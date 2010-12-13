@@ -11,8 +11,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    effect.cpp \
+    amplifier.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    effect.h \
+    amplifier.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    effect.ui \
+    amplifier.ui
