@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>230</width>
-    <height>295</height>
+    <width>250</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,11 @@
    <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
      <widget class="QComboBox" name="comboBox">
+      <item>
+       <property name="text">
+        <string>None</string>
+       </property>
+      </item>
       <item>
        <property name="text">
         <string>Compressor</string>
@@ -108,7 +113,7 @@
          <widget class="QSpinBox" name="spinBox_4"/>
         </item>
         <item>
-         <widget class="QLabel" name="label_5">
+         <widget class="QLabel" name="label_4">
           <property name="text">
            <string>???</string>
           </property>
@@ -125,7 +130,7 @@
          <widget class="QSpinBox" name="spinBox_5"/>
         </item>
         <item>
-         <widget class="QLabel" name="label_6">
+         <widget class="QLabel" name="label_5">
           <property name="text">
            <string>???</string>
           </property>
@@ -151,6 +156,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>za wzmakiem</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="checkBox_2">
         <property name="text">
          <string>ON</string>
@@ -160,18 +172,33 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="checkBox">
-        <property name="text">
-         <string>za wzmakiem</string>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QPushButton" name="setButton">
+      <property name="text">
+       <string>Set</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>comboBox</tabstop>
+  <tabstop>dial</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>dial_2</tabstop>
+  <tabstop>spinBox_2</tabstop>
+  <tabstop>dial_3</tabstop>
+  <tabstop>spinBox_3</tabstop>
+  <tabstop>dial_4</tabstop>
+  <tabstop>spinBox_4</tabstop>
+  <tabstop>dial_5</tabstop>
+  <tabstop>spinBox_5</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>setButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -197,12 +224,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>94</y>
+     <x>80</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
-     <x>104</x>
-     <y>66</y>
+     <x>80</x>
+     <y>88</y>
     </hint>
    </hints>
   </connection>
@@ -213,12 +240,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>172</x>
-     <y>66</y>
+     <x>162</x>
+     <y>88</y>
     </hint>
     <hint type="destinationlabel">
-     <x>171</x>
-     <y>106</y>
+     <x>162</x>
+     <y>114</y>
     </hint>
    </hints>
   </connection>
@@ -229,12 +256,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>216</x>
-     <y>99</y>
+     <x>162</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
-     <x>211</x>
-     <y>62</y>
+     <x>162</x>
+     <y>88</y>
     </hint>
    </hints>
   </connection>
@@ -245,12 +272,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>324</x>
-     <y>63</y>
+     <x>243</x>
+     <y>88</y>
     </hint>
     <hint type="destinationlabel">
-     <x>318</x>
-     <y>101</y>
+     <x>243</x>
+     <y>114</y>
     </hint>
    </hints>
   </connection>
@@ -261,12 +288,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>352</x>
-     <y>99</y>
+     <x>243</x>
+     <y>114</y>
     </hint>
     <hint type="destinationlabel">
-     <x>350</x>
-     <y>66</y>
+     <x>243</x>
+     <y>88</y>
     </hint>
    </hints>
   </connection>
@@ -277,12 +304,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>127</x>
-     <y>161</y>
+     <x>121</x>
+     <y>197</y>
     </hint>
     <hint type="destinationlabel">
-     <x>127</x>
-     <y>200</y>
+     <x>121</x>
+     <y>223</y>
     </hint>
    </hints>
   </connection>
@@ -293,12 +320,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>157</x>
-     <y>201</y>
+     <x>121</x>
+     <y>223</y>
     </hint>
     <hint type="destinationlabel">
-     <x>155</x>
-     <y>176</y>
+     <x>121</x>
+     <y>197</y>
     </hint>
    </hints>
   </connection>
@@ -309,12 +336,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>232</x>
-     <y>169</y>
+     <x>207</x>
+     <y>197</y>
     </hint>
     <hint type="destinationlabel">
-     <x>231</x>
-     <y>207</y>
+     <x>207</x>
+     <y>223</y>
     </hint>
    </hints>
   </connection>
@@ -325,12 +352,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>264</x>
-     <y>197</y>
+     <x>207</x>
+     <y>223</y>
     </hint>
     <hint type="destinationlabel">
-     <x>264</x>
-     <y>163</y>
+     <x>207</x>
+     <y>197</y>
     </hint>
    </hints>
   </connection>

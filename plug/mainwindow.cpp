@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     efekt3 = new Effect(this);
     efekt4 = new Effect(this);
 
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->Amplifier, SIGNAL(clicked()), wzmak, SLOT(show()));
     connect(ui->EffectButton1, SIGNAL(clicked()), efekt1, SLOT(show()));
     connect(ui->EffectButton2, SIGNAL(clicked()), efekt2, SLOT(show()));
