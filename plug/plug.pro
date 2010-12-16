@@ -13,12 +13,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     effect.cpp \
-    amplifier.cpp
+    amplifier.cpp \
+    mustang.cpp
 
 HEADERS  += mainwindow.h \
     effect.h \
-    amplifier.h
+    amplifier.h \
+    mustang.h
 
 FORMS    += mainwindow.ui \
     effect.ui \
     amplifier.ui
+
+LIBS += -lusb-1.0
