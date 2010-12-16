@@ -1,4 +1,5 @@
 #include "mustang.h"
+
 #include <stdio.h>
 
 Mustang::Mustang()
@@ -12,8 +13,6 @@ Mustang::~Mustang()
 
 int Mustang::start_amp()
 {
-    // TODO: send initialization string
-
     int ret;
     int recieved;
 
@@ -50,40 +49,50 @@ int Mustang::start_amp()
         return ret;
 
     // get handle for the device
-    piec_hand = NULL;
-    piec_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, USB_PID);
-    if(piec_hand == NULL)
-        return -1;
+    amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, USB_PID);
+    if(amp_hand == NULL)
+        stop_amp();
+        return -100;
 
     // claim the device
-    ret = libusb_claim_interface(piec_hand, 1);
+    ret = libusb_claim_interface(amp_hand, 1);
     if(ret)
+        stop_amp();
         return ret;
 
 //    libusb_interrupt_transfer(piec_hand, 1, p1, LENGTH, &recieved, TMOUT);
+//    libusb_interrupt_transfer(piec_hand, 129, p1, LENGTH, &recieved, TMOUT);
 //    libusb_interrupt_transfer(piec_hand, 1, p2, LENGTH, &recieved, TMOUT);
+//    libusb_interrupt_transfer(piec_hand, 129, p2, LENGTH, &recieved, TMOUT);
 //    libusb_interrupt_transfer(piec_hand, 1, p3, LENGTH, &recieved, TMOUT);
+//    libusb_interrupt_transfer(piec_hand, 129, p3, LENGTH, &recieved, TMOUT);
+//    while(recieved)
+//    {
+//        libusb_interrupt_transfer(piec_hand, 129, p3, LENGTH, &recieved, TMOUT);
+//    }
 
     return 0;
 }
 
 int Mustang::stop_amp()
 {
-    // TODO: send some finishing strings if any
-
     int ret;
 
-    // release claimed interface
-    ret = libusb_release_interface(piec_hand, 1);
-    if(ret)
-        return ret;
+    if(amp_hand != NULL)
+    {
+        // release claimed interface
+        ret = libusb_release_interface(amp_hand, 1);
+        if(ret)
+            return ret;
 
-    // close opened interface
-    libusb_close(piec_hand);
+        // close opened interface
+        libusb_close(amp_hand);
+        amp_hand = NULL;
+        printf("amp stopped\n");
+    }
 
     // stop using libusb
     libusb_exit(NULL);
-    printf("amp stopped\n");
 
     return 0;
 }

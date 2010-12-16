@@ -17,7 +17,7 @@ public:
     int stop_amp();
 
 private:
-    libusb_device_handle *piec_hand;
+    libusb_device_handle *amp_hand;
 };
 
 #endif // MUSTANG_H

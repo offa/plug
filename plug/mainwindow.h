@@ -24,12 +24,12 @@ public slots:
 private:
     Ui::MainWindow *ui;
 
-    Mustang *piec;
-    Amplifier *wzmak;
-    Effect *efekt1;
-    Effect *efekt2;
-    Effect *efekt3;
-    Effect *efekt4;
+    Mustang *amp_ops;
+    Amplifier *amp;
+    Effect *effect1;
+    Effect *effect2;
+    Effect *effect3;
+    Effect *effect4;
 };
 
 #endif // MAINWINDOW_H
