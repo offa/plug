@@ -20,6 +20,8 @@ public:
 
 public slots:
     void start_amp();
+    void set_reverb();
+    void set_overdrive();
 
 private:
     Ui::MainWindow *ui;

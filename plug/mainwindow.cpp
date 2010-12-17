@@ -13,10 +13,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     amp_ops = new Mustang();
     amp = new Amplifier(this);
-    effect1 = new Effect(this);
-    effect2 = new Effect(this);
-    effect3 = new Effect(this);
-    effect4 = new Effect(this);
+    effect1 = new Effect(this, 0);
+    effect2 = new Effect(this, 1);
+    effect3 = new Effect(this, 2);
+    effect4 = new Effect(this, 3);
 
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
@@ -25,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->EffectButton3, SIGNAL(clicked()), effect3, SLOT(show()));
     connect(ui->EffectButton4, SIGNAL(clicked()), effect4, SLOT(show()));
     connect(ui->connectButton, SIGNAL(clicked()), this, SLOT(start_amp()));
+
+    connect(ui->actionOver, SIGNAL(triggered()), this, SLOT(set_overdrive()));
+    connect(ui->actionReverb, SIGNAL(triggered()), this, SLOT(set_reverb()));
 }
 
 MainWindow::~MainWindow()
@@ -38,11 +41,23 @@ void MainWindow::start_amp()
     int x;
     x = amp_ops->start_amp();
     if(x == 0)
+    {
         ui->statusBar->showMessage(tr("Connected"), 5000);
+    }
     else
     {
         char aaa[16];
         sprintf(aaa, "Error: %d", x);
         ui->statusBar->showMessage(aaa, 5000);
     }
+}
+
+void MainWindow::set_overdrive()
+{
+    amp_ops->set_overdrive();
+}
+
+void MainWindow::set_reverb()
+{
+    amp_ops->set_reverb();
 }
