@@ -17,7 +17,7 @@ public:
 
 private:
     Ui::Effect *ui;
-    unsigned char dsp, slot, effect_num, knob1, knob2, knob3, knob4, knob5;
+    unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5;
     bool put_post_amp, turned_on;
 
 private slots:
@@ -28,7 +28,8 @@ private slots:
     void set_knob3(int);
     void set_knob4(int);
     void set_knob5(int);
-    void set_fx(int);
+    void choose_fx(int);
+    void set_fx(void);
 };
 
 #endif // EFFECT_H

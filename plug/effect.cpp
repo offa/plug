@@ -1,14 +1,23 @@
 #include "effect.h"
 #include "ui_effect.h"
 
+#include <stdio.h>
+#include "mainwindow.h"
+
 Effect::Effect(QWidget *parent, int number) :
     QMainWindow(parent),
     ui(new Ui::Effect)
 {
-    slot = number;
+    fx_slot = number;
+    put_post_amp = false;
+    turned_on = true;
     ui->setupUi(this);
 
-    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(set_fx(int)));
+    char title[10];
+    sprintf(title, "Effect %d", number+1);
+    setWindowTitle(title);
+
+    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
     connect(ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(post_amp(bool)));
     connect(ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(turn_on(bool)));
     connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_knob1(int)));
@@ -16,6 +25,7 @@ Effect::Effect(QWidget *parent, int number) :
     connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_knob3(int)));
     connect(ui->dial_4, SIGNAL(valueChanged(int)), this, SLOT(set_knob4(int)));
     connect(ui->dial_5, SIGNAL(valueChanged(int)), this, SLOT(set_knob5(int)));
+    connect(ui->setButton, SIGNAL(clicked()), this, SLOT(set_fx()));
 }
 
 Effect::~Effect()
@@ -30,14 +40,7 @@ void Effect::turn_on(bool value)
 
 void Effect::post_amp(bool value)
 {
-    if(value)
-    {
-        slot += 4;
-    }
-    else
-    {
-        slot -= 4;
-    }
+    put_post_amp = value;
 }
 
 void Effect::set_knob1(int value)
@@ -65,13 +68,12 @@ void Effect::set_knob5(int value)
     knob5 = value;
 }
 
-void Effect::set_fx(int value)
+void Effect::choose_fx(int value)
 {
-    switch(value)
-    {
-    case 0:
-        break;
-    case 1:
-        break;
-    }
+    effect_num = value;
+}
+
+void Effect::set_fx()
+{
+    ((MainWindow*)parent())->set_effect(effect_num, fx_slot, put_post_amp, knob1, knob2, knob3, knob4, knob5);
 }

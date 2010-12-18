@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>351</width>
-    <height>233</height>
+    <height>205</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,13 +15,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QPushButton" name="connectButton">
-      <property name="text">
-       <string>Connect</string>
-      </property>
-     </widget>
-    </item>
     <item>
      <widget class="QPushButton" name="Amplifier">
       <property name="minimumSize">
@@ -106,19 +99,11 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionSave"/>
+    <addaction name="actionConnect"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuFX">
-    <property name="title">
-     <string>FX</string>
-    </property>
-    <addaction name="actionOver"/>
-    <addaction name="actionReverb"/>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuFX"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave">
@@ -139,6 +124,11 @@
   <action name="actionReverb">
    <property name="text">
     <string>reverb</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Connect</string>
    </property>
   </action>
  </widget>

@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "mustang.h"
 
 #include <stdio.h>
 
@@ -9,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-//    ui->Amplifier->setDisabled(true);
+    ui->Amplifier->setDisabled(true);
 
     amp_ops = new Mustang();
     amp = new Amplifier(this);
@@ -24,10 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->EffectButton2, SIGNAL(clicked()), effect2, SLOT(show()));
     connect(ui->EffectButton3, SIGNAL(clicked()), effect3, SLOT(show()));
     connect(ui->EffectButton4, SIGNAL(clicked()), effect4, SLOT(show()));
-    connect(ui->connectButton, SIGNAL(clicked()), this, SLOT(start_amp()));
-
-    connect(ui->actionOver, SIGNAL(triggered()), this, SLOT(set_overdrive()));
-    connect(ui->actionReverb, SIGNAL(triggered()), this, SLOT(set_reverb()));
+    connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(start_amp()));
 }
 
 MainWindow::~MainWindow()
@@ -52,12 +48,10 @@ void MainWindow::start_amp()
     }
 }
 
-void MainWindow::set_overdrive()
+int MainWindow::set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp, unsigned char knob1,
+                           unsigned char knob2, unsigned char knob3, unsigned char knob4, unsigned char knob5)
 {
-    amp_ops->set_overdrive();
-}
-
-void MainWindow::set_reverb()
-{
-    amp_ops->set_reverb();
+    int ret;
+    ret = amp_ops->set_effect(effect, fx_slot, put_post_amp, knob1, knob2, knob3, knob4, knob5);
+    return ret;
 }
