@@ -9,6 +9,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->Amplifier->setDisabled(true);
+    ui->EffectButton1->setDisabled(true);
+    ui->EffectButton2->setDisabled(true);
+    ui->EffectButton3->setDisabled(true);
+    ui->EffectButton4->setDisabled(true);
 
     amp_ops = new Mustang();
     amp = new Amplifier(this);
@@ -38,6 +42,10 @@ void MainWindow::start_amp()
     x = amp_ops->start_amp();
     if(x == 0)
     {
+        ui->EffectButton1->setDisabled(false);
+        ui->EffectButton2->setDisabled(false);
+        ui->EffectButton3->setDisabled(false);
+        ui->EffectButton4->setDisabled(false);
         ui->statusBar->showMessage(tr("Connected"), 5000);
     }
     else
@@ -48,10 +56,11 @@ void MainWindow::start_amp()
     }
 }
 
-int MainWindow::set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp, unsigned char knob1,
-                           unsigned char knob2, unsigned char knob3, unsigned char knob4, unsigned char knob5)
+int MainWindow::set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,
+                           unsigned char knob1, unsigned char knob2, unsigned char knob3,
+                           unsigned char knob4, unsigned char knob5, unsigned char knob6)
 {
     int ret;
-    ret = amp_ops->set_effect(effect, fx_slot, put_post_amp, knob1, knob2, knob3, knob4, knob5);
+    ret = amp_ops->set_effect(effect, fx_slot, put_post_amp, knob1, knob2, knob3, knob4, knob5, knob6);
     return ret;
 }

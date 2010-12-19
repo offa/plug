@@ -20,8 +20,9 @@ public:
 
 public slots:
     void start_amp();
-    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp, unsigned char knob1,
-                   unsigned char knob2, unsigned char knob3, unsigned char knob4, unsigned char knob5);
+    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,
+                   unsigned char knob1, unsigned char knob2, unsigned char knob3,
+                   unsigned char knob4, unsigned char knob5, unsigned char knob6);
 
 private:
     Ui::MainWindow *ui;

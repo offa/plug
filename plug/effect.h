@@ -2,6 +2,7 @@
 #define EFFECT_H
 
 #include <QMainWindow>
+#include "effects_enum.h"
 
 namespace Ui {
     class Effect;
@@ -17,7 +18,7 @@ public:
 
 private:
     Ui::Effect *ui;
-    unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5;
+    unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6;
     bool put_post_amp, turned_on;
 
 private slots:
@@ -28,8 +29,9 @@ private slots:
     void set_knob3(int);
     void set_knob4(int);
     void set_knob5(int);
+    void set_knob6(int);
     void choose_fx(int);
-    void set_fx(void);
+    void send_fx(void);
 };
 
 #endif // EFFECT_H

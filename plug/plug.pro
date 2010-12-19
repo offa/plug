@@ -19,7 +19,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     effect.h \
     amplifier.h \
-    mustang.h
+    mustang.h \
+    effects_enum.h
 
 FORMS    += mainwindow.ui \
     effect.ui \

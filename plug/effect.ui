@@ -24,12 +24,187 @@
       </item>
       <item>
        <property name="text">
+        <string>Overdrive</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Fixed Wah</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Touch Wah</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Fuzz</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Fuzz Touch Wah</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Simple Compressor</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Compressor</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Overdrive</string>
+        <string>Sine Chorus</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Triangle Chorus</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Sine Flanger</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Triangle Flanger</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Vibratone</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Vintage Tremolo</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Sine Tremolo</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Ring Modulator</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Step Filter</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Phaser</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Pitch Schifter</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mono Delay</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Mono Echo Filter</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Stereo Echo Filter</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Multitap Delay</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Ping Pong Delay</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Ducking Delay</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Reverse Delay</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Tape Delay</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Stereo Tape Delay</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Small Hall Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Large Hall Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Small Room Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Large Room Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Small Plate Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Large Plate Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Ambient Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Arena Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>'63 Fender Spring Reverb</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>'65 Fender Spring Reverb</string>
        </property>
       </item>
      </widget>
@@ -55,7 +230,10 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Level</string>
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -80,7 +258,10 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Gain</string>
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -105,7 +286,10 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>???</string>
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -115,19 +299,6 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>52</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
@@ -147,7 +318,10 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>???</string>
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -172,24 +346,42 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>???</string>
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
        </layout>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>52</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QDial" name="dial_6">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBox_6">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -265,11 +457,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>80</x>
-     <y>114</y>
+     <y>112</y>
     </hint>
     <hint type="destinationlabel">
      <x>80</x>
-     <y>88</y>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -281,11 +473,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>162</x>
-     <y>88</y>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>162</x>
-     <y>114</y>
+     <y>112</y>
     </hint>
    </hints>
   </connection>
@@ -297,11 +489,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>162</x>
-     <y>114</y>
+     <y>112</y>
     </hint>
     <hint type="destinationlabel">
      <x>162</x>
-     <y>88</y>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -313,11 +505,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>243</x>
-     <y>88</y>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
      <x>243</x>
-     <y>114</y>
+     <y>112</y>
     </hint>
    </hints>
   </connection>
@@ -329,11 +521,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>243</x>
-     <y>114</y>
+     <y>112</y>
     </hint>
     <hint type="destinationlabel">
      <x>243</x>
-     <y>88</y>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -344,12 +536,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>121</x>
-     <y>197</y>
+     <x>80</x>
+     <y>192</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>223</y>
+     <x>80</x>
+     <y>219</y>
     </hint>
    </hints>
   </connection>
@@ -360,12 +552,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>121</x>
-     <y>223</y>
+     <x>80</x>
+     <y>219</y>
     </hint>
     <hint type="destinationlabel">
-     <x>121</x>
-     <y>197</y>
+     <x>80</x>
+     <y>192</y>
     </hint>
    </hints>
   </connection>
@@ -376,12 +568,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>207</x>
-     <y>197</y>
+     <x>162</x>
+     <y>192</y>
     </hint>
     <hint type="destinationlabel">
-     <x>207</x>
-     <y>223</y>
+     <x>162</x>
+     <y>219</y>
     </hint>
    </hints>
   </connection>
@@ -392,12 +584,44 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>207</x>
-     <y>223</y>
+     <x>162</x>
+     <y>219</y>
     </hint>
     <hint type="destinationlabel">
-     <x>207</x>
-     <y>197</y>
+     <x>162</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial_6</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_6</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>195</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_6</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial_6</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>217</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>218</x>
+     <y>181</y>
     </hint>
    </hints>
   </connection>

@@ -1,6 +1,7 @@
 #ifndef MUSTANG_H
 #define MUSTANG_H
 
+#include "effects_enum.h"
 #include <libusb-1.0/libusb.h>
 
 // amp's VID and PID
@@ -20,6 +21,7 @@
 #define KNOB3 34
 #define KNOB4 35
 #define KNOB5 36
+#define KNOB6 37
 
 class Mustang
 {
@@ -28,18 +30,15 @@ public:
     ~Mustang();
     int start_amp();
     int stop_amp();
-    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp, unsigned char knob1,
-                   unsigned char knob2, unsigned char knob3, unsigned char knob4, unsigned char knob5);
+    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,
+                   unsigned char knob1, unsigned char knob2, unsigned char knob3,
+                   unsigned char knob4, unsigned char knob5, unsigned char knob6);
 
 private:
     libusb_device_handle *amp_hand;
     unsigned char FXEXEC[LENGTH];
+    unsigned char prev_dsp, prev_slot, prev_19_bit, prev_20_bit;
 
-    enum effects {
-        NONE,
-        OVERDRIVE,
-        REVERB
-    };
 };
 
 #endif // MUSTANG_H
