@@ -7,6 +7,7 @@
 QT       += core gui
 
 TARGET = plug
+VERSION = 1.0
 TEMPLATE = app
 
 

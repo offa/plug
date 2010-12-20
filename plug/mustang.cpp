@@ -1,9 +1,11 @@
 #include "mustang.h"
 
 #include <stdio.h>
+#include <QtDebug>
 
 Mustang::Mustang()
 {
+    // "apply efect" command
     FXEXEC[0] = 0x1c;
     FXEXEC[1] = 0x03;
     for(int i = 2; i < LENGTH; i++)
@@ -11,7 +13,10 @@ Mustang::Mustang()
         FXEXEC[i] = 0x00;
     }
 
-    prev_dsp = 0x06;
+    prev_array[0][0] = 0x00;
+    prev_array[1][0] = 0x00;
+    prev_array[2][0] = 0x00;
+    prev_array[3][0] = 0x00;
 }
 
 Mustang::~Mustang()
@@ -79,7 +84,7 @@ int Mustang::stop_amp()
         // close opened interface
         libusb_close(amp_hand);
         amp_hand = NULL;
-        printf("amp stopped\n");
+        //printf("amp stopped\n");
     }
 
     // stop using libusb
@@ -92,14 +97,12 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
                         unsigned char knob1, unsigned char knob2, unsigned char knob3,
                         unsigned char knob4, unsigned char knob5, unsigned char knob6)
 {
-    // TODO: add rest of the effects
-
-    int ret, recieved;
-    unsigned char set_slot;
-    unsigned char array[64] = {
-      0x1c, 0x03, 0x09, 0x00, 0x00, 0x00, 0x01, 0x01,
+    int ret, recieved;    // variables used when sending
+    unsigned char set_slot=fx_slot;    // where to put the effect
+    unsigned char array[64] = {    // empty data form
+      0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x24, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -107,34 +110,50 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    if(put_post_amp)
+    if(put_post_amp)    // put effect in a slot after amplifier
     {
         set_slot = fx_slot + 4;
     }
+
+    // fill the form with data
     array[FXSLOT] = set_slot;
     array[KNOB1] = knob1;
     array[KNOB2] = knob2;
     array[KNOB3] = knob3;
     array[KNOB4] = knob4;
     array[KNOB5] = knob5;
+    // some effects have more knobs
     if (effect == MONO_ECHO_FILTER || effect == STEREO_ECHO_FILTER || effect == TAPE_DELAY || effect == STEREO_TAPE_DELAY)
     {
         array[KNOB6] = knob6;
     }
 
+    // fill the form with the rest of the data
+    int k=0;
     switch (effect) {
     case EMPTY:
-        array[DSP] = prev_dsp;
+        for (int i = 0; i < 4; i++)
+        {
+            if (prev_array[i][FXSLOT] == set_slot)
+            {
+                for (int j = 0; j < LENGTH; j++)
+                {
+                    array[j] = prev_array[i][j];
+                }
+                k++;
+            }
+        }
+        if (k == 0)
+        {
+            return 0;
+        }
         array[EFFECT] = 0x00;
-        array[FXSLOT] = prev_slot;
         array[KNOB1] = 0x00;
         array[KNOB2] = 0x00;
         array[KNOB3] = 0x00;
         array[KNOB4] = 0x00;
         array[KNOB5] = 0x00;
         array[KNOB6] = 0x00;
-        array[19] = prev_19_bit;
-        array[20] = prev_20_bit;
         break;
 
     case OVERDRIVE:
@@ -381,22 +400,57 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
 
     }
 
-    prev_dsp = array[DSP];
-    prev_slot = set_slot;
-    prev_19_bit = array[19];
-    prev_20_bit = array[20];
 
-//    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-//    ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
+//    FILE *f;
+//    f=fopen("/home/piotrek/dupa.abc","a");
 
-    FILE *f;
-    static char trynum=0;
-    char mes[16];
-    sprintf(mes, "test%d.bin",trynum);
-    f=fopen(mes,"w");
-    fwrite(array, sizeof(array), 1, f);
-    fclose(f);
-    trynum++;
 
-    return 0;
+    // clear DSP if something was there
+    if(prev_array[array[DSP]-6][0]!=0x00)
+    {
+        unsigned char clear_array[LENGTH];
+        for (int i=0; i<LENGTH;i++)
+        {
+            clear_array[i]=prev_array[array[DSP]-6][i];
+        }
+        clear_array[EFFECT] = 0x00;
+        clear_array[KNOB1] = 0x00;
+        clear_array[KNOB2] = 0x00;
+        clear_array[KNOB3] = 0x00;
+        clear_array[KNOB4] = 0x00;
+        clear_array[KNOB5] = 0x00;
+        clear_array[KNOB6] = 0x00;
+        ret = libusb_interrupt_transfer(amp_hand, 0x01, clear_array, LENGTH, &recieved, TMOUT);
+        ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
+//        fprintf(f,"clear: DSP: %d, slot: %d, effect: %d", clear_array[DSP], clear_array[FXSLOT], clear_array[EFFECT]);
+        qDebug()<<"clear: DSP: "<<clear_array[DSP]<<", slot: "<<clear_array[FXSLOT]<<", effect: "<<clear_array[EFFECT];
+    }
+
+    // send packet to the amp
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
+//    fprintf(f,"set:   DSP: %d, slot: %d, effect: %d", array[DSP], array[FXSLOT], array[EFFECT]);
+//    fclose(f);
+    qDebug()<<"set: DSP: "<<array[DSP]<<", slot: "<<array[FXSLOT]<<", effect: "<<array[EFFECT];
+
+    // save current settings
+    for (int i = 0; i < LENGTH; i++)
+    {
+        prev_array[array[DSP]-6][i] = array[i];
+    }
+
+
+    // used for debug
+//    FILE *f;
+//    static char trynum=0;
+//    char mes[16];
+//    sprintf(mes, "test%d.bin",trynum);
+//    f=fopen(mes,"w");
+//    fwrite(array, sizeof(array), 1, f);
+//    //fwrite(FXEXEC, sizeof(FXEXEC), 1, f);
+//    fclose(f);
+//    trynum++;
+
+
+    return ret;
 }

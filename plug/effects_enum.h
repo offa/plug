@@ -1,6 +1,8 @@
 #ifndef EFFECTS_ENUM_H
 #define EFFECTS_ENUM_H
 
+// list of all the effects
+// used for switches (looks nicer than numbers)
 enum effects {
     EMPTY,
     OVERDRIVE,

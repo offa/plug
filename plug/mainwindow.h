@@ -19,14 +19,16 @@ public:
     ~MainWindow();
 
 public slots:
-    void start_amp();
-    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,
+    void start_amp();    // initialize the communication
+    void stop_amp();    // terminate communication
+    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,    // send effect to the amp_ops object
                    unsigned char knob1, unsigned char knob2, unsigned char knob3,
                    unsigned char knob4, unsigned char knob5, unsigned char knob6);
 
 private:
     Ui::MainWindow *ui;
 
+    // pointers to objects
     Mustang *amp_ops;
     Amplifier *amp;
     Effect *effect1;

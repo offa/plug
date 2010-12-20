@@ -28,16 +28,16 @@ class Mustang
 public:
     Mustang();
     ~Mustang();
-    int start_amp();
-    int stop_amp();
-    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,
+    int start_amp();    // initialize communication
+    int stop_amp();    // terminate communication
+    int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,    // send the effect to the amp
                    unsigned char knob1, unsigned char knob2, unsigned char knob3,
                    unsigned char knob4, unsigned char knob5, unsigned char knob6);
 
 private:
-    libusb_device_handle *amp_hand;
-    unsigned char FXEXEC[LENGTH];
-    unsigned char prev_dsp, prev_slot, prev_19_bit, prev_20_bit;
+    libusb_device_handle *amp_hand;    // handle for USB communication
+    unsigned char FXEXEC[LENGTH];    // "apply effect" command for the amp
+    unsigned char prev_array[4][LENGTH];    // array used to clear the effect
 
 };
 

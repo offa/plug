@@ -24,7 +24,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Overdrive</string>
+        <string>[1] Overdrive</string>
        </property>
       </item>
       <item>
@@ -59,7 +59,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Sine Chorus</string>
+        <string>[2] Sine Chorus</string>
        </property>
       </item>
       <item>
@@ -114,7 +114,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Mono Delay</string>
+        <string>[3] Mono Delay</string>
        </property>
       </item>
       <item>
@@ -159,7 +159,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Small Hall Reverb</string>
+        <string>[4] Small Hall Reverb</string>
        </property>
       </item>
       <item>
@@ -390,17 +390,7 @@
       <item>
        <widget class="QCheckBox" name="checkBox">
         <property name="text">
-         <string>za wzmakiem</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="checkBox_2">
-        <property name="text">
-         <string>ON</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
+         <string>after amplifier</string>
         </property>
        </widget>
       </item>

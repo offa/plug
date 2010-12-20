@@ -22,6 +22,7 @@ private:
     bool put_post_amp, turned_on;
 
 private slots:
+    // functions to set variables
     void turn_on(bool);
     void post_amp(bool);
     void set_knob1(int);

@@ -8,6 +8,7 @@ Effect::Effect(QWidget *parent, int number) :
     QMainWindow(parent),
     ui(new Ui::Effect)
 {
+    // initialize variables
     fx_slot = number;
     put_post_amp = false;
     turned_on = true;
@@ -17,8 +18,10 @@ Effect::Effect(QWidget *parent, int number) :
     knob4 = 0;
     knob5 = 0;
     knob6 = 0;
+
     ui->setupUi(this);
 
+    // disable all elements until some effect is chosen
     ui->dial->setDisabled(true);
     ui->dial_2->setDisabled(true);
     ui->dial_3->setDisabled(true);
@@ -32,13 +35,15 @@ Effect::Effect(QWidget *parent, int number) :
     ui->spinBox_5->setDisabled(true);
     ui->spinBox_6->setDisabled(true);
 
+    // set window title
     char title[10];
-    sprintf(title, "Effect %d", number+1);
+    sprintf(title, "Effect %d", fx_slot+1);
     setWindowTitle(title);
 
+    // connect elements to slots
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
     connect(ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(post_amp(bool)));
-    connect(ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(turn_on(bool)));
+    //connect(ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(turn_on(bool)));
     connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_knob1(int)));
     connect(ui->dial_2, SIGNAL(valueChanged(int)), this, SLOT(set_knob2(int)));
     connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_knob3(int)));
@@ -53,6 +58,7 @@ Effect::~Effect()
     delete ui;
 }
 
+// functions setting variables
 void Effect::turn_on(bool value)
 {
     turned_on = value;
@@ -97,6 +103,7 @@ void Effect::choose_fx(int value)
 {
     effect_num = value;
 
+    // activate proper knobs and set their max values
     switch (value)
     {
     case EMPTY:
@@ -233,6 +240,7 @@ void Effect::choose_fx(int value)
         break;
     }
 
+    // set knob labels
     switch (value)
     {
     case EMPTY:
