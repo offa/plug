@@ -128,7 +128,7 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
         array[KNOB6] = knob6;
     }
 
-    // fill the form with the rest of the data
+    // fill the form with missing data
     int k=0;
     switch (effect) {
     case EMPTY:
@@ -141,6 +141,7 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
                     array[j] = prev_array[i][j];
                 }
                 k++;
+                break;
             }
         }
         if (k == 0)
@@ -400,38 +401,32 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
 
     }
 
-
-//    FILE *f;
-//    f=fopen("/home/piotrek/dupa.abc","a");
-
-
     // clear DSP if something was there
-    if(prev_array[array[DSP]-6][0]!=0x00)
-    {
-        unsigned char clear_array[LENGTH];
-        for (int i=0; i<LENGTH;i++)
-        {
-            clear_array[i]=prev_array[array[DSP]-6][i];
-        }
-        clear_array[EFFECT] = 0x00;
-        clear_array[KNOB1] = 0x00;
-        clear_array[KNOB2] = 0x00;
-        clear_array[KNOB3] = 0x00;
-        clear_array[KNOB4] = 0x00;
-        clear_array[KNOB5] = 0x00;
-        clear_array[KNOB6] = 0x00;
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, clear_array, LENGTH, &recieved, TMOUT);
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
-//        fprintf(f,"clear: DSP: %d, slot: %d, effect: %d", clear_array[DSP], clear_array[FXSLOT], clear_array[EFFECT]);
-        qDebug()<<"clear: DSP: "<<clear_array[DSP]<<", slot: "<<clear_array[FXSLOT]<<", effect: "<<clear_array[EFFECT];
-    }
+//    if(prev_array[array[DSP]-6][0]!=0x00)
+//    {
+//        unsigned char clear_array[LENGTH];
+//        for (int i=0; i<LENGTH;i++)
+//        {
+//            clear_array[i]=prev_array[array[DSP]-6][i];
+//        }
+//        clear_array[EFFECT] = 0x00;
+//        clear_array[KNOB1] = 0x00;
+//        clear_array[KNOB2] = 0x00;
+//        clear_array[KNOB3] = 0x00;
+//        clear_array[KNOB4] = 0x00;
+//        clear_array[KNOB5] = 0x00;
+//        clear_array[KNOB6] = 0x00;
+//        ret = libusb_interrupt_transfer(amp_hand, 0x01, clear_array, LENGTH, &recieved, TMOUT);
+//        ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
+//        //DEBUG
+//        qDebug()<<"clear: DSP: "<<clear_array[DSP]<<", slot: "<<clear_array[FXSLOT]<<", effect: "<<clear_array[EFFECT];
+//    }
 
     // send packet to the amp
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
-//    fprintf(f,"set:   DSP: %d, slot: %d, effect: %d", array[DSP], array[FXSLOT], array[EFFECT]);
-//    fclose(f);
-    qDebug()<<"set: DSP: "<<array[DSP]<<", slot: "<<array[FXSLOT]<<", effect: "<<array[EFFECT];
+    //DEBUG
+//    qDebug()<<"set: DSP: "<<array[DSP]<<", slot: "<<array[FXSLOT]<<", effect: "<<array[EFFECT];
 
     // save current settings
     for (int i = 0; i < LENGTH; i++)
@@ -440,7 +435,7 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
     }
 
 
-    // used for debug
+    //DEBUG
 //    FILE *f;
 //    static char trynum=0;
 //    char mes[16];
