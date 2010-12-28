@@ -24,6 +24,8 @@ public slots:
     int set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,    // send effect to the amp_ops object
                    unsigned char knob1, unsigned char knob2, unsigned char knob3,
                    unsigned char knob4, unsigned char knob5, unsigned char knob6);
+    int set_amplifier(unsigned char amplifier, unsigned char knob1, unsigned char knob2, unsigned char knob3,
+                      unsigned char knob4, unsigned char knob5, unsigned char knob6);
 
 private:
     Ui::MainWindow *ui;

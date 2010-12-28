@@ -49,6 +49,7 @@ void MainWindow::start_amp()
     if(x == 0)    // if request succeded
     {
         // activate buttons
+        //ui->Amplifier->setDisabled(false);
         ui->EffectButton1->setDisabled(false);
         ui->EffectButton2->setDisabled(false);
         ui->EffectButton3->setDisabled(false);
@@ -95,5 +96,13 @@ int MainWindow::set_effect(unsigned char effect, unsigned char fx_slot, bool put
 {
     int ret;
     ret = amp_ops->set_effect(effect, fx_slot, put_post_amp, knob1, knob2, knob3, knob4, knob5, knob6);
+    return ret;
+}
+
+int MainWindow::set_amplifier(unsigned char amplifier, unsigned char knob1, unsigned char knob2, unsigned char knob3,
+                               unsigned char knob4, unsigned char knob5, unsigned char knob6)
+{
+    int ret;
+    ret = amp_ops->set_amplifier(amplifier, knob1, knob2, knob3, knob4, knob5, knob6);
     return ret;
 }

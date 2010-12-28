@@ -8,7 +8,10 @@ Effect::Effect(QWidget *parent, int number) :
     QMainWindow(parent),
     ui(new Ui::Effect)
 {
+    ui->setupUi(this);
+
     // initialize variables
+    effect_num = ui->comboBox->currentIndex();
     fx_slot = number;
     put_post_amp = false;
     turned_on = true;
@@ -18,8 +21,6 @@ Effect::Effect(QWidget *parent, int number) :
     knob4 = 0;
     knob5 = 0;
     knob6 = 0;
-
-    ui->setupUi(this);
 
     // disable all elements until some effect is chosen
     ui->dial->setDisabled(true);

@@ -1,9 +1,29 @@
 #ifndef EFFECTS_ENUM_H
 #define EFFECTS_ENUM_H
 
-// list of all the effects
-// used for switches (looks nicer than numbers)
-enum effects {
+// enums used for switches (looks nicer
+// and is more practical than numbers)
+
+// list of all amplifiers
+enum amps
+{
+    FENDER_57_DELUXE,
+    FENDER_59_BASSMAN,
+    FENDER_57_CHAMP,
+    FENDER_65_DELUXE_REVERB,
+    FENDER_65_PRINCETON,
+    FENDER_65_TWIN_REVERB,
+    FENDER_SUPER_SONIC,
+    BRITISH_60S,
+    BRITISH_70S,
+    BRITISH_80S,
+    AMERICAN_90S,
+    METAL_2000
+};
+
+// list of all effects
+enum effects
+{
     EMPTY,
     OVERDRIVE,
     FIXED_WAH,

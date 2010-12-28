@@ -29,32 +29,32 @@
       </item>
       <item>
        <property name="text">
-        <string>Fixed Wah</string>
+        <string>[1] Fixed Wah</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Touch Wah</string>
+        <string>[1] Touch Wah</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Fuzz</string>
+        <string>[1] Fuzz</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Fuzz Touch Wah</string>
+        <string>[1] Fuzz Touch Wah</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Simple Compressor</string>
+        <string>[1] Simple Compressor</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Compressor</string>
+        <string>[1] Compressor</string>
        </property>
       </item>
       <item>
@@ -64,52 +64,52 @@
       </item>
       <item>
        <property name="text">
-        <string>Triangle Chorus</string>
+        <string>[2] Triangle Chorus</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Sine Flanger</string>
+        <string>[2] Sine Flanger</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Triangle Flanger</string>
+        <string>[2] Triangle Flanger</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Vibratone</string>
+        <string>[2] Vibratone</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Vintage Tremolo</string>
+        <string>[2] Vintage Tremolo</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Sine Tremolo</string>
+        <string>[2] Sine Tremolo</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Ring Modulator</string>
+        <string>[2] Ring Modulator</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Step Filter</string>
+        <string>[2] Step Filter</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Phaser</string>
+        <string>[2] Phaser</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Pitch Schifter</string>
+        <string>[2] Pitch Schifter</string>
        </property>
       </item>
       <item>
@@ -119,42 +119,42 @@
       </item>
       <item>
        <property name="text">
-        <string>Mono Echo Filter</string>
+        <string>[3] Mono Echo Filter</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Stereo Echo Filter</string>
+        <string>[3] Stereo Echo Filter</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Multitap Delay</string>
+        <string>[3] Multitap Delay</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Ping Pong Delay</string>
+        <string>[3] Ping Pong Delay</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Ducking Delay</string>
+        <string>[3] Ducking Delay</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Reverse Delay</string>
+        <string>[3] Reverse Delay</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Tape Delay</string>
+        <string>[3] Tape Delay</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Stereo Tape Delay</string>
+        <string>[3] Stereo Tape Delay</string>
        </property>
       </item>
       <item>
@@ -164,47 +164,47 @@
       </item>
       <item>
        <property name="text">
-        <string>Large Hall Reverb</string>
+        <string>[4] Large Hall Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Small Room Reverb</string>
+        <string>[4] Small Room Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Large Room Reverb</string>
+        <string>[4] Large Room Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Small Plate Reverb</string>
+        <string>[4] Small Plate Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Large Plate Reverb</string>
+        <string>[4] Large Plate Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Ambient Reverb</string>
+        <string>[4] Ambient Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Arena Reverb</string>
+        <string>[4] Arena Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>'63 Fender Spring Reverb</string>
+        <string>[4] '63 Fender Spring Reverb</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>'65 Fender Spring Reverb</string>
+        <string>[4] '65 Fender Spring Reverb</string>
        </property>
       </item>
      </widget>

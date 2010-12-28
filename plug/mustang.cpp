@@ -99,7 +99,7 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
 {
     int ret, recieved;    // variables used when sending
     unsigned char set_slot=fx_slot;    // where to put the effect
-    unsigned char array[64] = {    // empty data form
+    unsigned char array[LENGTH] = {    // empty data form
       0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -446,6 +446,57 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
 //    fclose(f);
 //    trynum++;
 
+
+    return ret;
+}
+
+int Mustang::set_amplifier(unsigned char amplifier, unsigned char knob1, unsigned char knob2, unsigned char knob3,
+                           unsigned char knob4, unsigned char knob5, unsigned char knob6)
+{
+    int ret, recieved;
+    unsigned char array[LENGTH];
+
+    switch (amplifier)
+    {
+    case FENDER_57_DELUXE:
+        break;
+
+    case FENDER_59_BASSMAN:
+        break;
+
+    case FENDER_57_CHAMP:
+        break;
+
+    case FENDER_65_DELUXE_REVERB:
+        break;
+
+    case FENDER_65_PRINCETON:
+        break;
+
+    case FENDER_65_TWIN_REVERB:
+        break;
+
+    case FENDER_SUPER_SONIC:
+        break;
+
+    case BRITISH_60S:
+        break;
+
+    case BRITISH_70S:
+        break;
+
+    case BRITISH_80S:
+        break;
+
+    case AMERICAN_90S:
+        break;
+
+    case METAL_2000:
+        break;
+    }
+
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
 
     return ret;
 }
