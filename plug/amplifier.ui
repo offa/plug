@@ -97,10 +97,18 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QDial" name="dial"/>
+         <widget class="QDial" name="dial">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox"/>
+         <widget class="QSpinBox" name="spinBox">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="label">
@@ -117,10 +125,18 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QDial" name="dial_2"/>
+         <widget class="QDial" name="dial_2">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox_2"/>
+         <widget class="QSpinBox" name="spinBox_2">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="label_2">
@@ -154,10 +170,18 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QDial" name="dial_3"/>
+         <widget class="QDial" name="dial_3">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox_3"/>
+         <widget class="QSpinBox" name="spinBox_3">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="label_3">
@@ -174,10 +198,18 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QDial" name="dial_4"/>
+         <widget class="QDial" name="dial_4">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox_4"/>
+         <widget class="QSpinBox" name="spinBox_4">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="label_4">
@@ -194,10 +226,18 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QDial" name="dial_5"/>
+         <widget class="QDial" name="dial_5">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spinBox_5"/>
+         <widget class="QSpinBox" name="spinBox_5">
+          <property name="maximum">
+           <number>255</number>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="label_5">
