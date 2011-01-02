@@ -10,35 +10,45 @@ Amplifier::Amplifier(QWidget *parent) :
     ui->setupUi(this);
 
     // initialize variables
-    amp_num = ui->comboBox->currentIndex();
-    knob1 = 0;
-    knob2 = 0;
-    knob3 = 0;
-    knob4 = 0;
-    knob5 = 0;
-    knob6 = 0;
+    gain = 0;
+    volume = 0;
+    treble = 0;
+    middle = 0;
+    bass = 0;
+
+    cabinet = 0;
+    noise_gate = 0;
+    master_vol = 128;
+    gain2 = 128;
+    presence = 128;
+    threshold = 0;
+    depth = 128;
+    bias = 128;
+    sag = 1;
+
+    advanced = new Amp_Advanced(this);
+    connect(ui->advancedButton, SIGNAL(clicked()), advanced, SLOT(open()));
+    choose_amp(0);
 
     // disabled until I discover how it works
-    ui->dial->setDisabled(true);
-    ui->dial_2->setDisabled(true);
-    ui->dial_3->setDisabled(true);
-    ui->dial_4->setDisabled(true);
-    ui->dial_5->setDisabled(true);
-    ui->dial_6->setDisabled(true);
-    ui->spinBox->setDisabled(true);
-    ui->spinBox_2->setDisabled(true);
-    ui->spinBox_3->setDisabled(true);
-    ui->spinBox_4->setDisabled(true);
-    ui->spinBox_5->setDisabled(true);
-    ui->spinBox_6->setDisabled(true);
+//    ui->dial->setDisabled(true);
+//    ui->dial_2->setDisabled(true);
+//    ui->dial_3->setDisabled(true);
+//    ui->dial_4->setDisabled(true);
+//    ui->dial_5->setDisabled(true);
+//    ui->spinBox->setDisabled(true);
+//    ui->spinBox_2->setDisabled(true);
+//    ui->spinBox_3->setDisabled(true);
+//    ui->spinBox_4->setDisabled(true);
+//    ui->spinBox_5->setDisabled(true);
+//    ui->advancedButton->setDisabled(true);
 
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_amp(int)));
-    connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_knob1(int)));
-    connect(ui->dial_2, SIGNAL(valueChanged(int)), this, SLOT(set_knob2(int)));
-    connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_knob3(int)));
-    connect(ui->dial_4, SIGNAL(valueChanged(int)), this, SLOT(set_knob4(int)));
-    connect(ui->dial_5, SIGNAL(valueChanged(int)), this, SLOT(set_knob5(int)));
-    connect(ui->dial_6, SIGNAL(valueChanged(int)), this, SLOT(set_knob6(int)));
+    connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_gain(int)));
+    connect(ui->dial_2, SIGNAL(valueChanged(int)), this, SLOT(set_volume(int)));
+    connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_treble(int)));
+    connect(ui->dial_4, SIGNAL(valueChanged(int)), this, SLOT(set_middle(int)));
+    connect(ui->dial_5, SIGNAL(valueChanged(int)), this, SLOT(set_bass(int)));
     connect(ui->setButton, SIGNAL(clicked()), this, SLOT(send_amp()));
 }
 
@@ -47,186 +57,150 @@ Amplifier::~Amplifier()
     delete ui;
 }
 
-void Amplifier::set_knob1(int value)
+void Amplifier::set_gain(int value)
 {
-    knob1 = value;
+    gain = value;
 }
 
-void Amplifier::set_knob2(int value)
+void Amplifier::set_volume(int value)
 {
-    knob2 = value;
+    volume = value;
 }
 
-void Amplifier::set_knob3(int value)
+void Amplifier::set_treble(int value)
 {
-    knob3 = value;
+    treble = value;
 }
 
-void Amplifier::set_knob4(int value)
+void Amplifier::set_middle(int value)
 {
-    knob4 = value;
+    middle = value;
 }
 
-void Amplifier::set_knob5(int value)
+void Amplifier::set_bass(int value)
 {
-    knob5 = value;
+    bass = value;
 }
 
-void Amplifier::set_knob6(int value)
+void Amplifier::set_cabinet(int value)
 {
-    knob6 = value;
+    cabinet = value;
+}
+
+void Amplifier::set_noise_gate(int value)
+{
+    noise_gate = value;
+}
+
+void Amplifier::set_presence(int value)
+{
+    presence = value;
+}
+
+void Amplifier::set_gain2(int value)
+{
+    gain2 = value;
+}
+
+void Amplifier::set_master_vol(int value)
+{
+    master_vol = value;
+}
+
+void Amplifier::set_threshold(int value)
+{
+    threshold = value;
+}
+
+void Amplifier::set_depth(int value)
+{
+    depth = value;
+}
+
+void Amplifier::set_bias(int value)
+{
+    bias = value;
+}
+
+void Amplifier::set_sag(int value)
+{
+    sag = value;
 }
 
 void Amplifier::choose_amp(int value)
 {
     amp_num = value;
 
-    // activate knobs
+    // set properties
     switch (value)
     {
     case FENDER_57_DELUXE:
+        advanced->change_cabinet(cab57DLX);
+        advanced->change_noise_gate(0);
         break;
+
     case FENDER_59_BASSMAN:
+        advanced->change_cabinet(cabBSSMN);
+        advanced->change_noise_gate(0);
         break;
+
     case FENDER_57_CHAMP:
+        advanced->change_cabinet(cabCHAMP);
+        advanced->change_noise_gate(0);
         break;
+
     case FENDER_65_DELUXE_REVERB:
+        advanced->change_cabinet(cab65DLX);
+        advanced->change_noise_gate(0);
         break;
+
     case FENDER_65_PRINCETON:
+        advanced->change_cabinet(cab65PRN);
+        advanced->change_noise_gate(0);
         break;
+
     case FENDER_65_TWIN_REVERB:
+        advanced->change_cabinet(cab65TWN);
+        advanced->change_noise_gate(0);
         break;
+
     case FENDER_SUPER_SONIC:
+        advanced->change_cabinet(cabSS112);
+        advanced->change_noise_gate(2);
         break;
+
     case BRITISH_60S:
+        advanced->change_cabinet(cab2x12C);
+        advanced->change_noise_gate(0);
         break;
+
     case BRITISH_70S:
+        advanced->change_cabinet(cab4x12G);
+        advanced->change_noise_gate(1);
         break;
+
     case BRITISH_80S:
+        advanced->change_cabinet(cab4x12M);
+        advanced->change_noise_gate(1);
         break;
+
     case AMERICAN_90S:
+        advanced->change_cabinet(cab4x12V);
+        advanced->change_noise_gate(3);
         break;
+
     case METAL_2000:
+        advanced->change_cabinet(cab4x12G);
+        advanced->change_noise_gate(2);
         break;
+
     default:
-        break;
-    }
-
-    // set labels
-    switch (value)
-    {
-    case FENDER_57_DELUXE:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case FENDER_59_BASSMAN:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case FENDER_57_CHAMP:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-
-        break;
-
-    case FENDER_65_DELUXE_REVERB:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case FENDER_65_PRINCETON:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case FENDER_65_TWIN_REVERB:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case FENDER_SUPER_SONIC:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case BRITISH_60S:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case BRITISH_70S:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case BRITISH_80S:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case AMERICAN_90S:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
-        break;
-
-    case METAL_2000:
-        ui->label->setText(tr(""));
-        ui->label_2->setText(tr(""));
-        ui->label_3->setText(tr(""));
-        ui->label_4->setText(tr(""));
-        ui->label_5->setText(tr(""));
-        ui->label_6->setText(tr(""));
         break;
     }
 }
 
 void Amplifier::send_amp()
 {
-    ((MainWindow*)parent())->set_amplifier(amp_num, knob1, knob2, knob3, knob4, knob5, knob6);
+    ((MainWindow*)parent())->set_amplifier(amp_num, gain, volume, treble, middle, bass,
+                                           cabinet, noise_gate, master_vol, gain2, presence, threshold, depth, bias, sag);
 }

@@ -14,7 +14,6 @@ Effect::Effect(QWidget *parent, int number) :
     effect_num = ui->comboBox->currentIndex();
     fx_slot = number;
     put_post_amp = false;
-    turned_on = true;
     knob1 = 0;
     knob2 = 0;
     knob3 = 0;
@@ -44,7 +43,6 @@ Effect::Effect(QWidget *parent, int number) :
     // connect elements to slots
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
     connect(ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(post_amp(bool)));
-    //connect(ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(turn_on(bool)));
     connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_knob1(int)));
     connect(ui->dial_2, SIGNAL(valueChanged(int)), this, SLOT(set_knob2(int)));
     connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_knob3(int)));
@@ -60,11 +58,6 @@ Effect::~Effect()
 }
 
 // functions setting variables
-void Effect::turn_on(bool value)
-{
-    turned_on = value;
-}
-
 void Effect::post_amp(bool value)
 {
     put_post_amp = value;

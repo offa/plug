@@ -50,6 +50,7 @@ int Mustang::start_amp()
         ret = libusb_detach_kernel_driver(amp_hand, 0);
         if(ret)
         {
+            stop_amp();
             return ret;
         }
     }
@@ -98,7 +99,7 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
                         unsigned char knob4, unsigned char knob5, unsigned char knob6)
 {
     int ret, recieved;    // variables used when sending
-    unsigned char set_slot=fx_slot;    // where to put the effect
+    unsigned char set_slot = fx_slot;    // where to put the effect
     unsigned char array[LENGTH] = {    // empty data form
       0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -450,48 +451,143 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
     return ret;
 }
 
-int Mustang::set_amplifier(unsigned char amplifier, unsigned char knob1, unsigned char knob2, unsigned char knob3,
-                           unsigned char knob4, unsigned char knob5, unsigned char knob6)
+int Mustang::set_amplifier(unsigned char amplifier, unsigned char gain, unsigned char volume, unsigned char treble,
+                           unsigned char middle, unsigned char bass, unsigned char cabinet, unsigned char noise_gate,
+                           unsigned char master_vol, unsigned char gain2, unsigned char presence, unsigned char threshold,
+                           unsigned char depth, unsigned char bias, unsigned char sag)
 {
     int ret, recieved;
-    unsigned char array[LENGTH];
+    unsigned char array[LENGTH] = {0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
+    0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
+    0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+    array[DSP] = 0x05;
+    array[GAIN] = gain;
+    array[VOLUME] = volume;
+    array[TREBLE] = treble;
+    array[MIDDLE] = middle;
+    array[BASS] = bass;
+
+    if(cabinet > 0x0c)
+        array[CABINET] = 0x00;
+    else
+        array[CABINET] = cabinet;
+
+    if(noise_gate > 0x05)
+        array[NOISE_GATE] = 0x00;
+    else
+        array[NOISE_GATE] = noise_gate;
+
+    array[MASTER_VOL] = master_vol;
+    array[GAIN2] = gain2;
+    array[PRESENCE] = presence;
+
+    if(noise_gate == 0x05)
+    {
+        if(threshold > 0x09)
+            array[THRESHOLD] = 0x00;
+        else
+            array[THRESHOLD] = threshold;
+
+        array[DEPTH] = depth;
+    }
+    array[BIAS] = bias;
+
+    if(sag > 0x02)
+        array[SAG] = 0x01;
+    else
+        array[SAG] = sag;
 
     switch (amplifier)
     {
     case FENDER_57_DELUXE:
+        array[AMPLIFIER] = 0x67;
+        array[44] = array[45] = array[46] = 0x01;
+        array[50] = 0x01;
+        array[54] = 0x53;
         break;
 
     case FENDER_59_BASSMAN:
+        array[AMPLIFIER] = 0x64;
+        array[44] = array[45] = array[46] = 0x02;
+        array[50] = 0x02;
+        array[54] = 0x67;
         break;
 
     case FENDER_57_CHAMP:
+        array[AMPLIFIER] = 0x7c;
+        array[44] = array[45] = array[46] = 0x0c;
+        array[50] = 0x0c;
+        array[54] = 0x00;
         break;
 
     case FENDER_65_DELUXE_REVERB:
+        array[AMPLIFIER] = 0x53;
+        array[40] = array[43] = 0x00;
+        array[44] = array[45] = array[46] = 0x03;
+        array[50] = 0x03;
+        array[54] = 0x6a;
         break;
 
     case FENDER_65_PRINCETON:
+        array[AMPLIFIER] = 0x6a;
+        array[44] = array[45] = array[46] = 0x04;
+        array[50] = 0x04;
+        array[54] = 0x61;
         break;
 
     case FENDER_65_TWIN_REVERB:
+        array[AMPLIFIER] = 0x75;
+        array[44] = array[45] = array[46] = 0x05;
+        array[50] = 0x05;
+        array[54] = 0x72;
         break;
 
     case FENDER_SUPER_SONIC:
+        array[AMPLIFIER] = 0x72;
+        array[44] = array[45] = array[46] = 0x06;
+        array[50] = 0x06;
+        array[54] = 0x79;
         break;
 
     case BRITISH_60S:
+        array[AMPLIFIER] = 0x61;
+        array[44] = array[45] = array[46] = 0x07;
+        array[50] = 0x07;
+        array[54] = 0x5e;
         break;
 
     case BRITISH_70S:
+        array[AMPLIFIER] = 0x79;
+        array[44] = array[45] = array[46] = 0x0b;
+        array[50] = 0x0b;
+        array[54] = 0x7c;
         break;
 
     case BRITISH_80S:
+        array[AMPLIFIER] = 0x5e;
+        array[44] = array[45] = array[46] = 0x09;
+        array[50] = 0x09;
+        array[54] = 0x5d;
         break;
 
     case AMERICAN_90S:
+        array[AMPLIFIER] = 0x5d;
+        array[44] = array[45] = array[46] = 0x0a;
+        array[50] = 0x0a;
+        array[54] = 0x6d;
         break;
 
     case METAL_2000:
+        array[AMPLIFIER] = 0x6d;
+        array[44] = array[45] = array[46] = 0x08;
+        array[50] = 0x08;
+        array[54] = 0x75;
         break;
     }
 

@@ -2,6 +2,7 @@
 #define AMPLIFIER_H
 
 #include <QMainWindow>
+#include "amp_advanced.h"
 #include "effects_enum.h"
 
 namespace Ui {
@@ -18,17 +19,28 @@ public:
 
 private:
     Ui::Amplifier *ui;
-    unsigned char amp_num, knob1, knob2, knob3, knob4, knob5, knob6;
+    Amp_Advanced *advanced;
+    unsigned char amp_num, gain, volume, treble, middle, bass;
+    unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag;
 
-private slots:
-    void set_knob1(int);
-    void set_knob2(int);
-    void set_knob3(int);
-    void set_knob4(int);
-    void set_knob5(int);
-    void set_knob6(int);
+public slots:
+    void set_gain(int);
+    void set_volume(int);
+    void set_treble(int);
+    void set_middle(int);
+    void set_bass(int);
     void choose_amp(int);
     void send_amp(void);
+
+    void set_cabinet(int);
+    void set_noise_gate(int);
+    void set_presence(int);
+    void set_gain2(int);
+    void set_master_vol(int);
+    void set_threshold(int);
+    void set_depth(int);
+    void set_bias(int);
+    void set_sag(int);
 };
 
 #endif // AMPLIFIER_H

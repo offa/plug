@@ -7,7 +7,6 @@
 QT       += core gui
 
 TARGET = plug
-VERSION = 1.0
 TEMPLATE = app
 
 
@@ -15,16 +14,22 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     effect.cpp \
     amplifier.cpp \
-    mustang.cpp
+    mustang.cpp \
+    amp_advanced.cpp
 
 HEADERS  += mainwindow.h \
     effect.h \
     amplifier.h \
     mustang.h \
-    effects_enum.h
+    effects_enum.h \
+    amp_advanced.h
 
 FORMS    += mainwindow.ui \
     effect.ui \
-    amplifier.ui
+    amplifier.ui \
+    amp_advanced.ui
 
 LIBS += -lusb-1.0
+
+ target.path += /usr/local/bin
+ INSTALLS += target

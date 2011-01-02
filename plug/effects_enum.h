@@ -67,4 +67,22 @@ enum effects
     FENDER_65_SPRING_REVERB
 };
 
+// list of all cabinets
+enum cabinets
+{
+    OFF,
+    cab57DLX,
+    cabBSSMN,
+    cab65DLX,
+    cab65PRN,
+    cabCHAMP,
+    cab4x12M,
+    cab2x12C,
+    cab4x12G,
+    cab65TWN,
+    cab4x12V,
+    cabSS212,
+    cabSS112
+};
+
 #endif // EFFECTS_ENUM_H

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>275</width>
-    <height>279</height>
+    <height>298</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -80,7 +80,20 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
@@ -92,7 +105,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string/>
+           <string>Gain</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -112,7 +125,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string/>
+           <string>Volume</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -121,6 +134,23 @@
         </item>
        </layout>
       </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -132,7 +162,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string/>
+           <string>Treble</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -141,10 +171,6 @@
         </item>
        </layout>
       </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
@@ -156,7 +182,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string/>
+           <string>Middle</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -176,27 +202,7 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string/>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="QDial" name="dial_6"/>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinBox_6"/>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string/>
+           <string>Bass</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -206,6 +212,13 @@
        </layout>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QPushButton" name="advancedButton">
+      <property name="text">
+       <string>Advanced</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QPushButton" name="setButton">
@@ -376,38 +389,6 @@
     <hint type="destinationlabel">
      <x>178</x>
      <y>197</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dial_6</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>spinBox_6</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>222</x>
-     <y>178</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>222</x>
-     <y>212</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinBox_6</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>dial_6</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>237</x>
-     <y>212</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>237</x>
-     <y>176</y>
     </hint>
    </hints>
   </connection>

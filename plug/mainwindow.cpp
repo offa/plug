@@ -49,7 +49,7 @@ void MainWindow::start_amp()
     if(x == 0)    // if request succeded
     {
         // activate buttons
-        //ui->Amplifier->setDisabled(false);
+        ui->Amplifier->setDisabled(false);
         ui->EffectButton1->setDisabled(false);
         ui->EffectButton2->setDisabled(false);
         ui->EffectButton3->setDisabled(false);
@@ -99,10 +99,13 @@ int MainWindow::set_effect(unsigned char effect, unsigned char fx_slot, bool put
     return ret;
 }
 
-int MainWindow::set_amplifier(unsigned char amplifier, unsigned char knob1, unsigned char knob2, unsigned char knob3,
-                               unsigned char knob4, unsigned char knob5, unsigned char knob6)
+int MainWindow::set_amplifier(unsigned char amplifier, unsigned char gain, unsigned char volume, unsigned char treble,
+                              unsigned char middle, unsigned char bass, unsigned char cabinet, unsigned char noise_gate,
+                              unsigned char master_vol, unsigned char gain2, unsigned char presence, unsigned char threshold,
+                              unsigned char depth, unsigned char bias, unsigned char sag)
 {
     int ret;
-    ret = amp_ops->set_amplifier(amplifier, knob1, knob2, knob3, knob4, knob5, knob6);
+    ret = amp_ops->set_amplifier(amplifier, gain, volume, treble, middle, bass,
+                                 cabinet, noise_gate, master_vol, gain2, presence, threshold, depth, bias, sag);
     return ret;
 }

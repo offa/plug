@@ -107,24 +107,9 @@
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionSave">
-   <property name="text">
-    <string>Save</string>
-   </property>
-  </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
-   </property>
-  </action>
-  <action name="actionOver">
-   <property name="text">
-    <string>over</string>
-   </property>
-  </action>
-  <action name="actionReverb">
-   <property name="text">
-    <string>reverb</string>
    </property>
   </action>
   <action name="actionConnect">
