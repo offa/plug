@@ -97,7 +97,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
@@ -109,12 +109,18 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionConnect">
    <property name="text">
-    <string>Connect</string>
+    <string>&amp;Connect</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="actionDisconnect">

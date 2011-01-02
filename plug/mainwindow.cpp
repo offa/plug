@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QShortcut>
 
 #include <stdio.h>
 
@@ -25,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     effect4 = new Effect(this, 3);
 
     // connect buttons to slots
-    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
     connect(ui->EffectButton1, SIGNAL(clicked()), effect1, SLOT(show()));
     connect(ui->EffectButton2, SIGNAL(clicked()), effect2, SLOT(show()));
@@ -33,6 +33,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->EffectButton4, SIGNAL(clicked()), effect4, SLOT(show()));
     connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(start_amp()));
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+
+    // shortcut to activate buttons while debuging
+    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
 }
 
 MainWindow::~MainWindow()
@@ -72,7 +77,8 @@ void MainWindow::stop_amp()
     x = amp_ops->stop_amp();
     if(x == 0)    // if request succeded
     {
-        // activate buttons
+        // deactivate buttons
+        ui->Amplifier->setDisabled(true);
         ui->EffectButton1->setDisabled(true);
         ui->EffectButton2->setDisabled(true);
         ui->EffectButton3->setDisabled(true);
@@ -108,4 +114,14 @@ int MainWindow::set_amplifier(unsigned char amplifier, unsigned char gain, unsig
     ret = amp_ops->set_amplifier(amplifier, gain, volume, treble, middle, bass,
                                  cabinet, noise_gate, master_vol, gain2, presence, threshold, depth, bias, sag);
     return ret;
+}
+
+// activate buttons
+void MainWindow::enable_buttons(void)
+{
+    ui->Amplifier->setDisabled(false);
+    ui->EffectButton1->setDisabled(false);
+    ui->EffectButton2->setDisabled(false);
+    ui->EffectButton3->setDisabled(false);
+    ui->EffectButton4->setDisabled(false);
 }

@@ -28,6 +28,7 @@ public slots:
                       unsigned char middle, unsigned char bass, unsigned char cabinet, unsigned char noise_gate,
                       unsigned char master_vol, unsigned char gain2, unsigned char presence, unsigned char threshold,
                       unsigned char depth, unsigned char bias, unsigned char sag);
+    void enable_buttons(void);
 
 private:
     Ui::MainWindow *ui;
