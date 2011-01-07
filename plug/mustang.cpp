@@ -6,17 +6,21 @@
 Mustang::Mustang()
 {
     // "apply efect" command
-    FXEXEC[0] = 0x1c;
-    FXEXEC[1] = 0x03;
+    execute[0] = 0x1c;
+    execute[1] = 0x03;
     for(int i = 2; i < LENGTH; i++)
     {
-        FXEXEC[i] = 0x00;
+        execute[i] = 0x00;
     }
 
     prev_array[0][0] = 0x00;
     prev_array[1][0] = 0x00;
     prev_array[2][0] = 0x00;
     prev_array[3][0] = 0x00;
+    for(int i = 0; i < 4; i++)
+    {
+        prev_array[i][FXSLOT] = 0xff;
+    }
 }
 
 Mustang::~Mustang()
@@ -94,12 +98,10 @@ int Mustang::stop_amp()
     return 0;
 }
 
-int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,
-                        unsigned char knob1, unsigned char knob2, unsigned char knob3,
-                        unsigned char knob4, unsigned char knob5, unsigned char knob6)
+int Mustang::set_effect(struct fx_pedal_settings value)
 {
     int ret, recieved;    // variables used when sending
-    unsigned char set_slot = fx_slot;    // where to put the effect
+    unsigned char slot;    // where to put the effect
     unsigned char array[LENGTH] = {    // empty data form
       0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -111,31 +113,38 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    if(put_post_amp)    // put effect in a slot after amplifier
+    if(value.put_post_amp)    // put effect in a slot after amplifier
     {
-        set_slot = fx_slot + 4;
+        slot = value.fx_slot + 4;
+    }
+    else
+    {
+        slot = value.fx_slot;
     }
 
     // fill the form with data
-    array[FXSLOT] = set_slot;
-    array[KNOB1] = knob1;
-    array[KNOB2] = knob2;
-    array[KNOB3] = knob3;
-    array[KNOB4] = knob4;
-    array[KNOB5] = knob5;
+    array[FXSLOT] = slot;
+    array[KNOB1] = value.knob1;
+    array[KNOB2] = value.knob2;
+    array[KNOB3] = value.knob3;
+    array[KNOB4] = value.knob4;
+    array[KNOB5] = value.knob5;
     // some effects have more knobs
-    if (effect == MONO_ECHO_FILTER || effect == STEREO_ECHO_FILTER || effect == TAPE_DELAY || effect == STEREO_TAPE_DELAY)
+    if (value.effect_num == MONO_ECHO_FILTER ||
+            value.effect_num == STEREO_ECHO_FILTER ||
+            value.effect_num == TAPE_DELAY ||
+            value.effect_num == STEREO_TAPE_DELAY)
     {
-        array[KNOB6] = knob6;
+        array[KNOB6] = value.knob6;
     }
 
     // fill the form with missing data
     int k=0;
-    switch (effect) {
+    switch (value.effect_num) {
     case EMPTY:
         for (int i = 0; i < 4; i++)
         {
-            if (prev_array[i][FXSLOT] == set_slot)
+            if (prev_array[i][FXSLOT] == slot)
             {
                 for (int j = 0; j < LENGTH; j++)
                 {
@@ -399,33 +408,11 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
         array[DSP] = 0x09;
         array[EFFECT] = 0x0b;
         break;
-
     }
-
-    // clear DSP if something was there
-//    if(prev_array[array[DSP]-6][0]!=0x00)
-//    {
-//        unsigned char clear_array[LENGTH];
-//        for (int i=0; i<LENGTH;i++)
-//        {
-//            clear_array[i]=prev_array[array[DSP]-6][i];
-//        }
-//        clear_array[EFFECT] = 0x00;
-//        clear_array[KNOB1] = 0x00;
-//        clear_array[KNOB2] = 0x00;
-//        clear_array[KNOB3] = 0x00;
-//        clear_array[KNOB4] = 0x00;
-//        clear_array[KNOB5] = 0x00;
-//        clear_array[KNOB6] = 0x00;
-//        ret = libusb_interrupt_transfer(amp_hand, 0x01, clear_array, LENGTH, &recieved, TMOUT);
-//        ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
-//        //DEBUG
-//        qDebug()<<"clear: DSP: "<<clear_array[DSP]<<", slot: "<<clear_array[FXSLOT]<<", effect: "<<clear_array[EFFECT];
-//    }
 
     // send packet to the amp
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     //DEBUG
 //    qDebug()<<"set: DSP: "<<array[DSP]<<", slot: "<<array[FXSLOT]<<", effect: "<<array[EFFECT];
 
@@ -451,10 +438,7 @@ int Mustang::set_effect(unsigned char effect, unsigned char fx_slot, bool put_po
     return ret;
 }
 
-int Mustang::set_amplifier(unsigned char amplifier, unsigned char gain, unsigned char volume, unsigned char treble,
-                           unsigned char middle, unsigned char bass, unsigned char cabinet, unsigned char noise_gate,
-                           unsigned char master_vol, unsigned char gain2, unsigned char presence, unsigned char threshold,
-                           unsigned char depth, unsigned char bias, unsigned char sag)
+int Mustang::set_amplifier(struct amp_settings value)
 {
     int ret, recieved;
     unsigned char array[LENGTH] = {0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -467,43 +451,43 @@ int Mustang::set_amplifier(unsigned char amplifier, unsigned char gain, unsigned
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     array[DSP] = 0x05;
-    array[GAIN] = gain;
-    array[VOLUME] = volume;
-    array[TREBLE] = treble;
-    array[MIDDLE] = middle;
-    array[BASS] = bass;
+    array[GAIN] = value.gain;
+    array[VOLUME] = value.volume;
+    array[TREBLE] = value.treble;
+    array[MIDDLE] = value.middle;
+    array[BASS] = value.bass;
 
-    if(cabinet > 0x0c)
+    if(value.cabinet > 0x0c)
         array[CABINET] = 0x00;
     else
-        array[CABINET] = cabinet;
+        array[CABINET] = value.cabinet;
 
-    if(noise_gate > 0x05)
+    if(value.noise_gate > 0x05)
         array[NOISE_GATE] = 0x00;
     else
-        array[NOISE_GATE] = noise_gate;
+        array[NOISE_GATE] = value.noise_gate;
 
-    array[MASTER_VOL] = master_vol;
-    array[GAIN2] = gain2;
-    array[PRESENCE] = presence;
+    array[MASTER_VOL] = value.master_vol;
+    array[GAIN2] = value.gain2;
+    array[PRESENCE] = value.presence;
 
-    if(noise_gate == 0x05)
+    if(value.noise_gate == 0x05)
     {
-        if(threshold > 0x09)
+        if(value.threshold > 0x09)
             array[THRESHOLD] = 0x00;
         else
-            array[THRESHOLD] = threshold;
+            array[THRESHOLD] = value.threshold;
 
-        array[DEPTH] = depth;
+        array[DEPTH] = value.depth;
     }
-    array[BIAS] = bias;
+    array[BIAS] = value.bias;
 
-    if(sag > 0x02)
+    if(value.sag > 0x02)
         array[SAG] = 0x01;
     else
-        array[SAG] = sag;
+        array[SAG] = value.sag;
 
-    switch (amplifier)
+    switch (value.amp_num)
     {
     case FENDER_57_DELUXE:
         array[AMPLIFIER] = 0x67;
@@ -592,7 +576,7 @@ int Mustang::set_amplifier(unsigned char amplifier, unsigned char gain, unsigned
     }
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, FXEXEC, LENGTH, &recieved, TMOUT);
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
 
     return ret;
 }

@@ -10,13 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // disable all buttons until the communication is set
-    ui->Amplifier->setDisabled(true);
-    ui->EffectButton1->setDisabled(true);
-    ui->EffectButton2->setDisabled(true);
-    ui->EffectButton3->setDisabled(true);
-    ui->EffectButton4->setDisabled(true);
-
     // create child objects
     amp_ops = new Mustang();
     amp = new Amplifier(this);
@@ -96,23 +89,17 @@ void MainWindow::stop_amp()
 }
 
 // pass the message to the amp
-int MainWindow::set_effect(unsigned char effect, unsigned char fx_slot, bool put_post_amp,
-                           unsigned char knob1, unsigned char knob2, unsigned char knob3,
-                           unsigned char knob4, unsigned char knob5, unsigned char knob6)
+int MainWindow::set_effect(struct fx_pedal_settings pedal)
 {
     int ret;
-    ret = amp_ops->set_effect(effect, fx_slot, put_post_amp, knob1, knob2, knob3, knob4, knob5, knob6);
+    ret = amp_ops->set_effect(pedal);
     return ret;
 }
 
-int MainWindow::set_amplifier(unsigned char amplifier, unsigned char gain, unsigned char volume, unsigned char treble,
-                              unsigned char middle, unsigned char bass, unsigned char cabinet, unsigned char noise_gate,
-                              unsigned char master_vol, unsigned char gain2, unsigned char presence, unsigned char threshold,
-                              unsigned char depth, unsigned char bias, unsigned char sag)
+int MainWindow::set_amplifier(struct amp_settings settings)
 {
     int ret;
-    ret = amp_ops->set_amplifier(amplifier, gain, volume, treble, middle, bass,
-                                 cabinet, noise_gate, master_vol, gain2, presence, threshold, depth, bias, sag);
+    ret = amp_ops->set_amplifier(settings);
     return ret;
 }
 

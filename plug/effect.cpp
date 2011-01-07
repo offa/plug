@@ -21,20 +21,6 @@ Effect::Effect(QWidget *parent, int number) :
     knob5 = 0;
     knob6 = 0;
 
-    // disable all elements until some effect is chosen
-    ui->dial->setDisabled(true);
-    ui->dial_2->setDisabled(true);
-    ui->dial_3->setDisabled(true);
-    ui->dial_4->setDisabled(true);
-    ui->dial_5->setDisabled(true);
-    ui->dial_6->setDisabled(true);
-    ui->spinBox->setDisabled(true);
-    ui->spinBox_2->setDisabled(true);
-    ui->spinBox_3->setDisabled(true);
-    ui->spinBox_4->setDisabled(true);
-    ui->spinBox_5->setDisabled(true);
-    ui->spinBox_6->setDisabled(true);
-
     // set window title
     char title[10];
     sprintf(title, "Effect %d", fx_slot+1);
@@ -42,7 +28,7 @@ Effect::Effect(QWidget *parent, int number) :
 
     // connect elements to slots
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
-    connect(ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(post_amp(bool)));
+    connect(ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(set_post_amp(bool)));
     connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_knob1(int)));
     connect(ui->dial_2, SIGNAL(valueChanged(int)), this, SLOT(set_knob2(int)));
     connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_knob3(int)));
@@ -58,7 +44,7 @@ Effect::~Effect()
 }
 
 // functions setting variables
-void Effect::post_amp(bool value)
+void Effect::set_post_amp(bool value)
 {
     put_post_amp = value;
 }
@@ -234,7 +220,7 @@ void Effect::choose_fx(int value)
         break;
     }
 
-    // set knob labels
+    // set knobs labels
     switch (value)
     {
     case EMPTY:
@@ -461,7 +447,20 @@ void Effect::choose_fx(int value)
     }
 }
 
+// send settings to the amplifier
 void Effect::send_fx()
 {
-    ((MainWindow*)parent())->set_effect(effect_num, fx_slot, put_post_amp, knob1, knob2, knob3, knob4, knob5, knob6);
+    struct fx_pedal_settings pedal;
+
+    pedal.effect_num = effect_num;
+    pedal.fx_slot = fx_slot;
+    pedal.put_post_amp = put_post_amp;
+    pedal.knob1 = knob1;
+    pedal.knob2 = knob2;
+    pedal.knob3 = knob3;
+    pedal.knob4 = knob4;
+    pedal.knob5 = knob5;
+    pedal.knob6 = knob6;
+
+    ((MainWindow*)parent())->set_effect(pedal);
 }

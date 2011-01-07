@@ -2,6 +2,7 @@
 #include "ui_amplifier.h"
 
 #include "mainwindow.h"
+#include "data_structs.h"
 
 Amplifier::Amplifier(QWidget *parent) :
     QMainWindow(parent),
@@ -29,19 +30,6 @@ Amplifier::Amplifier(QWidget *parent) :
     advanced = new Amp_Advanced(this);
     connect(ui->advancedButton, SIGNAL(clicked()), advanced, SLOT(open()));
     choose_amp(0);
-
-    // disabled until I discover how it works
-//    ui->dial->setDisabled(true);
-//    ui->dial_2->setDisabled(true);
-//    ui->dial_3->setDisabled(true);
-//    ui->dial_4->setDisabled(true);
-//    ui->dial_5->setDisabled(true);
-//    ui->spinBox->setDisabled(true);
-//    ui->spinBox_2->setDisabled(true);
-//    ui->spinBox_3->setDisabled(true);
-//    ui->spinBox_4->setDisabled(true);
-//    ui->spinBox_5->setDisabled(true);
-//    ui->advancedButton->setDisabled(true);
 
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_amp(int)));
     connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_gain(int)));
@@ -199,8 +187,26 @@ void Amplifier::choose_amp(int value)
     }
 }
 
+// send settings to the amplifier
 void Amplifier::send_amp()
 {
-    ((MainWindow*)parent())->set_amplifier(amp_num, gain, volume, treble, middle, bass,
-                                           cabinet, noise_gate, master_vol, gain2, presence, threshold, depth, bias, sag);
+    struct amp_settings settings;
+
+    settings.amp_num = amp_num;
+    settings.gain = gain;
+    settings.volume = volume;
+    settings.treble = treble;
+    settings.middle = middle;
+    settings.bass = bass;
+    settings.cabinet = cabinet;
+    settings.noise_gate = noise_gate;
+    settings.master_vol = master_vol;
+    settings.gain2 = gain2;
+    settings.presence = presence;
+    settings.threshold = threshold;
+    settings.depth = depth;
+    settings.bias = bias;
+    settings.sag = sag;
+
+    ((MainWindow*)parent())->set_amplifier(settings);
 }

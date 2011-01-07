@@ -22,7 +22,8 @@ HEADERS  += mainwindow.h \
     amplifier.h \
     mustang.h \
     effects_enum.h \
-    amp_advanced.h
+    amp_advanced.h \
+    data_structs.h
 
 FORMS    += mainwindow.ui \
     effect.ui \

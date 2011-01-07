@@ -23,7 +23,7 @@ private:
 
 public slots:
     // functions to set variables
-    void post_amp(bool);
+    void set_post_amp(bool);
     void set_knob1(int);
     void set_knob2(int);
     void set_knob3(int);
@@ -31,6 +31,8 @@ public slots:
     void set_knob5(int);
     void set_knob6(int);
     void choose_fx(int);
+
+    // send settings to the amplifier
     void send_fx(void);
 };
 

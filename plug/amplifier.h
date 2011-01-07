@@ -24,14 +24,15 @@ private:
     unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag;
 
 public slots:
+    // set basic variables
     void set_gain(int);
     void set_volume(int);
     void set_treble(int);
     void set_middle(int);
     void set_bass(int);
     void choose_amp(int);
-    void send_amp(void);
 
+    // set advanced variables
     void set_cabinet(int);
     void set_noise_gate(int);
     void set_presence(int);
@@ -41,6 +42,9 @@ public slots:
     void set_depth(int);
     void set_bias(int);
     void set_sag(int);
+
+    // send settings to the amplifier
+    void send_amp(void);
 };
 
 #endif // AMPLIFIER_H
