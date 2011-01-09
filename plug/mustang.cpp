@@ -414,7 +414,7 @@ int Mustang::set_effect(struct fx_pedal_settings value)
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     //DEBUG
-//    qDebug()<<"set: DSP: "<<array[DSP]<<", slot: "<<array[FXSLOT]<<", effect: "<<array[EFFECT];
+//    qDebug("set: DSP: %d, slot: %d, effect: %d", array[DSP], array[FXSLOT], array[EFFECT]);
 
     // save current settings
     for (int i = 0; i < LENGTH; i++)

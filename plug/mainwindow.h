@@ -6,6 +6,7 @@
 #include "amplifier.h"
 #include "mustang.h"
 #include "data_structs.h"
+#include "about.h"
 
 namespace Ui {
     class MainWindow;
@@ -36,6 +37,7 @@ private:
     Effect *effect2;
     Effect *effect3;
     Effect *effect4;
+    About *about_window;
 };
 
 #endif // MAINWINDOW_H

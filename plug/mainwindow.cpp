@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     effect3 = new Effect(this, 2);
     effect4 = new Effect(this, 3);
 
+    about_window = new About(this);
+
     // connect buttons to slots
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
     connect(ui->EffectButton1, SIGNAL(clicked()), effect1, SLOT(show()));
@@ -27,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(start_amp()));
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->actionAbout, SIGNAL(triggered()), about_window, SLOT(open()));
 
     // shortcut to activate buttons while debuging
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);

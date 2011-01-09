@@ -15,7 +15,8 @@ SOURCES += main.cpp\
     effect.cpp \
     amplifier.cpp \
     mustang.cpp \
-    amp_advanced.cpp
+    amp_advanced.cpp \
+    about.cpp
 
 HEADERS  += mainwindow.h \
     effect.h \
@@ -23,12 +24,14 @@ HEADERS  += mainwindow.h \
     mustang.h \
     effects_enum.h \
     amp_advanced.h \
-    data_structs.h
+    data_structs.h \
+    about.h
 
 FORMS    += mainwindow.ui \
     effect.ui \
     amplifier.ui \
-    amp_advanced.ui
+    amp_advanced.ui \
+    about.ui
 
 LIBS += -lusb-1.0
 
