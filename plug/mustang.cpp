@@ -599,18 +599,15 @@ int Mustang::set_amplifier(struct amp_settings value)
 int Mustang::save_on_amp(char *name, int slot)
 {
     int ret, recieved;
-    unsigned char array[64] = {
-        0x1c, 0x01, 0x03, 0x00, 0x00, 0x00, 0x01, 0x01,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
+    unsigned char array[64];
 
+    memset(array, 0x00, 64);
+    array[0] = 0x1c;
+    array[1] = 0x01;
+    array[2] = 0x03;
     array[SAVE_SLOT] = slot;
+    array[6] = 0x01;
+    array[7] = 0x01;
 
     if(strlen(name) > 31)
     {
@@ -622,14 +619,25 @@ int Mustang::save_on_amp(char *name, int slot)
         array[i] = name[j];
     }
 
-    execute[0] = 0x1c;
-    execute[1] = 0x01;
-    execute[2] = 0x01;
-    execute[SAVE_SLOT] = slot;
-    execute[6] = 0x01;
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    load_memory_bank(slot);
+
+    return ret;
+}
+
+int Mustang::load_memory_bank(int slot)
+{
+    int ret, recieved;
+    unsigned char array[64];
+
+    memset(array, 0x00, 64);
+    array[0] = 0x1c;
+    array[1] = 0x01;
+    array[2] = 0x01;
+    array[SAVE_SLOT] = slot;
+    array[6] = 0x01;
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
 
     return ret;
 }

@@ -57,6 +57,7 @@ public:
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
     int save_on_amp(char *, int);
+    int load_memory_bank(int);
 
 private:
     libusb_device_handle *amp_hand;    // handle for USB communication
