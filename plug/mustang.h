@@ -1,9 +1,12 @@
 #ifndef MUSTANG_H
 #define MUSTANG_H
 
+#include <stdio.h>
+#include <string.h>
+#include <libusb-1.0/libusb.h>
+#include <QtDebug>
 #include "effects_enum.h"
 #include "data_structs.h"
-#include <libusb-1.0/libusb.h>
 
 // amp's VID and PID
 #define USB_VID 0x1ed8
@@ -41,15 +44,19 @@
 #define BIAS 42
 #define SAG 51
 
+// save fields
+#define SAVE_SLOT 4
+
 class Mustang
 {
 public:
     Mustang();
     ~Mustang();
-    int start_amp();    // initialize communication
-    int stop_amp();    // terminate communication
+    int start_amp(void);    // initialize communication
+    int stop_amp(void);    // terminate communication
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
+    int save_on_amp(char *, int);
 
 private:
     libusb_device_handle *amp_hand;    // handle for USB communication

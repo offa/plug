@@ -1,12 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <stdio.h>
+#include <QShortcut>
 #include <QMainWindow>
 #include "effect.h"
 #include "amplifier.h"
 #include "mustang.h"
 #include "data_structs.h"
 #include "about.h"
+#include "saveonamp.h"
 
 namespace Ui {
     class MainWindow;
@@ -21,10 +24,11 @@ public:
     ~MainWindow();
 
 public slots:
-    void start_amp();    // initialize the communication
-    void stop_amp();    // terminate communication
+    void start_amp(void);    // initialize the communication
+    void stop_amp(void);    // terminate communication
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
+    int save_on_amp(char *, int);
     void enable_buttons(void);
 
 private:
@@ -38,6 +42,7 @@ private:
     Effect *effect3;
     Effect *effect4;
     About *about_window;
+    SaveOnAmp *save;
 };
 
 #endif // MAINWINDOW_H

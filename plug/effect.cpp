@@ -1,7 +1,6 @@
 #include "effect.h"
 #include "ui_effect.h"
 
-#include <stdio.h>
 #include "mainwindow.h"
 
 Effect::Effect(QWidget *parent, int number) :

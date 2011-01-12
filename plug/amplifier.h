@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "amp_advanced.h"
 #include "effects_enum.h"
+#include "data_structs.h"
 
 namespace Ui {
     class Amplifier;

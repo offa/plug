@@ -163,7 +163,7 @@
    <sender>pushButton</sender>
    <signal>clicked()</signal>
    <receiver>About</receiver>
-   <slot>accept()</slot>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>160</x>

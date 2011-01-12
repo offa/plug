@@ -1,6 +1,7 @@
 #ifndef EFFECT_H
 #define EFFECT_H
 
+#include <stdio.h>
 #include <QMainWindow>
 #include "effects_enum.h"
 

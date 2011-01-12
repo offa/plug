@@ -2,7 +2,6 @@
 #include "ui_amplifier.h"
 
 #include "mainwindow.h"
-#include "data_structs.h"
 
 Amplifier::Amplifier(QWidget *parent) :
     QMainWindow(parent),

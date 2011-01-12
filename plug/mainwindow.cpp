@@ -1,8 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QShortcut>
-
-#include <stdio.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     effect4 = new Effect(this, 3);
 
     about_window = new About(this);
+    save = new SaveOnAmp(this);
 
     // connect buttons to slots
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
@@ -30,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered()), about_window, SLOT(open()));
+    connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(open()));
 
     // shortcut to activate buttons while debuging
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
@@ -55,6 +54,7 @@ void MainWindow::start_amp()
         ui->EffectButton2->setDisabled(false);
         ui->EffectButton3->setDisabled(false);
         ui->EffectButton4->setDisabled(false);
+        ui->actionSave_to_amplifier->setDisabled(false);
         ui->statusBar->showMessage(tr("Connected"), 5000);    // show message on the status bar
     }
     else    // if request failed
@@ -79,6 +79,7 @@ void MainWindow::stop_amp()
         ui->EffectButton2->setDisabled(true);
         ui->EffectButton3->setDisabled(true);
         ui->EffectButton4->setDisabled(true);
+        ui->actionSave_to_amplifier->setDisabled(true);
         ui->statusBar->showMessage(tr("Disconnected"), 5000);    // show message on the status bar
     }
     else    // if request failed
@@ -106,6 +107,13 @@ int MainWindow::set_amplifier(struct amp_settings settings)
     return ret;
 }
 
+int MainWindow::save_on_amp(char *name, int slot)
+{
+    int ret;
+    ret = amp_ops->save_on_amp(name, slot);
+    return ret;
+}
+
 // activate buttons
 void MainWindow::enable_buttons(void)
 {
@@ -114,4 +122,5 @@ void MainWindow::enable_buttons(void)
     ui->EffectButton2->setDisabled(false);
     ui->EffectButton3->setDisabled(false);
     ui->EffectButton4->setDisabled(false);
+    ui->actionSave_to_amplifier->setDisabled(false);
 }
