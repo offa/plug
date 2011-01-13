@@ -3,12 +3,9 @@
 Mustang::Mustang()
 {
     // "apply efect" command
+    memset(execute, 0x00, LENGTH);
     execute[0] = 0x1c;
     execute[1] = 0x03;
-    for(int i = 2; i < LENGTH; i++)
-    {
-        execute[i] = 0x00;
-    }
 
     prev_array[0][0] = 0x00;
     prev_array[1][0] = 0x00;
@@ -27,7 +24,8 @@ Mustang::~Mustang()
 
 int Mustang::start_amp()
 {
-    int ret;
+    int ret, recieved;
+    unsigned char array[LENGTH];
 
     // initialize libusb
     ret = libusb_init(NULL);
@@ -63,6 +61,30 @@ int Mustang::start_amp()
         stop_amp();
         return ret;
     }
+
+    // initialization which is needed if you want
+    // amp to give you any replies in the future
+    memset(array, 0x00, LENGTH);
+    array[1] = 0xc3;
+    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+
+//    memset(array, 0x00, LENGTH);
+//    array[0] = 0x1a;
+//    array[1] = 0x03;
+//    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+//    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+
+//    memset(array, 0x00, LENGTH);
+//    array[0] = 0xff;
+//    array[1] = 0xc1;
+//    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+//    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+
+//    while(recieved)
+//    {
+//        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+//    }
 
     return 0;
 }
@@ -599,9 +621,9 @@ int Mustang::set_amplifier(struct amp_settings value)
 int Mustang::save_on_amp(char *name, int slot)
 {
     int ret, recieved;
-    unsigned char array[64];
+    unsigned char array[LENGTH];
 
-    memset(array, 0x00, 64);
+    memset(array, 0x00, LENGTH);
     array[0] = 0x1c;
     array[1] = 0x01;
     array[2] = 0x03;
@@ -620,17 +642,17 @@ int Mustang::save_on_amp(char *name, int slot)
     }
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    load_memory_bank(slot);
+    load_memory_bank(slot, NULL);
 
     return ret;
 }
 
-int Mustang::load_memory_bank(int slot)
+int Mustang::load_memory_bank(int slot, unsigned char data[6][LENGTH])
 {
     int ret, recieved;
-    unsigned char array[64];
+    unsigned char array[LENGTH];
 
-    memset(array, 0x00, 64);
+    memset(array, 0x00, LENGTH);
     array[0] = 0x1c;
     array[1] = 0x01;
     array[2] = 0x01;
@@ -638,6 +660,15 @@ int Mustang::load_memory_bank(int slot)
     array[6] = 0x01;
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    if(data != NULL)
+    {
+        for(int i = 0; recieved; i++)
+        {
+            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+            if(i < 6)
+              memcpy(data[i], array, LENGTH);
+        }
+    }
 
     return ret;
 }

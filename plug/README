@@ -42,7 +42,7 @@ instead of
 2. Usage
 
   After you successfully compile the code and run the program click
-File-->Connect (Ctrl+C) to connect software to the amplifier. Message
+"Connection"-->"Connect" (Ctrl+C) to connect software to the amplifier. Message
 "Connected" should appear on the status bar at the bottom of the window. After
 that buttons will become active.
 
@@ -71,6 +71,10 @@ Effect buttons represents an effect slots. If you want to add an effect:
 - press "Set" button to send effect to an amplifier
 To add an effect after the amplifier just enable the check box at the bottom in
 the effect window.
+
+To save settings in one of amplifiers memory banks click "File"-->"Save on
+amplifier". In the newly opened window choose name for your preset (for
+compatibility with FUSE) and memory bank and click save.
 
 
 3. Help and donations

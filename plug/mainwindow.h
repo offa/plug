@@ -10,6 +10,7 @@
 #include "data_structs.h"
 #include "about.h"
 #include "saveonamp.h"
+#include "loadfromamp.h"
 
 namespace Ui {
     class MainWindow;
@@ -29,6 +30,7 @@ public slots:
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
     int save_on_amp(char *, int);
+    int load_from_amp(int);
     void enable_buttons(void);
 
 private:
@@ -43,6 +45,7 @@ private:
     Effect *effect4;
     About *about_window;
     SaveOnAmp *save;
+    LoadFromAmp *load;
 };
 
 #endif // MAINWINDOW_H

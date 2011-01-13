@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     about_window = new About(this);
     save = new SaveOnAmp(this);
+    load = new LoadFromAmp(this);
 
     // connect buttons to slots
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
@@ -29,8 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered()), about_window, SLOT(open()));
     connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(open()));
+    connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(open()));
 
-    // shortcut to activate buttons while debuging
+    // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
 }
@@ -55,6 +57,7 @@ void MainWindow::start_amp()
         ui->EffectButton3->setDisabled(false);
         ui->EffectButton4->setDisabled(false);
         ui->actionSave_to_amplifier->setDisabled(false);
+        ui->action_Load_from_amplifier->setDisabled(false);
         ui->statusBar->showMessage(tr("Connected"), 5000);    // show message on the status bar
     }
     else    // if request failed
@@ -80,6 +83,7 @@ void MainWindow::stop_amp()
         ui->EffectButton3->setDisabled(true);
         ui->EffectButton4->setDisabled(true);
         ui->actionSave_to_amplifier->setDisabled(true);
+        ui->action_Load_from_amplifier->setDisabled(true);
         ui->statusBar->showMessage(tr("Disconnected"), 5000);    // show message on the status bar
     }
     else    // if request failed
@@ -110,8 +114,47 @@ int MainWindow::set_amplifier(struct amp_settings settings)
 int MainWindow::save_on_amp(char *name, int slot)
 {
     int ret;
+    char title[40];
+
     ret = amp_ops->save_on_amp(name, slot);
+
+    if(name[0] == 0x00)
+        sprintf(title, "PLUG (NONE)");
+    else
+        sprintf(title, "PLUG (%s)", name);
+    setWindowTitle(title);
+
     return ret;
+}
+
+int MainWindow::load_from_amp(int slot)
+{
+    unsigned char data[6][64];
+    char title[40];
+
+    memset(data, 0x00, (6*64));
+    amp_ops->load_memory_bank(slot, data);
+
+    memset(title, 0x00, 40);
+    if(data[0][16] == 0x00)
+    {
+        sprintf(title, "PLUG (NONE)");
+    }
+    else
+    {
+        sprintf(title, "PLUG (");
+        for(int i = 6, j = 16; data[0][j] != 0x00; i++, j++)
+        {
+            title[i] = data[0][j];
+            title[i+1] = ')';
+            title[i+2] = 0x00;
+        }
+    }
+    setWindowTitle(title);
+
+    // TODO: loading amp and effects
+
+    return 0;
 }
 
 // activate buttons
@@ -123,4 +166,5 @@ void MainWindow::enable_buttons(void)
     ui->EffectButton3->setDisabled(false);
     ui->EffectButton4->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
+    ui->action_Load_from_amplifier->setDisabled(false);
 }
