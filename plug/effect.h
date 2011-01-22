@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <QMainWindow>
 #include "effects_enum.h"
+#include "data_structs.h"
 
 namespace Ui {
     class Effect;
@@ -35,6 +36,8 @@ public slots:
 
     // send settings to the amplifier
     void send_fx(void);
+
+    void load(struct fx_pedal_settings);
 };
 
 #endif // EFFECT_H

@@ -2,6 +2,8 @@
 
 Mustang::Mustang()
 {
+    amp_hand = NULL;
+
     // "apply efect" command
     memset(execute, 0x00, LENGTH);
     execute[0] = 0x1c;
@@ -27,64 +29,68 @@ int Mustang::start_amp()
     int ret, recieved;
     unsigned char array[LENGTH];
 
-    // initialize libusb
-    ret = libusb_init(NULL);
-    if (ret)
-    {
-        return ret;
-    }
-
-    // get handle for the device
-    amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, USB_PID);
     if(amp_hand == NULL)
     {
-        stop_amp();
-        return -100;
-    }
 
-    // detach kernel driver
-    ret = libusb_kernel_driver_active(amp_hand, 0);
-    if(ret)
-    {
-        ret = libusb_detach_kernel_driver(amp_hand, 0);
+        // initialize libusb
+        ret = libusb_init(NULL);
+        if (ret)
+        {
+            return ret;
+        }
+
+        // get handle for the device
+        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, USB_PID);
+        if(amp_hand == NULL)
+        {
+            stop_amp();
+            return -100;
+        }
+
+        // detach kernel driver
+        ret = libusb_kernel_driver_active(amp_hand, 0);
+        if(ret)
+        {
+            ret = libusb_detach_kernel_driver(amp_hand, 0);
+            if(ret)
+            {
+                stop_amp();
+                return ret;
+            }
+        }
+
+        // claim the device
+        ret = libusb_claim_interface(amp_hand, 0);
         if(ret)
         {
             stop_amp();
             return ret;
         }
-    }
 
-    // claim the device
-    ret = libusb_claim_interface(amp_hand, 0);
-    if(ret)
-    {
-        stop_amp();
-        return ret;
-    }
+        // initialization which is needed if you want
+        // to get any replies from the amp in the future
+        memset(array, 0x00, LENGTH);
+        array[1] = 0xc3;
+        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-    // initialization which is needed if you want
-    // amp to give you any replies in the future
-    memset(array, 0x00, LENGTH);
-    array[1] = 0xc3;
-    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-
-//    memset(array, 0x00, LENGTH);
-//    array[0] = 0x1a;
-//    array[1] = 0x03;
-//    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-//    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-
-//    memset(array, 0x00, LENGTH);
-//    array[0] = 0xff;
-//    array[1] = 0xc1;
-//    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-//    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-
-//    while(recieved)
-//    {
+//        memset(array, 0x00, LENGTH);
+//        array[0] = 0x1a;
+//        array[1] = 0x03;
+//        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
 //        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-//    }
+
+//        memset(array, 0x00, LENGTH);
+//        array[0] = 0xff;
+//        array[1] = 0xc1;
+//        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+//        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+
+//        while(recieved)
+//        {
+//            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+//        }
+    }
 
     return 0;
 }
@@ -109,10 +115,10 @@ int Mustang::stop_amp()
         libusb_close(amp_hand);
         amp_hand = NULL;
         //printf("amp stopped\n");
-    }
 
-    // stop using libusb
-    libusb_exit(NULL);
+        // stop using libusb
+        libusb_exit(NULL);
+    }
 
     return 0;
 }
@@ -642,15 +648,16 @@ int Mustang::save_on_amp(char *name, int slot)
     }
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    load_memory_bank(slot, NULL);
+    load_memory_bank(slot, NULL, NULL, NULL);
 
     return ret;
 }
 
-int Mustang::load_memory_bank(int slot, unsigned char data[6][LENGTH])
+//int Mustang::load_memory_bank(int slot, unsigned char data[6][LENGTH])
+int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
     int ret, recieved;
-    unsigned char array[LENGTH];
+    unsigned char array[LENGTH], data[6][LENGTH];
 
     memset(array, 0x00, LENGTH);
     array[0] = 0x1c;
@@ -660,13 +667,285 @@ int Mustang::load_memory_bank(int slot, unsigned char data[6][LENGTH])
     array[6] = 0x01;
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    if(data != NULL)
+    for(int i = 0; recieved; i++)
     {
-        for(int i = 0; recieved; i++)
-        {
-            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        if(name != NULL && amp_set != NULL && effects_set != NULL)
             if(i < 6)
-              memcpy(data[i], array, LENGTH);
+                memcpy(data[i], array, LENGTH);
+    }
+
+
+    if(name != NULL && amp_set != NULL && effects_set != NULL)
+    {
+        // NAME
+        memset(name, 0x00, 32);
+        for(int i = 0, j = 16; data[0][j] != 0x00; i++, j++)
+        {
+            name[i] = data[0][j];
+        }
+
+
+        // AMPLIFIER
+        switch(data[1][AMPLIFIER])
+        {
+        case 0x67:
+            amp_set->amp_num = FENDER_57_DELUXE;
+            break;
+
+        case 0x64:
+            amp_set->amp_num = FENDER_59_BASSMAN;
+            break;
+
+        case 0x7c:
+            amp_set->amp_num = FENDER_57_CHAMP;
+            break;
+
+        case 0x53:
+            amp_set->amp_num = FENDER_65_DELUXE_REVERB;
+            break;
+
+        case 0x6a:
+            amp_set->amp_num = FENDER_65_PRINCETON;
+            break;
+
+        case 0x75:
+            amp_set->amp_num = FENDER_65_TWIN_REVERB;
+            break;
+
+        case 0x72:
+            amp_set->amp_num = FENDER_SUPER_SONIC;
+            break;
+
+        case 0x61:
+            amp_set->amp_num = BRITISH_60S;
+            break;
+
+        case 0x79:
+            amp_set->amp_num = BRITISH_70S;
+            break;
+
+        case 0x5e:
+            amp_set->amp_num = BRITISH_80S;
+            break;
+
+        case 0x5d:
+            amp_set->amp_num = AMERICAN_90S;
+            break;
+
+        case 0x6d:
+            amp_set->amp_num = METAL_2000;
+            break;
+        }
+
+        amp_set->gain = data[1][GAIN];
+        amp_set->volume = data[1][VOLUME];
+        amp_set->treble = data[1][TREBLE];
+        amp_set->middle = data[1][MIDDLE];
+        amp_set->bass = data[1][BASS];
+        amp_set->cabinet = data[1][CABINET];
+        amp_set->noise_gate = data[1][NOISE_GATE];
+        amp_set->master_vol = data[1][MASTER_VOL];
+        amp_set->gain2 = data[1][GAIN2];
+        amp_set->presence = data[1][PRESENCE];
+        amp_set->threshold = data[1][THRESHOLD];
+        amp_set->depth = data[1][DEPTH];
+        amp_set->bias = data[1][BIAS];
+        amp_set->sag = data[1][SAG];
+
+
+        // EFFECTS
+        for(int i = 2; i < 6; i++)
+        {
+            int j;
+
+            switch(data[i][FXSLOT])
+            {
+            case 0x00:
+            case 0x04:
+                j = 0;
+                break;
+
+            case 0x01:
+            case 0x05:
+                j = 1;
+                break;
+
+            case 0x02:
+            case 0x06:
+                j = 2;
+                break;
+
+            case 0x03:
+            case 0x07:
+                j = 3;
+                break;
+            }
+
+            switch(data[i][EFFECT])
+            {
+            case 0x00:
+                effects_set[j].effect_num = EMPTY;
+                break;
+
+            case 0x3c:
+                effects_set[j].effect_num =  OVERDRIVE;
+                break;
+
+            case 0x49:
+                effects_set[j].effect_num = FIXED_WAH;
+                break;
+
+            case 0x4a:
+                effects_set[j].effect_num = TOUCH_WAH;
+                break;
+
+            case 0x1a:
+                effects_set[j].effect_num = FUZZ;
+                break;
+
+            case 0x1c:
+                effects_set[j].effect_num = FUZZ_TOUCH_WAH;
+                break;
+
+            case 0x88:
+                effects_set[j].effect_num = SIMPLE_COMP;
+                break;
+
+            case 0x07:
+                effects_set[j].effect_num = COMPRESSOR;
+                break;
+
+            case 0x12:
+                effects_set[j].effect_num = SINE_CHORUS;
+                break;
+
+            case 0x13:
+                effects_set[j].effect_num = TRIANGLE_CHORUS;
+                break;
+
+            case 0x18:
+                effects_set[j].effect_num = SINE_FLANGER;
+                break;
+
+            case 0x19:
+                effects_set[j].effect_num = TRIANGLE_FLANGER;
+                break;
+
+            case 0x2d:
+                effects_set[j].effect_num = VIBRATONE;
+                break;
+
+            case 0x40:
+                effects_set[j].effect_num = VINTAGE_TREMOLO;
+                break;
+
+            case 0x41:
+                effects_set[j].effect_num = SINE_TREMOLO;
+                break;
+
+            case 0x22:
+                effects_set[j].effect_num = RING_MODULATOR;
+                break;
+
+            case 0x29:
+                effects_set[j].effect_num = STEP_FILTER;
+                break;
+
+            case 0x4f:
+                effects_set[j].effect_num = PHASER;
+                break;
+
+            case 0x1f:
+                effects_set[j].effect_num = PITCH_SHIFTER;
+                break;
+
+            case 0x16:
+                effects_set[j].effect_num = MONO_DELAY;
+                break;
+
+            case 0x43:
+                effects_set[j].effect_num = MONO_ECHO_FILTER;
+                break;
+
+            case 0x48:
+                effects_set[j].effect_num = STEREO_ECHO_FILTER;
+                break;
+
+            case 0x44:
+                effects_set[j].effect_num = MULTITAP_DELAY;
+                break;
+
+            case 0x45:
+                effects_set[j].effect_num = PING_PONG_DELAY;
+                break;
+
+            case 0x15:
+                effects_set[j].effect_num = DUCKING_DELAY;
+                break;
+
+            case 0x46:
+                effects_set[j].effect_num = REVERSE_DELAY;
+                break;
+
+            case 0x2b:
+                effects_set[j].effect_num = TAPE_DELAY;
+                break;
+
+            case 0x2a:
+                effects_set[j].effect_num = STEREO_TAPE_DELAY;
+                break;
+
+            case 0x24:
+                effects_set[j].effect_num = SMALL_HALL_REVERB;
+                break;
+
+            case 0x3a:
+                effects_set[j].effect_num = LARGE_HALL_REVERB;
+                break;
+
+            case 0x26:
+                effects_set[j].effect_num = SMALL_ROOM_REVERB;
+                break;
+
+            case 0x3b:
+                effects_set[j].effect_num = LARGE_ROOM_REVERB;
+                break;
+
+            case 0x4e:
+                effects_set[j].effect_num = SMALL_PLATE_REVERB;
+                break;
+
+            case 0x4b:
+                effects_set[j].effect_num = LARGE_PLATE_REVERB;
+                break;
+
+            case 0x4c:
+                effects_set[j].effect_num = AMBIENT_REVERB;
+                break;
+
+            case 0x4d:
+                effects_set[j].effect_num = ARENA_REVERB;
+                break;
+
+            case 0x21:
+                effects_set[j].effect_num = FENDER_63_SPRING_REVERB;
+                break;
+
+            case 0x0b:
+                effects_set[j].effect_num = FENDER_65_SPRING_REVERB;
+                break;
+            }
+
+            effects_set[j].fx_slot = j;
+            effects_set[j].knob1 = data[i][KNOB1];
+            effects_set[j].knob2 = data[i][KNOB2];
+            effects_set[j].knob3 = data[i][KNOB3];
+            effects_set[j].knob4 = data[i][KNOB4];
+            effects_set[j].knob5 = data[i][KNOB5];
+            effects_set[j].knob6 = data[i][KNOB6];
+            if(data[i][FXSLOT] > 0x03)
+                effects_set[j].put_post_amp = true;
         }
     }
 

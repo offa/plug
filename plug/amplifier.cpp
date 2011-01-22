@@ -209,3 +209,24 @@ void Amplifier::send_amp()
 
     ((MainWindow*)parent())->set_amplifier(settings);
 }
+
+void Amplifier::load(struct amp_settings settings)
+{
+    ui->comboBox->setCurrentIndex(settings.amp_num);
+    ui->dial->setValue(settings.gain);
+    ui->dial_2->setValue(settings.volume);
+    ui->dial_3->setValue(settings.treble);
+    ui->dial_4->setValue(settings.middle);
+    ui->dial_5->setValue(settings.bass);
+
+    advanced->change_cabinet(settings.cabinet);
+    advanced->change_noise_gate(settings.noise_gate);
+
+    advanced->set_master_vol(settings.master_vol);
+    advanced->set_gain2(settings.gain2);
+    advanced->set_presence(settings.presence);
+    advanced->set_depth(settings.depth);
+    advanced->set_threshold(settings.threshold);
+    advanced->set_bias(settings.bias);
+    advanced->set_sag(settings.sag);
+}

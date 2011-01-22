@@ -56,3 +56,38 @@ void Amp_Advanced::activate_custom_ng(int value)
         ui->spinBox_4->setDisabled(true);
     }
 }
+
+void Amp_Advanced::set_master_vol(int value)
+{
+    ui->dial->setValue(value);
+}
+
+void Amp_Advanced::set_gain2(int value)
+{
+    ui->dial_2->setValue(value);
+}
+
+void Amp_Advanced::set_presence(int value)
+{
+    ui->dial_3->setValue(value);
+}
+
+void Amp_Advanced::set_depth(int value)
+{
+    ui->dial_4->setValue(value);
+}
+
+void Amp_Advanced::set_threshold(int value)
+{
+    ui->dial_5->setValue(value);
+}
+
+void Amp_Advanced::set_bias(int value)
+{
+    ui->dial_6->setValue(value);
+}
+
+void Amp_Advanced::set_sag(int value)
+{
+    ui->dial_7->setValue(value);
+}

@@ -119,9 +119,9 @@ int MainWindow::save_on_amp(char *name, int slot)
     ret = amp_ops->save_on_amp(name, slot);
 
     if(name[0] == 0x00)
-        sprintf(title, "PLUG (NONE)");
+        sprintf(title, "PLUG: NONE");
     else
-        sprintf(title, "PLUG (%s)", name);
+        sprintf(title, "PLUG: %s", name);
     setWindowTitle(title);
 
     return ret;
@@ -129,30 +129,28 @@ int MainWindow::save_on_amp(char *name, int slot)
 
 int MainWindow::load_from_amp(int slot)
 {
-    unsigned char data[6][64];
-    char title[40];
+    struct amp_settings amplifier_set;
+    struct fx_pedal_settings effects_set[4];
+    char name[32], title[40];
 
-    memset(data, 0x00, (6*64));
-    amp_ops->load_memory_bank(slot, data);
+    amp_ops->load_memory_bank(slot, name, &amplifier_set, effects_set);
 
     memset(title, 0x00, 40);
-    if(data[0][16] == 0x00)
+    if(name[0] == 0x00)
     {
-        sprintf(title, "PLUG (NONE)");
+        sprintf(title, "PLUG: NONE");
     }
     else
     {
-        sprintf(title, "PLUG (");
-        for(int i = 6, j = 16; data[0][j] != 0x00; i++, j++)
-        {
-            title[i] = data[0][j];
-            title[i+1] = ')';
-            title[i+2] = 0x00;
-        }
+        sprintf(title, "PLUG: %s", name);
     }
     setWindowTitle(title);
 
-    // TODO: loading amp and effects
+    amp->load(amplifier_set);
+    effect1->load(effects_set[0]);
+    effect2->load(effects_set[1]);
+    effect3->load(effects_set[2]);
+    effect4->load(effects_set[3]);
 
     return 0;
 }

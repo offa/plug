@@ -463,3 +463,15 @@ void Effect::send_fx()
 
     ((MainWindow*)parent())->set_effect(pedal);
 }
+
+void Effect::load(struct fx_pedal_settings settings)
+{
+    ui->comboBox->setCurrentIndex(settings.effect_num);
+    ui->dial->setValue(settings.knob1);
+    ui->dial_2->setValue(settings.knob2);
+    ui->dial_3->setValue(settings.knob3);
+    ui->dial_4->setValue(settings.knob4);
+    ui->dial_5->setValue(settings.knob5);
+    ui->dial_6->setValue(settings.knob6);
+    ui->checkBox->setChecked(settings.put_post_amp);
+}

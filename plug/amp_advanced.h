@@ -21,6 +21,13 @@ private:
 public slots:
     void change_cabinet(int);
     void change_noise_gate(int);
+    void set_master_vol(int);
+    void set_gain2(int);
+    void set_presence(int);
+    void set_depth(int);
+    void set_threshold(int);
+    void set_bias(int);
+    void set_sag(int);
 
 private slots:
     void activate_custom_ng(int);
