@@ -7,11 +7,6 @@ Amp_Advanced::Amp_Advanced(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->dial_5->setDisabled(true);
-    ui->spinBox_5->setDisabled(true);
-    ui->dial_4->setDisabled(true);
-    ui->spinBox_4->setDisabled(true);
-
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), parent, SLOT(set_cabinet(int)));
     connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), parent, SLOT(set_noise_gate(int)));
     connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(activate_custom_ng(int)));

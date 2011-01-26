@@ -20,7 +20,6 @@ SaveOnAmp::~SaveOnAmp()
 
 void SaveOnAmp::save()
 {
-    QByteArray bytename(ui->lineEdit->text().toAscii());
-    ((MainWindow*)parent())->save_on_amp((char*)bytename.constData(), ui->comboBox->currentIndex());
+    ((MainWindow*)parent())->save_on_amp(ui->lineEdit->text().toAscii().data(), ui->comboBox->currentIndex());
     this->close();
 }

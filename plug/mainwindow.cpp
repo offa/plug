@@ -59,6 +59,7 @@ void MainWindow::start_amp()
         ui->actionSave_to_amplifier->setDisabled(false);
         ui->action_Load_from_amplifier->setDisabled(false);
         ui->statusBar->showMessage(tr("Connected"), 5000);    // show message on the status bar
+        load_from_amp(0);
     }
     else    // if request failed
     {

@@ -329,6 +329,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
         <widget class="QDial" name="dial_5">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="maximum">
           <number>9</number>
          </property>
@@ -339,6 +342,9 @@
        </item>
        <item>
         <widget class="QSpinBox" name="spinBox_5">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="maximum">
           <number>9</number>
          </property>
@@ -363,6 +369,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QDial" name="dial_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -373,6 +382,9 @@
        </item>
        <item>
         <widget class="QSpinBox" name="spinBox_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>

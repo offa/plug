@@ -759,6 +759,7 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
         {
             int j;
 
+            prev_array[data[i][DSP]-6][FXSLOT]=data[i][FXSLOT];
             switch(data[i][FXSLOT])
             {
             case 0x00:
