@@ -2,8 +2,14 @@
 #define MAINWINDOW_H
 
 #include <stdio.h>
+#include <string.h>
 #include <QShortcut>
 #include <QMainWindow>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
+#include <QLabel>
+#include <QMessageBox>
 #include "effect.h"
 #include "amplifier.h"
 #include "mustang.h"
@@ -11,6 +17,8 @@
 #include "about.h"
 #include "saveonamp.h"
 #include "loadfromamp.h"
+
+#define VERSION "0.3.999"
 
 namespace Ui {
     class MainWindow;
@@ -46,6 +54,12 @@ private:
     About *about_window;
     SaveOnAmp *save;
     LoadFromAmp *load;
+
+    QNetworkReply *reply;
+    void check_for_updates();
+
+private slots:
+    void httpReadyRead();
 };
 
 #endif // MAINWINDOW_H

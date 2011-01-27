@@ -35,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
+
+    check_for_updates();
 }
 
 MainWindow::~MainWindow()
@@ -166,4 +168,21 @@ void MainWindow::enable_buttons(void)
     ui->EffectButton4->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
     ui->action_Load_from_amplifier->setDisabled(false);
+}
+
+void MainWindow::check_for_updates()
+{
+    QNetworkAccessManager *qnam = new QNetworkAccessManager(this);
+    reply = qnam->get(QNetworkRequest((QUrl)"http://piorekf.org/plug/VERSION"));
+    connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
+}
+
+void MainWindow::httpReadyRead()
+{
+    if(strcmp(reply->readAll().data(), VERSION))
+    {
+        QLabel *label = new QLabel("Update available!", this);
+        ui->statusBar->addWidget(label);
+        QMessageBox::information(this, "Update", "Update available!\nCheck homepage for new version.");
+    }
 }
