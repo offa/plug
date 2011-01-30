@@ -9,6 +9,7 @@ Mustang::Mustang()
     execute[0] = 0x1c;
     execute[1] = 0x03;
 
+    memset(prev_array, 0x00, LENGTH*4);
     prev_array[0][0] = 0x00;
     prev_array[1][0] = 0x00;
     prev_array[2][0] = 0x00;
@@ -74,22 +75,22 @@ int Mustang::start_amp()
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-//        memset(array, 0x00, LENGTH);
-//        array[0] = 0x1a;
-//        array[1] = 0x03;
-//        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-//        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        memset(array, 0x00, LENGTH);
+        array[0] = 0x1a;
+        array[1] = 0x03;
+        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-//        memset(array, 0x00, LENGTH);
-//        array[0] = 0xff;
-//        array[1] = 0xc1;
-//        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-//        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        memset(array, 0x00, LENGTH);
+        array[0] = 0xff;
+        array[1] = 0xc1;
+        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-//        while(recieved)
-//        {
-//            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-//        }
+        while(recieved)
+        {
+            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        }
     }
 
     return 0;
@@ -653,7 +654,6 @@ int Mustang::save_on_amp(char *name, int slot)
     return ret;
 }
 
-//int Mustang::load_memory_bank(int slot, unsigned char data[6][LENGTH])
 int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
     int ret, recieved;
@@ -759,7 +759,13 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
         {
             int j;
 
+            prev_array[data[i][DSP]-6][0]=0x1c;
+            prev_array[data[i][DSP]-6][1]=0x03;
             prev_array[data[i][DSP]-6][FXSLOT]=data[i][FXSLOT];
+            prev_array[data[i][DSP]-6][DSP]=data[i][DSP];
+            prev_array[data[i][DSP]-6][19]=data[i][19];
+            prev_array[data[i][DSP]-6][20]=data[i][20];
+
             switch(data[i][FXSLOT])
             {
             case 0x00:

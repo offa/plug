@@ -49,6 +49,7 @@ void MainWindow::start_amp()
 {
     int x;
 
+    ui->statusBar->showMessage(tr("Connecting..."), 0);
     x = amp_ops->start_amp();    // request initialization of communication
     if(x == 0)    // if request succeded
     {
@@ -60,7 +61,7 @@ void MainWindow::start_amp()
         ui->EffectButton4->setDisabled(false);
         ui->actionSave_to_amplifier->setDisabled(false);
         ui->action_Load_from_amplifier->setDisabled(false);
-        ui->statusBar->showMessage(tr("Connected"), 5000);    // show message on the status bar
+        ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
         load_from_amp(0);
     }
     else    // if request failed
