@@ -66,10 +66,17 @@ void MainWindow::start_amp()
     }
     else    // if request failed
     {
-        // print error code
-        char err[16];
-        sprintf(err, "Error: %d", x);
-        ui->statusBar->showMessage(err, 5000);
+        if(x == -100)
+        {
+            ui->statusBar->showMessage(tr("Suitable device not found!"), 5000);
+        }
+        else
+        {
+            // print error code
+            char err[16];
+            sprintf(err, "Error: %d", x);
+            ui->statusBar->showMessage(err, 5000);
+        }
     }
 }
 
@@ -88,7 +95,7 @@ void MainWindow::stop_amp()
         ui->EffectButton4->setDisabled(true);
         ui->actionSave_to_amplifier->setDisabled(true);
         ui->action_Load_from_amplifier->setDisabled(true);
-        ui->statusBar->showMessage(tr("Disconnected"), 5000);    // show message on the status bar
+        ui->statusBar->showMessage(tr("Disconnected"), 3000);    // show message on the status bar
     }
     else    // if request failed
     {
@@ -151,10 +158,24 @@ int MainWindow::load_from_amp(int slot)
     setWindowTitle(title);
 
     amp->load(amplifier_set);
-    effect1->load(effects_set[0]);
-    effect2->load(effects_set[1]);
-    effect3->load(effects_set[2]);
-    effect4->load(effects_set[3]);
+    for(int i = 0; i < 4; i++)
+    {
+        switch(effects_set[i].fx_slot)
+        {
+        case 0x00:
+        case 0x04:
+            effect1->load(effects_set[i]);
+        case 0x01:
+        case 0x05:
+            effect2->load(effects_set[i]);
+        case 0x02:
+        case 0x06:
+            effect3->load(effects_set[i]);
+        case 0x03:
+        case 0x07:
+            effect4->load(effects_set[i]);
+        }
+    }
 
     return 0;
 }

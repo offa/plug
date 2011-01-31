@@ -10,13 +10,14 @@ Mustang::Mustang()
     execute[1] = 0x03;
 
     memset(prev_array, 0x00, LENGTH*4);
-    prev_array[0][0] = 0x00;
-    prev_array[1][0] = 0x00;
-    prev_array[2][0] = 0x00;
-    prev_array[3][0] = 0x00;
     for(int i = 0; i < 4; i++)
     {
+        prev_array[i][0] = 0x1c;
+        prev_array[i][1] = 0x03;
+        prev_array[i][6] = prev_array[i][7] = prev_array[i][21] = 0x01;
+        prev_array[i][20] = 0x08;
         prev_array[i][FXSLOT] = 0xff;
+
     }
 }
 
@@ -148,6 +149,37 @@ int Mustang::set_effect(struct fx_pedal_settings value)
         slot = value.fx_slot;
     }
 
+    // clear effect on previous DSP before setting a new one
+    int k=0;
+    for (int i = 0; i < 4; i++)
+    {
+        if (prev_array[i][FXSLOT] == value.fx_slot || prev_array[i][FXSLOT] == (value.fx_slot+4))
+        {
+            for (int j = 0; j < LENGTH; j++)
+            {
+                array[j] = prev_array[i][j];
+            }
+            prev_array[i][FXSLOT] = 0xff;
+            k++;
+            break;
+        }
+    }
+    array[EFFECT] = 0x00;
+    array[KNOB1] = 0x00;
+    array[KNOB2] = 0x00;
+    array[KNOB3] = 0x00;
+    array[KNOB4] = 0x00;
+    array[KNOB5] = 0x00;
+    array[KNOB6] = 0x00;
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
+    //DEBUG
+//    qDebug("set: DSP: %d, slot: %d, effect: %d, EMPTY", array[DSP], array[FXSLOT], array[EFFECT]);
+    if(value.effect_num == 0)
+    {
+        return 0;
+    }
+
     // fill the form with data
     array[FXSLOT] = slot;
     array[KNOB1] = value.knob1;
@@ -165,34 +197,7 @@ int Mustang::set_effect(struct fx_pedal_settings value)
     }
 
     // fill the form with missing data
-    int k=0;
     switch (value.effect_num) {
-    case EMPTY:
-        for (int i = 0; i < 4; i++)
-        {
-            if (prev_array[i][FXSLOT] == slot)
-            {
-                for (int j = 0; j < LENGTH; j++)
-                {
-                    array[j] = prev_array[i][j];
-                }
-                k++;
-                break;
-            }
-        }
-        if (k == 0)
-        {
-            return 0;
-        }
-        array[EFFECT] = 0x00;
-        array[KNOB1] = 0x00;
-        array[KNOB2] = 0x00;
-        array[KNOB3] = 0x00;
-        array[KNOB4] = 0x00;
-        array[KNOB5] = 0x00;
-        array[KNOB6] = 0x00;
-        break;
-
     case OVERDRIVE:
         array[DSP] = 0x06;
         array[EFFECT] = 0x3c;
@@ -759,12 +764,12 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
         {
             int j;
 
-            prev_array[data[i][DSP]-6][0]=0x1c;
-            prev_array[data[i][DSP]-6][1]=0x03;
-            prev_array[data[i][DSP]-6][FXSLOT]=data[i][FXSLOT];
-            prev_array[data[i][DSP]-6][DSP]=data[i][DSP];
-            prev_array[data[i][DSP]-6][19]=data[i][19];
-            prev_array[data[i][DSP]-6][20]=data[i][20];
+            prev_array[data[i][DSP]-6][0] = 0x1c;
+            prev_array[data[i][DSP]-6][1] = 0x03;
+            prev_array[data[i][DSP]-6][FXSLOT] = data[i][FXSLOT];
+            prev_array[data[i][DSP]-6][DSP] = data[i][DSP];
+            prev_array[data[i][DSP]-6][19] = data[i][19];
+            prev_array[data[i][DSP]-6][20] = data[i][20];
 
             switch(data[i][FXSLOT])
             {
@@ -788,6 +793,18 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
                 j = 3;
                 break;
             }
+
+            effects_set[j].fx_slot = data[i][FXSLOT];
+            effects_set[j].knob1 = data[i][KNOB1];
+            effects_set[j].knob2 = data[i][KNOB2];
+            effects_set[j].knob3 = data[i][KNOB3];
+            effects_set[j].knob4 = data[i][KNOB4];
+            effects_set[j].knob5 = data[i][KNOB5];
+            effects_set[j].knob6 = data[i][KNOB6];
+            if(data[i][FXSLOT] > 0x03)
+                effects_set[j].put_post_amp = true;
+            else
+                effects_set[j].put_post_amp = false;
 
             switch(data[i][EFFECT])
             {
@@ -943,16 +960,6 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
                 effects_set[j].effect_num = FENDER_65_SPRING_REVERB;
                 break;
             }
-
-            effects_set[j].fx_slot = j;
-            effects_set[j].knob1 = data[i][KNOB1];
-            effects_set[j].knob2 = data[i][KNOB2];
-            effects_set[j].knob3 = data[i][KNOB3];
-            effects_set[j].knob4 = data[i][KNOB4];
-            effects_set[j].knob5 = data[i][KNOB5];
-            effects_set[j].knob6 = data[i][KNOB6];
-            if(data[i][FXSLOT] > 0x03)
-                effects_set[j].put_post_amp = true;
         }
     }
 

@@ -86,6 +86,7 @@ void Effect::choose_fx(int value)
     switch (value)
     {
     case EMPTY:
+        ui->checkBox->setDisabled(true);
         ui->dial->setValue(0);
         ui->dial_2->setValue(0);
         ui->dial_3->setValue(0);
@@ -107,6 +108,7 @@ void Effect::choose_fx(int value)
         break;
 
     case SIMPLE_COMP:
+        ui->checkBox->setDisabled(false);
         ui->dial->setMaximum(3);
         ui->spinBox->setMaximum(3);
         ui->dial_2->setValue(0);
@@ -129,6 +131,7 @@ void Effect::choose_fx(int value)
         break;
 
     case RING_MODULATOR:
+        ui->checkBox->setDisabled(false);
         ui->dial->setMaximum(255);
         ui->spinBox->setMaximum(255);
         ui->dial_4->setMaximum(1);
@@ -151,6 +154,7 @@ void Effect::choose_fx(int value)
         break;
 
     case PHASER:
+        ui->checkBox->setDisabled(false);
         ui->dial->setMaximum(255);
         ui->spinBox->setMaximum(255);
         ui->dial_4->setMaximum(255);
@@ -176,6 +180,7 @@ void Effect::choose_fx(int value)
     case STEREO_ECHO_FILTER:
     case TAPE_DELAY:
     case STEREO_TAPE_DELAY:
+        ui->checkBox->setDisabled(false);
         ui->dial->setMaximum(255);
         ui->spinBox->setMaximum(255);
         ui->dial_4->setMaximum(255);
@@ -197,6 +202,7 @@ void Effect::choose_fx(int value)
         break;
 
     default:
+        ui->checkBox->setDisabled(false);
         ui->dial->setMaximum(255);
         ui->spinBox->setMaximum(255);
         ui->dial_4->setMaximum(255);

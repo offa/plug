@@ -426,7 +426,7 @@
       <item>
        <widget class="QCheckBox" name="checkBox">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="text">
          <string>after amplifier</string>
