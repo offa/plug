@@ -18,7 +18,7 @@
 #include "saveonamp.h"
 #include "loadfromamp.h"
 
-#define VERSION "0.3.999"
+#define VERSION "0.4"
 
 namespace Ui {
     class MainWindow;

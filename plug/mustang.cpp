@@ -794,7 +794,7 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
                 break;
             }
 
-            effects_set[j].fx_slot = data[i][FXSLOT];
+            effects_set[j].fx_slot = j;
             effects_set[j].knob1 = data[i][KNOB1];
             effects_set[j].knob2 = data[i][KNOB2];
             effects_set[j].knob3 = data[i][KNOB3];
