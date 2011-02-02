@@ -9,6 +9,10 @@ Amplifier::Amplifier(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // load window size
+    QSettings settings;
+    restoreGeometry(settings.value("amplifierWindowGeometry").toByteArray());
+
     // initialize variables
     gain = 0;
     volume = 0;
@@ -229,4 +233,11 @@ void Amplifier::load(struct amp_settings settings)
     advanced->set_threshold(settings.threshold);
     advanced->set_bias(settings.bias);
     advanced->set_sag(settings.sag);
+}
+
+// save window size on close
+void Amplifier::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue("amplifierWindowGeometry", saveGeometry());
 }

@@ -10,6 +10,7 @@
 #include <QtNetwork/QNetworkReply>
 #include <QLabel>
 #include <QMessageBox>
+#include <QSettings>
 #include "effect.h"
 #include "amplifier.h"
 #include "mustang.h"
@@ -43,6 +44,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
+    void closeEvent(QCloseEvent *event);
 
     // pointers to objects
     Mustang *amp_ops;

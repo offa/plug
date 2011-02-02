@@ -2,6 +2,7 @@
 #define AMP_ADVANCED_H
 
 #include <QDialog>
+#include <QSettings>
 
 namespace Ui {
     class Amp_Advanced;
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::Amp_Advanced *ui;
+    void closeEvent(QCloseEvent *);
 
 public slots:
     void change_cabinet(int);

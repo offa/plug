@@ -7,6 +7,10 @@ Amp_Advanced::Amp_Advanced(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // load window size
+    QSettings settings;
+    restoreGeometry(settings.value("amplifierAdvancedWindowGeometry").toByteArray());
+
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), parent, SLOT(set_cabinet(int)));
     connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), parent, SLOT(set_noise_gate(int)));
     connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(activate_custom_ng(int)));
@@ -85,4 +89,11 @@ void Amp_Advanced::set_bias(int value)
 void Amp_Advanced::set_sag(int value)
 {
     ui->dial_7->setValue(value);
+}
+
+// save window size on close
+void Amp_Advanced::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue("amplifierAdvancedWindowGeometry", saveGeometry());
 }

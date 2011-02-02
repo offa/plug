@@ -675,13 +675,21 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
     for(int i = 0; recieved; i++)
     {
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        if(name != NULL && amp_set != NULL && effects_set != NULL)
+        if(name != NULL || amp_set != NULL || effects_set != NULL)
             if(i < 6)
                 memcpy(data[i], array, LENGTH);
     }
 
+    decode_data((unsigned char **)data, name, amp_set, effects_set);
 
-    if(name != NULL && amp_set != NULL && effects_set != NULL)
+    return ret;
+}
+
+int Mustang::decode_data(unsigned char **raw_data, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
+{
+    unsigned char (*data)[LENGTH] = (unsigned char(*)[LENGTH])raw_data;  //cast ** to a two dimensional array
+
+    if(name != NULL)
     {
         // NAME
         memset(name, 0x00, 32);
@@ -689,8 +697,11 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
         {
             name[i] = data[0][j];
         }
+    }
 
 
+    if(amp_set != NULL)
+    {
         // AMPLIFIER
         switch(data[1][AMPLIFIER])
         {
@@ -757,8 +768,11 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
         amp_set->depth = data[1][DEPTH];
         amp_set->bias = data[1][BIAS];
         amp_set->sag = data[1][SAG];
+    }
 
 
+    if(effects_set != NULL)
+    {
         // EFFECTS
         for(int i = 2; i < 6; i++)
         {
@@ -963,5 +977,5 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
         }
     }
 
-    return ret;
+    return 0;
 }

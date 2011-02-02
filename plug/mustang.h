@@ -64,6 +64,8 @@ private:
     unsigned char execute[LENGTH];    // "apply" command sent after each instruction
     unsigned char prev_array[4][LENGTH];    // array used to clear the effect
 
+    int decode_data(unsigned char **, char *, struct amp_settings *, struct fx_pedal_settings *t);
+
 };
 
 #endif // MUSTANG_H

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <QMainWindow>
+#include <QSettings>
 #include "effects_enum.h"
 #include "data_structs.h"
 
@@ -20,6 +21,8 @@ public:
 
 private:
     Ui::Effect *ui;
+    char title[10];
+    void closeEvent(QCloseEvent *);
     unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6;
     bool put_post_amp;
 

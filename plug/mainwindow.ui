@@ -121,13 +121,13 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuConnection">
     <property name="title">
-     <string>C&amp;onnection</string>
+     <string>&amp;Connection</string>
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>

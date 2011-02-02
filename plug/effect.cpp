@@ -9,6 +9,14 @@ Effect::Effect(QWidget *parent, int number) :
 {
     ui->setupUi(this);
 
+    // set window title
+    sprintf(title, "Effect %d", number+1);
+    setWindowTitle(title);
+
+    // load window size
+    QSettings settings;
+    restoreGeometry(settings.value(title).toByteArray());
+
     // initialize variables
     effect_num = ui->comboBox->currentIndex();
     fx_slot = number;
@@ -19,11 +27,6 @@ Effect::Effect(QWidget *parent, int number) :
     knob4 = 0;
     knob5 = 0;
     knob6 = 0;
-
-    // set window title
-    char title[10];
-    sprintf(title, "Effect %d", fx_slot+1);
-    setWindowTitle(title);
 
     // connect elements to slots
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
@@ -480,4 +483,11 @@ void Effect::load(struct fx_pedal_settings settings)
     ui->dial_5->setValue(settings.knob5);
     ui->dial_6->setValue(settings.knob6);
     ui->checkBox->setChecked(settings.put_post_amp);
+}
+
+// save window size on close
+void Effect::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue(title, saveGeometry());
 }

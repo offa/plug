@@ -7,6 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // load window size
+    QSettings settings;
+    restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
+    restoreState(settings.value("mainWindowState").toByteArray());
+
     // create child objects
     amp_ops = new Mustang();
     amp = new Amplifier(this);
@@ -207,4 +212,12 @@ void MainWindow::httpReadyRead()
         ui->statusBar->addWidget(label);
         QMessageBox::information(this, "Update", "Update available!\nCheck homepage for new version.");
     }
+}
+
+// save window size on close
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    QSettings settings;
+    settings.setValue("mainWindowGeometry", saveGeometry());
+    settings.setValue("mainWindowState", saveState());
 }

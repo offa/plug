@@ -2,6 +2,7 @@
 #define AMPLIFIER_H
 
 #include <QMainWindow>
+#include <QSettings>
 #include "amp_advanced.h"
 #include "effects_enum.h"
 #include "data_structs.h"
@@ -20,6 +21,7 @@ public:
 
 private:
     Ui::Amplifier *ui;
+    void closeEvent(QCloseEvent *);
     Amp_Advanced *advanced;
     unsigned char amp_num, gain, volume, treble, middle, bass;
     unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag;
