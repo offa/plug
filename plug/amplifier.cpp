@@ -45,6 +45,8 @@ Amplifier::Amplifier(QWidget *parent) :
 
 Amplifier::~Amplifier()
 {
+    QSettings settings;
+    settings.setValue("amplifierWindowGeometry", saveGeometry());
     delete ui;
 }
 

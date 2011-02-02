@@ -25,6 +25,8 @@ Amp_Advanced::Amp_Advanced(QWidget *parent) :
 
 Amp_Advanced::~Amp_Advanced()
 {
+    QSettings settings;
+    settings.setValue("amplifierAdvancedWindowGeometry", saveGeometry());
     delete ui;
 }
 

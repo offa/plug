@@ -42,6 +42,8 @@ Effect::Effect(QWidget *parent, int number) :
 
 Effect::~Effect()
 {
+    QSettings settings;
+    settings.setValue(title, saveGeometry());
     delete ui;
 }
 
