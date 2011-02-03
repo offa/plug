@@ -23,3 +23,24 @@ void LoadFromAmp::load()
     ((MainWindow*)parent())->load_from_amp(ui->comboBox->currentIndex());
     this->close();
 }
+
+void LoadFromAmp::load_names(char names[24][32])
+{
+    char name[40];
+    char slot_names[24][5] = {
+        "[O1]", "[O2]", "[O3]", "[O4]", "[O5]", "[O6]", "[O7]", "[O8]",
+        "[G1]", "[G2]", "[G3]", "[G4]", "[G5]", "[G6]", "[G7]", "[G8]",
+        "[R1]", "[R2]", "[R3]", "[R4]", "[R5]", "[R6]", "[R7]", "[R8]"
+    };
+
+    for(int i = 0; i < 24; i++)
+    {
+        sprintf(name, "%s %s", slot_names[i], names[i]);
+        ui->comboBox->setItemText(i, name);
+    }
+}
+
+void LoadFromAmp::change_name(int slot, char *name)
+{
+    ui->comboBox->setItemText(slot, name);
+}

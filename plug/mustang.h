@@ -52,7 +52,7 @@ class Mustang
 public:
     Mustang();
     ~Mustang();
-    int start_amp(void);    // initialize communication
+    int start_amp(char [][32], char *, struct amp_settings *, struct fx_pedal_settings *);    // initialize communication
     int stop_amp(void);    // terminate communication
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
@@ -64,8 +64,7 @@ private:
     unsigned char execute[LENGTH];    // "apply" command sent after each instruction
     unsigned char prev_array[4][LENGTH];    // array used to clear the effect
 
-    int decode_data(unsigned char **, char *, struct amp_settings *, struct fx_pedal_settings *t);
-
+    int decode_data(unsigned char [6][LENGTH], char *, struct amp_settings *, struct fx_pedal_settings *t);
 };
 
 #endif // MUSTANG_H

@@ -2,6 +2,7 @@
 #define SAVEONAMP_H
 
 #include <QDialog>
+#include <stdio.h>
 
 namespace Ui {
     class SaveOnAmp;
@@ -14,6 +15,7 @@ class SaveOnAmp : public QDialog
 public:
     explicit SaveOnAmp(QWidget *parent = 0);
     ~SaveOnAmp();
+    void load_names(char names[24][32]);
 
 private:
     Ui::SaveOnAmp *ui;

@@ -14,6 +14,8 @@ class LoadFromAmp : public QDialog
 public:
     explicit LoadFromAmp(QWidget *parent = 0);
     ~LoadFromAmp();
+    void load_names(char names[24][32]);
+    void change_name(int, char *);
 
 private:
     Ui::LoadFromAmp *ui;

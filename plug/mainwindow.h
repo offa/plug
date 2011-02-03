@@ -19,7 +19,7 @@
 #include "saveonamp.h"
 #include "loadfromamp.h"
 
-#define VERSION "0.4"
+#define VERSION "0.4.999"
 
 namespace Ui {
     class MainWindow;
@@ -41,6 +41,7 @@ public slots:
     int save_on_amp(char *, int);
     int load_from_amp(int);
     void enable_buttons(void);
+    void change_name(int, char *);
 
 private:
     Ui::MainWindow *ui;

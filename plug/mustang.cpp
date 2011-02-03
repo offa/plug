@@ -26,10 +26,11 @@ Mustang::~Mustang()
     this->stop_amp();
 }
 
-int Mustang::start_amp()
+int Mustang::start_amp(char list[][32]=NULL, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL)
 {
     int ret, recieved;
     unsigned char array[LENGTH];
+    unsigned char recieved_data[164][LENGTH], data[6][LENGTH];
 
     if(amp_hand == NULL)
     {
@@ -45,7 +46,7 @@ int Mustang::start_amp()
         amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, USB_PID);
         if(amp_hand == NULL)
         {
-            stop_amp();
+            libusb_exit(NULL);
             return -100;
         }
 
@@ -86,12 +87,28 @@ int Mustang::start_amp()
         array[0] = 0xff;
         array[1] = 0xc1;
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-        while(recieved)
+        memset(recieved_data, 0x00, 164*LENGTH);
+        for(int i = 0; recieved; i++)
         {
             libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+            if(list != NULL || name != NULL || amp_set != NULL || effects_set != NULL)
+            {
+                memcpy(recieved_data[i], array, LENGTH);
+            }
         }
+
+        int i=0;
+        for(int j = 0; i<48; i+=2, j++)
+        {
+            memcpy(list[j], recieved_data[i]+16, 32);
+        }
+
+        for(int j = 0; j < 6; i++, j++)
+        {
+            memcpy(data[j], recieved_data[i], LENGTH);
+        }
+        decode_data(data, name, amp_set, effects_set);
     }
 
     return 0;
@@ -659,7 +676,7 @@ int Mustang::save_on_amp(char *name, int slot)
     return ret;
 }
 
-int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
+int Mustang::load_memory_bank(int slot, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL)
 {
     int ret, recieved;
     unsigned char array[LENGTH], data[6][LENGTH];
@@ -680,15 +697,13 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
                 memcpy(data[i], array, LENGTH);
     }
 
-    decode_data((unsigned char **)data, name, amp_set, effects_set);
+    decode_data(data, name, amp_set, effects_set);
 
     return ret;
 }
 
-int Mustang::decode_data(unsigned char **raw_data, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
+int Mustang::decode_data(unsigned char data[6][LENGTH], char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL)
 {
-    unsigned char (*data)[LENGTH] = (unsigned char(*)[LENGTH])raw_data;  //cast ** to a two dimensional array
-
     if(name != NULL)
     {
         // NAME

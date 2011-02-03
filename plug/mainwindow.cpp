@@ -56,23 +56,14 @@ MainWindow::~MainWindow()
 void MainWindow::start_amp()
 {
     int x;
+    struct amp_settings amplifier_set;
+    struct fx_pedal_settings effects_set[4];
+    char name[32], title[40], names[24][32];
 
     ui->statusBar->showMessage(tr("Connecting..."), 0);
-    x = amp_ops->start_amp();    // request initialization of communication
-    if(x == 0)    // if request succeded
-    {
-        // activate buttons
-        ui->Amplifier->setDisabled(false);
-        ui->EffectButton1->setDisabled(false);
-        ui->EffectButton2->setDisabled(false);
-        ui->EffectButton3->setDisabled(false);
-        ui->EffectButton4->setDisabled(false);
-        ui->actionSave_to_amplifier->setDisabled(false);
-        ui->action_Load_from_amplifier->setDisabled(false);
-        ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
-        load_from_amp(0);
-    }
-    else    // if request failed
+    x = amp_ops->start_amp(names, name, &amplifier_set, effects_set);    // request initialization of communication
+
+    if(x != 0)    // if request succeded
     {
         if(x == -100)
         {
@@ -85,7 +76,52 @@ void MainWindow::start_amp()
             sprintf(err, "Error: %d", x);
             ui->statusBar->showMessage(err, 5000);
         }
+        return;
     }
+
+    load->load_names(names);
+    save->load_names(names);
+
+    memset(title, 0x00, 40);
+    if(name[0] == 0x00)
+    {
+        sprintf(title, "PLUG: NONE");
+    }
+    else
+    {
+        sprintf(title, "PLUG: %s", name);
+    }
+    setWindowTitle(title);
+
+    amp->load(amplifier_set);
+    for(int i = 0; i < 4; i++)
+    {
+        switch(effects_set[i].fx_slot)
+        {
+        case 0x00:
+        case 0x04:
+            effect1->load(effects_set[i]);
+        case 0x01:
+        case 0x05:
+            effect2->load(effects_set[i]);
+        case 0x02:
+        case 0x06:
+            effect3->load(effects_set[i]);
+        case 0x03:
+        case 0x07:
+            effect4->load(effects_set[i]);
+        }
+    }
+
+    // activate buttons
+    ui->Amplifier->setDisabled(false);
+    ui->EffectButton1->setDisabled(false);
+    ui->EffectButton2->setDisabled(false);
+    ui->EffectButton3->setDisabled(false);
+    ui->EffectButton4->setDisabled(false);
+    ui->actionSave_to_amplifier->setDisabled(false);
+    ui->action_Load_from_amplifier->setDisabled(false);
+    ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
 }
 
 void MainWindow::stop_amp()
@@ -209,7 +245,7 @@ void MainWindow::check_for_updates()
 
 void MainWindow::httpReadyRead()
 {
-    if(strcmp(reply->readAll().data(), VERSION))
+    if(reply->readAll()>VERSION)
     {
         QLabel *label = new QLabel("Update available!", this);
         ui->statusBar->addWidget(label);
@@ -223,4 +259,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     QSettings settings;
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("mainWindowState", saveState());
+}
+
+void MainWindow::change_name(int slot, char *name)
+{
+    load->change_name(slot, name);
 }
