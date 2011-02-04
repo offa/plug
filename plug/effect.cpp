@@ -486,10 +486,3 @@ void Effect::load(struct fx_pedal_settings settings)
     ui->dial_6->setValue(settings.knob6);
     ui->checkBox->setChecked(settings.put_post_amp);
 }
-
-// save window size on close
-void Effect::closeEvent(QCloseEvent *event)
-{
-    QSettings settings;
-    settings.setValue(title, saveGeometry());
-}

@@ -254,12 +254,12 @@ void MainWindow::httpReadyRead()
 }
 
 // save window size on close
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    QSettings settings;
-    settings.setValue("mainWindowGeometry", saveGeometry());
-    settings.setValue("mainWindowState", saveState());
-}
+//void MainWindow::closeEvent(QCloseEvent *event)
+//{
+//    QSettings settings;
+//    settings.setValue("mainWindowGeometry", saveGeometry());
+//    settings.setValue("mainWindowState", saveState());
+//}
 
 void MainWindow::change_name(int slot, char *name)
 {

@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <QtDebug>
 #include <QShortcut>
 #include <QMainWindow>
 #include <QtNetwork/QNetworkAccessManager>
@@ -45,7 +46,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    void closeEvent(QCloseEvent *event);
+//    void closeEvent(QCloseEvent *event);
 
     // pointers to objects
     Mustang *amp_ops;

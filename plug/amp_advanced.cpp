@@ -92,10 +92,3 @@ void Amp_Advanced::set_sag(int value)
 {
     ui->dial_7->setValue(value);
 }
-
-// save window size on close
-void Amp_Advanced::closeEvent(QCloseEvent *event)
-{
-    QSettings settings;
-    settings.setValue("amplifierAdvancedWindowGeometry", saveGeometry());
-}

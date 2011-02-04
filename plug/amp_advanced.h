@@ -18,7 +18,6 @@ public:
 
 private:
     Ui::Amp_Advanced *ui;
-    void closeEvent(QCloseEvent *);
 
 public slots:
     void change_cabinet(int);

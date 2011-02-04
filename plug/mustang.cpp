@@ -30,7 +30,8 @@ int Mustang::start_amp(char list[][32]=NULL, char *name=NULL, struct amp_setting
 {
     int ret, recieved;
     unsigned char array[LENGTH];
-    unsigned char recieved_data[164][LENGTH], data[6][LENGTH];
+    unsigned char recieved_data[142][LENGTH], data[6][LENGTH];
+    memset(recieved_data, 0x00, 142*LENGTH);
 
     if(amp_hand == NULL)
     {
@@ -83,32 +84,33 @@ int Mustang::start_amp(char list[][32]=NULL, char *name=NULL, struct amp_setting
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-        memset(array, 0x00, LENGTH);
-        array[0] = 0xff;
-        array[1] = 0xc1;
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-
-        memset(recieved_data, 0x00, 164*LENGTH);
-        for(int i = 0; recieved; i++)
+        if(list != NULL || name != NULL || amp_set != NULL || effects_set != NULL)
         {
-            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-            if(list != NULL || name != NULL || amp_set != NULL || effects_set != NULL)
+            int i=0;
+
+            memset(array, 0x00, LENGTH);
+            array[0] = 0xff;
+            array[1] = 0xc1;
+            libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+
+            for(; recieved; i++)
             {
+                libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
                 memcpy(recieved_data[i], array, LENGTH);
             }
-        }
 
-        int i=0;
-        for(int j = 0; i<48; i+=2, j++)
-        {
-            memcpy(list[j], recieved_data[i]+16, 32);
-        }
+            i=0;
+            for(int j = 0; i<48; i+=2, j++)
+            {
+                memcpy(list[j], recieved_data[i]+16, 32);
+            }
 
-        for(int j = 0; j < 6; i++, j++)
-        {
-            memcpy(data[j], recieved_data[i], LENGTH);
+            for(int j = 0; j < 6; i++, j++)
+            {
+                memcpy(data[j], recieved_data[i], LENGTH);
+            }
+            decode_data(data, name, amp_set, effects_set);
         }
-        decode_data(data, name, amp_set, effects_set);
     }
 
     return 0;
