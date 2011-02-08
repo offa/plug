@@ -2,7 +2,6 @@
 #define MUSTANG_H
 
 #include <stdio.h>
-#include <string.h>
 #include <libusb-1.0/libusb.h>
 #include <QtDebug>
 #include "effects_enum.h"

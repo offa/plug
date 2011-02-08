@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QCoreApplication::setOrganizationName("piorekf");
+    QCoreApplication::setOrganizationDomain("piorekf.org");
     QCoreApplication::setApplicationName("PLUG");
     MainWindow w;
     w.show();

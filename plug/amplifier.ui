@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>275</width>
-    <height>300</height>
+    <width>500</width>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label_6">
         <property name="text">
@@ -29,6 +29,18 @@
       </item>
       <item>
        <widget class="QComboBox" name="comboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maxVisibleItems">
          <number>12</number>
         </property>
@@ -94,12 +106,8 @@
         </item>
        </widget>
       </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <spacer name="horizontalSpacer">
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -111,6 +119,33 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QPushButton" name="advancedButton">
+        <property name="text">
+         <string>A&amp;dvanced</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="setButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Set</string>
+        </property>
+        <property name="shortcut">
+         <string>Return</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
@@ -174,7 +209,7 @@
        </layout>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -186,10 +221,6 @@
         </property>
        </spacer>
       </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -284,23 +315,6 @@
        </layout>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QPushButton" name="advancedButton">
-      <property name="text">
-       <string>A&amp;dvanced</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="setButton">
-      <property name="text">
-       <string>Set</string>
-      </property>
-      <property name="shortcut">
-       <string>Return</string>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
