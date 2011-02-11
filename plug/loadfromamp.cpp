@@ -26,7 +26,6 @@ void LoadFromAmp::load()
 
 void LoadFromAmp::load_names(char names[24][32])
 {
-    char name[40];
     char slot_names[24][5] = {
         "[O1]", "[O2]", "[O3]", "[O4]", "[O5]", "[O6]", "[O7]", "[O8]",
         "[G1]", "[G2]", "[G3]", "[G4]", "[G5]", "[G6]", "[G7]", "[G8]",
@@ -34,13 +33,10 @@ void LoadFromAmp::load_names(char names[24][32])
     };
 
     for(int i = 0; i < 24; i++)
-    {
-        sprintf(name, "%s %s", slot_names[i], names[i]);
-        ui->comboBox->setItemText(i, name);
-    }
+        ui->comboBox->setItemText(i, QString("%1 %2").arg(slot_names[i]).arg(names[i]));
 }
 
-void LoadFromAmp::change_name(int slot, char *name)
+void LoadFromAmp::change_name(int slot, QString *name)
 {
-    ui->comboBox->setItemText(slot, name);
+    ui->comboBox->setItemText(slot, *name);
 }

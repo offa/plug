@@ -51,19 +51,19 @@ class Mustang
 public:
     Mustang();
     ~Mustang();
-    int start_amp(char [][32], char *, struct amp_settings *, struct fx_pedal_settings *);    // initialize communication
+    int start_amp(char list[][32]=NULL, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL);    // initialize communication
     int stop_amp(void);    // terminate communication
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
     int save_on_amp(char *, int);
-    int load_memory_bank(int, char *, struct amp_settings *, struct fx_pedal_settings *);
+    int load_memory_bank(int, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL);
 
 private:
     libusb_device_handle *amp_hand;    // handle for USB communication
     unsigned char execute[LENGTH];    // "apply" command sent after each instruction
     unsigned char prev_array[4][LENGTH];    // array used to clear the effect
 
-    int decode_data(unsigned char [6][LENGTH], char *, struct amp_settings *, struct fx_pedal_settings *t);
+    int decode_data(unsigned char [6][LENGTH], char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL);
 };
 
 #endif // MUSTANG_H

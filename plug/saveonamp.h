@@ -2,7 +2,6 @@
 #define SAVEONAMP_H
 
 #include <QDialog>
-#include <stdio.h>
 
 namespace Ui {
     class SaveOnAmp;

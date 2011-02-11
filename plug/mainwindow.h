@@ -1,8 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <stdio.h>
-#include <string.h>
 #include <QtDebug>
 #include <QShortcut>
 #include <QMainWindow>
@@ -42,7 +40,7 @@ public slots:
     int save_on_amp(char *, int);
     int load_from_amp(int);
     void enable_buttons(void);
-    void change_name(int, char *);
+    void change_name(int, QString *);
 
 private:
     Ui::MainWindow *ui;

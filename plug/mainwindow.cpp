@@ -58,7 +58,7 @@ void MainWindow::start_amp()
     int x;
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
-    char name[32], title[40], names[24][32];
+    char name[32], /*title[40],*/ names[24][32];
 
     ui->statusBar->showMessage(tr("Connecting..."), 0);
     x = amp_ops->start_amp(names, name, &amplifier_set, effects_set);    // request initialization of communication
@@ -66,32 +66,19 @@ void MainWindow::start_amp()
     if(x != 0)    // if request succeded
     {
         if(x == -100)
-        {
             ui->statusBar->showMessage(tr("Suitable device not found!"), 5000);
-        }
         else
-        {
-            // print error code
-            char err[16];
-            sprintf(err, "Error: %d", x);
-            ui->statusBar->showMessage(err, 5000);
-        }
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(x), 5000);
         return;
     }
 
     load->load_names(names);
     save->load_names(names);
 
-    memset(title, 0x00, 40);
     if(name[0] == 0x00)
-    {
-        sprintf(title, "PLUG: NONE");
-    }
+        setWindowTitle(QString(tr("PLUG: NONE")));
     else
-    {
-        sprintf(title, "PLUG: %s", name);
-    }
-    setWindowTitle(title);
+        setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
     amp->load(amplifier_set);
     for(int i = 0; i < 4; i++)
@@ -142,42 +129,30 @@ void MainWindow::stop_amp()
         ui->statusBar->showMessage(tr("Disconnected"), 3000);    // show message on the status bar
     }
     else    // if request failed
-    {
-        // print error code
-        char err[16];
-        sprintf(err, "Error: %d", x);
-        ui->statusBar->showMessage(err, 5000);
-    }
-
+        ui->statusBar->showMessage(QString(tr("Error: %1")).arg(x), 5000);
 }
 
 // pass the message to the amp
 int MainWindow::set_effect(struct fx_pedal_settings pedal)
 {
-    int ret;
-    ret = amp_ops->set_effect(pedal);
-    return ret;
+    return amp_ops->set_effect(pedal);
 }
 
 int MainWindow::set_amplifier(struct amp_settings settings)
 {
-    int ret;
-    ret = amp_ops->set_amplifier(settings);
-    return ret;
+    return amp_ops->set_amplifier(settings);
 }
 
 int MainWindow::save_on_amp(char *name, int slot)
 {
     int ret;
-    char title[40];
 
     ret = amp_ops->save_on_amp(name, slot);
 
     if(name[0] == 0x00)
-        sprintf(title, "PLUG: NONE");
+        setWindowTitle(QString(tr("PLUG: NONE")));
     else
-        sprintf(title, "PLUG: %s", name);
-    setWindowTitle(title);
+        setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
     return ret;
 }
@@ -186,20 +161,14 @@ int MainWindow::load_from_amp(int slot)
 {
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
-    char name[32], title[40];
+    char name[32];
 
     amp_ops->load_memory_bank(slot, name, &amplifier_set, effects_set);
 
-    memset(title, 0x00, 40);
     if(name[0] == 0x00)
-    {
-        sprintf(title, "PLUG: NONE");
-    }
+        setWindowTitle(QString(tr("PLUG: NONE")));
     else
-    {
-        sprintf(title, "PLUG: %s", name);
-    }
-    setWindowTitle(title);
+        setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
     amp->load(amplifier_set);
     for(int i = 0; i < 4; i++)
@@ -261,7 +230,7 @@ void MainWindow::httpReadyRead()
 //    settings.setValue("mainWindowState", saveState());
 //}
 
-void MainWindow::change_name(int slot, char *name)
+void MainWindow::change_name(int slot, QString *name)
 {
     load->change_name(slot, name);
 }

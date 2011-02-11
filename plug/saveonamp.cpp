@@ -20,23 +20,21 @@ SaveOnAmp::~SaveOnAmp()
 
 void SaveOnAmp::save()
 {
-    char name[40];
     char slot_names[24][5] = {
         "[O1]", "[O2]", "[O3]", "[O4]", "[O5]", "[O6]", "[O7]", "[O8]",
         "[G1]", "[G2]", "[G3]", "[G4]", "[G5]", "[G6]", "[G7]", "[G8]",
         "[R1]", "[R2]", "[R3]", "[R4]", "[R5]", "[R6]", "[R7]", "[R8]"
     };
+    QString name(QString("%1 %2").arg(slot_names[ui->comboBox->currentIndex()]).arg(ui->lineEdit->text()));
 
-    sprintf(name, "%s %s", slot_names[ui->comboBox->currentIndex()], ui->lineEdit->text().toAscii().data());
     ui->comboBox->setItemText(ui->comboBox->currentIndex(), name);
-    ((MainWindow*)parent())->change_name(ui->comboBox->currentIndex(), name);
+    ((MainWindow*)parent())->change_name(ui->comboBox->currentIndex(), &name);
     ((MainWindow*)parent())->save_on_amp(ui->lineEdit->text().toAscii().data(), ui->comboBox->currentIndex());
     this->close();
 }
 
 void SaveOnAmp::load_names(char names[24][32])
 {
-    char name[40];
     char slot_names[24][5] = {
         "[O1]", "[O2]", "[O3]", "[O4]", "[O5]", "[O6]", "[O7]", "[O8]",
         "[G1]", "[G2]", "[G3]", "[G4]", "[G5]", "[G6]", "[G7]", "[G8]",
@@ -44,8 +42,5 @@ void SaveOnAmp::load_names(char names[24][32])
     };
 
     for(int i = 0; i < 24; i++)
-    {
-        sprintf(name, "%s %s", slot_names[i], names[i]);
-        ui->comboBox->setItemText(i, name);
-    }
+        ui->comboBox->setItemText(i, QString("%1 %2").arg(slot_names[i]).arg(names[i]));
 }

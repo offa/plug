@@ -26,7 +26,7 @@ Mustang::~Mustang()
     this->stop_amp();
 }
 
-int Mustang::start_amp(char list[][32]=NULL, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL)
+int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
     int ret, recieved;
     unsigned char array[LENGTH];
@@ -678,7 +678,7 @@ int Mustang::save_on_amp(char *name, int slot)
     return ret;
 }
 
-int Mustang::load_memory_bank(int slot, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL)
+int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
     int ret, recieved;
     unsigned char array[LENGTH], data[6][LENGTH];
@@ -704,7 +704,7 @@ int Mustang::load_memory_bank(int slot, char *name=NULL, struct amp_settings *am
     return ret;
 }
 
-int Mustang::decode_data(unsigned char data[6][LENGTH], char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL)
+int Mustang::decode_data(unsigned char data[6][LENGTH], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
     if(name != NULL)
     {
@@ -793,7 +793,7 @@ int Mustang::decode_data(unsigned char data[6][LENGTH], char *name=NULL, struct 
         // EFFECTS
         for(int i = 2; i < 6; i++)
         {
-            int j;
+            int j=0;
 
             prev_array[data[i][DSP]-6][0] = 0x1c;
             prev_array[data[i][DSP]-6][1] = 0x03;
