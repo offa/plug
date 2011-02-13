@@ -2,6 +2,7 @@
 #define MUSTANG_H
 
 #include <stdio.h>
+#include <string.h>
 #include <libusb-1.0/libusb.h>
 #include <QtDebug>
 #include "effects_enum.h"
@@ -45,6 +46,7 @@
 
 // save fields
 #define SAVE_SLOT 4
+#define FXKNOB 3
 
 class Mustang
 {
@@ -57,6 +59,7 @@ public:
     int set_amplifier(struct amp_settings);
     int save_on_amp(char *, int);
     int load_memory_bank(int, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL);
+    int save_effects(int , char *, int , struct fx_pedal_settings *);
 
 private:
     libusb_device_handle *amp_hand;    // handle for USB communication
