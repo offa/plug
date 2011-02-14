@@ -16,11 +16,11 @@ RISK.
 
 
 Table of Contents:
-  1. Compiling
+  1. Compilation
   2. Usage
   3. Help and donations
 
-1. Compiling
+1. Compilation
 
 To build program requires Qt4 and libusb-1.0. To build the code you need to
 run the following commands in the source directory:
@@ -31,12 +31,10 @@ If both commands finished without errors compilation is finished. Executables
 name is "plug" so to run the program just type:
 ~ $ ./plug
 
----
+==========
 If you are a Mac user and want to build a project for Xcode type:
 ~ $ qmake -spec macx-xcode plug.pro
-instead of
-~ $ qmake plug.pro
----
+==========
 
 
 2. Usage
@@ -46,7 +44,7 @@ instead of
 "Connected" should appear on the status bar at the bottom of the window. After
 that buttons will become active.
 
----
+==========
 NOTE for Ubuntu users:
 For some reason Ubuntu allows only root to access USB devices of unknown type.
 To change this and allow users in "plugdev" group to also have access to Mustang
@@ -58,7 +56,7 @@ SYSFS{idProduct}=="0004", GROUP="plugdev"
 Now either restart computer or unplug amp and restart udev subsystem with the
 following command:
 ~ $ sudo service udev restart
----
+==========
 
 Button titled "Amplifier" allows you to choose amplifier model and it's
 settings. In the amplifier window there is also a button named "Advanced" which
@@ -73,8 +71,18 @@ To add an effect after the amplifier just enable the check box at the bottom in
 the effect window.
 
 To save settings in one of amplifiers memory banks click "File"-->"Save on
-amplifier". In the newly opened window choose name for your preset (for
-compatibility with FUSE) and memory bank and click save.
+amplifier". In the newly opened window choose name for your preset  and memory
+bank and click save.
+
+To load presets from the amplifier choose "File"-->"Load from amplifier" and in
+the window that will appear choose slot to load.
+
+PLUG support also the possibility to save effect presets to MOD and DLY/REV
+knobs. To do so set effect you wish to save on one of the effects slot and
+choose "Save effects" from "File" menu.
+You must set Modulation effects on the "Effect 2" slot, and Delay and Reverb
+effects on "Effect 3" and "Effect 4" slots. Otherwise they will not be saved.
+
 
 
 3. Help and donations
@@ -82,8 +90,8 @@ compatibility with FUSE) and memory bank and click save.
 Want to help? Have any ideas? Great!
 You can:
 - write code and send me patches
-- prepare packages for Linux distributions, I will post them here (if you want)
-- send me some ideas through the issue tracker on the project page
+- prepare packages for Linux distributions, I will post them on the project page
+- send me some ideas through the issue tracker on bitbucket
 - help in any other way
 
 Please donate if you like my work.
