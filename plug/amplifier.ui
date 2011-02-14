@@ -153,6 +153,12 @@
           <property name="maximum">
            <number>255</number>
           </property>
+          <property name="notchTarget">
+           <double>12.750000000000000</double>
+          </property>
+          <property name="notchesVisible">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -183,6 +189,12 @@
          <widget class="QDial" name="dial_2">
           <property name="maximum">
            <number>255</number>
+          </property>
+          <property name="notchTarget">
+           <double>12.750000000000000</double>
+          </property>
+          <property name="notchesVisible">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -228,6 +240,12 @@
           <property name="maximum">
            <number>255</number>
           </property>
+          <property name="notchTarget">
+           <double>12.750000000000000</double>
+          </property>
+          <property name="notchesVisible">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -259,6 +277,12 @@
           <property name="maximum">
            <number>255</number>
           </property>
+          <property name="notchTarget">
+           <double>12.750000000000000</double>
+          </property>
+          <property name="notchesVisible">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -289,6 +313,12 @@
          <widget class="QDial" name="dial_5">
           <property name="maximum">
            <number>255</number>
+          </property>
+          <property name="notchTarget">
+           <double>12.750000000000000</double>
+          </property>
+          <property name="notchesVisible">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

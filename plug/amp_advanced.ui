@@ -162,6 +162,12 @@
          <property name="value">
           <number>128</number>
          </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -199,6 +205,12 @@
          <property name="value">
           <number>128</number>
          </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -235,6 +247,12 @@
          </property>
          <property name="value">
           <number>128</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -277,6 +295,12 @@
          <property name="value">
           <number>128</number>
          </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -313,6 +337,12 @@
          </property>
          <property name="value">
           <number>1</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -353,6 +383,12 @@
          </property>
          <property name="value">
           <number>0</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -396,6 +432,12 @@
          </property>
          <property name="value">
           <number>128</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
