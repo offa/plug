@@ -247,16 +247,27 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
     if(fx_num == 1)
     {
         if(mod)
+        {
             effect2->get_settings(effects[0]);
+            set_effect(effects[0]);
+        }
         else if(dly)
+        {
             effect3->get_settings(effects[0]);
+            set_effect(effects[0]);
+        }
         else if(rev)
+        {
             effect4->get_settings(effects[0]);
+            set_effect(effects[0]);
+        }
     }
     else
     {
         effect3->get_settings(effects[0]);
+        set_effect(effects[0]);
         effect4->get_settings(effects[1]);
+        set_effect(effects[1]);
     }
 
     amp_ops->save_effects(slot, name, fx_num, effects);

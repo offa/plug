@@ -969,6 +969,7 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, struct
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
+    execute[2]=0x00;  // why this must be here?
 
     if(number_of_effects > 2)
         repeat = 1;
@@ -999,10 +1000,13 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, struct
 
     array[1] = 0x03;
     array[6] = 0x00;
+    memset(array+16, 0x00, LENGTH-16);
     for(int i = 0; i < repeat; i++)
     {
+        array[19] = 0x00;
         array[20] = 0x08;
         array[21] = 0x01;
+        array[KNOB6] = 0x00;
 
         if(effects[i].put_post_amp)
             array[FXSLOT] = effects[i].fx_slot+4;
