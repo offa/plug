@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     amp_advanced.cpp \
     about.cpp \
     saveonamp.cpp \
-    loadfromamp.cpp
+    loadfromamp.cpp \
+    save_effects.cpp
 
 HEADERS  += mainwindow.h \
     effect.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     data_structs.h \
     about.h \
     saveonamp.h \
-    loadfromamp.h
+    loadfromamp.h \
+    save_effects.h
 
 FORMS    += mainwindow.ui \
     effect.ui \
@@ -37,7 +39,8 @@ FORMS    += mainwindow.ui \
     amp_advanced.ui \
     about.ui \
     saveonamp.ui \
-    loadfromamp.ui
+    loadfromamp.ui \
+    save_effects.ui
 
 LIBS += -lusb-1.0
 

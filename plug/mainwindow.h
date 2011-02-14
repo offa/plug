@@ -17,6 +17,7 @@
 #include "about.h"
 #include "saveonamp.h"
 #include "loadfromamp.h"
+#include "save_effects.h"
 
 #define VERSION "0.4.999"
 
@@ -41,6 +42,7 @@ public slots:
     int load_from_amp(int);
     void enable_buttons(void);
     void change_name(int, QString *);
+    void save_effects(int, char *, int, bool, bool, bool);
 
 private:
     Ui::MainWindow *ui;
@@ -56,6 +58,7 @@ private:
     About *about_window;
     SaveOnAmp *save;
     LoadFromAmp *load;
+    Save_effects *seffects;
 
     QNetworkReply *reply;
     void check_for_updates();

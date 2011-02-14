@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Save_effects</class>
+ <widget class="QDialog" name="Save_effects">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>250</width>
+    <height>175</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Save effects</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>&amp;Name:</string>
+       </property>
+       <property name="buddy">
+        <cstring>lineEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="maxLength">
+        <number>23</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>&amp;Knob slot: </string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox">
+       <property name="maxVisibleItems">
+        <number>12</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>A1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>A3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>B3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>C3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>D1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>D2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>D3</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>&amp;Modulation</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="text">
+        <string>&amp;Delay</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_3">
+       <property name="text">
+        <string>&amp;Reverb</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>&amp;Save</string>
+       </property>
+       <property name="shortcut">
+        <string>Return</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

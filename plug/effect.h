@@ -39,6 +39,7 @@ public slots:
     void send_fx(void);
 
     void load(struct fx_pedal_settings);
+    void get_settings(struct fx_pedal_settings &);
 };
 
 #endif // EFFECT_H

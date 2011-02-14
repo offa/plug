@@ -32,7 +32,10 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Slot:</string>
+        <string>&amp;Slot:</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox</cstring>
        </property>
       </widget>
      </item>
@@ -180,14 +183,17 @@
      <item>
       <widget class="QPushButton" name="pushButton_2">
        <property name="text">
-        <string>Cancel</string>
+        <string>&amp;Cancel</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Load</string>
+        <string>&amp;Load</string>
+       </property>
+       <property name="shortcut">
+        <string>Return</string>
        </property>
       </widget>
      </item>

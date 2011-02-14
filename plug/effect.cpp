@@ -485,3 +485,16 @@ void Effect::load(struct fx_pedal_settings settings)
     ui->dial_6->setValue(settings.knob6);
     ui->checkBox->setChecked(settings.put_post_amp);
 }
+
+void Effect::get_settings(struct fx_pedal_settings &pedal)
+{
+    pedal.effect_num = effect_num;
+    pedal.fx_slot = fx_slot;
+    pedal.put_post_amp = put_post_amp;
+    pedal.knob1 = knob1;
+    pedal.knob2 = knob2;
+    pedal.knob3 = knob3;
+    pedal.knob4 = knob4;
+    pedal.knob5 = knob5;
+    pedal.knob6 = knob6;
+}

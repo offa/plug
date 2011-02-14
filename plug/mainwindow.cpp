@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     about_window = new About(this);
     save = new SaveOnAmp(this);
     load = new LoadFromAmp(this);
+    seffects = new Save_effects(this);
 
     // connect buttons to slots
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
@@ -36,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionAbout, SIGNAL(triggered()), about_window, SLOT(open()));
     connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(open()));
     connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(open()));
+    connect(ui->actionSave_effects, SIGNAL(triggered()), seffects, SLOT(open()));
 
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
@@ -108,6 +110,7 @@ void MainWindow::start_amp()
     ui->EffectButton4->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
     ui->action_Load_from_amplifier->setDisabled(false);
+    ui->actionSave_effects->setDisabled(false);
     ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
 }
 
@@ -126,6 +129,7 @@ void MainWindow::stop_amp()
         ui->EffectButton4->setDisabled(true);
         ui->actionSave_to_amplifier->setDisabled(true);
         ui->action_Load_from_amplifier->setDisabled(true);
+        ui->actionSave_effects->setDisabled(true);
         ui->statusBar->showMessage(tr("Disconnected"), 3000);    // show message on the status bar
     }
     else    // if request failed
@@ -203,6 +207,7 @@ void MainWindow::enable_buttons(void)
     ui->EffectButton4->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
     ui->action_Load_from_amplifier->setDisabled(false);
+    ui->actionSave_effects->setDisabled(false);
 }
 
 void MainWindow::check_for_updates()
@@ -233,4 +238,26 @@ void MainWindow::httpReadyRead()
 void MainWindow::change_name(int slot, QString *name)
 {
     load->change_name(slot, name);
+}
+
+void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool dly, bool rev)
+{
+    struct fx_pedal_settings effects[2];
+
+    if(fx_num == 1)
+    {
+        if(mod)
+            effect2->get_settings(effects[0]);
+        else if(dly)
+            effect3->get_settings(effects[0]);
+        else if(rev)
+            effect4->get_settings(effects[0]);
+    }
+    else
+    {
+        effect3->get_settings(effects[0]);
+        effect4->get_settings(effects[1]);
+    }
+
+    amp_ops->save_effects(slot, name, fx_num, effects);
 }
