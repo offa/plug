@@ -155,6 +155,7 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="actionCheck_for_Updates"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuConnection">
@@ -164,8 +165,16 @@
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actionConnect_on_startup"/>
+    <addaction name="actionCheck_for_updates_on_startup"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuConnection"/>
+   <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -223,6 +232,30 @@
    </property>
    <property name="text">
     <string>Save &amp;effects</string>
+   </property>
+  </action>
+  <action name="actionConnect_on_startup">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Connect on startup</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_updates_on_startup">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Check for &amp;updates on startup</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_Updates">
+   <property name="text">
+    <string>Check for &amp;Updates</string>
    </property>
   </action>
  </widget>

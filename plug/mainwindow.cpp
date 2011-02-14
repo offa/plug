@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     effect3 = new Effect(this, 2);
     effect4 = new Effect(this, 3);
 
+    this->show();
+
     about_window = new About(this);
     save = new SaveOnAmp(this);
     load = new LoadFromAmp(this);
@@ -38,12 +40,33 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(open()));
     connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(open()));
     connect(ui->actionSave_effects, SIGNAL(triggered()), seffects, SLOT(open()));
+    connect(ui->actionCheck_for_Updates, SIGNAL(triggered()), this, SLOT(check_for_updates()));
 
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
 
-    check_for_updates();
+    // setting default values if there was none
+    if(!settings.contains("checkForUpdates"))
+        settings.setValue("checkForUpdates", true);
+    if(!settings.contains("connectOnStartup"))
+        settings.setValue("connectOnStartup", false);
+
+    // setting UI
+    ui->actionCheck_for_updates_on_startup->setChecked(settings.value("checkForUpdates").toBool());
+    ui->actionConnect_on_startup->setChecked(settings.value("connectOnStartup").toBool());
+
+    // connecting control functions
+    connect(ui->actionCheck_for_updates_on_startup, SIGNAL(toggled(bool)), this, SLOT(change_updates(bool)));
+    connect(ui->actionConnect_on_startup, SIGNAL(toggled(bool)), this, SLOT(change_connect(bool)));
+
+    // connect the functions if needed
+    if(settings.value("checkForUpdates").toBool())
+        connect(this, SIGNAL(started()), this, SLOT(check_for_updates()));
+    if(settings.value("connectOnStartup").toBool())
+        connect(this, SIGNAL(started()), this, SLOT(start_amp()));
+
+    emit started();
 }
 
 MainWindow::~MainWindow()
@@ -225,15 +248,9 @@ void MainWindow::httpReadyRead()
         ui->statusBar->addWidget(label);
         QMessageBox::information(this, "Update", "Update available!\nCheck homepage for new version.");
     }
+    else
+        ui->statusBar->showMessage("You are using the newest version", 5000);
 }
-
-// save window size on close
-//void MainWindow::closeEvent(QCloseEvent *event)
-//{
-//    QSettings settings;
-//    settings.setValue("mainWindowGeometry", saveGeometry());
-//    settings.setValue("mainWindowState", saveState());
-//}
 
 void MainWindow::change_name(int slot, QString *name)
 {
@@ -271,4 +288,18 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
     }
 
     amp_ops->save_effects(slot, name, fx_num, effects);
+}
+
+void MainWindow::change_updates(bool value)
+{
+    QSettings settings;
+
+    settings.setValue("checkForUpdates", value);
+}
+
+void MainWindow::change_connect(bool value)
+{
+    QSettings settings;
+
+    settings.setValue("connectOnStartup", value);
 }

@@ -46,7 +46,6 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-//    void closeEvent(QCloseEvent *event);
 
     // pointers to objects
     Mustang *amp_ops;
@@ -61,10 +60,15 @@ private:
     Save_effects *seffects;
 
     QNetworkReply *reply;
-    void check_for_updates();
 
 private slots:
+    void check_for_updates();
     void httpReadyRead();
+    void change_updates(bool);
+    void change_connect(bool);
+
+signals:
+    void started();
 };
 
 #endif // MAINWINDOW_H
