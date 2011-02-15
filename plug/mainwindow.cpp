@@ -83,7 +83,7 @@ void MainWindow::start_amp()
     int x;
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
-    char name[32], /*title[40],*/ names[24][32];
+    char name[32], names[24][32];
 
     ui->statusBar->showMessage(tr("Connecting..."), 0);
     x = amp_ops->start_amp(names, name, &amplifier_set, effects_set);    // request initialization of communication

@@ -9,10 +9,6 @@ Effect::Effect(QWidget *parent, int number) :
 {
     ui->setupUi(this);
 
-    // load window size
-    QSettings settings;
-    restoreGeometry(settings.value(QString("Effect %1 WindowGeometry").arg(fx_slot)).toByteArray());
-
     // initialize variables
     effect_num = ui->comboBox->currentIndex();
     fx_slot = number;
@@ -23,6 +19,10 @@ Effect::Effect(QWidget *parent, int number) :
     knob4 = 0;
     knob5 = 0;
     knob6 = 0;
+
+    // load window size
+    QSettings settings;
+    restoreGeometry(settings.value(QString("Effect%1WindowGeometry").arg(fx_slot)).toByteArray());
 
     // set window title
     setWindowTitle(QString(tr("Effect %1")).arg(fx_slot+1));
@@ -42,7 +42,7 @@ Effect::Effect(QWidget *parent, int number) :
 Effect::~Effect()
 {
     QSettings settings;
-    settings.setValue(QString("Effect %1 WindowGeometry").arg(fx_slot), saveGeometry());
+    settings.setValue(QString("Effect%1WindowGeometry").arg(fx_slot), saveGeometry());
     delete ui;
 }
 
