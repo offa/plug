@@ -19,7 +19,7 @@
 #include "loadfromamp.h"
 #include "save_effects.h"
 
-#define VERSION "0.4.999"
+#define VERSION "0.5"
 
 namespace Ui {
     class MainWindow;
