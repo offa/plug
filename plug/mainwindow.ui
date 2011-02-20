@@ -156,6 +156,7 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="actionCheck_for_Updates"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuConnection">
@@ -232,6 +233,9 @@
    </property>
    <property name="text">
     <string>Save &amp;effects</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
   <action name="actionConnect_on_startup">
