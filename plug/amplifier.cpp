@@ -30,6 +30,8 @@ Amplifier::Amplifier(QWidget *parent) :
     bias = 128;
     sag = 1;
 
+    changed = false;
+
     advanced = new Amp_Advanced(this);
     connect(ui->advancedButton, SIGNAL(clicked()), advanced, SLOT(open()));
     choose_amp(0);
@@ -53,76 +55,91 @@ Amplifier::~Amplifier()
 void Amplifier::set_gain(int value)
 {
     gain = value;
+    changed = true;
 }
 
 void Amplifier::set_volume(int value)
 {
     volume = value;
+    changed = true;
 }
 
 void Amplifier::set_treble(int value)
 {
     treble = value;
+    changed = true;
 }
 
 void Amplifier::set_middle(int value)
 {
     middle = value;
+    changed = true;
 }
 
 void Amplifier::set_bass(int value)
 {
     bass = value;
+    changed = true;
 }
 
 void Amplifier::set_cabinet(int value)
 {
     cabinet = value;
+    changed = true;
 }
 
 void Amplifier::set_noise_gate(int value)
 {
     noise_gate = value;
+    changed = true;
 }
 
 void Amplifier::set_presence(int value)
 {
     presence = value;
+    changed = true;
 }
 
 void Amplifier::set_gain2(int value)
 {
     gain2 = value;
+    changed = true;
 }
 
 void Amplifier::set_master_vol(int value)
 {
     master_vol = value;
+    changed = true;
 }
 
 void Amplifier::set_threshold(int value)
 {
     threshold = value;
+    changed = true;
 }
 
 void Amplifier::set_depth(int value)
 {
     depth = value;
+    changed = true;
 }
 
 void Amplifier::set_bias(int value)
 {
     bias = value;
+    changed = true;
 }
 
 void Amplifier::set_sag(int value)
 {
     sag = value;
+    changed = true;
 }
 
 void Amplifier::choose_amp(int value)
 {
     amp_num = value;
+    changed = true;
 
     // set properties
     switch (value)
@@ -196,6 +213,10 @@ void Amplifier::choose_amp(int value)
 void Amplifier::send_amp()
 {
     struct amp_settings settings;
+
+    if(!changed)
+        return;
+    changed = false;
 
     settings.amp_num = amp_num;
     settings.gain = gain;

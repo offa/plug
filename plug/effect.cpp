@@ -19,6 +19,7 @@ Effect::Effect(QWidget *parent, int number) :
     knob4 = 0;
     knob5 = 0;
     knob6 = 0;
+    changed = false;
 
     // load window size
     QSettings settings;
@@ -51,41 +52,49 @@ Effect::~Effect()
 void Effect::set_post_amp(bool value)
 {
     put_post_amp = value;
+    changed = true;
 }
 
 void Effect::set_knob1(int value)
 {
     knob1 = value;
+    changed = true;
 }
 
 void Effect::set_knob2(int value)
 {
     knob2 = value;
+    changed = true;
 }
 
 void Effect::set_knob3(int value)
 {
     knob3 = value;
+    changed = true;
 }
 
 void Effect::set_knob4(int value)
 {
     knob4 = value;
+    changed = true;
 }
 
 void Effect::set_knob5(int value)
 {
     knob5 = value;
+    changed = true;
 }
 
 void Effect::set_knob6(int value)
 {
     knob6 = value;
+    changed = true;
 }
 
 void Effect::choose_fx(int value)
 {
     effect_num = value;
+    changed = true;
 
     // activate proper knobs and set their max values
     switch (value)
@@ -465,6 +474,10 @@ void Effect::send_fx()
 {
     struct fx_pedal_settings pedal;
 
+    if(!changed)
+        return;
+    changed = false;
+
     pedal.effect_num = effect_num;
     pedal.fx_slot = fx_slot;
     pedal.put_post_amp = put_post_amp;
@@ -475,7 +488,7 @@ void Effect::send_fx()
     pedal.knob5 = knob5;
     pedal.knob6 = knob6;
 
-    ((MainWindow*)parent())->set_effect(pedal);
+//    ((MainWindow*)parent())->set_effect(pedal);
 }
 
 void Effect::load(struct fx_pedal_settings settings)
@@ -518,5 +531,6 @@ void Effect::off_switch(bool value)
         ui->setButton->setDisabled(false);
         choose_fx(ui->comboBox->currentIndex());
     }
+    changed = true;
     send_fx();
 }
