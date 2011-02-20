@@ -12,6 +12,18 @@ MainWindow::MainWindow(QWidget *parent) :
     restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
     restoreState(settings.value("mainWindowState").toByteArray());
 
+    // setting default values if there was none
+    if(!settings.contains("Settings/checkForUpdates"))
+        settings.setValue("Settings/checkForUpdates", true);
+    if(!settings.contains("Settings/connectOnStartup"))
+        settings.setValue("Settings/connectOnStartup", false);
+    if(!settings.contains("Settings/oneSetToSetThemAll"))
+        settings.setValue("Settings/oneSetToSetThemAll", false);
+    if(!settings.contains("Settings/keepWindowsOpen"))
+        settings.setValue("Settings/keepWindowsOpen", false);
+    if(!settings.contains("Settings/popupChangedWindows"))
+        settings.setValue("Settings/popupChangedWindows", false);
+
     // create child objects
     amp_ops = new Mustang();
     amp = new Amplifier(this);
@@ -24,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     save = new SaveOnAmp(this);
     load = new LoadFromAmp(this);
     seffects = new Save_effects(this);
+    settings_win = new Settings(this);
 
     this->show();
 
@@ -46,29 +59,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(open()));
     connect(ui->actionSave_effects, SIGNAL(triggered()), seffects, SLOT(open()));
     connect(ui->actionCheck_for_Updates, SIGNAL(triggered()), this, SLOT(check_for_updates()));
+    connect(ui->action_Configure, SIGNAL(triggered()), settings_win, SLOT(show()));
 
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
     connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
 
-    // setting default values if there was none
-    if(!settings.contains("checkForUpdates"))
-        settings.setValue("checkForUpdates", true);
-    if(!settings.contains("connectOnStartup"))
-        settings.setValue("connectOnStartup", false);
-
-    // setting UI
-    ui->actionCheck_for_updates_on_startup->setChecked(settings.value("checkForUpdates").toBool());
-    ui->actionConnect_on_startup->setChecked(settings.value("connectOnStartup").toBool());
-
-    // connecting control functions
-    connect(ui->actionCheck_for_updates_on_startup, SIGNAL(toggled(bool)), this, SLOT(change_updates(bool)));
-    connect(ui->actionConnect_on_startup, SIGNAL(toggled(bool)), this, SLOT(change_connect(bool)));
-
     // connect the functions if needed
-    if(settings.value("checkForUpdates").toBool())
+    if(settings.value("Settings/checkForUpdates").toBool())
         connect(this, SIGNAL(started()), this, SLOT(check_for_updates()));
-    if(settings.value("connectOnStartup").toBool())
+    if(settings.value("Settings/connectOnStartup").toBool())
         connect(this, SIGNAL(started()), this, SLOT(start_amp()));
 
     emit started();
@@ -85,6 +85,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::start_amp()
 {
+    QSettings settings;
     int x;
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
@@ -111,6 +112,8 @@ void MainWindow::start_amp()
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
     amp->load(amplifier_set);
+    if(settings.value("Settings/popupChangedWindows").toBool())
+        amp->show();
     for(int i = 0; i < 4; i++)
     {
         switch(effects_set[i].fx_slot)
@@ -118,15 +121,34 @@ void MainWindow::start_amp()
         case 0x00:
         case 0x04:
             effect1->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect1->show();
+            break;
+
         case 0x01:
         case 0x05:
             effect2->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect2->show();
+            break;
+
         case 0x02:
         case 0x06:
             effect3->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect3->show();
+            break;
+
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
+            if(effects_set[i].effect_num != 0)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect4->show();
+            break;
         }
     }
 
@@ -191,6 +213,7 @@ int MainWindow::save_on_amp(char *name, int slot)
 
 int MainWindow::load_from_amp(int slot)
 {
+    QSettings settings;
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
     char name[32];
@@ -203,6 +226,8 @@ int MainWindow::load_from_amp(int slot)
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
     amp->load(amplifier_set);
+    if(settings.value("Settings/popupChangedWindows").toBool())
+        amp->show();
     for(int i = 0; i < 4; i++)
     {
         switch(effects_set[i].fx_slot)
@@ -210,15 +235,34 @@ int MainWindow::load_from_amp(int slot)
         case 0x00:
         case 0x04:
             effect1->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect1->show();
+            break;
+
         case 0x01:
         case 0x05:
             effect2->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect2->show();
+            break;
+
         case 0x02:
         case 0x06:
             effect3->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect3->show();
+            break;
+
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
+            if(effects_set[i].effect_num != 0)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect4->show();
+            break;
         }
     }
 
@@ -293,18 +337,4 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
     }
 
     amp_ops->save_effects(slot, name, fx_num, effects);
-}
-
-void MainWindow::change_updates(bool value)
-{
-    QSettings settings;
-
-    settings.setValue("checkForUpdates", value);
-}
-
-void MainWindow::change_connect(bool value)
-{
-    QSettings settings;
-
-    settings.setValue("connectOnStartup", value);
 }

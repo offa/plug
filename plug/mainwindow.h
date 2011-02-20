@@ -18,6 +18,7 @@
 #include "saveonamp.h"
 #include "loadfromamp.h"
 #include "save_effects.h"
+#include "settings.h"
 
 #define VERSION "0.5"
 
@@ -58,14 +59,13 @@ private:
     SaveOnAmp *save;
     LoadFromAmp *load;
     Save_effects *seffects;
+    Settings *settings_win;
 
     QNetworkReply *reply;
 
 private slots:
     void check_for_updates();
     void httpReadyRead();
-    void change_updates(bool);
-    void change_connect(bool);
 
 signals:
     void started();

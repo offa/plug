@@ -170,8 +170,7 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
-    <addaction name="actionConnect_on_startup"/>
-    <addaction name="actionCheck_for_updates_on_startup"/>
+    <addaction name="action_Configure"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuConnection"/>
@@ -260,6 +259,11 @@
   <action name="actionCheck_for_Updates">
    <property name="text">
     <string>Check for &amp;Updates</string>
+   </property>
+  </action>
+  <action name="action_Configure">
+   <property name="text">
+    <string>&amp;Configure</string>
    </property>
   </action>
  </widget>
