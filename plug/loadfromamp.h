@@ -1,13 +1,13 @@
 #ifndef LOADFROMAMP_H
 #define LOADFROMAMP_H
 
-#include <QDialog>
+#include <QMainWindow>
 
 namespace Ui {
     class LoadFromAmp;
 }
 
-class LoadFromAmp : public QDialog
+class LoadFromAmp : public QMainWindow
 {
     Q_OBJECT
 

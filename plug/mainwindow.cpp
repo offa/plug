@@ -55,8 +55,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionAbout, SIGNAL(triggered()), about_window, SLOT(open()));
-    connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(open()));
-    connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(open()));
+    connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(show()));
+    connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(show()));
     connect(ui->actionSave_effects, SIGNAL(triggered()), seffects, SLOT(open()));
     connect(ui->actionCheck_for_Updates, SIGNAL(triggered()), this, SLOT(check_for_updates()));
     connect(ui->action_Configure, SIGNAL(triggered()), settings_win, SLOT(show()));

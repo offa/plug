@@ -1,205 +1,207 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>LoadFromAmp</class>
- <widget class="QDialog" name="LoadFromAmp">
+ <widget class="QMainWindow" name="LoadFromAmp">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>150</height>
+    <height>100</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Load from Amplifier</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>&amp;Slot:</string>
-       </property>
-       <property name="buddy">
-        <cstring>comboBox</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBox">
-       <item>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Orange 1</string>
+         <string>&amp;Slot:</string>
         </property>
-       </item>
-       <item>
+        <property name="buddy">
+         <cstring>comboBox</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox">
+        <item>
+         <property name="text">
+          <string>Orange 1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Orange 2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Orange 3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Orange 4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Orange 5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Orange 6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Orange 7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Orange 8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Green 8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Red 8</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>17</width>
+        <height>32</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
         <property name="text">
-         <string>Orange 2</string>
+         <string>&amp;Cancel</string>
         </property>
-       </item>
-       <item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>Orange 3</string>
+         <string>&amp;Load</string>
         </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Orange 4</string>
+        <property name="shortcut">
+         <string>Return</string>
         </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Orange 5</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Orange 6</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Orange 7</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Orange 8</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 4</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 5</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 6</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 7</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Green 8</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 4</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 5</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 6</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 7</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Red 8</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>17</width>
-       <height>32</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>&amp;Load</string>
-       </property>
-       <property name="shortcut">
-        <string>Return</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-  </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 
 LoadFromAmp::LoadFromAmp(QWidget *parent) :
-    QDialog(parent),
+    QMainWindow(parent),
     ui(new Ui::LoadFromAmp)
 {
     ui->setupUi(this);
@@ -25,8 +25,11 @@ LoadFromAmp::~LoadFromAmp()
 
 void LoadFromAmp::load()
 {
+    QSettings settings;
+
     ((MainWindow*)parent())->load_from_amp(ui->comboBox->currentIndex());
-    this->close();
+    if(!settings.value("Settings/keepWindowsOpen").toBool())
+        this->close();
 }
 
 void LoadFromAmp::load_names(char names[24][32])

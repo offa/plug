@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 
 SaveOnAmp::SaveOnAmp(QWidget *parent) :
-    QDialog(parent),
+    QMainWindow(parent),
     ui(new Ui::SaveOnAmp)
 {
     ui->setupUi(this);
@@ -25,6 +25,7 @@ SaveOnAmp::~SaveOnAmp()
 
 void SaveOnAmp::save()
 {
+    QSettings settings;
     char slot_names[24][5] = {
         "[O1]", "[O2]", "[O3]", "[O4]", "[O5]", "[O6]", "[O7]", "[O8]",
         "[G1]", "[G2]", "[G3]", "[G4]", "[G5]", "[G6]", "[G7]", "[G8]",
@@ -35,7 +36,8 @@ void SaveOnAmp::save()
     ui->comboBox->setItemText(ui->comboBox->currentIndex(), name);
     ((MainWindow*)parent())->change_name(ui->comboBox->currentIndex(), &name);
     ((MainWindow*)parent())->save_on_amp(ui->lineEdit->text().toAscii().data(), ui->comboBox->currentIndex());
-    this->close();
+    if(!settings.value("Settings/keepWindowsOpen").toBool())
+        this->close();
 }
 
 void SaveOnAmp::load_names(char names[24][32])

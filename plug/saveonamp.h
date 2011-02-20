@@ -1,13 +1,13 @@
 #ifndef SAVEONAMP_H
 #define SAVEONAMP_H
 
-#include <QDialog>
+#include <QMainWindow>
 
 namespace Ui {
     class SaveOnAmp;
 }
 
-class SaveOnAmp : public QDialog
+class SaveOnAmp : public QMainWindow
 {
     Q_OBJECT
 
