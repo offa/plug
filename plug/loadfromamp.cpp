@@ -9,12 +9,17 @@ LoadFromAmp::LoadFromAmp(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSettings settings;
+    restoreGeometry(settings.value("loadAmpPresetWindowGeometry").toByteArray());
+
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(load()));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 LoadFromAmp::~LoadFromAmp()
 {
+    QSettings settings;
+    settings.setValue("loadAmpPresetWindowGeometry", saveGeometry());
     delete ui;
 }
 
