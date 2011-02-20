@@ -34,6 +34,7 @@ public slots:
     void set_knob5(int);
     void set_knob6(int);
     void choose_fx(int);
+    void off_switch(bool);
 
     // send settings to the amplifier
     void send_fx(void);

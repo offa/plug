@@ -37,6 +37,7 @@ Effect::Effect(QWidget *parent, int number) :
     connect(ui->dial_5, SIGNAL(valueChanged(int)), this, SLOT(set_knob5(int)));
     connect(ui->dial_6, SIGNAL(valueChanged(int)), this, SLOT(set_knob6(int)));
     connect(ui->setButton, SIGNAL(clicked()), this, SLOT(send_fx()));
+    connect(ui->pushButton, SIGNAL(toggled(bool)), this, SLOT(off_switch(bool)));
 }
 
 Effect::~Effect()
@@ -91,12 +92,15 @@ void Effect::choose_fx(int value)
     {
     case EMPTY:
         ui->checkBox->setDisabled(true);
-        ui->dial->setValue(0);
-        ui->dial_2->setValue(0);
-        ui->dial_3->setValue(0);
-        ui->dial_4->setValue(0);
-        ui->dial_5->setValue(0);
-        ui->dial_6->setValue(0);
+        if(sender() == ui->comboBox)
+        {
+            ui->dial->setValue(0);
+            ui->dial_2->setValue(0);
+            ui->dial_3->setValue(0);
+            ui->dial_4->setValue(0);
+            ui->dial_5->setValue(0);
+            ui->dial_6->setValue(0);
+        }
         ui->dial->setDisabled(true);
         ui->dial_2->setDisabled(true);
         ui->dial_3->setDisabled(true);
@@ -497,4 +501,22 @@ void Effect::get_settings(struct fx_pedal_settings &pedal)
     pedal.knob4 = knob4;
     pedal.knob5 = knob5;
     pedal.knob6 = knob6;
+}
+
+void Effect::off_switch(bool value)
+{
+    if(value)
+    {
+        ui->comboBox->setDisabled(true);
+        ui->setButton->setDisabled(true);
+        // all other are disabled by setting effect to EMPTY
+        choose_fx(EMPTY);
+    }
+    else
+    {
+        ui->comboBox->setDisabled(false);
+        ui->setButton->setDisabled(false);
+        choose_fx(ui->comboBox->currentIndex());
+    }
+    send_fx();
 }
