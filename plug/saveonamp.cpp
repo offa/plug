@@ -51,3 +51,9 @@ void SaveOnAmp::load_names(char names[24][32])
     for(int i = 0; i < 24; i++)
         ui->comboBox->setItemText(i, QString("%1 %2").arg(slot_names[i]).arg(names[i]));
 }
+
+void SaveOnAmp::change_index(int value, QString name)
+{
+    ui->comboBox->setCurrentIndex(value);
+    ui->lineEdit->setText(name);
+}

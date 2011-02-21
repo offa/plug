@@ -16,6 +16,9 @@ public:
     ~SaveOnAmp();
     void load_names(char names[24][32]);
 
+public slots:
+    void change_index(int, QString);
+
 private:
     Ui::SaveOnAmp *ui;
 

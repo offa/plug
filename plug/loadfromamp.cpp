@@ -28,6 +28,7 @@ void LoadFromAmp::load()
     QSettings settings;
 
     ((MainWindow*)parent())->load_from_amp(ui->comboBox->currentIndex());
+    ((MainWindow*)parent())->set_index(ui->comboBox->currentIndex());
     if(!settings.value("Settings/keepWindowsOpen").toBool())
         this->close();
 }
@@ -47,4 +48,5 @@ void LoadFromAmp::load_names(char names[24][32])
 void LoadFromAmp::change_name(int slot, QString *name)
 {
     ui->comboBox->setItemText(slot, *name);
+    ui->comboBox->setCurrentIndex(slot);
 }

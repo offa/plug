@@ -44,6 +44,7 @@ public slots:
     void enable_buttons(void);
     void change_name(int, QString *);
     void save_effects(int, char *, int, bool, bool, bool);
+    void set_index(int);
 
 private:
     Ui::MainWindow *ui;
@@ -62,6 +63,8 @@ private:
     Settings *settings_win;
 
     QNetworkReply *reply;
+
+    QString current_name;
 
 private slots:
     void check_for_updates();

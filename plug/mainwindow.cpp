@@ -111,6 +111,8 @@ void MainWindow::start_amp()
     else
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
+    current_name = name;
+
     amp->load(amplifier_set);
     if(settings.value("Settings/popupChangedWindows").toBool())
         amp->show();
@@ -193,7 +195,8 @@ int MainWindow::set_effect(struct fx_pedal_settings pedal)
 
     if(!settings.value("Settings/oneSetToSetThemAll").toBool())
         return amp_ops->set_effect(pedal);
-    return amp->send_amp();
+    amp->send_amp();
+    return 0;
 }
 
 int MainWindow::set_amplifier(struct amp_settings amp_settings)
@@ -240,6 +243,8 @@ int MainWindow::save_on_amp(char *name, int slot)
     else
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
+    current_name=name;
+
     return ret;
 }
 
@@ -256,6 +261,8 @@ int MainWindow::load_from_amp(int slot)
         setWindowTitle(QString(tr("PLUG: NONE")));
     else
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
+
+    current_name=name;
 
     amp->load(amplifier_set);
     if(settings.value("Settings/popupChangedWindows").toBool())
@@ -336,6 +343,11 @@ void MainWindow::httpReadyRead()
 void MainWindow::change_name(int slot, QString *name)
 {
     load->change_name(slot, name);
+}
+
+void MainWindow::set_index(int value)
+{
+    save->change_index(value, current_name);
 }
 
 void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool dly, bool rev)
