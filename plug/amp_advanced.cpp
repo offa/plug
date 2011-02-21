@@ -9,7 +9,7 @@ Amp_Advanced::Amp_Advanced(QWidget *parent) :
 
     // load window size
     QSettings settings;
-    restoreGeometry(settings.value("amplifierAdvancedWindowGeometry").toByteArray());
+    restoreGeometry(settings.value("Windows/amplifierAdvancedWindowGeometry").toByteArray());
 
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), parent, SLOT(set_cabinet(int)));
     connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), parent, SLOT(set_noise_gate(int)));
@@ -26,7 +26,7 @@ Amp_Advanced::Amp_Advanced(QWidget *parent) :
 Amp_Advanced::~Amp_Advanced()
 {
     QSettings settings;
-    settings.setValue("amplifierAdvancedWindowGeometry", saveGeometry());
+    settings.setValue("Windows/amplifierAdvancedWindowGeometry", saveGeometry());
     delete ui;
 }
 

@@ -9,8 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // load window size
     QSettings settings;
-    restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
-    restoreState(settings.value("mainWindowState").toByteArray());
+    restoreGeometry(settings.value("Windows/mainWindowGeometry").toByteArray());
+    restoreState(settings.value("Windows/mainWindowState").toByteArray());
 
     // setting default values if there was none
     if(!settings.contains("Settings/checkForUpdates"))
@@ -77,8 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     QSettings settings;
-    settings.setValue("mainWindowGeometry", saveGeometry());
-    settings.setValue("mainWindowState", saveState());
+    settings.setValue("Windows/mainWindowGeometry", saveGeometry());
+    settings.setValue("Windows/mainWindowState", saveState());
     delete amp_ops;    // stop the communication before exiting
     delete ui;
 }
@@ -145,7 +145,7 @@ void MainWindow::start_amp()
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
-            if(effects_set[i].effect_num != 0)
+            if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect4->show();
             break;
@@ -189,12 +189,44 @@ void MainWindow::stop_amp()
 // pass the message to the amp
 int MainWindow::set_effect(struct fx_pedal_settings pedal)
 {
-    return amp_ops->set_effect(pedal);
+    QSettings settings;
+
+    if(!settings.value("Settings/oneSetToSetThemAll").toBool())
+        return amp_ops->set_effect(pedal);
+    return amp->send_amp();
 }
 
-int MainWindow::set_amplifier(struct amp_settings settings)
+int MainWindow::set_amplifier(struct amp_settings amp_settings)
 {
-    return amp_ops->set_amplifier(settings);
+    QSettings settings;
+
+    if(settings.value("Settings/oneSetToSetThemAll").toBool())
+    {
+        struct fx_pedal_settings pedal;
+
+        if(effect1->get_changed())
+        {
+            effect1->get_settings(pedal);
+            amp_ops->set_effect(pedal);
+        }
+        if(effect2->get_changed())
+        {
+            effect2->get_settings(pedal);
+            amp_ops->set_effect(pedal);
+        }
+        if(effect3->get_changed())
+        {
+            effect3->get_settings(pedal);
+            amp_ops->set_effect(pedal);
+        }
+        if(effect4->get_changed())
+        {
+            effect4->get_settings(pedal);
+            amp_ops->set_effect(pedal);
+        }
+    }
+
+    return amp_ops->set_amplifier(amp_settings);
 }
 
 int MainWindow::save_on_amp(char *name, int slot)
@@ -259,7 +291,7 @@ int MainWindow::load_from_amp(int slot)
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
-            if(effects_set[i].effect_num != 0)
+            if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect4->show();
             break;

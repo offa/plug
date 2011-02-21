@@ -18,6 +18,9 @@ public:
     explicit Effect(QWidget *parent = 0, int number = 0);
     ~Effect();
 
+    void set_changed(bool);
+    bool get_changed();
+
 private:
     Ui::Effect *ui;
     char title[10];

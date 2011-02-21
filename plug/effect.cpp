@@ -23,7 +23,7 @@ Effect::Effect(QWidget *parent, int number) :
 
     // load window size
     QSettings settings;
-    restoreGeometry(settings.value(QString("Effect%1WindowGeometry").arg(fx_slot)).toByteArray());
+    restoreGeometry(settings.value(QString("Windows/Effect%1WindowGeometry").arg(fx_slot)).toByteArray());
 
     // set window title
     setWindowTitle(QString(tr("Effect %1")).arg(fx_slot+1));
@@ -44,7 +44,7 @@ Effect::Effect(QWidget *parent, int number) :
 Effect::~Effect()
 {
     QSettings settings;
-    settings.setValue(QString("Effect%1WindowGeometry").arg(fx_slot), saveGeometry());
+    settings.setValue(QString("Windows/Effect%1WindowGeometry").arg(fx_slot), saveGeometry());
     delete ui;
 }
 
@@ -52,49 +52,49 @@ Effect::~Effect()
 void Effect::set_post_amp(bool value)
 {
     put_post_amp = value;
-    changed = true;
+    set_changed(true);
 }
 
 void Effect::set_knob1(int value)
 {
     knob1 = value;
-    changed = true;
+    set_changed(true);
 }
 
 void Effect::set_knob2(int value)
 {
     knob2 = value;
-    changed = true;
+    set_changed(true);
 }
 
 void Effect::set_knob3(int value)
 {
     knob3 = value;
-    changed = true;
+    set_changed(true);
 }
 
 void Effect::set_knob4(int value)
 {
     knob4 = value;
-    changed = true;
+    set_changed(true);
 }
 
 void Effect::set_knob5(int value)
 {
     knob5 = value;
-    changed = true;
+    set_changed(true);
 }
 
 void Effect::set_knob6(int value)
 {
     knob6 = value;
-    changed = true;
+    set_changed(true);
 }
 
 void Effect::choose_fx(int value)
 {
     effect_num = value;
-    changed = true;
+    set_changed(true);
 
     // activate proper knobs and set their max values
     switch (value)
@@ -474,9 +474,9 @@ void Effect::send_fx()
 {
     struct fx_pedal_settings pedal;
 
-    if(!changed)
+    if(!get_changed())
         return;
-    changed = false;
+    set_changed(false);
 
     pedal.effect_num = effect_num;
     pedal.fx_slot = fx_slot;
@@ -531,6 +531,16 @@ void Effect::off_switch(bool value)
         ui->setButton->setDisabled(false);
         choose_fx(ui->comboBox->currentIndex());
     }
-    changed = true;
+    set_changed(true);
     send_fx();
+}
+
+void Effect::set_changed(bool value)
+{
+    changed = value;
+}
+
+bool Effect::get_changed()
+{
+    return changed;
 }

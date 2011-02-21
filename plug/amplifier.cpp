@@ -11,7 +11,7 @@ Amplifier::Amplifier(QWidget *parent) :
 
     // load window size
     QSettings settings;
-    restoreGeometry(settings.value("amplifierWindowGeometry").toByteArray());
+    restoreGeometry(settings.value("Windows/amplifierWindowGeometry").toByteArray());
 
     // initialize variables
     gain = 0;
@@ -48,7 +48,7 @@ Amplifier::Amplifier(QWidget *parent) :
 Amplifier::~Amplifier()
 {
     QSettings settings;
-    settings.setValue("amplifierWindowGeometry", saveGeometry());
+    settings.setValue("Windows/amplifierWindowGeometry", saveGeometry());
     delete ui;
 }
 

@@ -10,7 +10,7 @@ Save_effects::Save_effects(QWidget *parent) :
     ui->setupUi(this);
 
     QSettings settings;
-    restoreGeometry(settings.value("saveEffectPresetWindowGeometry").toByteArray());
+    restoreGeometry(settings.value("Windows/saveEffectPresetWindowGeometry").toByteArray());
 
     connect(ui->checkBox, SIGNAL(clicked()), this, SLOT(select_checkbox()));
     connect(ui->checkBox_2, SIGNAL(clicked()), this, SLOT(select_checkbox()));
@@ -22,7 +22,7 @@ Save_effects::Save_effects(QWidget *parent) :
 Save_effects::~Save_effects()
 {
     QSettings settings;
-    settings.setValue("saveEffectPresetWindowGeometry", saveGeometry());
+    settings.setValue("Windows/saveEffectPresetWindowGeometry", saveGeometry());
     delete ui;
 }
 

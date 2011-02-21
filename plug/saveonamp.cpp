@@ -10,7 +10,7 @@ SaveOnAmp::SaveOnAmp(QWidget *parent) :
     ui->setupUi(this);
 
     QSettings settings;
-    restoreGeometry(settings.value("saveAmpPresetWindowGeometry").toByteArray());
+    restoreGeometry(settings.value("Windows/saveAmpPresetWindowGeometry").toByteArray());
 
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(save()));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
@@ -19,7 +19,7 @@ SaveOnAmp::SaveOnAmp(QWidget *parent) :
 SaveOnAmp::~SaveOnAmp()
 {
     QSettings settings;
-    settings.setValue("saveAmpPresetWindowGeometry", saveGeometry());
+    settings.setValue("Windows/saveAmpPresetWindowGeometry", saveGeometry());
     delete ui;
 }
 
