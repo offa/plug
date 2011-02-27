@@ -54,6 +54,7 @@ void SaveOnAmp::load_names(char names[24][32])
 
 void SaveOnAmp::change_index(int value, QString name)
 {
-    ui->comboBox->setCurrentIndex(value);
+    if(value > 0)
+        ui->comboBox->setCurrentIndex(value);
     ui->lineEdit->setText(name);
 }

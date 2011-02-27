@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QSettings>
+#include <QFileDialog>
 #include "effect.h"
 #include "amplifier.h"
 #include "mustang.h"
@@ -19,6 +20,7 @@
 #include "loadfromamp.h"
 #include "save_effects.h"
 #include "settings.h"
+#include "loadfromfile.h"
 
 #define VERSION "0.5"
 
@@ -45,6 +47,7 @@ public slots:
     void change_name(int, QString *);
     void save_effects(int, char *, int, bool, bool, bool);
     void set_index(int);
+    void loadfile();
 
 private:
     Ui::MainWindow *ui;

@@ -17,7 +17,6 @@ Mustang::Mustang()
         prev_array[i][6] = prev_array[i][7] = prev_array[i][21] = 0x01;
         prev_array[i][20] = 0x08;
         prev_array[i][FXSLOT] = 0xff;
-
     }
 }
 

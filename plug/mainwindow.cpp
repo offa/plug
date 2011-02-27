@@ -59,7 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(show()));
     connect(ui->actionSave_effects, SIGNAL(triggered()), seffects, SLOT(open()));
     connect(ui->actionCheck_for_Updates, SIGNAL(triggered()), this, SLOT(check_for_updates()));
-    connect(ui->action_Configure, SIGNAL(triggered()), settings_win, SLOT(show()));
+    connect(ui->action_Options, SIGNAL(triggered()), settings_win, SLOT(show()));
+    connect(ui->actionL_oad_from_file, SIGNAL(triggered()), this, SLOT(loadfile()));
 
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
@@ -160,9 +161,13 @@ void MainWindow::start_amp()
     ui->EffectButton2->setDisabled(false);
     ui->EffectButton3->setDisabled(false);
     ui->EffectButton4->setDisabled(false);
+    ui->actionConnect->setDisabled(true);
+    ui->actionDisconnect->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
     ui->action_Load_from_amplifier->setDisabled(false);
     ui->actionSave_effects->setDisabled(false);
+    ui->actionL_oad_from_file->setDisabled(false);
+//    ui->actionS_ave_to_file->setDisabled(false);
     ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
 }
 
@@ -179,9 +184,13 @@ void MainWindow::stop_amp()
         ui->EffectButton2->setDisabled(true);
         ui->EffectButton3->setDisabled(true);
         ui->EffectButton4->setDisabled(true);
+        ui->actionConnect->setDisabled(false);
+        ui->actionDisconnect->setDisabled(true);
         ui->actionSave_to_amplifier->setDisabled(true);
         ui->action_Load_from_amplifier->setDisabled(true);
         ui->actionSave_effects->setDisabled(true);
+        ui->actionL_oad_from_file->setDisabled(true);
+        ui->actionS_ave_to_file->setDisabled(true);
         ui->statusBar->showMessage(tr("Disconnected"), 3000);    // show message on the status bar
     }
     else    // if request failed
@@ -316,9 +325,13 @@ void MainWindow::enable_buttons(void)
     ui->EffectButton2->setDisabled(false);
     ui->EffectButton3->setDisabled(false);
     ui->EffectButton4->setDisabled(false);
+    ui->actionConnect->setDisabled(false);
+    ui->actionDisconnect->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
     ui->action_Load_from_amplifier->setDisabled(false);
     ui->actionSave_effects->setDisabled(false);
+    ui->actionL_oad_from_file->setDisabled(false);
+    ui->actionS_ave_to_file->setDisabled(false);
 }
 
 void MainWindow::check_for_updates()
@@ -381,4 +394,73 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
     }
 
     amp_ops->save_effects(slot, name, fx_num, effects);
+}
+
+void MainWindow::loadfile()
+{
+    QSettings settings;
+    struct amp_settings amplifier_set;
+    struct fx_pedal_settings effects_set[4];
+    LoadFromFile *loader = new LoadFromFile;
+    QString filename = QFileDialog::getOpenFileName(this, "Open...", "~/", "FUSE files (*.fuse *.xml)");
+
+    if(filename.isEmpty())
+        return;
+
+    QFile *file = new QFile(filename, this);
+
+    if (!file->open(QFile::ReadOnly | QFile::Text)) {
+                    QMessageBox::critical(this, "Error!", "Couldn't open file");
+                    return;
+    }
+
+    loader->parseFile(file, &current_name, &amplifier_set, effects_set);
+    file->close();
+
+    if(current_name.isEmpty())
+        setWindowTitle(QString(tr("PLUG: NONE")));
+    else
+        setWindowTitle(QString(tr("PLUG: %1")).arg(current_name));
+    set_index(-1);
+
+    amp->load(amplifier_set);
+    if(settings.value("Settings/popupChangedWindows").toBool())
+        amp->show();
+    for(int i = 0; i < 4; i++)
+    {
+        switch(effects_set[i].fx_slot)
+        {
+        case 0x00:
+        case 0x04:
+            effect1->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect1->show();
+            break;
+
+        case 0x01:
+        case 0x05:
+            effect2->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect2->show();
+            break;
+
+        case 0x02:
+        case 0x06:
+            effect3->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect3->show();
+            break;
+
+        case 0x03:
+        case 0x07:
+            effect4->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                if(settings.value("Settings/popupChangedWindows").toBool())
+                    effect4->show();
+            break;
+        }
+    }
 }

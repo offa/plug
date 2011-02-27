@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     saveonamp.cpp \
     loadfromamp.cpp \
     save_effects.cpp \
-    settings.cpp
+    settings.cpp \
+    loadfromfile.cpp
 
 HEADERS  += mainwindow.h \
     effect.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     saveonamp.h \
     loadfromamp.h \
     save_effects.h \
-    settings.h
+    settings.h \
+    loadfromfile.h
 
 FORMS    += mainwindow.ui \
     effect.ui \

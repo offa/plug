@@ -147,6 +147,9 @@
     <addaction name="action_Load_from_amplifier"/>
     <addaction name="actionSave_to_amplifier"/>
     <addaction name="separator"/>
+    <addaction name="actionL_oad_from_file"/>
+    <addaction name="actionS_ave_to_file"/>
+    <addaction name="separator"/>
     <addaction name="actionSave_effects"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -170,7 +173,7 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
-    <addaction name="action_Configure"/>
+    <addaction name="action_Options"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuConnection"/>
@@ -195,6 +198,9 @@
    </property>
   </action>
   <action name="actionDisconnect">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Disconnect</string>
    </property>
@@ -261,9 +267,25 @@
     <string>Check for &amp;Updates</string>
    </property>
   </action>
-  <action name="action_Configure">
+  <action name="action_Options">
    <property name="text">
-    <string>&amp;Configure</string>
+    <string>&amp;Options</string>
+   </property>
+  </action>
+  <action name="actionL_oad_from_file">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>L&amp;oad from file</string>
+   </property>
+  </action>
+  <action name="actionS_ave_to_file">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>S&amp;ave to file</string>
    </property>
   </action>
  </widget>
