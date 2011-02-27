@@ -488,7 +488,7 @@ void Effect::send_fx()
     pedal.knob5 = knob5;
     pedal.knob6 = knob6;
 
-//    ((MainWindow*)parent())->set_effect(pedal);
+    ((MainWindow*)parent())->set_effect(pedal);
 }
 
 void Effect::load(struct fx_pedal_settings settings)
