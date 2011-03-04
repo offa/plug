@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QShortcut>
 #include "effects_enum.h"
 #include "data_structs.h"
 

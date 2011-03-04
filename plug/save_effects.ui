@@ -148,6 +148,9 @@
        <property name="text">
         <string>&amp;Cancel</string>
        </property>
+       <property name="shortcut">
+        <string>Esc</string>
+       </property>
       </widget>
      </item>
      <item>

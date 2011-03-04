@@ -39,6 +39,12 @@ Effect::Effect(QWidget *parent, int number) :
     connect(ui->dial_6, SIGNAL(valueChanged(int)), this, SLOT(set_knob6(int)));
     connect(ui->setButton, SIGNAL(clicked()), this, SLOT(send_fx()));
     connect(ui->pushButton, SIGNAL(toggled(bool)), this, SLOT(off_switch(bool)));
+
+    QShortcut *close = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+    connect(close, SIGNAL(activated()), this, SLOT(close()));
+
+    QShortcut *off = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot+1)), this, 0, 0, Qt::ApplicationShortcut);
+    connect(off, SIGNAL(activated()), ui->pushButton, SLOT(toggle()));
 }
 
 Effect::~Effect()

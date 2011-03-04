@@ -188,6 +188,9 @@
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionConnect">
    <property name="text">
@@ -220,6 +223,9 @@
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="action_Load_from_amplifier">
    <property name="enabled">
@@ -231,6 +237,9 @@
    <property name="shortcut">
     <string>Ctrl+L</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
   </action>
   <action name="actionSave_effects">
    <property name="enabled">
@@ -241,6 +250,9 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
   <action name="actionConnect_on_startup">

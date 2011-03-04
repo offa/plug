@@ -43,6 +43,9 @@ Amplifier::Amplifier(QWidget *parent) :
     connect(ui->dial_4, SIGNAL(valueChanged(int)), this, SLOT(set_middle(int)));
     connect(ui->dial_5, SIGNAL(valueChanged(int)), this, SLOT(set_bass(int)));
     connect(ui->setButton, SIGNAL(clicked()), this, SLOT(send_amp()));
+
+    QShortcut *close = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+    connect(close, SIGNAL(activated()), this, SLOT(close()));
 }
 
 Amplifier::~Amplifier()

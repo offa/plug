@@ -57,6 +57,9 @@
      <property name="text">
       <string>OK</string>
      </property>
+     <property name="shortcut">
+      <string>Return, Esc</string>
+     </property>
     </widget>
    </item>
   </layout>

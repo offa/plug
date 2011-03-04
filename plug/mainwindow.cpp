@@ -41,11 +41,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->show();
 
-    ui->actionSave_effects->setShortcutContext(Qt::ApplicationShortcut);
-    ui->actionSave_to_amplifier->setShortcutContext(Qt::ApplicationShortcut);
-    ui->action_Load_from_amplifier->setShortcutContext(Qt::ApplicationShortcut);
-    ui->actionExit->setShortcutContext(Qt::ApplicationShortcut);
-
     // connect buttons to slots
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
     connect(ui->EffectButton1, SIGNAL(clicked()), effect1, SLOT(show()));

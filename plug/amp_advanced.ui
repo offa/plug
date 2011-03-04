@@ -492,7 +492,7 @@
         <string>OK</string>
        </property>
        <property name="shortcut">
-        <string>Return</string>
+        <string>Return, Esc</string>
        </property>
       </widget>
      </item>
