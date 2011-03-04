@@ -21,6 +21,7 @@
 #include "save_effects.h"
 #include "settings.h"
 #include "loadfromfile.h"
+#include "savetofile.h"
 
 #define VERSION "0.5"
 
@@ -48,11 +49,13 @@ public slots:
     void save_effects(int, char *, int, bool, bool, bool);
     void set_index(int);
     void loadfile();
+    void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
 
 private:
     Ui::MainWindow *ui;
 
     // pointers to objects
+    QString current_name;
     Mustang *amp_ops;
     Amplifier *amp;
     Effect *effect1;
@@ -64,10 +67,9 @@ private:
     LoadFromAmp *load;
     Save_effects *seffects;
     Settings *settings_win;
+    SaveToFile *saver;
 
     QNetworkReply *reply;
-
-    QString current_name;
 
 private slots:
     void check_for_updates();

@@ -50,6 +50,7 @@ public slots:
     void send_amp(void);
 
     void load(struct amp_settings);
+    void get_settings(struct amp_settings*);
 };
 
 #endif // AMPLIFIER_H

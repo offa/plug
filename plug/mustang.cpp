@@ -653,12 +653,12 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
     for(int i = 0; recieved; i++)
     {
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        if(name != NULL || amp_set != NULL || effects_set != NULL)
-            if(i < 6)
-                memcpy(data[i], array, LENGTH);
+        if(i < 6)
+            memcpy(data[i], array, LENGTH);
     }
 
-    decode_data(data, name, amp_set, effects_set);
+    if(name != NULL || amp_set != NULL || effects_set != NULL)
+        decode_data(data, name, amp_set, effects_set);
 
     return ret;
 }

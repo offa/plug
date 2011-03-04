@@ -10,14 +10,19 @@
 class LoadFromFile
 {
 public:
-    LoadFromFile();
+    LoadFromFile(QFile*, QString*, struct amp_settings*, struct fx_pedal_settings[4]);
     ~LoadFromFile();
-    void parseFile(QFile*, QString*, struct amp_settings*, struct fx_pedal_settings*);
+    void loadfile();
 
 private:
-    void parseAmp(QXmlStreamReader*, struct amp_settings*);
-    void parseFX(QXmlStreamReader*, struct fx_pedal_settings[]);
-    void parseFUSE(QXmlStreamReader*, QString*);
+    QString *name;
+    struct amp_settings *amplifier_settings;
+    struct fx_pedal_settings *fx_settings;
+    QXmlStreamReader *xml;
+
+    void parseAmp();
+    void parseFX();
+    void parseFUSE();
 };
 
 #endif // LOADFROMFILE_H

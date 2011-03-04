@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     load = new LoadFromAmp(this);
     seffects = new Save_effects(this);
     settings_win = new Settings(this);
+    saver = new SaveToFile(this);
 
     this->show();
 
@@ -61,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionCheck_for_Updates, SIGNAL(triggered()), this, SLOT(check_for_updates()));
     connect(ui->action_Options, SIGNAL(triggered()), settings_win, SLOT(show()));
     connect(ui->actionL_oad_from_file, SIGNAL(triggered()), this, SLOT(loadfile()));
+    connect(ui->actionS_ave_to_file, SIGNAL(triggered()), saver, SLOT(show()));
 
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
@@ -167,7 +169,7 @@ void MainWindow::start_amp()
     ui->action_Load_from_amplifier->setDisabled(false);
     ui->actionSave_effects->setDisabled(false);
     ui->actionL_oad_from_file->setDisabled(false);
-//    ui->actionS_ave_to_file->setDisabled(false);
+    ui->actionS_ave_to_file->setDisabled(false);
     ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
 }
 
@@ -339,6 +341,7 @@ void MainWindow::check_for_updates()
     QNetworkAccessManager *qnam = new QNetworkAccessManager(this);
     reply = qnam->get(QNetworkRequest((QUrl)"http://piorekf.org/plug/VERSION"));
     connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
+    delete qnam;
 }
 
 void MainWindow::httpReadyRead()
@@ -398,24 +401,28 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
 
 void MainWindow::loadfile()
 {
-    QSettings settings;
-    struct amp_settings amplifier_set;
-    struct fx_pedal_settings effects_set[4];
-    LoadFromFile *loader = new LoadFromFile;
-    QString filename = QFileDialog::getOpenFileName(this, "Open...", "~/", "FUSE files (*.fuse *.xml)");
+    QString filename = QFileDialog::getOpenFileName(this, "Open...", "~/", "FUSE files(*.fuse *.xml)");
 
     if(filename.isEmpty())
         return;
 
     QFile *file = new QFile(filename, this);
 
-    if (!file->open(QFile::ReadOnly | QFile::Text)) {
-                    QMessageBox::critical(this, "Error!", "Couldn't open file");
-                    return;
+    if (!file->open(QFile::ReadOnly | QFile::Text))
+    {
+        QMessageBox::critical(this, "Error!", "Could not open file");
+        return;
     }
 
-    loader->parseFile(file, &current_name, &amplifier_set, effects_set);
+    QSettings settings;
+    struct amp_settings amplifier_set;
+    struct fx_pedal_settings effects_set[4];
+    LoadFromFile *loader = new LoadFromFile(file, &current_name, &amplifier_set, effects_set);
+
+    loader->loadfile();
     file->close();
+    delete loader;
+    delete file;
 
     if(current_name.isEmpty())
         setWindowTitle(QString(tr("PLUG: NONE")));
@@ -463,4 +470,13 @@ void MainWindow::loadfile()
             break;
         }
     }
+}
+
+void MainWindow::get_settings(struct amp_settings *amplifier_settings, struct fx_pedal_settings fx_settings[4])
+{
+    amp->get_settings(amplifier_settings);
+    effect1->get_settings(fx_settings[0]);
+    effect2->get_settings(fx_settings[1]);
+    effect3->get_settings(fx_settings[2]);
+    effect4->get_settings(fx_settings[3]);
 }

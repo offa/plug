@@ -257,3 +257,22 @@ void Amplifier::load(struct amp_settings settings)
     advanced->set_bias(settings.bias);
     advanced->set_sag(settings.sag);
 }
+
+void Amplifier::get_settings(struct amp_settings *settings)
+{
+    settings->amp_num = amp_num;
+    settings->gain = gain;
+    settings->volume = volume;
+    settings->treble = treble;
+    settings->middle = middle;
+    settings->bass = bass;
+    settings->cabinet = cabinet;
+    settings->noise_gate = noise_gate;
+    settings->master_vol = master_vol;
+    settings->gain2 = gain2;
+    settings->presence = presence;
+    settings->threshold = threshold;
+    settings->depth = depth;
+    settings->bias = bias;
+    settings->sag = sag;
+}
