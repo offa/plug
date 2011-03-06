@@ -46,7 +46,7 @@ void SaveToFile::savefile()
         return;
     }
 
-    ((MainWindow*)parent())->change_name(ui->lineEdit_2->text());
+    ((MainWindow*)parent())->change_title(ui->lineEdit_2->text());
 
     xml = new QXmlStreamWriter(file);
     struct amp_settings amplifier_settings;
@@ -57,7 +57,7 @@ void SaveToFile::savefile()
     xml->writeStartDocument();
     xml->writeStartElement("Preset");
     xml->writeAttribute("amplifier", "Mustang I/II");
-    xml->writeAttribute("ProductID", "1");
+    xml->writeAttribute("ProductId", "1");
 
     writeAmp(amplifier_settings);
     manageWriteFX(fx_settings);
@@ -572,7 +572,7 @@ void SaveToFile::writeFUSE()
     xml->writeStartElement("Info");
     xml->writeAttribute("name", ui->lineEdit_2->text());
     xml->writeAttribute("author", ui->lineEdit_3->text());
-    xml->writeAttribute("rating", "0.0");
+    xml->writeAttribute("rating", "0");
     xml->writeAttribute("genre1", "-1");
     xml->writeAttribute("genre2", "-1");
     xml->writeAttribute("genre3", "-1");

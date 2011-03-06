@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
         settings.setValue("Settings/keepWindowsOpen", false);
     if(!settings.contains("Settings/popupChangedWindows"))
         settings.setValue("Settings/popupChangedWindows", false);
+    if(!settings.contains("Settings/defaultEffectValues"))
+        settings.setValue("Settings/defaultEffectValues", true);
 
     // create child objects
     amp_ops = new Mustang();
@@ -58,6 +60,18 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_Options, SIGNAL(triggered()), settings_win, SLOT(show()));
     connect(ui->actionL_oad_from_file, SIGNAL(triggered()), this, SLOT(loadfile()));
     connect(ui->actionS_ave_to_file, SIGNAL(triggered()), saver, SLOT(show()));
+
+    // shortcuts to activate effect windows
+    QShortcut *showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *showfx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *showfx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *showfx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, 0, 0, Qt::ApplicationShortcut);
+    connect(showfx1, SIGNAL(activated()), this, SLOT(show_fx1()));
+    connect(showfx2, SIGNAL(activated()), this, SLOT(show_fx2()));
+    connect(showfx3, SIGNAL(activated()), this, SLOT(show_fx3()));
+    connect(showfx4, SIGNAL(activated()), this, SLOT(show_fx4()));
+    connect(showamp, SIGNAL(activated()), this, SLOT(show_amp()));
 
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
@@ -341,7 +355,7 @@ void MainWindow::check_for_updates()
 
     QNetworkAccessManager *qnam = new QNetworkAccessManager(this);
     reply = qnam->get(QNetworkRequest((QUrl)"http://piorekf.org/plug/VERSION"));
-    connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
+    connect(reply, SIGNAL(finished()), this, SLOT(httpReadyRead()));
 }
 
 void MainWindow::httpReadyRead()
@@ -350,13 +364,13 @@ void MainWindow::httpReadyRead()
     {
         QLabel *label = new QLabel(tr("<b>Update available!</b>"), this);
         ui->statusBar->addWidget(label);
-        QMessageBox *msgbx = new QMessageBox;
-        msgbx->setWindowTitle(tr("Update"));
-        msgbx->setText(tr("<b>Update available!</b>"));
-        msgbx->setInformativeText(tr("Check homepage for new version"));
-        msgbx->setIcon(QMessageBox::Information);
-        msgbx->show();
-//        QMessageBox::information(this, "Update", "<b>Update available!</b><br>Check homepage for new version.");
+//        QMessageBox *msgbx = new QMessageBox(this);
+//        msgbx->setWindowTitle(tr("Update"));
+//        msgbx->setText(tr("<b>Update available!</b>"));
+//        msgbx->setInformativeText(tr("Check homepage for new version"));
+//        msgbx->setIcon(QMessageBox::Information);
+//        msgbx->exec();
+        QMessageBox::information(this, "Update", "<b>Update available!</b><br><br>Check homepage for new version.");
     }
     else if(manual_check)
         ui->statusBar->showMessage(tr("You are using the newest version"), 5000);
@@ -431,7 +445,7 @@ void MainWindow::loadfile()
     delete loader;
     delete file;
 
-    change_name(name);
+    change_title(name);
 
     amp->load(amplifier_set);
     if(settings.value("Settings/popupChangedWindows").toBool())
@@ -484,7 +498,7 @@ void MainWindow::get_settings(struct amp_settings *amplifier_settings, struct fx
     effect4->get_settings(fx_settings[3]);
 }
 
-void MainWindow::change_name(QString name)
+void MainWindow::change_title(QString name)
 {
     current_name = name;
 
@@ -492,4 +506,37 @@ void MainWindow::change_name(QString name)
         setWindowTitle(QString(tr("PLUG: NONE")));
     else
         setWindowTitle(QString(tr("PLUG: %1")).arg(current_name));
+}
+
+void MainWindow::show_fx1()
+{
+    if(!effect1->isVisible())
+        effect1->show();
+    effect1->activateWindow();
+}
+
+void MainWindow::show_fx2()
+{
+    if(!effect2->isVisible())
+        effect2->show();
+    effect2->activateWindow();
+}
+void MainWindow::show_fx3()
+{
+    if(!effect3->isVisible())
+        effect3->show();
+    effect3->activateWindow();
+}
+void MainWindow::show_fx4()
+{
+    if(!effect4->isVisible())
+        effect4->show();
+    effect4->activateWindow();
+}
+
+void MainWindow::show_amp()
+{
+    if(!amp->isVisible())
+        amp->show();
+    amp->activateWindow();
 }

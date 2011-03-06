@@ -99,6 +99,7 @@ void Effect::set_knob6(int value)
 
 void Effect::choose_fx(int value)
 {
+    QSettings settings;
     effect_num = value;
     set_changed(true);
 
@@ -473,6 +474,351 @@ void Effect::choose_fx(int value)
         ui->label_6->setText(tr(""));
         break;
     }
+
+    if(settings.value("Settings/defaultEffectValues").toBool())
+    {
+        switch (value)
+        {
+        case EMPTY:
+            break;
+
+        case OVERDRIVE:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case FIXED_WAH:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case TOUCH_WAH:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case FUZZ:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case FUZZ_TOUCH_WAH:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x80);
+            break;
+
+        case SIMPLE_COMP:
+            ui->dial->setValue(0x01);
+            ui->dial_2->setValue(0x00);
+            ui->dial_3->setValue(0x00);
+            ui->dial_4->setValue(0x00);
+            ui->dial_5->setValue(0x00);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case COMPRESSOR:
+            ui->dial->setValue(0x8d);
+            ui->dial_2->setValue(0x0f);
+            ui->dial_3->setValue(0x4f);
+            ui->dial_4->setValue(0x7f);
+            ui->dial_5->setValue(0x7f);
+            ui->dial_6->setValue(0x00);
+            break;
+
+
+        case SINE_CHORUS:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x0e);
+            ui->dial_3->setValue(0x19);
+            ui->dial_4->setValue(0x19);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case TRIANGLE_CHORUS:
+            ui->dial->setValue(0x5d);
+            ui->dial_2->setValue(0x0e);
+            ui->dial_3->setValue(0x19);
+            ui->dial_4->setValue(0x19);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case SINE_FLANGER:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x0e);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case TRIANGLE_FLANGER:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x00);
+            ui->dial_3->setValue(0xff);
+            ui->dial_4->setValue(0x33);
+            ui->dial_5->setValue(0x41);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case VIBRATONE:
+            ui->dial->setValue(0xf4);
+            ui->dial_2->setValue(0xff);
+            ui->dial_3->setValue(0x27);
+            ui->dial_4->setValue(0xad);
+            ui->dial_5->setValue(0x82);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case VINTAGE_TREMOLO:
+            ui->dial->setValue(0xdb);
+            ui->dial_2->setValue(0xad);
+            ui->dial_3->setValue(0x63);
+            ui->dial_4->setValue(0xf4);
+            ui->dial_5->setValue(0xf1);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case SINE_TREMOLO:
+            ui->dial->setValue(0xdb);
+            ui->dial_2->setValue(0x99);
+            ui->dial_3->setValue(0x7d);
+            ui->dial_4->setValue(0x00);
+            ui->dial_5->setValue(0x00);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case RING_MODULATOR:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case STEP_FILTER:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case PHASER:
+            ui->dial->setValue(0xfd);
+            ui->dial_2->setValue(0x00);
+            ui->dial_3->setValue(0xfd);
+            ui->dial_4->setValue(0xb8);
+            ui->dial_5->setValue(0x00);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case PITCH_SHIFTER:
+            ui->dial->setValue(0xc7);
+            ui->dial_2->setValue(0x3e);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x00);
+            ui->dial_5->setValue(0x00);
+            ui->dial_6->setValue(0x00);
+            break;
+
+
+        case MONO_ECHO_FILTER:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x80);
+            break;
+
+        case STEREO_ECHO_FILTER:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0xb3);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x80);
+            break;
+
+        case MONO_DELAY:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case MULTITAP_DELAY:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x66);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case REVERSE_DELAY:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case PING_PONG_DELAY:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case TAPE_DELAY:
+            ui->dial->setValue(0x7d);
+            ui->dial_2->setValue(0x1c);
+            ui->dial_3->setValue(0x00);
+            ui->dial_4->setValue(0x63);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case STEREO_TAPE_DELAY:
+            ui->dial->setValue(0x7d);
+            ui->dial_2->setValue(0x88);
+            ui->dial_3->setValue(0x1c);
+            ui->dial_4->setValue(0x63);
+            ui->dial_5->setValue(0xff);
+            ui->dial_6->setValue(0x80);
+            break;
+
+        case DUCKING_DELAY:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+
+        case SMALL_HALL_REVERB:
+            ui->dial->setValue(0x6e);
+            ui->dial_2->setValue(0x5d);
+            ui->dial_3->setValue(0x6e);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x91);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case LARGE_HALL_REVERB:
+            ui->dial->setValue(0x4f);
+            ui->dial_2->setValue(0x3e);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x05);
+            ui->dial_5->setValue(0xb0);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case SMALL_ROOM_REVERB:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case LARGE_ROOM_REVERB:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case SMALL_PLATE_REVERB:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case LARGE_PLATE_REVERB:
+            ui->dial->setValue(0x38);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x91);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0xb6);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case AMBIENT_REVERB:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case ARENA_REVERB:
+            ui->dial->setValue(0xff);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+
+        case FENDER_63_SPRING_REVERB:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x80);
+            ui->dial_3->setValue(0x80);
+            ui->dial_4->setValue(0x80);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0);
+            break;
+
+        case FENDER_65_SPRING_REVERB:
+            ui->dial->setValue(0x80);
+            ui->dial_2->setValue(0x8b);
+            ui->dial_3->setValue(0x49);
+            ui->dial_4->setValue(0xff);
+            ui->dial_5->setValue(0x80);
+            ui->dial_6->setValue(0x00);
+            break;
+        }
+    }
 }
 
 // send settings to the amplifier
@@ -526,6 +872,7 @@ void Effect::off_switch(bool value)
 {
     if(value)
     {
+        ui->pushButton->setText(tr("On"));
         ui->comboBox->setDisabled(true);
         ui->setButton->setDisabled(true);
         // all other are disabled by setting effect to EMPTY
@@ -533,9 +880,11 @@ void Effect::off_switch(bool value)
     }
     else
     {
+        ui->pushButton->setText(tr("Off"));
         ui->comboBox->setDisabled(false);
         ui->setButton->setDisabled(false);
         choose_fx(ui->comboBox->currentIndex());
+        activateWindow();
     }
     set_changed(true);
     send_fx();

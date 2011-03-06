@@ -50,7 +50,7 @@ public slots:
     void set_index(int);
     void loadfile();
     void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
-    void change_name(QString);
+    void change_title(QString);
 
 private:
     Ui::MainWindow *ui;
@@ -76,6 +76,12 @@ private:
 private slots:
     void check_for_updates();
     void httpReadyRead();
+    void show_fx1();
+    void show_fx2();
+    void show_fx3();
+    void show_fx4();
+    void show_amp();
+
 
 signals:
     void started();

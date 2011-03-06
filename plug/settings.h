@@ -25,6 +25,7 @@ private slots:
     void change_oneset(bool);
     void change_keepopen(bool);
     void change_popupwindows(bool);
+    void change_effectvalues(bool);
 };
 
 #endif // SETTINGS_H

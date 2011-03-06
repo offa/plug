@@ -14,12 +14,14 @@ Settings::Settings(QWidget *parent) :
     ui->checkBox_3->setChecked(settings.value("Settings/oneSetToSetThemAll").toBool());
     ui->checkBox_4->setChecked(settings.value("Settings/keepWindowsOpen").toBool());
     ui->checkBox_5->setChecked(settings.value("Settings/popupChangedWindows").toBool());
+    ui->checkBox_6->setChecked(settings.value("Settings/defaultEffectValues").toBool());
 
     connect(ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(change_updates(bool)));
     connect(ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(change_connect(bool)));
     connect(ui->checkBox_3, SIGNAL(toggled(bool)), this, SLOT(change_oneset(bool)));
     connect(ui->checkBox_4, SIGNAL(toggled(bool)), this, SLOT(change_keepopen(bool)));
     connect(ui->checkBox_5, SIGNAL(toggled(bool)), this, SLOT(change_popupwindows(bool)));
+    connect(ui->checkBox_6, SIGNAL(toggled(bool)), this, SLOT(change_effectvalues(bool)));
 }
 
 Settings::~Settings()
@@ -60,4 +62,11 @@ void Settings::change_popupwindows(bool value)
     QSettings settings;
 
     settings.setValue("Settings/popupChangedWindows", value);
+}
+
+void Settings::change_effectvalues(bool value)
+{
+    QSettings settings;
+
+    settings.setValue("Settings/defaultEffectValues", value);
 }
