@@ -188,7 +188,8 @@ void MainWindow::stop_amp()
         ui->actionSave_effects->setDisabled(true);
         ui->actionL_oad_from_file->setDisabled(true);
         ui->actionS_ave_to_file->setDisabled(true);
-        ui->statusBar->showMessage(tr("Disconnected"), 3000);    // show message on the status bar
+        setWindowTitle(QString(tr("PLUG")));
+        ui->statusBar->showMessage(tr("Disconnected"), 5000);    // show message on the status bar
     }
     else    // if request failed
         ui->statusBar->showMessage(QString(tr("Error: %1")).arg(x), 5000);
@@ -333,22 +334,32 @@ void MainWindow::enable_buttons(void)
 
 void MainWindow::check_for_updates()
 {
+    if(sender() == ui->actionCheck_for_Updates)
+        manual_check = true;
+    else
+        manual_check = false;
+
     QNetworkAccessManager *qnam = new QNetworkAccessManager(this);
     reply = qnam->get(QNetworkRequest((QUrl)"http://piorekf.org/plug/VERSION"));
     connect(reply, SIGNAL(readyRead()), this, SLOT(httpReadyRead()));
-    delete qnam;
 }
 
 void MainWindow::httpReadyRead()
 {
-    if(reply->readAll()>VERSION)
+    if(reply->readAll() > VERSION)
     {
-        QLabel *label = new QLabel("Update available!", this);
+        QLabel *label = new QLabel(tr("<b>Update available!</b>"), this);
         ui->statusBar->addWidget(label);
-        QMessageBox::information(this, "Update", "Update available!\nCheck homepage for new version.");
+        QMessageBox *msgbx = new QMessageBox;
+        msgbx->setWindowTitle(tr("Update"));
+        msgbx->setText(tr("<b>Update available!</b>"));
+        msgbx->setInformativeText(tr("Check homepage for new version"));
+        msgbx->setIcon(QMessageBox::Information);
+        msgbx->show();
+//        QMessageBox::information(this, "Update", "<b>Update available!</b><br>Check homepage for new version.");
     }
-    else
-        ui->statusBar->showMessage("You are using the newest version", 5000);
+    else if(manual_check)
+        ui->statusBar->showMessage(tr("You are using the newest version"), 5000);
 }
 
 void MainWindow::change_name(int slot, QString *name)
@@ -396,7 +407,7 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
 
 void MainWindow::loadfile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Open...", "~/", "FUSE files(*.fuse *.xml)");
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("FUSE files (*.fuse *.xml)"));
 
     if(filename.isEmpty())
         return;
@@ -405,25 +416,22 @@ void MainWindow::loadfile()
 
     if (!file->open(QFile::ReadOnly | QFile::Text))
     {
-        QMessageBox::critical(this, "Error!", "Could not open file");
+        QMessageBox::critical(this, tr("Error!"), tr("Could not open file"));
         return;
     }
 
     QSettings settings;
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
-    LoadFromFile *loader = new LoadFromFile(file, &current_name, &amplifier_set, effects_set);
+    QString name;
+    LoadFromFile *loader = new LoadFromFile(file, &name, &amplifier_set, effects_set);
 
     loader->loadfile();
     file->close();
     delete loader;
     delete file;
 
-    if(current_name.isEmpty())
-        setWindowTitle(QString(tr("PLUG: NONE")));
-    else
-        setWindowTitle(QString(tr("PLUG: %1")).arg(current_name));
-    set_index(-1);
+    change_name(name);
 
     amp->load(amplifier_set);
     if(settings.value("Settings/popupChangedWindows").toBool())
@@ -474,4 +482,14 @@ void MainWindow::get_settings(struct amp_settings *amplifier_settings, struct fx
     effect2->get_settings(fx_settings[1]);
     effect3->get_settings(fx_settings[2]);
     effect4->get_settings(fx_settings[3]);
+}
+
+void MainWindow::change_name(QString name)
+{
+    current_name = name;
+
+    if(current_name.isEmpty())
+        setWindowTitle(QString(tr("PLUG: NONE")));
+    else
+        setWindowTitle(QString(tr("PLUG: %1")).arg(current_name));
 }

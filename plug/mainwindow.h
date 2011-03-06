@@ -50,12 +50,14 @@ public slots:
     void set_index(int);
     void loadfile();
     void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
+    void change_name(QString);
 
 private:
     Ui::MainWindow *ui;
 
     // pointers to objects
     QString current_name;
+    bool manual_check;
     Mustang *amp_ops;
     Amplifier *amp;
     Effect *effect1;

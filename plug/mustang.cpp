@@ -117,16 +117,20 @@ int Mustang::stop_amp()
     {
         // release claimed interface
         ret = libusb_release_interface(amp_hand, 0);
-        if(ret)
+        if(ret && (ret != LIBUSB_ERROR_NO_DEVICE))
             return ret;
 
-        // re-attach kernel driver
-        ret = libusb_attach_kernel_driver(amp_hand, 0);
+        if(ret != LIBUSB_ERROR_NO_DEVICE)
+        {
+            // re-attach kernel driver
+            ret = libusb_attach_kernel_driver(amp_hand, 0);
+            if(ret)
+                return ret;
+        }
 
         // close opened interface
         libusb_close(amp_hand);
         amp_hand = NULL;
-        //printf("amp stopped\n");
 
         // stop using libusb
         libusb_exit(NULL);

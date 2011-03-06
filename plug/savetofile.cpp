@@ -21,7 +21,11 @@ SaveToFile::~SaveToFile()
 
 QString SaveToFile::choose_destination()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Save...", "~/", "FUSE files(*.fuse)");
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save..."), QDir::homePath(), tr("FUSE files (*.fuse)"));
+
+    QFileInfo info(filename);
+    if(info.suffix().isEmpty())
+        filename.append(".fuse");
 
     emit destination_chosen(filename);
     return filename;
@@ -31,16 +35,18 @@ void SaveToFile::savefile()
 {
     if(ui->lineEdit->text().isEmpty())
     {
-        QMessageBox::critical(this, "Error!", "No file given");
+        QMessageBox::critical(this, tr("Error!"), tr("No file given"));
         return;
     }
 
     QFile *file = new QFile(ui->lineEdit->text(), this);
     if (!file->open(QFile::WriteOnly))
     {
-        QMessageBox::critical(this, "Error!", "Could not create file");
+        QMessageBox::critical(this, tr("Error!"), tr("Could not create file"));
         return;
     }
+
+    ((MainWindow*)parent())->change_name(ui->lineEdit_2->text());
 
     xml = new QXmlStreamWriter(file);
     struct amp_settings amplifier_settings;
