@@ -16,13 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
     if(!settings.contains("Settings/checkForUpdates"))
         settings.setValue("Settings/checkForUpdates", true);
     if(!settings.contains("Settings/connectOnStartup"))
-        settings.setValue("Settings/connectOnStartup", false);
+        settings.setValue("Settings/connectOnStartup", true);
     if(!settings.contains("Settings/oneSetToSetThemAll"))
         settings.setValue("Settings/oneSetToSetThemAll", false);
     if(!settings.contains("Settings/keepWindowsOpen"))
         settings.setValue("Settings/keepWindowsOpen", false);
     if(!settings.contains("Settings/popupChangedWindows"))
-        settings.setValue("Settings/popupChangedWindows", false);
+        settings.setValue("Settings/popupChangedWindows", true);
     if(!settings.contains("Settings/defaultEffectValues"))
         settings.setValue("Settings/defaultEffectValues", true);
 
@@ -103,7 +103,8 @@ void MainWindow::start_amp()
     struct fx_pedal_settings effects_set[4];
     char name[32], names[24][32];
 
-    ui->statusBar->showMessage(tr("Connecting..."), 0);
+    ui->statusBar->showMessage(tr("Connecting..."));
+    this->repaint();  // this should not be needed!
     x = amp_ops->start_amp(names, name, &amplifier_set, effects_set);    // request initialization of communication
 
     if(x != 0)    // if request succeded

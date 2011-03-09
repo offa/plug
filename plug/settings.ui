@@ -29,6 +29,9 @@
      <property name="text">
       <string>Connect to the amplifier on startup</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -49,6 +52,9 @@
     <widget class="QCheckBox" name="checkBox_5">
      <property name="text">
       <string>Open changed windows after loading/connecting</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

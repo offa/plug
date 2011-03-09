@@ -23,7 +23,7 @@
 #include "loadfromfile.h"
 #include "savetofile.h"
 
-#define VERSION "0.5"
+#define VERSION "0.6"
 
 namespace Ui {
     class MainWindow;
