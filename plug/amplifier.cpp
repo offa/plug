@@ -242,6 +242,8 @@ void Amplifier::send_amp()
 
 void Amplifier::load(struct amp_settings settings)
 {
+    changed = true;
+
     ui->comboBox->setCurrentIndex(settings.amp_num);
     ui->dial->setValue(settings.gain);
     ui->dial_2->setValue(settings.volume);

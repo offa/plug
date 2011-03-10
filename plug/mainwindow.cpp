@@ -449,6 +449,7 @@ void MainWindow::loadfile()
     change_title(name);
 
     amp->load(amplifier_set);
+    amp->send_amp();
     if(settings.value("Settings/popupChangedWindows").toBool())
         amp->show();
     for(int i = 0; i < 4; i++)
@@ -459,6 +460,8 @@ void MainWindow::loadfile()
         case 0x04:
             effect1->load(effects_set[i]);
             if(effects_set[i].effect_num)
+                effect1->send_fx();
+            if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect1->show();
             break;
@@ -466,6 +469,8 @@ void MainWindow::loadfile()
         case 0x01:
         case 0x05:
             effect2->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                effect2->send_fx();
             if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect2->show();
@@ -475,6 +480,8 @@ void MainWindow::loadfile()
         case 0x06:
             effect3->load(effects_set[i]);
             if(effects_set[i].effect_num)
+                effect3->send_fx();
+            if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect3->show();
             break;
@@ -482,6 +489,8 @@ void MainWindow::loadfile()
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
+            if(effects_set[i].effect_num)
+                effect4->send_fx();
             if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect4->show();

@@ -845,6 +845,8 @@ void Effect::send_fx()
 
 void Effect::load(struct fx_pedal_settings settings)
 {
+    set_changed(true);
+
     ui->comboBox->setCurrentIndex(settings.effect_num);
     ui->dial->setValue(settings.knob1);
     ui->dial_2->setValue(settings.knob2);
