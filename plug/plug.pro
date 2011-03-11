@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     save_effects.cpp \
     settings.cpp \
     loadfromfile.cpp \
-    savetofile.cpp
+    savetofile.cpp \
+    library.cpp
 
 HEADERS  += mainwindow.h \
     effect.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     save_effects.h \
     settings.h \
     loadfromfile.h \
-    savetofile.h
+    savetofile.h \
+    library.h
 
 FORMS    += mainwindow.ui \
     effect.ui \
@@ -48,7 +50,8 @@ FORMS    += mainwindow.ui \
     loadfromamp.ui \
     save_effects.ui \
     settings.ui \
-    savetofile.ui
+    savetofile.ui \
+    library.ui
 
 LIBS += -lusb-1.0
 

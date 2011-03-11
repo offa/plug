@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 
-Save_effects::Save_effects(QWidget *parent) :
+SaveEffects::SaveEffects(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Save_effects)
 {
@@ -19,14 +19,14 @@ Save_effects::Save_effects(QWidget *parent) :
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-Save_effects::~Save_effects()
+SaveEffects::~SaveEffects()
 {
     QSettings settings;
     settings.setValue("Windows/saveEffectPresetWindowGeometry", saveGeometry());
     delete ui;
 }
 
-void Save_effects::select_checkbox()
+void SaveEffects::select_checkbox()
 {
     if(!ui->checkBox->isChecked() && !ui->checkBox_2->isChecked() && !ui->checkBox_3->isChecked())
         ui->pushButton->setDisabled(true);
@@ -42,7 +42,7 @@ void Save_effects::select_checkbox()
         ui->checkBox->setChecked(false);
 }
 
-void Save_effects::send()
+void SaveEffects::send()
 {
     int number = 0;
 

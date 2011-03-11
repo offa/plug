@@ -37,11 +37,11 @@ MainWindow::MainWindow(QWidget *parent) :
     about_window = new About(this);
     save = new SaveOnAmp(this);
     load = new LoadFromAmp(this);
-    seffects = new Save_effects(this);
+    seffects = new SaveEffects(this);
     settings_win = new Settings(this);
     saver = new SaveToFile(this);
 
-    this->show();
+    connected = false;
 
     // connect buttons to slots
     connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_Options, SIGNAL(triggered()), settings_win, SLOT(show()));
     connect(ui->actionL_oad_from_file, SIGNAL(triggered()), this, SLOT(loadfile()));
     connect(ui->actionS_ave_to_file, SIGNAL(triggered()), saver, SLOT(show()));
+    connect(ui->action_Library_view, SIGNAL(triggered()), this, SLOT(show_library()));
 
     // shortcuts to activate effect windows
     QShortcut *showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
@@ -82,6 +83,9 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(this, SIGNAL(started()), this, SLOT(check_for_updates()));
     if(settings.value("Settings/connectOnStartup").toBool())
         connect(this, SIGNAL(started()), this, SLOT(start_amp()));
+
+    this->show();
+    this->repaint();
 
     emit started();
 }
@@ -180,7 +184,10 @@ void MainWindow::start_amp()
     ui->actionSave_effects->setDisabled(false);
     ui->actionL_oad_from_file->setDisabled(false);
     ui->actionS_ave_to_file->setDisabled(false);
+    ui->action_Library_view->setDisabled(false);
     ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
+
+    connected = true;
 }
 
 void MainWindow::stop_amp()
@@ -203,8 +210,11 @@ void MainWindow::stop_amp()
         ui->actionSave_effects->setDisabled(true);
         ui->actionL_oad_from_file->setDisabled(true);
         ui->actionS_ave_to_file->setDisabled(true);
+        ui->action_Library_view->setDisabled(true);
         setWindowTitle(QString(tr("PLUG")));
         ui->statusBar->showMessage(tr("Disconnected"), 5000);    // show message on the status bar
+
+        connected = false;
     }
     else    // if request failed
         ui->statusBar->showMessage(QString(tr("Error: %1")).arg(x), 5000);
@@ -345,6 +355,9 @@ void MainWindow::enable_buttons(void)
     ui->actionSave_effects->setDisabled(false);
     ui->actionL_oad_from_file->setDisabled(false);
     ui->actionS_ave_to_file->setDisabled(false);
+    ui->action_Library_view->setDisabled(false);
+
+    connected = true;
 }
 
 void MainWindow::check_for_updates()
@@ -420,9 +433,10 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
     amp_ops->save_effects(slot, name, fx_num, effects);
 }
 
-void MainWindow::loadfile()
+void MainWindow::loadfile(QString filename)
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("FUSE files (*.fuse *.xml)"));
+    if(filename.isEmpty())
+        filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("FUSE files (*.fuse *.xml)"));
 
     if(filename.isEmpty())
         return;
@@ -516,6 +530,8 @@ void MainWindow::change_title(QString name)
 
 void MainWindow::show_fx1()
 {
+    if(!connected)
+        return;
     if(!effect1->isVisible())
         effect1->show();
     effect1->activateWindow();
@@ -523,18 +539,24 @@ void MainWindow::show_fx1()
 
 void MainWindow::show_fx2()
 {
+    if(!connected)
+        return;
     if(!effect2->isVisible())
         effect2->show();
     effect2->activateWindow();
 }
 void MainWindow::show_fx3()
 {
+    if(!connected)
+        return;
     if(!effect3->isVisible())
         effect3->show();
     effect3->activateWindow();
 }
 void MainWindow::show_fx4()
 {
+    if(!connected)
+        return;
     if(!effect4->isVisible())
         effect4->show();
     effect4->activateWindow();
@@ -542,7 +564,38 @@ void MainWindow::show_fx4()
 
 void MainWindow::show_amp()
 {
+    if(!connected)
+        return;
     if(!amp->isVisible())
         amp->show();
     amp->activateWindow();
+}
+
+void MainWindow::show_library()
+{
+    ui->statusBar->showMessage(QString(tr("Working...")), 3000);
+    this->repaint();
+    QSettings settings;
+    char names[24][32];
+    bool previous = settings.value("Settings/popupChangedWindows").toBool();
+
+    if(!connected)
+        return;
+
+    settings.setValue("Settings/popupChangedWindows", false);
+
+    library = new Library(this);
+    amp_ops->get_current_names(names);
+    library->get_names(names);
+    effect1->close();
+    effect2->close();
+    effect3->close();
+    effect4->close();
+    amp->close();
+    this->close();
+    library->exec();
+
+    settings.setValue("Settings/popupChangedWindows", previous);
+    this->show();
+    delete library;
 }

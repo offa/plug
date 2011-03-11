@@ -173,6 +173,7 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
+    <addaction name="action_Library_view"/>
     <addaction name="action_Options"/>
    </widget>
    <addaction name="menuFile"/>
@@ -285,6 +286,20 @@
    </property>
    <property name="text">
     <string>S&amp;ave to file</string>
+   </property>
+  </action>
+  <action name="action_Library_view">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Library view</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+L</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
  </widget>

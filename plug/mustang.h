@@ -60,6 +60,7 @@ public:
     int save_on_amp(char *, int);
     int load_memory_bank(int, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL);
     int save_effects(int , char *, int , struct fx_pedal_settings *);
+    int get_current_names(char names[][32]);
 
 private:
     libusb_device_handle *amp_hand;    // handle for USB communication

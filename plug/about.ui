@@ -34,7 +34,7 @@
    <item>
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>version 0.6</string>
+      <string>version 0.6.999</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -99,6 +99,9 @@
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
+     <property name="textInteractionFlags">
+      <set>Qt::TextBrowserInteraction</set>
+     </property>
     </widget>
    </item>
    <item>
@@ -113,6 +116,9 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::TextBrowserInteraction</set>
      </property>
     </widget>
    </item>

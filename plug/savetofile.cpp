@@ -75,7 +75,7 @@ void SaveToFile::savefile()
 
 void SaveToFile::writeAmp(struct amp_settings settings)
 {
-    int model, something, something2, something3 = 128;
+    int model=0, something=0, something2=0, something3 = 128;
 
     switch (settings.amp_num)
     {
@@ -348,7 +348,7 @@ void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
 
 void SaveToFile::writeFX(struct fx_pedal_settings settings)
 {
-    int model, position;
+    int model=0, position;
 
     switch (settings.effect_num) {
     case EMPTY:

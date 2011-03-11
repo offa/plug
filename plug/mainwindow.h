@@ -22,8 +22,9 @@
 #include "settings.h"
 #include "loadfromfile.h"
 #include "savetofile.h"
+#include "library.h"
 
-#define VERSION "0.6"
+#define VERSION "0.6.999"
 
 namespace Ui {
     class MainWindow;
@@ -48,7 +49,7 @@ public slots:
     void change_name(int, QString *);
     void save_effects(int, char *, int, bool, bool, bool);
     void set_index(int);
-    void loadfile();
+    void loadfile(QString filename = QString());
     void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
     void change_title(QString);
 
@@ -57,7 +58,7 @@ private:
 
     // pointers to objects
     QString current_name;
-    bool manual_check;
+    bool manual_check, connected;
     Mustang *amp_ops;
     Amplifier *amp;
     Effect *effect1;
@@ -67,9 +68,10 @@ private:
     About *about_window;
     SaveOnAmp *save;
     LoadFromAmp *load;
-    Save_effects *seffects;
+    SaveEffects *seffects;
     Settings *settings_win;
     SaveToFile *saver;
+    Library *library;
 
     QNetworkReply *reply;
 
@@ -81,6 +83,7 @@ private slots:
     void show_fx3();
     void show_fx4();
     void show_amp();
+    void show_library();
 
 
 signals:

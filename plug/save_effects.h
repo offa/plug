@@ -7,13 +7,13 @@ namespace Ui {
     class Save_effects;
 }
 
-class Save_effects : public QDialog
+class SaveEffects : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Save_effects(QWidget *parent = 0);
-    ~Save_effects();
+    explicit SaveEffects(QWidget *parent = 0);
+    ~SaveEffects();
 
 private:
     Ui::Save_effects *ui;
