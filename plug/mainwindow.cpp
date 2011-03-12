@@ -172,18 +172,16 @@ void MainWindow::start_amp()
     }
 
     // activate buttons
-    ui->Amplifier->setDisabled(false);
-    ui->EffectButton1->setDisabled(false);
-    ui->EffectButton2->setDisabled(false);
-    ui->EffectButton3->setDisabled(false);
-    ui->EffectButton4->setDisabled(false);
+    amp->enable_set_button(true);
+    effect1->enable_set_button(true);
+    effect2->enable_set_button(true);
+    effect3->enable_set_button(true);
+    effect4->enable_set_button(true);
     ui->actionConnect->setDisabled(true);
     ui->actionDisconnect->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
     ui->action_Load_from_amplifier->setDisabled(false);
     ui->actionSave_effects->setDisabled(false);
-    ui->actionL_oad_from_file->setDisabled(false);
-    ui->actionS_ave_to_file->setDisabled(false);
     ui->action_Library_view->setDisabled(false);
     ui->statusBar->showMessage(tr("Connected"), 3000);    // show message on the status bar
 
@@ -198,18 +196,16 @@ void MainWindow::stop_amp()
     if(x == 0)    // if request succeded
     {
         // deactivate buttons
-        ui->Amplifier->setDisabled(true);
-        ui->EffectButton1->setDisabled(true);
-        ui->EffectButton2->setDisabled(true);
-        ui->EffectButton3->setDisabled(true);
-        ui->EffectButton4->setDisabled(true);
+        amp->enable_set_button(false);
+        effect1->enable_set_button(false);
+        effect2->enable_set_button(false);
+        effect3->enable_set_button(false);
+        effect4->enable_set_button(false);
         ui->actionConnect->setDisabled(false);
         ui->actionDisconnect->setDisabled(true);
         ui->actionSave_to_amplifier->setDisabled(true);
         ui->action_Load_from_amplifier->setDisabled(true);
         ui->actionSave_effects->setDisabled(true);
-        ui->actionL_oad_from_file->setDisabled(true);
-        ui->actionS_ave_to_file->setDisabled(true);
         ui->action_Library_view->setDisabled(true);
         setWindowTitle(QString(tr("PLUG")));
         ui->statusBar->showMessage(tr("Disconnected"), 5000);    // show message on the status bar
@@ -343,18 +339,16 @@ int MainWindow::load_from_amp(int slot)
 // activate buttons
 void MainWindow::enable_buttons(void)
 {
-    ui->Amplifier->setDisabled(false);
-    ui->EffectButton1->setDisabled(false);
-    ui->EffectButton2->setDisabled(false);
-    ui->EffectButton3->setDisabled(false);
-    ui->EffectButton4->setDisabled(false);
+    amp->enable_set_button(true);
+    effect1->enable_set_button(true);
+    effect2->enable_set_button(true);
+    effect3->enable_set_button(true);
+    effect4->enable_set_button(true);
     ui->actionConnect->setDisabled(false);
     ui->actionDisconnect->setDisabled(false);
     ui->actionSave_to_amplifier->setDisabled(false);
     ui->action_Load_from_amplifier->setDisabled(false);
     ui->actionSave_effects->setDisabled(false);
-    ui->actionL_oad_from_file->setDisabled(false);
-    ui->actionS_ave_to_file->setDisabled(false);
     ui->action_Library_view->setDisabled(false);
 
     connected = true;
@@ -463,7 +457,8 @@ void MainWindow::loadfile(QString filename)
     change_title(name);
 
     amp->load(amplifier_set);
-    amp->send_amp();
+    if(connected)
+        amp->send_amp();
     if(settings.value("Settings/popupChangedWindows").toBool())
         amp->show();
     for(int i = 0; i < 4; i++)
@@ -473,7 +468,8 @@ void MainWindow::loadfile(QString filename)
         case 0x00:
         case 0x04:
             effect1->load(effects_set[i]);
-            effect1->send_fx();
+            if(connected)
+                effect1->send_fx();
             if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect1->show();
@@ -482,7 +478,8 @@ void MainWindow::loadfile(QString filename)
         case 0x01:
         case 0x05:
             effect2->load(effects_set[i]);
-            effect2->send_fx();
+            if(connected)
+                effect2->send_fx();
             if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect2->show();
@@ -491,7 +488,8 @@ void MainWindow::loadfile(QString filename)
         case 0x02:
         case 0x06:
             effect3->load(effects_set[i]);
-            effect3->send_fx();
+            if(connected)
+                effect3->send_fx();
             if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect3->show();
@@ -500,7 +498,8 @@ void MainWindow::loadfile(QString filename)
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
-            effect4->send_fx();
+            if(connected)
+                effect4->send_fx();
             if(effects_set[i].effect_num)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect4->show();

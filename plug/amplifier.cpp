@@ -281,3 +281,8 @@ void Amplifier::get_settings(struct amp_settings *settings)
     settings->bias = bias;
     settings->sag = sag;
 }
+
+void Amplifier::enable_set_button(bool value)
+{
+    ui->setButton->setEnabled(value);
+}

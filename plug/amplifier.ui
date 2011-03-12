@@ -128,6 +128,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="setButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>

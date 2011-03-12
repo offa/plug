@@ -901,3 +901,8 @@ bool Effect::get_changed()
 {
     return changed;
 }
+
+void Effect::enable_set_button(bool value)
+{
+    ui->setButton->setEnabled(value);
+}

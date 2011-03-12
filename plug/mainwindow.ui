@@ -17,9 +17,6 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPushButton" name="Amplifier">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -41,9 +38,6 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QPushButton" name="EffectButton1">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -63,9 +57,6 @@
       </item>
       <item>
        <widget class="QPushButton" name="EffectButton2">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -85,9 +76,6 @@
       </item>
       <item>
        <widget class="QPushButton" name="EffectButton3">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -107,9 +95,6 @@
       </item>
       <item>
        <widget class="QPushButton" name="EffectButton4">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -144,11 +129,11 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Load_from_amplifier"/>
-    <addaction name="actionSave_to_amplifier"/>
-    <addaction name="separator"/>
     <addaction name="actionL_oad_from_file"/>
     <addaction name="actionS_ave_to_file"/>
+    <addaction name="separator"/>
+    <addaction name="action_Load_from_amplifier"/>
+    <addaction name="actionSave_to_amplifier"/>
     <addaction name="separator"/>
     <addaction name="actionSave_effects"/>
     <addaction name="separator"/>
@@ -267,9 +252,6 @@
    </property>
   </action>
   <action name="actionL_oad_from_file">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>L&amp;oad from file</string>
    </property>
@@ -281,9 +263,6 @@
    </property>
   </action>
   <action name="actionS_ave_to_file">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>S&amp;ave to file</string>
    </property>
