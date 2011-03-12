@@ -158,7 +158,6 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
-    <addaction name="action_Library_view"/>
     <addaction name="action_Options"/>
    </widget>
    <addaction name="menuFile"/>
