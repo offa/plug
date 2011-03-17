@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionL_oad_from_file, SIGNAL(triggered()), this, SLOT(loadfile()));
     connect(ui->actionS_ave_to_file, SIGNAL(triggered()), saver, SLOT(show()));
     connect(ui->action_Library_view, SIGNAL(triggered()), this, SLOT(show_library()));
+    connect(ui->action_Update_firmware, SIGNAL(triggered()), this, SLOT(update_firmware()));
 
     // shortcuts to activate effect windows
     QShortcut *showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
@@ -372,12 +373,6 @@ void MainWindow::httpReadyRead()
     {
         QLabel *label = new QLabel(tr("<b>Update available!</b>"), this);
         ui->statusBar->addWidget(label);
-//        QMessageBox *msgbx = new QMessageBox(this);
-//        msgbx->setWindowTitle(tr("Update"));
-//        msgbx->setText(tr("<b>Update available!</b>"));
-//        msgbx->setInformativeText(tr("Check homepage for new version"));
-//        msgbx->setIcon(QMessageBox::Information);
-//        msgbx->exec();
         QMessageBox::information(this, "Update", "<b>Update available!</b><br><br>Check homepage for new version.");
     }
     else if(manual_check)
@@ -597,4 +592,42 @@ void MainWindow::show_library()
     settings.setValue("Settings/popupChangedWindows", previous);
     this->show();
     delete library;
+}
+
+void MainWindow::update_firmware()
+{
+    if(QMessageBox::warning(this, "Danger!", "This function may destroy your amplifier!<br><u><b>You are using it at you own risk!</b></u>", QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
+        return;
+
+    QString filename;
+    int ret = 0;
+
+    QMessageBox::information(this, "Prepare", "Please power off the amplifier, then power it back on while holding \"Save\" button.<br>After pressing \"OK\" choose firmware file and then update will begin.<br>It will take about one minute. You will be noticed when it's finished.");
+
+    filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("Mustang firmware (*.upd)"));
+    if(filename.isEmpty())
+        return;
+
+    if(connected)
+        this->stop_amp();
+
+    ui->statusBar->showMessage("Updating firmware. Please wait...");
+    ui->centralWidget->setDisabled(true);
+    ui->menuBar->setDisabled(true);
+    this->repaint();
+    ret = amp_ops->update(filename.toAscii().data());  // magic part
+    ui->centralWidget->setDisabled(false);
+    ui->menuBar->setDisabled(false);
+    ui->statusBar->showMessage("", 1);
+    if(ret == -100)
+    {
+        ui->statusBar->showMessage(tr("Suitable device not found!"), 5000);
+        return;
+    }
+    else if(ret)
+    {
+        ui->statusBar->showMessage(QString(tr("Communication error: %1")).arg(ret), 5000);
+        return;
+    }
+    QMessageBox::information(this, "Update finished", "Update finished<br>If \"Exit\" button is lit - update was succesful<br>If \"Save\" button is lit - update failed<br><br>Power off the amplifier and then back on to finish the process.");
 }

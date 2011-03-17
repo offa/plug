@@ -24,7 +24,7 @@
 #include "savetofile.h"
 #include "library.h"
 
-#define VERSION "0.6.1"
+#define VERSION "0.6.999"
 
 namespace Ui {
     class MainWindow;
@@ -52,6 +52,7 @@ public slots:
     void loadfile(QString filename = QString());
     void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
     void change_title(QString);
+    void update_firmware();
 
 private:
     Ui::MainWindow *ui;

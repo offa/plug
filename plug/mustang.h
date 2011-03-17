@@ -7,10 +7,15 @@
 #include <QtDebug>
 #include "effects_enum.h"
 #include "data_structs.h"
+#include <time.h>
 
 // amp's VID and PID
 #define USB_VID 0x1ed8
 #define USB_PID 0x0004
+
+// amp's VID and PID while in update mode
+#define USB_UPDATE_VID 0x1ed8
+#define USB_UPDATE_PID 0x0006
 
 // for USB communication
 #define TMOUT 500
@@ -61,6 +66,7 @@ public:
     int load_memory_bank(int, char *name=NULL, struct amp_settings *amp_set=NULL, struct fx_pedal_settings *effects_set=NULL);
     int save_effects(int , char *, int , struct fx_pedal_settings *);
     int get_current_names(char names[][32]);
+    int update(char *);
 
 private:
     libusb_device_handle *amp_hand;    // handle for USB communication

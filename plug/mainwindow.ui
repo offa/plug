@@ -137,6 +137,8 @@
     <addaction name="separator"/>
     <addaction name="actionSave_effects"/>
     <addaction name="separator"/>
+    <addaction name="action_Update_firmware"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -158,6 +160,7 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
+    <addaction name="action_Library_view"/>
     <addaction name="action_Options"/>
    </widget>
    <addaction name="menuFile"/>
@@ -278,6 +281,11 @@
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="action_Update_firmware">
+   <property name="text">
+    <string>&amp;Update firmware</string>
    </property>
   </action>
  </widget>

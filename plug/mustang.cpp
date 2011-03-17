@@ -1268,3 +1268,107 @@ int Mustang::get_current_names(char names[][32])
 
     return 0;
 }
+
+int Mustang::update(char *filename)
+{
+    int ret, recieved;
+    unsigned char array[LENGTH], number = 0;
+    FILE *file;
+    file = fopen(filename, "rb");
+    struct timespec sleep;
+    sleep.tv_nsec = 10000000;
+    sleep.tv_sec = 0;
+
+    if(amp_hand == NULL)
+    {
+        // initialize libusb
+        ret = libusb_init(NULL);
+        if (ret)
+            return ret;
+
+        // get handle for the device
+        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, USB_UPDATE_PID);
+        if(amp_hand == NULL)
+        {
+            libusb_exit(NULL);
+            return -100;
+        }
+
+        // detach kernel driver
+        ret = libusb_kernel_driver_active(amp_hand, 0);
+        if(ret)
+        {
+            ret = libusb_detach_kernel_driver(amp_hand, 0);
+            if(ret)
+            {
+                stop_amp();
+                return ret;
+            }
+        }
+
+        // claim the device
+        ret = libusb_claim_interface(amp_hand, 0);
+        if(ret)
+        {
+            stop_amp();
+            return ret;
+        }
+    }
+    else
+        return -200;
+
+    // send date when firmware was created
+    fseek(file, 0x1a, SEEK_SET);
+    memset(array, 0x00, LENGTH);
+    array[0] = 0x02;
+    array[1] = 0x03;
+    array[2] = 0x01;
+    array[3] = 0x06;
+    fread(array+4, 1, 11, file);
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+    nanosleep(&sleep, NULL);
+
+    // send firmware
+    fseek(file, 0x110, SEEK_SET);
+    for(;;)
+    {
+        memset(array, 0x00, LENGTH);
+        array[0] = array[1] = 0x03;
+        array[2] = number;
+        number++;
+        array[3] = fread(array+4, 1, LENGTH-8, file);
+        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        nanosleep(&sleep, NULL);
+        if(feof(file))  // if reached end of the file
+            break;  // exit loop
+    }
+    fclose(file);
+
+    // send "finished" packet
+    memset(array, 0x00, LENGTH);
+    array[0] = 0x04;
+    array[1] = 0x03;
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+
+    // release claimed interface
+    ret = libusb_release_interface(amp_hand, 0);
+    if(ret)
+        return ret;
+
+    // re-attach kernel driver
+    ret = libusb_attach_kernel_driver(amp_hand, 0);
+    if(ret)
+        return ret;
+
+    // close opened interface
+    libusb_close(amp_hand);
+    amp_hand = NULL;
+
+    // stop using libusb
+    libusb_exit(NULL);
+
+    return 0;
+}
