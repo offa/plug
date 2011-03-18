@@ -29,6 +29,8 @@ private slots:
     void get_directory();
     void get_files(QString);
     void load_file(int);
+    void change_font_size(int);
+    void change_font_family(QFont);
 
 signals:
     void directory_changed(QString);

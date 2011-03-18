@@ -1276,7 +1276,7 @@ int Mustang::update(char *filename)
     FILE *file;
     file = fopen(filename, "rb");
     struct timespec sleep;
-    sleep.tv_nsec = 10000000;
+    sleep.tv_nsec = NANO_SEC_SLEEP;
     sleep.tv_sec = 0;
 
     if(amp_hand == NULL)

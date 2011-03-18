@@ -20,6 +20,7 @@
 // for USB communication
 #define TMOUT 500
 #define LENGTH 64
+#define NANO_SEC_SLEEP 10000000
 
 // effect array fields
 #define DSP 2

@@ -573,9 +573,6 @@ void MainWindow::show_library()
     char names[24][32];
     bool previous = settings.value("Settings/popupChangedWindows").toBool();
 
-    if(!connected)
-        return;
-
     settings.setValue("Settings/popupChangedWindows", false);
 
     library = new Library(this);
@@ -621,7 +618,7 @@ void MainWindow::update_firmware()
     ui->statusBar->showMessage("", 1);
     if(ret == -100)
     {
-        ui->statusBar->showMessage(tr("Suitable device not found!"), 5000);
+        ui->statusBar->showMessage(tr("Error: Suitable device not found!"), 5000);
         return;
     }
     else if(ret)
@@ -629,5 +626,5 @@ void MainWindow::update_firmware()
         ui->statusBar->showMessage(QString(tr("Communication error: %1")).arg(ret), 5000);
         return;
     }
-    QMessageBox::information(this, "Update finished", "Update finished<br>If \"Exit\" button is lit - update was succesful<br>If \"Save\" button is lit - update failed<br><br>Power off the amplifier and then back on to finish the process.");
+    QMessageBox::information(this, "Update finished", "<b>Update finished</b><br>If \"Exit\" button is lit - update was succesful<br>If \"Save\" button is lit - update failed<br><br>Power off the amplifier and then back on to finish the process.");
 }

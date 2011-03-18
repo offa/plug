@@ -12,12 +12,16 @@ Library::Library(QWidget *parent) :
     restoreGeometry(settings.value("Windows/libraryWindowGeometry").toByteArray());
 
     files = new QList<QFileInfo>();
+    ui->spinBox->setValue(ui->listWidget->font().pointSize());
+    ui->fontComboBox->setCurrentFont(ui->listWidget->font());
 
     connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(int)));
     connect(ui->listWidget_2, SIGNAL(currentRowChanged(int)), this, SLOT(load_file(int)));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(get_directory()));
     connect(this, SIGNAL(directory_changed(QString)), ui->label_3, SLOT(setText(QString)));
     connect(this, SIGNAL(directory_changed(QString)), this, SLOT(get_files(QString)));
+    connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(change_font_size(int)));
+    connect(ui->fontComboBox, SIGNAL(currentFontChanged(QFont)), this, SLOT(change_font_family(QFont)));
 }
 
 Library::~Library()
@@ -73,4 +77,19 @@ void Library::load_file(int row)
 void Library::resizeEvent(QResizeEvent *event)
 {
     ui->label_3->setMaximumWidth((event->size().width()/2)-ui->pushButton->size().width());
+}
+
+void Library::change_font_size(int value)
+{
+    QFont font(ui->listWidget_2->font());
+    font.setPointSize(value);
+    ui->listWidget->setFont(font);
+    ui->listWidget_2->setFont(font);
+}
+
+void Library::change_font_family(QFont font)
+{
+    font.setPointSize(ui->spinBox->value());
+    ui->listWidget->setFont(font);
+    ui->listWidget_2->setFont(font);
 }
