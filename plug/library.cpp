@@ -12,6 +12,13 @@ Library::Library(QWidget *parent) :
     restoreGeometry(settings.value("Windows/libraryWindowGeometry").toByteArray());
 
     files = new QList<QFileInfo>();
+
+    if(settings.contains("Library/lastDirectory"))
+    {
+        ui->label_3->setText(settings.value("Library/lastDirectory").toString());
+        get_files(settings.value("Library/lastDirectory").toString());
+    }
+
     ui->spinBox->setValue(ui->listWidget->font().pointSize());
     ui->fontComboBox->setCurrentFont(ui->listWidget->font());
 
@@ -50,7 +57,9 @@ void Library::load_slot(int slot)
 
 void Library::get_directory()
 {
+    QSettings settings;
     QString directory = QFileDialog::getExistingDirectory(this, QString(tr("Choose directory")), QDir::homePath());
+    settings.setValue("Library/lastDirectory", directory);
     emit directory_changed(directory);
 }
 

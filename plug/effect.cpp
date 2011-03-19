@@ -45,6 +45,9 @@ Effect::Effect(QWidget *parent, int number) :
 
     QShortcut *off = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot+1)), this, 0, 0, Qt::ApplicationShortcut);
     connect(off, SIGNAL(activated()), ui->pushButton, SLOT(toggle()));
+
+    QShortcut *default_fx = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot+5)), this, 0, 0, Qt::ApplicationShortcut);
+    connect(default_fx, SIGNAL(activated()), this, SLOT(load_default_fx()));
 }
 
 Effect::~Effect()
@@ -905,4 +908,24 @@ bool Effect::get_changed()
 void Effect::enable_set_button(bool value)
 {
     ui->setButton->setEnabled(value);
+}
+
+void Effect::load_default_fx()
+{
+    QSettings settings;
+
+    if(!settings.contains(QString("DefaultEffects/Effect%1/Effect").arg(fx_slot)))
+        return;
+
+    ui->comboBox->setCurrentIndex(settings.value(QString("DefaultEffects/Effect%1/Effect").arg(fx_slot)).toInt());
+    ui->dial->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob1").arg(fx_slot)).toInt());
+    ui->dial_2->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob2").arg(fx_slot)).toInt());
+    ui->dial_3->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob3").arg(fx_slot)).toInt());
+    ui->dial_4->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob4").arg(fx_slot)).toInt());
+    ui->dial_5->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob5").arg(fx_slot)).toInt());
+    ui->dial_6->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob6").arg(fx_slot)).toInt());
+    ui->checkBox->setChecked(settings.value(QString("DefaultEffects/Effect%1/Post amp").arg(fx_slot)).toBool());
+
+    set_changed(true);
+    this->send_fx();
 }

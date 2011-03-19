@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DefaultEffects</class>
+ <widget class="QDialog" name="DefaultEffects">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Default effects</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_7">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>&amp;Effect:</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <item>
+        <property name="text">
+         <string>None</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Overdrive</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Fixed Wah</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Touch Wah</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Fuzz</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Fuzz Touch Wah</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Simple Compressor</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Compressor</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Sine Chorus</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Triangle Chorus</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Sine Flanger</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Triangle Flanger</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Vibratone</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Vintage Tremolo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Sine Tremolo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Ring Modulator</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Step Filter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Phaser</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Pitch Schifter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Mono Delay</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Mono Echo Filter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Stereo Echo Filter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Multitap Delay</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Ping Pong Delay</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Ducking Delay</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Reverse Delay</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Tape Delay</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[3] Stereo Tape Delay</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Small Hall Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Large Hall Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Small Room Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Large Room Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Small Plate Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Large Plate Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Ambient Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] Arena Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] '63 Fender Spring Reverb</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[4] '65 Fender Spring Reverb</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QDial" name="dial">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QDial" name="dial_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_2</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QDial" name="dial_3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_3</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QDial" name="dial_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_4</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QDial" name="dial_5">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_5">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_5</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QDial" name="dial_6">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_6">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_6</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>&amp;after amplifier</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Copy settings from slot:</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_2</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_2">
+       <item>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>&amp;Copy</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Save as default effect:</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_3</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_3">
+       <item>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>&amp;Save</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>spinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>17</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>22</x>
+     <y>118</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>119</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>41</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial_2</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>118</x>
+     <y>112</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial_2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_2</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>135</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial_3</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>212</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>212</x>
+     <y>111</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial_3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_3</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>123</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>247</x>
+     <y>161</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial_4</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>27</x>
+     <y>310</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>26</x>
+     <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial_4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_4</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>63</x>
+     <y>257</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>58</x>
+     <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_5</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial_5</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial_5</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_5</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>142</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_6</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial_6</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>225</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial_6</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_6</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>261</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>315</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

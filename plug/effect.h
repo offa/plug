@@ -46,6 +46,7 @@ public slots:
 
     void load(struct fx_pedal_settings);
     void get_settings(struct fx_pedal_settings &);
+    void load_default_fx();
 };
 
 #endif // EFFECT_H

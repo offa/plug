@@ -160,6 +160,7 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
+    <addaction name="action_Default_effects"/>
     <addaction name="action_Library_view"/>
     <addaction name="action_Options"/>
    </widget>
@@ -286,6 +287,17 @@
   <action name="action_Update_firmware">
    <property name="text">
     <string>&amp;Update firmware</string>
+   </property>
+  </action>
+  <action name="action_Default_effects">
+   <property name="text">
+    <string>&amp;Default effects</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
  </widget>

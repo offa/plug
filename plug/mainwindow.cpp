@@ -62,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionS_ave_to_file, SIGNAL(triggered()), saver, SLOT(show()));
     connect(ui->action_Library_view, SIGNAL(triggered()), this, SLOT(show_library()));
     connect(ui->action_Update_firmware, SIGNAL(triggered()), this, SLOT(update_firmware()));
+    connect(ui->action_Default_effects, SIGNAL(triggered()), this, SLOT(show_default_effects()));
 
     // shortcuts to activate effect windows
     QShortcut *showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
@@ -222,6 +223,9 @@ int MainWindow::set_effect(struct fx_pedal_settings pedal)
 {
     QSettings settings;
 
+    if(!connected)
+        return 0;
+
     if(!settings.value("Settings/oneSetToSetThemAll").toBool())
         return amp_ops->set_effect(pedal);
     amp->send_amp();
@@ -231,6 +235,9 @@ int MainWindow::set_effect(struct fx_pedal_settings pedal)
 int MainWindow::set_amplifier(struct amp_settings amp_settings)
 {
     QSettings settings;
+
+    if(!connected)
+        return 0;
 
     if(settings.value("Settings/oneSetToSetThemAll").toBool())
     {
@@ -505,11 +512,15 @@ void MainWindow::loadfile(QString filename)
 
 void MainWindow::get_settings(struct amp_settings *amplifier_settings, struct fx_pedal_settings fx_settings[4])
 {
-    amp->get_settings(amplifier_settings);
-    effect1->get_settings(fx_settings[0]);
-    effect2->get_settings(fx_settings[1]);
-    effect3->get_settings(fx_settings[2]);
-    effect4->get_settings(fx_settings[3]);
+    if(amplifier_settings != NULL)
+        amp->get_settings(amplifier_settings);
+    if(fx_settings != NULL)
+    {
+        effect1->get_settings(fx_settings[0]);
+        effect2->get_settings(fx_settings[1]);
+        effect3->get_settings(fx_settings[2]);
+        effect4->get_settings(fx_settings[3]);
+    }
 }
 
 void MainWindow::change_title(QString name)
@@ -524,8 +535,6 @@ void MainWindow::change_title(QString name)
 
 void MainWindow::show_fx1()
 {
-    if(!connected)
-        return;
     if(!effect1->isVisible())
         effect1->show();
     effect1->activateWindow();
@@ -533,24 +542,18 @@ void MainWindow::show_fx1()
 
 void MainWindow::show_fx2()
 {
-    if(!connected)
-        return;
     if(!effect2->isVisible())
         effect2->show();
     effect2->activateWindow();
 }
 void MainWindow::show_fx3()
 {
-    if(!connected)
-        return;
     if(!effect3->isVisible())
         effect3->show();
     effect3->activateWindow();
 }
 void MainWindow::show_fx4()
 {
-    if(!connected)
-        return;
     if(!effect4->isVisible())
         effect4->show();
     effect4->activateWindow();
@@ -558,8 +561,6 @@ void MainWindow::show_fx4()
 
 void MainWindow::show_amp()
 {
-    if(!connected)
-        return;
     if(!amp->isVisible())
         amp->show();
     amp->activateWindow();
@@ -599,7 +600,7 @@ void MainWindow::update_firmware()
     QString filename;
     int ret = 0;
 
-    QMessageBox::information(this, "Prepare", "Please power off the amplifier, then power it back on while holding \"Save\" button.<br>After pressing \"OK\" choose firmware file and then update will begin.<br>It will take about one minute. You will be noticed when it's finished.");
+    QMessageBox::information(this, "Prepare", "Please power off the amplifier, then power it back on while holding \"Save\" button.<br>After pressing \"OK\" choose firmware file and then update will begin.<br>It will take about one minute. You will be notified when it's finished.");
 
     filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("Mustang firmware (*.upd)"));
     if(filename.isEmpty())
@@ -627,4 +628,11 @@ void MainWindow::update_firmware()
         return;
     }
     QMessageBox::information(this, "Update finished", "<b>Update finished</b><br>If \"Exit\" button is lit - update was succesful<br>If \"Save\" button is lit - update failed<br><br>Power off the amplifier and then back on to finish the process.");
+}
+
+void MainWindow::show_default_effects()
+{
+    deffx = new DefaultEffects(this);
+    deffx->exec();
+    delete deffx;
 }

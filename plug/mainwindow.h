@@ -23,6 +23,7 @@
 #include "loadfromfile.h"
 #include "savetofile.h"
 #include "library.h"
+#include "defaulteffects.h"
 
 #define VERSION "0.6.999"
 
@@ -73,6 +74,7 @@ private:
     Settings *settings_win;
     SaveToFile *saver;
     Library *library;
+    DefaultEffects *deffx;
 
     QNetworkReply *reply;
 
@@ -85,6 +87,7 @@ private slots:
     void show_fx4();
     void show_amp();
     void show_library();
+    void show_default_effects();
 
 
 signals:
