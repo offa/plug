@@ -19,8 +19,12 @@ Library::Library(QWidget *parent) :
         get_files(settings.value("Library/lastDirectory").toString());
     }
 
-    ui->spinBox->setValue(ui->listWidget->font().pointSize());
-    ui->fontComboBox->setCurrentFont(ui->listWidget->font());
+    QFont font(settings.value("Library/FontFamily", ui->listWidget->font().family()).toString(), settings.value("Library/FontSize", ui->listWidget->font().pointSize()).toInt());
+    ui->listWidget->setFont(font);
+    ui->listWidget_2->setFont(font);
+
+    ui->spinBox->setValue(font.pointSize());
+    ui->fontComboBox->setCurrentFont(font);
 
     connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(int)));
     connect(ui->listWidget_2, SIGNAL(currentRowChanged(int)), this, SLOT(load_file(int)));
@@ -90,15 +94,22 @@ void Library::resizeEvent(QResizeEvent *event)
 
 void Library::change_font_size(int value)
 {
+    QSettings settings;
     QFont font(ui->listWidget_2->font());
     font.setPointSize(value);
     ui->listWidget->setFont(font);
     ui->listWidget_2->setFont(font);
+
+    settings.setValue("Library/FontSize", value);
 }
 
 void Library::change_font_family(QFont font)
 {
+    QSettings settings;
+
     font.setPointSize(ui->spinBox->value());
     ui->listWidget->setFont(font);
     ui->listWidget_2->setFont(font);
+
+    settings.setValue("Library/FontFamily", font.family());
 }
