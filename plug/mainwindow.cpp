@@ -358,8 +358,6 @@ void MainWindow::enable_buttons(void)
     ui->action_Load_from_amplifier->setDisabled(false);
     ui->actionSave_effects->setDisabled(false);
     ui->action_Library_view->setDisabled(false);
-
-    connected = true;
 }
 
 void MainWindow::check_for_updates()
@@ -439,9 +437,17 @@ void MainWindow::loadfile(QString filename)
 
     QFile *file = new QFile(filename, this);
 
-    if (!file->open(QFile::ReadOnly | QFile::Text))
+    if(file->exists())
     {
-        QMessageBox::critical(this, tr("Error!"), tr("Could not open file"));
+        if (!file->open(QFile::ReadOnly | QFile::Text))
+        {
+            QMessageBox::critical(this, tr("Error!"), tr("Could not open file"));
+            return;
+        }
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Error!"), tr("No such file"));
         return;
     }
 
@@ -635,4 +641,66 @@ void MainWindow::show_default_effects()
     deffx = new DefaultEffects(this);
     deffx->exec();
     delete deffx;
+}
+
+void MainWindow::empty_other(int value, Effect *caller)
+{
+    struct fx_pedal_settings settings;
+    int fx_family = check_fx_family(value);
+
+    if(caller != effect1)
+    {
+        effect1->get_settings(settings);
+        if(check_fx_family(settings.effect_num) == fx_family)
+        {
+            effect1->choose_fx(0);
+            effect1->send_fx();
+        }
+    }
+
+    if(caller != effect2)
+    {
+        effect2->get_settings(settings);
+        if(check_fx_family(settings.effect_num) == fx_family)
+        {
+            effect2->choose_fx(0);
+            effect2->send_fx();
+        }
+    }
+
+    if(caller != effect3)
+    {
+        effect3->get_settings(settings);
+        if(check_fx_family(settings.effect_num) == fx_family)
+        {
+            effect3->choose_fx(0);
+            effect3->send_fx();
+        }
+    }
+
+    if(caller != effect4)
+    {
+        effect4->get_settings(settings);
+        if(check_fx_family(settings.effect_num) == fx_family)
+        {
+            effect4->choose_fx(0);
+            effect4->send_fx();
+        }
+    }
+}
+
+int MainWindow::check_fx_family(int value)
+{
+    if(value == 0)
+        return 0;
+    if(value >= 1 && value <= 7)
+        return 1;
+    if(value >= 8 && value <= 18)
+        return 2;
+    if(value >= 19 && value <= 27)
+        return 3;
+    if(value >= 28 && value <= 37)
+        return 4;
+
+    return 0;
 }

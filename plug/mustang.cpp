@@ -154,11 +154,6 @@ int Mustang::set_effect(struct fx_pedal_settings value)
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    if(value.put_post_amp)    // put effect in a slot after amplifier
-        slot = value.fx_slot + 4;
-    else
-        slot = value.fx_slot;
-
     // clear effect on previous DSP before setting a new one
     int k=0;
     for (int i = 0; i < 4; i++)
@@ -186,6 +181,11 @@ int Mustang::set_effect(struct fx_pedal_settings value)
 //    qDebug("set: DSP: %d, slot: %d, effect: %d, EMPTY", array[DSP], array[FXSLOT], array[EFFECT]);
     if(value.effect_num == EMPTY)
         return ret;
+
+    if(value.put_post_amp)    // put effect in a slot after amplifier
+        slot = value.fx_slot + 4;
+    else
+        slot = value.fx_slot;
 
     // fill the form with data
     array[FXSLOT] = slot;

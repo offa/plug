@@ -54,6 +54,7 @@ public slots:
     void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
     void change_title(QString);
     void update_firmware();
+    void empty_other(int, Effect*);
 
 private:
     Ui::MainWindow *ui;
@@ -88,6 +89,7 @@ private slots:
     void show_amp();
     void show_library();
     void show_default_effects();
+    int check_fx_family(int);
 
 
 signals:

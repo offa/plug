@@ -61,7 +61,7 @@
    <item>
     <widget class="QCheckBox" name="checkBox_6">
      <property name="text">
-      <string>Set default values on effect load</string>
+      <string>Set default knob values when choosing effect</string>
      </property>
      <property name="checked">
       <bool>true</bool>

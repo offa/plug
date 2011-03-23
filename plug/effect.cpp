@@ -102,6 +102,10 @@ void Effect::set_knob6(int value)
 
 void Effect::choose_fx(int value)
 {
+    ui->comboBox->setCurrentIndex(value);
+    if(value != 0)
+        ((MainWindow*)parent())->empty_other(value, this);
+
     QSettings settings;
     effect_num = value;
     set_changed(true);
