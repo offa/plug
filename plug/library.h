@@ -15,9 +15,8 @@ class Library : public QDialog
     Q_OBJECT
 
 public:
-    explicit Library(QWidget *parent = 0);
+    explicit Library(char names[24][32], QWidget *parent = 0);
     ~Library();
-    void get_names(char [24][32]);
 
 private:
     Ui::Library *ui;

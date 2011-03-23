@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 
-Library::Library(QWidget *parent) :
+Library::Library(char names[24][32], QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Library)
 {
@@ -23,6 +23,11 @@ Library::Library(QWidget *parent) :
     ui->listWidget->setFont(font);
     ui->listWidget_2->setFont(font);
 
+    for(int i = 0; i < 24; i++)
+    {
+        ui->listWidget->addItem(QString("%1").arg(names[i]));
+    }
+
     ui->spinBox->setValue(font.pointSize());
     ui->fontComboBox->setCurrentFont(font);
 
@@ -41,14 +46,6 @@ Library::~Library()
     settings.setValue("Windows/libraryWindowGeometry", saveGeometry());
     delete files;
     delete ui;
-}
-
-void Library::get_names(char names[24][32])
-{
-    for(int i = 0; i < 24; i++)
-    {
-        ui->listWidget->addItem(QString("%1").arg(names[i]));
-    }
 }
 
 void Library::load_slot(int slot)

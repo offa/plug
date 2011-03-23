@@ -107,7 +107,7 @@ void MainWindow::start_amp()
     int x;
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
-    char name[32], names[24][32];
+    char name[32];
 
     ui->statusBar->showMessage(tr("Connecting..."));
     this->repaint();  // this should not be needed!
@@ -272,6 +272,9 @@ int MainWindow::save_on_amp(char *name, int slot)
 {
     int ret;
 
+    if(!connected)
+        return -1;
+
     ret = amp_ops->save_on_amp(name, slot);
 
     if(name[0] == 0x00)
@@ -280,6 +283,7 @@ int MainWindow::save_on_amp(char *name, int slot)
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
 
     current_name=name;
+    memcpy(names[slot], name, 32);
 
     return ret;
 }
@@ -290,6 +294,9 @@ int MainWindow::load_from_amp(int slot)
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
     char name[32];
+
+    if(!connected)
+        return -1;
 
     amp_ops->load_memory_bank(slot, name, &amplifier_set, effects_set);
 
@@ -574,17 +581,12 @@ void MainWindow::show_amp()
 
 void MainWindow::show_library()
 {
-    ui->statusBar->showMessage(QString(tr("Working...")), 3000);
-    this->repaint();
     QSettings settings;
-    char names[24][32];
     bool previous = settings.value("Settings/popupChangedWindows").toBool();
 
     settings.setValue("Settings/popupChangedWindows", false);
 
-    library = new Library(this);
-    amp_ops->get_current_names(names);
-    library->get_names(names);
+    library = new Library(names, this);
     effect1->close();
     effect2->close();
     effect3->close();

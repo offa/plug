@@ -61,6 +61,7 @@ private:
 
     // pointers to objects
     QString current_name;
+    char  names[24][32];
     bool manual_check, connected;
     Mustang *amp_ops;
     Amplifier *amp;

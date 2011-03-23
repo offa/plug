@@ -1244,31 +1244,6 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, struct
     return 0;
 }
 
-int Mustang::get_current_names(char names[][32])
-{
-    int recieved, ret;
-    unsigned char array[LENGTH], recieved_data[142][LENGTH];
-    memset(array, 0x00, LENGTH);
-    memset(recieved_data, 0x00, 142*LENGTH);
-
-    array[0] = 0xff;
-    array[1] = 0xc1;
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    if(ret)
-        return ret;
-
-    for(int i = 0; recieved; i++)
-    {
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        memcpy(recieved_data[i], array, LENGTH);
-    }
-
-    for(int i = 0, j = 0; i<48; i+=2, j++)
-        memcpy(names[j], recieved_data[i]+16, 32);
-
-    return 0;
-}
-
 int Mustang::update(char *filename)
 {
     int ret, recieved;
