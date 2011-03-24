@@ -35,6 +35,9 @@
           <height>0</height>
          </size>
         </property>
+        <property name="maxVisibleItems">
+         <number>15</number>
+        </property>
         <item>
          <property name="text">
           <string>None</string>

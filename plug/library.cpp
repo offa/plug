@@ -23,13 +23,13 @@ Library::Library(char names[24][32], QWidget *parent) :
     ui->listWidget->setFont(font);
     ui->listWidget_2->setFont(font);
 
+    ui->spinBox->setValue(font.pointSize());
+    ui->fontComboBox->setCurrentFont(font);
+
     for(int i = 0; i < 24; i++)
     {
         ui->listWidget->addItem(QString("%1").arg(names[i]));
     }
-
-    ui->spinBox->setValue(font.pointSize());
-    ui->fontComboBox->setCurrentFont(font);
 
     connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(int)));
     connect(ui->listWidget_2, SIGNAL(currentRowChanged(int)), this, SLOT(load_file(int)));
@@ -52,6 +52,7 @@ void Library::load_slot(int slot)
 {
     if(slot < 0)
         return;
+
     ui->listWidget_2->setCurrentRow(-1);
     ((MainWindow*)parent())->load_from_amp(slot);
 }
@@ -59,7 +60,12 @@ void Library::load_slot(int slot)
 void Library::get_directory()
 {
     QSettings settings;
-    QString directory = QFileDialog::getExistingDirectory(this, QString(tr("Choose directory")), QDir::homePath());
+
+    QString directory = QFileDialog::getExistingDirectory(this, QString(tr("Choose directory")), settings.value("Library/lastDirectory", QString(QDir::homePath())).toString());
+
+    if(directory.isEmpty())
+        return;
+
     settings.setValue("Library/lastDirectory", directory);
     emit directory_changed(directory);
 }
@@ -80,6 +86,7 @@ void Library::load_file(int row)
 {
     if(row < 0)
         return;
+
     ui->listWidget->setCurrentRow(-1);
     ((MainWindow*)parent())->loadfile((*files)[row].canonicalFilePath());
 }
@@ -93,6 +100,7 @@ void Library::change_font_size(int value)
 {
     QSettings settings;
     QFont font(ui->listWidget_2->font());
+
     font.setPointSize(value);
     ui->listWidget->setFont(font);
     ui->listWidget_2->setFont(font);

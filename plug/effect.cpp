@@ -102,13 +102,13 @@ void Effect::set_knob6(int value)
 
 void Effect::choose_fx(int value)
 {
-    ui->comboBox->setCurrentIndex(value);
-    if(value != 0)
-        ((MainWindow*)parent())->empty_other(value, this);
-
     QSettings settings;
     effect_num = value;
     set_changed(true);
+
+    ui->comboBox->setCurrentIndex(value);
+    if(value != 0)
+        ((MainWindow*)parent())->empty_other(value, this);
 
     // activate proper knobs and set their max values
     switch (value)
@@ -884,15 +884,54 @@ void Effect::off_switch(bool value)
         ui->pushButton->setText(tr("On"));
         ui->comboBox->setDisabled(true);
         ui->setButton->setDisabled(true);
-        // all other are disabled by setting effect to EMPTY
-        choose_fx(EMPTY);
+        ui->dial->setDisabled(true);
+        ui->dial_2->setDisabled(true);
+        ui->dial_3->setDisabled(true);
+        ui->dial_4->setDisabled(true);
+        ui->dial_5->setDisabled(true);
+        ui->dial_6->setDisabled(true);
+        ui->spinBox->setDisabled(true);
+        ui->spinBox_2->setDisabled(true);
+        ui->spinBox_3->setDisabled(true);
+        ui->spinBox_4->setDisabled(true);
+        ui->spinBox_5->setDisabled(true);
+        ui->spinBox_6->setDisabled(true);
+        ui->checkBox->setDisabled(true);
+        ui->label->setDisabled(true);
+        ui->label_2->setDisabled(true);
+        ui->label_3->setDisabled(true);
+        ui->label_4->setDisabled(true);
+        ui->label_5->setDisabled(true);
+        ui->label_6->setDisabled(true);
+        ui->label_7->setDisabled(true);
+        effect_num = 0;
     }
     else
     {
         ui->pushButton->setText(tr("Off"));
         ui->comboBox->setDisabled(false);
         ui->setButton->setDisabled(false);
-        choose_fx(ui->comboBox->currentIndex());
+        ui->dial->setDisabled(false);
+        ui->dial_2->setDisabled(false);
+        ui->dial_3->setDisabled(false);
+        ui->dial_4->setDisabled(false);
+        ui->dial_5->setDisabled(false);
+        ui->dial_6->setDisabled(false);
+        ui->spinBox->setDisabled(false);
+        ui->spinBox_2->setDisabled(false);
+        ui->spinBox_3->setDisabled(false);
+        ui->spinBox_4->setDisabled(false);
+        ui->spinBox_5->setDisabled(false);
+        ui->spinBox_6->setDisabled(false);
+        ui->checkBox->setDisabled(false);
+        ui->label->setDisabled(false);
+        ui->label_2->setDisabled(false);
+        ui->label_3->setDisabled(false);
+        ui->label_4->setDisabled(false);
+        ui->label_5->setDisabled(false);
+        ui->label_6->setDisabled(false);
+        ui->label_7->setDisabled(false);
+        effect_num = ui->comboBox->currentIndex();
         activateWindow();
     }
     set_changed(true);
