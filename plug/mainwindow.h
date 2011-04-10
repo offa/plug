@@ -25,7 +25,7 @@
 #include "library.h"
 #include "defaulteffects.h"
 
-#define VERSION "0.6.999"
+#define VERSION "0.7"
 
 namespace Ui {
     class MainWindow;

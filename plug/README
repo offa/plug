@@ -48,10 +48,12 @@ that buttons will become active.
 NOTE for Ubuntu users:
 For some reason Ubuntu allows only root to access USB devices of unknown type.
 To change this and allow users in "plugdev" group to also have access to Mustang
-amp create file /etc/udev/rules.d/50-mustang.rules containing line:
+amp create file /etc/udev/rules.d/50-mustang.rules containing lines:
 
 SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", SYSFS{idVendor}=="1ed8",
 SYSFS{idProduct}=="0004", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", SYSFS{idVendor}=="1ed8",
+SYSFS{idProduct}=="0006", GROUP="plugdev"
 
 Now either restart computer or unplug amp and restart udev subsystem with the
 following command:
