@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    memset(names, 0x00, 100*32);
+
     // load window size
     QSettings settings;
     restoreGeometry(settings.value("Windows/mainWindowGeometry").toByteArray());
@@ -193,6 +195,9 @@ void MainWindow::start_amp()
 void MainWindow::stop_amp()
 {
     int x;
+
+    save->delete_items();
+    load->delete_items();
 
     x = amp_ops->stop_amp();
     if(x == 0)    // if request succeded
@@ -602,8 +607,8 @@ void MainWindow::show_library()
 
 void MainWindow::update_firmware()
 {
-    if(QMessageBox::warning(this, "Danger!", "This function may destroy your amplifier!<br><u><b>You are using it at you own risk!</b></u>", QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
-        return;
+//    if(QMessageBox::warning(this, "Danger!", "This function may destroy your amplifier!<br><u><b>You are using it at you own risk!</b></u>", QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
+//        return;
 
     QString filename;
     int ret = 0;

@@ -26,9 +26,11 @@ Library::Library(char names[24][32], QWidget *parent) :
     ui->spinBox->setValue(font.pointSize());
     ui->fontComboBox->setCurrentFont(font);
 
-    for(int i = 0; i < 24; i++)
+    for(int i = 0; i < 100; i++)
     {
-        ui->listWidget->addItem(QString("%1").arg(names[i]));
+        if(names[i][0] == 0x00)
+            break;
+        ui->listWidget->addItem(QString("[%1] %2").arg(i+1).arg(names[i]));
     }
 
     connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(int)));

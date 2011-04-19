@@ -26,12 +26,7 @@ SaveOnAmp::~SaveOnAmp()
 void SaveOnAmp::save()
 {
     QSettings settings;
-    char slot_names[24][5] = {
-        "[O1]", "[O2]", "[O3]", "[O4]", "[O5]", "[O6]", "[O7]", "[O8]",
-        "[G1]", "[G2]", "[G3]", "[G4]", "[G5]", "[G6]", "[G7]", "[G8]",
-        "[R1]", "[R2]", "[R3]", "[R4]", "[R5]", "[R6]", "[R7]", "[R8]"
-    };
-    QString name(QString("%1 %2").arg(slot_names[ui->comboBox->currentIndex()]).arg(ui->lineEdit->text()));
+    QString name(QString("[%1] %2").arg(ui->comboBox->currentIndex()).arg(ui->lineEdit->text()));
 
     ui->comboBox->setItemText(ui->comboBox->currentIndex(), name);
     ((MainWindow*)parent())->change_name(ui->comboBox->currentIndex(), &name);
@@ -40,16 +35,21 @@ void SaveOnAmp::save()
         this->close();
 }
 
-void SaveOnAmp::load_names(char names[24][32])
+void SaveOnAmp::load_names(char names[][32])
 {
-    char slot_names[24][5] = {
-        "[O1]", "[O2]", "[O3]", "[O4]", "[O5]", "[O6]", "[O7]", "[O8]",
-        "[G1]", "[G2]", "[G3]", "[G4]", "[G5]", "[G6]", "[G7]", "[G8]",
-        "[R1]", "[R2]", "[R3]", "[R4]", "[R5]", "[R6]", "[R7]", "[R8]"
-    };
+    for(int i = 0; i < 100; i++)
+    {
+        if(names[i][0] == 0x00)
+            break;
+        ui->comboBox->addItem(QString("[%1] %2").arg(i+1).arg(names[i]));
+    }
+}
 
-    for(int i = 0; i < 24; i++)
-        ui->comboBox->setItemText(i, QString("%1 %2").arg(slot_names[i]).arg(names[i]));
+void SaveOnAmp::delete_items()
+{
+    int j = ui->comboBox->count();
+    for(int i = 0; i < j; i++)
+        ui->comboBox->removeItem(0);
 }
 
 void SaveOnAmp::change_index(int value, QString name)

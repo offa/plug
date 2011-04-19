@@ -511,7 +511,7 @@ void SaveToFile::writeFX(struct fx_pedal_settings settings)
     xml->writeAttribute("POS", QString("%1").arg(position));
     xml->writeAttribute("BypassState", "1");
 
-    if(model == 0)
+    if(model == EMPTY)
     {
         xml->writeCharacters("");
         xml->writeEndElement();  // end Module

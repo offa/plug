@@ -25,7 +25,7 @@
 #include "library.h"
 #include "defaulteffects.h"
 
-#define VERSION "0.7"
+#define VERSION "0.7.999"
 
 namespace Ui {
     class MainWindow;
@@ -61,7 +61,7 @@ private:
 
     // pointers to objects
     QString current_name;
-    char  names[24][32];
+    char  names[100][32];
     bool manual_check, connected;
     Mustang *amp_ops;
     Amplifier *amp;

@@ -11,7 +11,8 @@
 
 // amp's VID and PID
 #define USB_VID 0x1ed8
-#define USB_PID 0x0004
+#define OLD_USB_PID 0x0004  //Mustang I and II
+#define NEW_USB_PID 0x0005  //Mustang III, IV and V
 
 // amp's VID and PID while in update mode
 #define USB_UPDATE_VID 0x1ed8

@@ -29,8 +29,8 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 {
     int ret, recieved;
     unsigned char array[LENGTH];
-    unsigned char recieved_data[142][LENGTH], data[6][LENGTH];
-    memset(recieved_data, 0x00, 142*LENGTH);
+    unsigned char recieved_data[294][LENGTH], data[6][LENGTH];
+    memset(recieved_data, 0x00, 294*LENGTH);
 
     if(amp_hand == NULL)
     {
@@ -40,12 +40,12 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
             return ret;
 
         // get handle for the device
-        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, USB_PID);
-        if(amp_hand == NULL)
-        {
-            libusb_exit(NULL);
-            return -100;
-        }
+        if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, OLD_USB_PID)) == NULL)
+            if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, NEW_USB_PID)) == NULL)
+            {
+                libusb_exit(NULL);
+                return -100;
+            }
 
         // detach kernel driver
         ret = libusb_kernel_driver_active(amp_hand, 0);
@@ -83,24 +83,27 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 
     if(list != NULL || name != NULL || amp_set != NULL || effects_set != NULL)
     {
+        int i = 0, j = 0;
         memset(array, 0x00, LENGTH);
         array[0] = 0xff;
         array[1] = 0xc1;
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
 
-        for(int i = 0; recieved; i++)
+        for(i = 0; recieved; i++)
         {
             libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
             memcpy(recieved_data[i], array, LENGTH);
         }
 
+        int max_to_receive;
+        i > 142 ? max_to_receive = 200 : max_to_receive = 48;
         if(list != NULL)
-            for(int i = 0, j = 0; i<48; i+=2, j++)
+            for(i = 0, j = 0; i<max_to_receive; i+=2, j++)
                 memcpy(list[j], recieved_data[i]+16, 32);
 
         if(name != NULL || amp_set != NULL || effects_set != NULL)
         {
-            for(int i = 48, j = 0; j < 6; i++, j++)
+            for(j = 0; j < 6; i++, j++)
                 memcpy(data[j], recieved_data[i], LENGTH);
             decode_data(data, name, amp_set, effects_set);
         }

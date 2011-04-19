@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
-    <height>175</height>
+    <width>300</width>
+    <height>250</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -140,6 +140,16 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>&lt;b&gt;NOTE&lt;/b&gt;: Modulation will be taken from &quot;Effect 2&quot; slot, Delay from &quot;Effect 3&quot; slot and Reverb from &quot;Effect4&quot; slot.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
