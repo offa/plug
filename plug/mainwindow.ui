@@ -254,13 +254,16 @@
    <property name="text">
     <string>&amp;Options</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionL_oad_from_file">
    <property name="text">
     <string>L&amp;oad from file</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Ctrl+Shift+O</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
@@ -269,6 +272,9 @@
   <action name="actionS_ave_to_file">
    <property name="text">
     <string>S&amp;ave to file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="action_Library_view">
@@ -288,6 +294,9 @@
   <action name="action_Update_firmware">
    <property name="text">
     <string>&amp;Update firmware</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="action_Default_effects">

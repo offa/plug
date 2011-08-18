@@ -468,12 +468,15 @@ void MainWindow::save_effects(int slot, char *name, int fx_num, bool mod, bool d
 
 void MainWindow::loadfile(QString filename)
 {
+    QSettings settings;
+
     if(filename.isEmpty())
-        filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("FUSE files (*.fuse *.xml)"));
+        filename = QFileDialog::getOpenFileName(this, tr("Open..."), settings.value("LoadFile/lastDirectory", QDir::homePath()).toString(), tr("FUSE files (*.fuse *.xml)"));
 
     if(filename.isEmpty())
         return;
 
+    settings.setValue("LoadFile/lastDirectory", QFileInfo(filename).absolutePath());
     QFile *file = new QFile(filename, this);
 
     if(file->exists())
@@ -490,7 +493,6 @@ void MainWindow::loadfile(QString filename)
         return;
     }
 
-    QSettings settings;
     struct amp_settings amplifier_set;
     struct fx_pedal_settings effects_set[4];
     QString name;
@@ -741,80 +743,80 @@ int MainWindow::check_fx_family(int value)
 
 void MainWindow::load_presets0()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset0"))
-      load_from_amp(settings.value("DefaultPresets/Preset0").toInt());
+    if(settings.contains("DefaultPresets/Preset0"))
+        load_from_amp(settings.value("DefaultPresets/Preset0").toInt());
 }
 
 void MainWindow::load_presets1()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset1"))
-      load_from_amp(settings.value("DefaultPresets/Preset1").toInt());
+    if(settings.contains("DefaultPresets/Preset1"))
+        load_from_amp(settings.value("DefaultPresets/Preset1").toInt());
 }
 
 void MainWindow::load_presets2()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset2"))
-      load_from_amp(settings.value("DefaultPresets/Preset2").toInt());
+    if(settings.contains("DefaultPresets/Preset2"))
+        load_from_amp(settings.value("DefaultPresets/Preset2").toInt());
 }
 
 void MainWindow::load_presets3()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset3"))
-      load_from_amp(settings.value("DefaultPresets/Preset3").toInt());
+    if(settings.contains("DefaultPresets/Preset3"))
+        load_from_amp(settings.value("DefaultPresets/Preset3").toInt());
 }
 
 void MainWindow::load_presets4()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset4"))
-      load_from_amp(settings.value("DefaultPresets/Preset4").toInt());
+    if(settings.contains("DefaultPresets/Preset4"))
+        load_from_amp(settings.value("DefaultPresets/Preset4").toInt());
 }
 
 void MainWindow::load_presets5()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset5"))
-      load_from_amp(settings.value("DefaultPresets/Preset5").toInt());
+    if(settings.contains("DefaultPresets/Preset5"))
+        load_from_amp(settings.value("DefaultPresets/Preset5").toInt());
 }
 
 void MainWindow::load_presets6()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset6"))
-      load_from_amp(settings.value("DefaultPresets/Preset6").toInt());
+    if(settings.contains("DefaultPresets/Preset6"))
+        load_from_amp(settings.value("DefaultPresets/Preset6").toInt());
 }
 
 void MainWindow::load_presets7()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset7"))
-      load_from_amp(settings.value("DefaultPresets/Preset7").toInt());
+    if(settings.contains("DefaultPresets/Preset7"))
+        load_from_amp(settings.value("DefaultPresets/Preset7").toInt());
 }
 
 void MainWindow::load_presets8()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset8"))
-      load_from_amp(settings.value("DefaultPresets/Preset8").toInt());
+    if(settings.contains("DefaultPresets/Preset8"))
+        load_from_amp(settings.value("DefaultPresets/Preset8").toInt());
 }
 
 void MainWindow::load_presets9()
 {
-  QSettings settings;
+    QSettings settings;
 
-  if(settings.contains("DefaultPresets/Preset9"))
-      load_from_amp(settings.value("DefaultPresets/Preset9").toInt());
+    if(settings.contains("DefaultPresets/Preset9"))
+        load_from_amp(settings.value("DefaultPresets/Preset9").toInt());
 }
