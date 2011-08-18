@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     seffects = new SaveEffects(this);
     settings_win = new Settings(this);
     saver = new SaveToFile(this);
+    quickpres = new QuickPresets(this);
 
     connected = false;
 
@@ -65,6 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_Library_view, SIGNAL(triggered()), this, SLOT(show_library()));
     connect(ui->action_Update_firmware, SIGNAL(triggered()), this, SLOT(update_firmware()));
     connect(ui->action_Default_effects, SIGNAL(triggered()), this, SLOT(show_default_effects()));
+    connect(ui->action_Quick_presets, SIGNAL(triggered()), quickpres, SLOT(show()));
 
     // shortcuts to activate effect windows
     QShortcut *showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
@@ -77,6 +79,28 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(showfx3, SIGNAL(activated()), this, SLOT(show_fx3()));
     connect(showfx4, SIGNAL(activated()), this, SLOT(show_fx4()));
     connect(showamp, SIGNAL(activated()), this, SLOT(show_amp()));
+
+    // shortcuts for quick loading presets
+    QShortcut *loadpres0 = new QShortcut(QKeySequence(Qt::Key_0), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres1 = new QShortcut(QKeySequence(Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres2 = new QShortcut(QKeySequence(Qt::Key_2), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres3 = new QShortcut(QKeySequence(Qt::Key_3), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres4 = new QShortcut(QKeySequence(Qt::Key_4), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres5 = new QShortcut(QKeySequence(Qt::Key_5), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres6 = new QShortcut(QKeySequence(Qt::Key_6), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres7 = new QShortcut(QKeySequence(Qt::Key_7), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres8 = new QShortcut(QKeySequence(Qt::Key_8), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres9 = new QShortcut(QKeySequence(Qt::Key_9), this, 0, 0, Qt::ApplicationShortcut);
+    connect(loadpres0, SIGNAL(activated()), this, SLOT(load_presets0()));
+    connect(loadpres1, SIGNAL(activated()), this, SLOT(load_presets1()));
+    connect(loadpres2, SIGNAL(activated()), this, SLOT(load_presets2()));
+    connect(loadpres3, SIGNAL(activated()), this, SLOT(load_presets3()));
+    connect(loadpres4, SIGNAL(activated()), this, SLOT(load_presets4()));
+    connect(loadpres5, SIGNAL(activated()), this, SLOT(load_presets5()));
+    connect(loadpres6, SIGNAL(activated()), this, SLOT(load_presets6()));
+    connect(loadpres7, SIGNAL(activated()), this, SLOT(load_presets7()));
+    connect(loadpres8, SIGNAL(activated()), this, SLOT(load_presets8()));
+    connect(loadpres9, SIGNAL(activated()), this, SLOT(load_presets9()));
 
     // shortcut to activate buttons
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
@@ -126,6 +150,7 @@ void MainWindow::start_amp()
 
     load->load_names(names);
     save->load_names(names);
+    quickpres->load_names(names);
 
     if(name[0] == 0x00)
         setWindowTitle(QString(tr("PLUG: NONE")));
@@ -198,6 +223,7 @@ void MainWindow::stop_amp()
 
     save->delete_items();
     load->delete_items();
+    quickpres->delete_items();
 
     x = amp_ops->stop_amp();
     if(x == 0)    // if request succeded
@@ -399,6 +425,7 @@ void MainWindow::httpReadyRead()
 void MainWindow::change_name(int slot, QString *name)
 {
     load->change_name(slot, name);
+    quickpres->change_name(slot, name);
 }
 
 void MainWindow::set_index(int value)
@@ -710,4 +737,84 @@ int MainWindow::check_fx_family(int value)
         return 4;
 
     return 0;
+}
+
+void MainWindow::load_presets0()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset0"))
+      load_from_amp(settings.value("DefaultPresets/Preset0").toInt());
+}
+
+void MainWindow::load_presets1()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset1"))
+      load_from_amp(settings.value("DefaultPresets/Preset1").toInt());
+}
+
+void MainWindow::load_presets2()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset2"))
+      load_from_amp(settings.value("DefaultPresets/Preset2").toInt());
+}
+
+void MainWindow::load_presets3()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset3"))
+      load_from_amp(settings.value("DefaultPresets/Preset3").toInt());
+}
+
+void MainWindow::load_presets4()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset4"))
+      load_from_amp(settings.value("DefaultPresets/Preset4").toInt());
+}
+
+void MainWindow::load_presets5()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset5"))
+      load_from_amp(settings.value("DefaultPresets/Preset5").toInt());
+}
+
+void MainWindow::load_presets6()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset6"))
+      load_from_amp(settings.value("DefaultPresets/Preset6").toInt());
+}
+
+void MainWindow::load_presets7()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset7"))
+      load_from_amp(settings.value("DefaultPresets/Preset7").toInt());
+}
+
+void MainWindow::load_presets8()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset8"))
+      load_from_amp(settings.value("DefaultPresets/Preset8").toInt());
+}
+
+void MainWindow::load_presets9()
+{
+  QSettings settings;
+
+  if(settings.contains("DefaultPresets/Preset9"))
+      load_from_amp(settings.value("DefaultPresets/Preset9").toInt());
 }

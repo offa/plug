@@ -24,6 +24,7 @@
 #include "savetofile.h"
 #include "library.h"
 #include "defaulteffects.h"
+#include "quickpresets.h"
 
 #define VERSION "0.7.999"
 
@@ -77,6 +78,7 @@ private:
     SaveToFile *saver;
     Library *library;
     DefaultEffects *deffx;
+    QuickPresets *quickpres;
 
     QNetworkReply *reply;
 
@@ -91,6 +93,16 @@ private slots:
     void show_library();
     void show_default_effects();
     int check_fx_family(int);
+    void load_presets0();
+    void load_presets1();
+    void load_presets2();
+    void load_presets3();
+    void load_presets4();
+    void load_presets5();
+    void load_presets6();
+    void load_presets7();
+    void load_presets8();
+    void load_presets9();
 
 
 signals:

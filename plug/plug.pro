@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     loadfromfile.cpp \
     savetofile.cpp \
     library.cpp \
-    defaulteffects.cpp
+    defaulteffects.cpp \
+    quickpresets.cpp
 
 HEADERS  += mainwindow.h \
     effect.h \
@@ -41,7 +42,8 @@ HEADERS  += mainwindow.h \
     loadfromfile.h \
     savetofile.h \
     library.h \
-    defaulteffects.h
+    defaulteffects.h \
+    quickpresets.h
 
 FORMS    += mainwindow.ui \
     effect.ui \
@@ -54,7 +56,8 @@ FORMS    += mainwindow.ui \
     settings.ui \
     savetofile.ui \
     library.ui \
-    defaulteffects.ui
+    defaulteffects.ui \
+    quickpresets.ui
 
 LIBS += -lusb-1.0
 
