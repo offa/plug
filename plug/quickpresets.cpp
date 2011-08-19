@@ -9,16 +9,16 @@ QuickPresets::QuickPresets(QWidget *parent) :
 
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset0(int)));
-    connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset1(int)));
-    connect(ui->comboBox_3, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset2(int)));
-    connect(ui->comboBox_4, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset3(int)));
-    connect(ui->comboBox_5, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset4(int)));
-    connect(ui->comboBox_6, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset5(int)));
-    connect(ui->comboBox_7, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset6(int)));
-    connect(ui->comboBox_8, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset7(int)));
-    connect(ui->comboBox_9, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset8(int)));
-    connect(ui->comboBox_10, SIGNAL(currentIndexChanged(int)), this, SLOT(setDefaultPreset9(int)));
+    connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(setDefaultPreset0(int)));
+    connect(ui->comboBox_2, SIGNAL(activated(int)), this, SLOT(setDefaultPreset1(int)));
+    connect(ui->comboBox_3, SIGNAL(activated(int)), this, SLOT(setDefaultPreset2(int)));
+    connect(ui->comboBox_4, SIGNAL(activated(int)), this, SLOT(setDefaultPreset3(int)));
+    connect(ui->comboBox_5, SIGNAL(activated(int)), this, SLOT(setDefaultPreset4(int)));
+    connect(ui->comboBox_6, SIGNAL(activated(int)), this, SLOT(setDefaultPreset5(int)));
+    connect(ui->comboBox_7, SIGNAL(activated(int)), this, SLOT(setDefaultPreset6(int)));
+    connect(ui->comboBox_8, SIGNAL(activated(int)), this, SLOT(setDefaultPreset7(int)));
+    connect(ui->comboBox_9, SIGNAL(activated(int)), this, SLOT(setDefaultPreset8(int)));
+    connect(ui->comboBox_10, SIGNAL(activated(int)), this, SLOT(setDefaultPreset9(int)));
 }
 
 QuickPresets::~QuickPresets()
@@ -28,7 +28,10 @@ QuickPresets::~QuickPresets()
 
 void QuickPresets::load_names(char names[][32])
 {
-    for(int i = 0; i < 100; i++)
+    int i;
+    QSettings settings;
+
+    for(i = 0; i < 100; i++)
     {
         if(names[i][0] == 0x00)
             break;
@@ -43,6 +46,67 @@ void QuickPresets::load_names(char names[][32])
         ui->comboBox_9->addItem(QString("[%1] %2").arg(i+1).arg(names[i]));
         ui->comboBox_10->addItem(QString("[%1] %2").arg(i+1).arg(names[i]));
     }
+
+    ui->comboBox->addItem(tr("[Empty]"));
+    ui->comboBox_2->addItem(tr("[Empty]"));
+    ui->comboBox_3->addItem(tr("[Empty]"));
+    ui->comboBox_4->addItem(tr("[Empty]"));
+    ui->comboBox_5->addItem(tr("[Empty]"));
+    ui->comboBox_6->addItem(tr("[Empty]"));
+    ui->comboBox_7->addItem(tr("[Empty]"));
+    ui->comboBox_8->addItem(tr("[Empty]"));
+    ui->comboBox_9->addItem(tr("[Empty]"));
+    ui->comboBox_10->addItem(tr("[Empty]"));
+
+    if(settings.contains("DefaultPresets/Preset0"))
+        ui->comboBox->setCurrentIndex(settings.value("DefaultPresets/Preset0").toInt());
+    else
+        ui->comboBox->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset1"))
+        ui->comboBox_2->setCurrentIndex(settings.value("DefaultPresets/Preset1").toInt());
+    else
+        ui->comboBox_2->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset2"))
+        ui->comboBox_3->setCurrentIndex(settings.value("DefaultPresets/Preset2").toInt());
+    else
+        ui->comboBox_3->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset3"))
+        ui->comboBox_4->setCurrentIndex(settings.value("DefaultPresets/Preset3").toInt());
+    else
+        ui->comboBox_4->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset4"))
+        ui->comboBox_5->setCurrentIndex(settings.value("DefaultPresets/Preset4").toInt());
+    else
+        ui->comboBox_5->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset5"))
+        ui->comboBox_6->setCurrentIndex(settings.value("DefaultPresets/Preset5").toInt());
+    else
+        ui->comboBox_6->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset6"))
+        ui->comboBox_7->setCurrentIndex(settings.value("DefaultPresets/Preset6").toInt());
+    else
+        ui->comboBox_7->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset7"))
+        ui->comboBox_8->setCurrentIndex(settings.value("DefaultPresets/Preset7").toInt());
+    else
+        ui->comboBox_8->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset8"))
+        ui->comboBox_9->setCurrentIndex(settings.value("DefaultPresets/Preset8").toInt());
+    else
+        ui->comboBox_9->setCurrentIndex(i);
+
+    if(settings.contains("DefaultPresets/Preset9"))
+        ui->comboBox_10->setCurrentIndex(settings.value("DefaultPresets/Preset9").toInt());
+    else
+        ui->comboBox_10->setCurrentIndex(i);
 }
 
 void QuickPresets::delete_items()
@@ -99,61 +163,101 @@ void QuickPresets::change_name(int slot, QString *name)
 void QuickPresets::setDefaultPreset0(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset0", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset0");
+    else
+        settings.setValue("DefaultPresets/Preset0", slot);
 }
 
 void QuickPresets::setDefaultPreset1(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset1", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset1");
+    else
+        settings.setValue("DefaultPresets/Preset1", slot);
 }
 
 void QuickPresets::setDefaultPreset2(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset2", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset2");
+    else
+        settings.setValue("DefaultPresets/Preset2", slot);
 }
 
 void QuickPresets::setDefaultPreset3(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset3", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset3");
+    else
+        settings.setValue("DefaultPresets/Preset3", slot);
 }
 
 void QuickPresets::setDefaultPreset4(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset4", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset4");
+    else
+        settings.setValue("DefaultPresets/Preset4", slot);
 }
 
 void QuickPresets::setDefaultPreset5(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset5", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset5");
+    else
+        settings.setValue("DefaultPresets/Preset5", slot);
 }
 
 void QuickPresets::setDefaultPreset6(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset6", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset6");
+    else
+        settings.setValue("DefaultPresets/Preset6", slot);
 }
 
 void QuickPresets::setDefaultPreset7(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset7", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset7");
+    else
+        settings.setValue("DefaultPresets/Preset7", slot);
 }
 
 void QuickPresets::setDefaultPreset8(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset8", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset8");
+    else
+        settings.setValue("DefaultPresets/Preset8", slot);
 }
 
 void QuickPresets::setDefaultPreset9(int slot)
 {
     QSettings settings;
-    settings.setValue("DefaultPresets/Preset9", slot);
+
+    if(slot == 24 || slot == 100)
+        settings.remove("DefaultPresets/Preset9");
+    else
+        settings.setValue("DefaultPresets/Preset9", slot);
 }
 
 void QuickPresets::changeEvent(QEvent *e)
