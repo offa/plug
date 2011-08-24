@@ -416,7 +416,7 @@ void MainWindow::httpReadyRead()
     {
         QLabel *label = new QLabel(tr("<b>Update available!</b>"), this);
         ui->statusBar->addWidget(label);
-        QMessageBox::information(this, "Update", "<b>Update available!</b><br><br>Check homepage for new version.");
+        QMessageBox::information(this, "Update", "<b>Update available!</b><br/><br/>Check homepage for new version.");
     }
     else if(manual_check)
         ui->statusBar->showMessage(tr("You are using the newest version"), 5000);
