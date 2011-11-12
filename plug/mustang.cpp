@@ -29,8 +29,8 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 {
     int ret, recieved;
     unsigned char array[LENGTH];
-    unsigned char recieved_data[294][LENGTH], data[6][LENGTH];
-    memset(recieved_data, 0x00, 294*LENGTH);
+    unsigned char recieved_data[296][LENGTH], data[6][LENGTH];
+    memset(recieved_data, 0x00, 296*LENGTH);
 
     if(amp_hand == NULL)
     {
@@ -96,7 +96,7 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
         }
 
         int max_to_receive;
-        i > 142 ? max_to_receive = 200 : max_to_receive = 48;
+        i > 143 ? max_to_receive = 200 : max_to_receive = 48;
         if(list != NULL)
             for(i = 0, j = 0; i<max_to_receive; i+=2, j++)
                 memcpy(list[j], recieved_data[i]+16, 32);
