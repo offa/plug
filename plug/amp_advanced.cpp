@@ -21,6 +21,7 @@ Amp_Advanced::Amp_Advanced(QWidget *parent) :
     connect(ui->dial_5, SIGNAL(valueChanged(int)), parent, SLOT(set_threshold(int)));
     connect(ui->dial_6, SIGNAL(valueChanged(int)), parent, SLOT(set_bias(int)));
     connect(ui->dial_7, SIGNAL(valueChanged(int)), parent, SLOT(set_sag(int)));
+    connect(ui->checkBox, SIGNAL(toggled(bool)), parent, SLOT(set_brightness(bool)));
 }
 
 Amp_Advanced::~Amp_Advanced()
@@ -91,4 +92,9 @@ void Amp_Advanced::set_bias(int value)
 void Amp_Advanced::set_sag(int value)
 {
     ui->dial_7->setValue(value);
+}
+
+void Amp_Advanced::set_brightness(bool value)
+{
+    ui->checkBox->setChecked(value);
 }

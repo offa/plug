@@ -50,6 +50,7 @@
 #define DEPTH 41
 #define BIAS 42
 #define SAG 51
+#define BRIGHTNESS 52
 
 // save fields
 #define SAVE_SLOT 4

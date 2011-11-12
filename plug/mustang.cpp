@@ -529,6 +529,8 @@ int Mustang::set_amplifier(struct amp_settings value)
     else
         array[SAG] = value.sag;
 
+    array[BRIGHTNESS] = value.brightness?1:0;
+
     switch (value.amp_num)
     {
     case FENDER_57_DELUXE:
@@ -756,6 +758,7 @@ int Mustang::decode_data(unsigned char data[6][LENGTH], char *name, struct amp_s
         amp_set->depth = data[1][DEPTH];
         amp_set->bias = data[1][BIAS];
         amp_set->sag = data[1][SAG];
+        amp_set->brightness = data[1][BRIGHTNESS]?true:false;
     }
 
 

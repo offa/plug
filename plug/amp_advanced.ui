@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
+    <width>413</width>
     <height>303</height>
    </rect>
   </property>
@@ -146,6 +146,13 @@
          <string>Custom</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>&amp;Brightness</string>
+       </property>
       </widget>
      </item>
     </layout>

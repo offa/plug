@@ -18,6 +18,7 @@ struct amp_settings
     unsigned char depth;
     unsigned char bias;
     unsigned char sag;
+    bool brightness;
 };
 
 struct fx_pedal_settings

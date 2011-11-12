@@ -29,6 +29,7 @@ Amplifier::Amplifier(QWidget *parent) :
     depth = 128;
     bias = 128;
     sag = 1;
+    brightness = 0;
 
     changed = false;
 
@@ -139,6 +140,12 @@ void Amplifier::set_sag(int value)
     changed = true;
 }
 
+void Amplifier::set_brightness(bool value)
+{
+    brightness = value;
+    changed = true;
+}
+
 void Amplifier::choose_amp(int value)
 {
     amp_num = value;
@@ -236,6 +243,7 @@ void Amplifier::send_amp()
     settings.depth = depth;
     settings.bias = bias;
     settings.sag = sag;
+    settings.brightness = brightness;
 
     ((MainWindow*)parent())->set_amplifier(settings);
 }
@@ -261,6 +269,7 @@ void Amplifier::load(struct amp_settings settings)
     advanced->set_threshold(settings.threshold);
     advanced->set_bias(settings.bias);
     advanced->set_sag(settings.sag);
+    advanced->set_brightness(settings.brightness);
 }
 
 void Amplifier::get_settings(struct amp_settings *settings)
@@ -280,6 +289,7 @@ void Amplifier::get_settings(struct amp_settings *settings)
     settings->depth = depth;
     settings->bias = bias;
     settings->sag = sag;
+    settings->brightness = brightness;
 }
 
 void Amplifier::enable_set_button(bool value)

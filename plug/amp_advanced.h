@@ -29,6 +29,7 @@ public slots:
     void set_threshold(int);
     void set_bias(int);
     void set_sag(int);
+    void set_brightness(bool);
 
 private slots:
     void activate_custom_ng(int);

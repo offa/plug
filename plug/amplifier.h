@@ -25,7 +25,7 @@ private:
     Amp_Advanced *advanced;
     unsigned char amp_num, gain, volume, treble, middle, bass;
     unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag;
-    bool changed;
+    bool changed, brightness;
 
 public slots:
     // set basic variables
@@ -46,6 +46,7 @@ public slots:
     void set_depth(int);
     void set_bias(int);
     void set_sag(int);
+    void set_brightness(bool);
 
     // send settings to the amplifier
     void send_amp(void);
