@@ -13,7 +13,19 @@
   <property name="windowTitle">
    <string>PLUG</string>
   </property>
+  <property name="accessibleName">
+   <string>Main window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Main window containing menus and buttons to open amplifier's and effect's windows</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="accessibleName">
+    <string>Container with buttons</string>
+   </property>
+   <property name="accessibleDescription">
+    <string>This container holds buttons to open amplifier's and effect's windows</string>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPushButton" name="Amplifier">
@@ -28,6 +40,12 @@
         <width>0</width>
         <height>50</height>
        </size>
+      </property>
+      <property name="accessibleName">
+       <string>Amplifier</string>
+      </property>
+      <property name="accessibleDescription">
+       <string>This button opens window to set amplifier</string>
       </property>
       <property name="text">
        <string>&amp;Amplifier</string>
@@ -50,6 +68,12 @@
           <height>25</height>
          </size>
         </property>
+        <property name="accessibleName">
+         <string>Effect 1</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>This button opens window to set effect 1</string>
+        </property>
         <property name="text">
          <string>Effect &amp;1</string>
         </property>
@@ -68,6 +92,12 @@
           <width>75</width>
           <height>25</height>
          </size>
+        </property>
+        <property name="accessibleName">
+         <string>Effect 2</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>This button opens window to set effect 2</string>
         </property>
         <property name="text">
          <string>Effect &amp;2</string>
@@ -88,6 +118,12 @@
           <height>25</height>
          </size>
         </property>
+        <property name="accessibleName">
+         <string>Effect 3</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>This button opens window to set effect 3</string>
+        </property>
         <property name="text">
          <string>Effect &amp;3</string>
         </property>
@@ -107,6 +143,12 @@
           <height>25</height>
          </size>
         </property>
+        <property name="accessibleName">
+         <string>Effect 4</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>This button opens window to set effect 4</string>
+        </property>
         <property name="text">
          <string>Effect &amp;4</string>
         </property>
@@ -122,10 +164,22 @@
      <x>0</x>
      <y>0</y>
      <width>350</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
+   <property name="accessibleName">
+    <string>Menu bar</string>
+   </property>
+   <property name="accessibleDescription">
+    <string>Bar holding different menus</string>
+   </property>
    <widget class="QMenu" name="menuFile">
+    <property name="accessibleName">
+     <string>File menu</string>
+    </property>
+    <property name="accessibleDescription">
+     <string>Menu holding various options</string>
+    </property>
     <property name="title">
      <string>&amp;File</string>
     </property>
@@ -143,6 +197,12 @@
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
+    <property name="accessibleName">
+     <string>Help menu</string>
+    </property>
+    <property name="accessibleDescription">
+     <string>Menu holding help options</string>
+    </property>
     <property name="title">
      <string>&amp;Help</string>
     </property>
@@ -151,6 +211,12 @@
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuConnection">
+    <property name="accessibleName">
+     <string>Connection menu</string>
+    </property>
+    <property name="accessibleDescription">
+     <string>Menu holding options to connect and disconnect from the device</string>
+    </property>
     <property name="title">
      <string>&amp;Connection</string>
     </property>
@@ -158,6 +224,12 @@
     <addaction name="actionDisconnect"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
+    <property name="accessibleName">
+     <string>Settings menu</string>
+    </property>
+    <property name="accessibleDescription">
+     <string>Menu holding different settings</string>
+    </property>
     <property name="title">
      <string>&amp;Settings</string>
     </property>
@@ -170,7 +242,14 @@
    <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="accessibleName">
+    <string>Status bar</string>
+   </property>
+   <property name="accessibleDescription">
+    <string>This bar display various notifications</string>
+   </property>
+  </widget>
   <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
