@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Quick presets</string>
+   <string>Quick Presets</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,10 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Default preset for key &quot;1&quot;</string>
+        <string>Default preset for key &quot;&amp;1&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_2</cstring>
        </property>
       </widget>
      </item>
@@ -33,7 +36,10 @@
      <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Default preset for key &quot;2&quot;</string>
+        <string>Default preset for key &quot;&amp;2&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_3</cstring>
        </property>
       </widget>
      </item>
@@ -47,7 +53,10 @@
      <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Default preset for key &quot;3&quot;</string>
+        <string>Default preset for key &quot;&amp;3&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_4</cstring>
        </property>
       </widget>
      </item>
@@ -61,7 +70,10 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Default preset for key &quot;4&quot;</string>
+        <string>Default preset for key &quot;&amp;4&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_5</cstring>
        </property>
       </widget>
      </item>
@@ -75,7 +87,10 @@
      <item>
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Default preset for key &quot;5&quot;</string>
+        <string>Default preset for key &quot;&amp;5&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_6</cstring>
        </property>
       </widget>
      </item>
@@ -89,7 +104,10 @@
      <item>
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>Default preset for key &quot;6&quot;</string>
+        <string>Default preset for key &quot;&amp;6&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_7</cstring>
        </property>
       </widget>
      </item>
@@ -103,7 +121,10 @@
      <item>
       <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>Default preset for key &quot;7&quot;</string>
+        <string>Default preset for key &quot;&amp;7&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_8</cstring>
        </property>
       </widget>
      </item>
@@ -117,7 +138,10 @@
      <item>
       <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>Default preset for key &quot;8&quot;</string>
+        <string>Default preset for key &quot;&amp;8&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_9</cstring>
        </property>
       </widget>
      </item>
@@ -131,7 +155,10 @@
      <item>
       <widget class="QLabel" name="label_10">
        <property name="text">
-        <string>Default preset for key &quot;9&quot;</string>
+        <string>Default preset for key &quot;&amp;9&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox_10</cstring>
        </property>
       </widget>
      </item>
@@ -145,7 +172,10 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Default preset for key &quot;0&quot;</string>
+        <string>Default preset for key &quot;&amp;0&quot;</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBox</cstring>
        </property>
       </widget>
      </item>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Save effects</string>
+   <string>Save Effects</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
