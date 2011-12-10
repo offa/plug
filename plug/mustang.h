@@ -3,11 +3,12 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <libusb-1.0/libusb.h>
-#include <QtDebug>
+//#include <QtDebug>
 #include "effects_enum.h"
 #include "data_structs.h"
-#include <time.h>
+//#include <time.h>
 
 // amp's VID and PID
 #define USB_VID 0x1ed8
@@ -21,7 +22,7 @@
 // for USB communication
 #define TMOUT 500
 #define LENGTH 64
-#define NANO_SEC_SLEEP 10000000
+//#define NANO_SEC_SLEEP 10000000
 
 // effect array fields
 #define DSP 2

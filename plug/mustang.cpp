@@ -1256,9 +1256,9 @@ int Mustang::update(char *filename)
     unsigned char array[LENGTH], number = 0;
     FILE *file;
     file = fopen(filename, "rb");
-    struct timespec sleep;
-    sleep.tv_nsec = NANO_SEC_SLEEP;
-    sleep.tv_sec = 0;
+//    struct timespec sleep;
+//    sleep.tv_nsec = NANO_SEC_SLEEP;
+//    sleep.tv_sec = 0;
 
     if(amp_hand == NULL)
     {
@@ -1308,7 +1308,8 @@ int Mustang::update(char *filename)
     fread(array+4, 1, 11, file);
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-    nanosleep(&sleep, NULL);
+//    nanosleep(&sleep, NULL);
+    usleep(10000);
 
     // send firmware
     fseek(file, 0x110, SEEK_SET);
@@ -1321,7 +1322,8 @@ int Mustang::update(char *filename)
         array[3] = fread(array+4, 1, LENGTH-8, file);
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        nanosleep(&sleep, NULL);
+//        nanosleep(&sleep, NULL);
+        usleep(10000);
         if(feof(file))  // if reached end of the file
             break;  // exit loop
     }
