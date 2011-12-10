@@ -261,7 +261,7 @@ void SaveToFile::writeAmp(struct amp_settings settings)
 
     xml->writeStartElement("Param");
     xml->writeAttribute("ControlIndex", "20");
-    xml->writeCharacters("0");
+    xml->writeCharacters(QString("%1").arg(settings.brightness?"1":"0"));
     xml->writeEndElement();
 
     xml->writeStartElement("Param");

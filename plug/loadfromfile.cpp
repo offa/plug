@@ -152,6 +152,9 @@ void LoadFromFile::parseAmp()
                     i = xml->readElementText().toInt();
                     amplifier_settings->sag = i;
                     break;
+                case 20:
+                    amplifier_settings->brightness = (xml->readElementText().toInt()?true:false);
+                    break;
                 }
             }
         }
