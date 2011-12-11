@@ -510,12 +510,12 @@ void MainWindow::loadfile(QString filename)
         amp->send_amp();
     if(settings.value("Settings/popupChangedWindows").toBool())
         amp->show();
+
     for(int i = 0; i < 4; i++)
     {
         switch(effects_set[i].fx_slot)
         {
         case 0x00:
-        case 0x04:
             effect1->load(effects_set[i]);
             if(connected)
                 effect1->send_fx();
@@ -525,7 +525,6 @@ void MainWindow::loadfile(QString filename)
             break;
 
         case 0x01:
-        case 0x05:
             effect2->load(effects_set[i]);
             if(connected)
                 effect2->send_fx();
@@ -535,7 +534,6 @@ void MainWindow::loadfile(QString filename)
             break;
 
         case 0x02:
-        case 0x06:
             effect3->load(effects_set[i]);
             if(connected)
                 effect3->send_fx();
@@ -545,7 +543,6 @@ void MainWindow::loadfile(QString filename)
             break;
 
         case 0x03:
-        case 0x07:
             effect4->load(effects_set[i]);
             if(connected)
                 effect4->send_fx();

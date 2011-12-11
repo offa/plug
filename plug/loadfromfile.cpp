@@ -165,7 +165,7 @@ void LoadFromFile::parseAmp()
 void LoadFromFile::parseFX()
 {
     int x = 0;
-    bool fx_slots[4] = {false, false, false, false};
+    int fx_slots[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
     xml->readNextStartElement();
     while(xml->name() != "FX")
@@ -182,17 +182,14 @@ void LoadFromFile::parseFX()
                 x = 3;
             else if(xml->name() == "Module")
             {
-                int i = xml->attributes().value("POS").toString().toInt();
+                int position = xml->attributes().value("POS").toString().toInt();
 
-                if(i > 3)
+                if(position > 3)
                     fx_settings[x].put_post_amp = true;
                 else
                     fx_settings[x].put_post_amp = false;
 
-                while(fx_slots[i%4])
-                    i++;
-                fx_slots[i%4] = true;
-                fx_settings[x].fx_slot = i%4;
+                fx_slots[position] = x+1;
 
                 switch(xml->attributes().value("ID").toString().toInt())
                 {
@@ -382,6 +379,15 @@ void LoadFromFile::parseFX()
             }
         }
         xml->readNext();
+    }
+
+    for(int i = 0, j = 0; i < 8; i++)
+    {
+        if(fx_slots[i])
+        {
+            fx_settings[fx_slots[i]-1].fx_slot = j;
+            j++;
+        }
     }
 }
 
