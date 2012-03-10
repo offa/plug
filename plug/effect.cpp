@@ -916,13 +916,11 @@ void Effect::off_switch(bool value)
         ui->dial_3->setDisabled(false);
         ui->dial_4->setDisabled(false);
         ui->dial_5->setDisabled(false);
-        ui->dial_6->setDisabled(false);
         ui->spinBox->setDisabled(false);
         ui->spinBox_2->setDisabled(false);
         ui->spinBox_3->setDisabled(false);
         ui->spinBox_4->setDisabled(false);
         ui->spinBox_5->setDisabled(false);
-        ui->spinBox_6->setDisabled(false);
         ui->checkBox->setDisabled(false);
         ui->label->setDisabled(false);
         ui->label_2->setDisabled(false);
@@ -932,6 +930,11 @@ void Effect::off_switch(bool value)
         ui->label_6->setDisabled(false);
         ui->label_7->setDisabled(false);
         effect_num = ui->comboBox->currentIndex();
+        if(effect_num == MONO_ECHO_FILTER || effect_num == STEREO_ECHO_FILTER || effect_num == TAPE_DELAY || effect_num == STEREO_TAPE_DELAY)
+        {
+            ui->dial_6->setDisabled(false);
+            ui->spinBox_6->setDisabled(false);
+        }
         activateWindow();
     }
     set_changed(true);
