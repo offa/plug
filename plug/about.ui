@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>About PLUG</string>
   </property>
+  <property name="accessibleName">
+   <string>About window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Provides information about program's version and author</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
@@ -22,6 +28,12 @@
        <weight>75</weight>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="accessibleName">
+      <string>PLUG</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Program's name</string>
      </property>
      <property name="text">
       <string>PLUG</string>
@@ -33,6 +45,12 @@
    </item>
    <item>
     <widget class="QLabel" name="label_6">
+     <property name="accessibleName">
+      <string>Version 1.0.999</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Program's version</string>
+     </property>
      <property name="text">
       <string>version 1.0.999</string>
      </property>
@@ -48,6 +66,12 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="accessibleName">
+      <string>by &quot;piorekf&quot; plug@piorekf.org</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Info about the author</string>
+     </property>
      <property name="text">
       <string>by 'piorekf' &lt;plug@piorekf.org&gt;</string>
      </property>
@@ -62,6 +86,12 @@
       <font>
        <pointsize>8</pointsize>
       </font>
+     </property>
+     <property name="accessibleName">
+      <string>Licensed under GPLv3</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>License information</string>
      </property>
      <property name="text">
       <string>Licensed under GPLv3</string>
@@ -93,6 +123,12 @@
        <bold>false</bold>
       </font>
      </property>
+     <property name="accessibleName">
+      <string>homepage: http://piorekf.org/plug</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Program's homepage address</string>
+     </property>
      <property name="text">
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -117,6 +153,12 @@ p, li { white-space: pre-wrap; }
       <font>
        <pointsize>8</pointsize>
       </font>
+     </property>
+     <property name="accessibleName">
+      <string>Source page: https://bitbucket.org/piorekf/plug</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Address of a page where program's source can be found</string>
      </property>
      <property name="text">
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -153,6 +195,12 @@ p, li { white-space: pre-wrap; }
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="accessibleName">
+        <string>OK</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Close &quot;About&quot; window</string>
+       </property>
        <property name="text">
         <string>OK</string>
        </property>

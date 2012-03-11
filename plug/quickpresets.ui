@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Quick Presets</string>
   </property>
+  <property name="accessibleName">
+   <string>Quick presets window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Allows you to set presets to be quickly loaded with a shortcut</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -27,7 +33,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="comboBox_2">
+       <property name="accessibleName">
+        <string>Preset 1</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -44,7 +57,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_3"/>
+      <widget class="QComboBox" name="comboBox_3">
+       <property name="accessibleName">
+        <string>Preset 2</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -61,7 +81,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_4"/>
+      <widget class="QComboBox" name="comboBox_4">
+       <property name="accessibleName">
+        <string>Preset 3</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -78,7 +105,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_5"/>
+      <widget class="QComboBox" name="comboBox_5">
+       <property name="accessibleName">
+        <string>Preset 4</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -95,7 +129,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_6"/>
+      <widget class="QComboBox" name="comboBox_6">
+       <property name="accessibleName">
+        <string>Preset 5</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -112,7 +153,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_7"/>
+      <widget class="QComboBox" name="comboBox_7">
+       <property name="accessibleName">
+        <string>Preset 6</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -129,7 +177,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_8"/>
+      <widget class="QComboBox" name="comboBox_8">
+       <property name="accessibleName">
+        <string>Preset 7</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -146,7 +201,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_9"/>
+      <widget class="QComboBox" name="comboBox_9">
+       <property name="accessibleName">
+        <string>Preset 8</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -163,7 +225,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_10"/>
+      <widget class="QComboBox" name="comboBox_10">
+       <property name="accessibleName">
+        <string>Preset 9</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -180,7 +249,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="comboBox">
+       <property name="accessibleName">
+        <string>Preset 0</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Select which slot to load with shortcut</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -201,6 +277,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="accessibleName">
+        <string>OK</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Save settings and close window</string>
+       </property>
        <property name="text">
         <string>&amp;OK</string>
        </property>

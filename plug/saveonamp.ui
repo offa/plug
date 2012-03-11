@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Save on Amplifier</string>
   </property>
+  <property name="accessibleName">
+   <string>Save on amplifier window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Allows you to set current settings on the amplifier</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -42,6 +48,12 @@
       </item>
       <item>
        <widget class="QComboBox" name="comboBox">
+        <property name="accessibleName">
+         <string>Slot</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Select slot where current settings will be saved</string>
+        </property>
         <property name="maxVisibleItems">
          <number>20</number>
         </property>
@@ -63,6 +75,12 @@
       </item>
       <item>
        <widget class="QLineEdit" name="lineEdit">
+        <property name="accessibleName">
+         <string>Name</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Select name for your preset</string>
+        </property>
         <property name="maxLength">
          <number>31</number>
         </property>
@@ -87,6 +105,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="pushButton_2">
+        <property name="accessibleName">
+         <string>Cancel</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Do not save anything and close this window</string>
+        </property>
         <property name="text">
          <string>&amp;Cancel</string>
         </property>
@@ -97,6 +121,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
+        <property name="accessibleName">
+         <string>Save</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Save preset and close this window</string>
+        </property>
         <property name="text">
          <string>&amp;Save</string>
         </property>

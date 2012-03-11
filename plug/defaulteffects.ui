@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Default Effects</string>
   </property>
+  <property name="accessibleName">
+   <string>Default effect's window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Here you can select default effects which will be loaded when keyboard shortcut is used</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -33,6 +39,12 @@
          <width>100</width>
          <height>0</height>
         </size>
+       </property>
+       <property name="accessibleName">
+        <string>Default effect's effect</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows to choose effect to be emulated</string>
        </property>
        <item>
         <property name="text">
@@ -499,6 +511,12 @@
      <property name="enabled">
       <bool>false</bool>
      </property>
+     <property name="accessibleName">
+      <string>After amplifier</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Set effect to be put virtually after emulated amplifier</string>
+     </property>
      <property name="text">
       <string>&amp;after amplifier</string>
      </property>
@@ -518,6 +536,12 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboBox_2">
+       <property name="accessibleName">
+        <string>Copy from slot</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows you to choose from which effect lot to copy effect settings</string>
+       </property>
        <item>
         <property name="text">
          <string>1</string>
@@ -542,6 +566,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="accessibleName">
+        <string>Copy</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Copy selected slot's settings</string>
+       </property>
        <property name="text">
         <string>&amp;Copy</string>
        </property>
@@ -563,6 +593,12 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboBox_3">
+       <property name="accessibleName">
+        <string>Save to slot</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Choose for which slot save settings as a default effect</string>
+       </property>
        <item>
         <property name="text">
          <string>1</string>
@@ -587,6 +623,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">
+       <property name="accessibleName">
+        <string>Save</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Save settings as a default effect</string>
+       </property>
        <property name="text">
         <string>&amp;Save</string>
        </property>

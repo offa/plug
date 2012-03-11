@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Save to File</string>
   </property>
+  <property name="accessibleName">
+   <string>Save to file window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Allows you to save current settings to a file</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -27,7 +33,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_2"/>
+      <widget class="QLineEdit" name="lineEdit_2">
+       <property name="accessibleName">
+        <string>Name</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows you to set the name of the preset</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_3">
@@ -40,7 +53,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_3"/>
+      <widget class="QLineEdit" name="lineEdit_3">
+       <property name="accessibleName">
+        <string>Author</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows you to set the author of the preset</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -57,10 +77,23 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="accessibleName">
+        <string>Path to a file</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Enter the path and file name where to save the preset</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="accessibleName">
+        <string>Choose path and file name</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows you to choose path and filename of the preset</string>
+       </property>
        <property name="text">
         <string>...</string>
        </property>
@@ -72,6 +105,12 @@
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QPushButton" name="pushButton_3">
+       <property name="accessibleName">
+        <string>Cancel</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Do not save anything and close this window</string>
+       </property>
        <property name="text">
         <string>&amp;Cancel</string>
        </property>
@@ -82,6 +121,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">
+       <property name="accessibleName">
+        <string>Save</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Save preset and close this window</string>
+       </property>
        <property name="text">
         <string>&amp;Save</string>
        </property>

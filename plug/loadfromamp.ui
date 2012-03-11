@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Load from Amplifier</string>
   </property>
+  <property name="accessibleName">
+   <string>Load preset from amplifier</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Window which allows you to load presets from amplifier</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -42,6 +48,12 @@
       </item>
       <item>
        <widget class="QComboBox" name="comboBox">
+        <property name="accessibleName">
+         <string>Slot</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Choose which slot to load</string>
+        </property>
         <property name="maxVisibleItems">
          <number>20</number>
         </property>
@@ -66,6 +78,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QPushButton" name="pushButton_2">
+        <property name="accessibleName">
+         <string>Cancel</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Quit window without loading anything</string>
+        </property>
         <property name="text">
          <string>&amp;Cancel</string>
         </property>
@@ -76,6 +94,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
+        <property name="accessibleName">
+         <string>Load</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Load's selected setting from amplifier and closes the window</string>
+        </property>
         <property name="text">
          <string>&amp;Load</string>
         </property>

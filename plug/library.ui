@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>PLUG Library</string>
   </property>
+  <property name="accessibleName">
+   <string>Library window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Allows to quickly load presets from amplifier and files</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -29,7 +35,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget"/>
+        <widget class="QListWidget" name="listWidget">
+         <property name="accessibleName">
+          <string>Presets from amplifier</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>This list shows presets on ampplifier</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -71,6 +84,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="accessibleName">
+            <string>Choose directory</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Choose directory where preset files are stored</string>
+           </property>
            <property name="text">
             <string>&amp;...</string>
            </property>
@@ -79,7 +98,14 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget_2"/>
+        <widget class="QListWidget" name="listWidget_2">
+         <property name="accessibleName">
+          <string>Presets from files</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>This list shows presets from files</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -111,7 +137,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QFontComboBox" name="fontComboBox"/>
+      <widget class="QFontComboBox" name="fontComboBox">
+       <property name="accessibleName">
+        <string>Choose font</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows to choose font which will be used to display presets</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_5">
@@ -125,6 +158,12 @@
      </item>
      <item>
       <widget class="QSpinBox" name="spinBox">
+       <property name="accessibleName">
+        <string>Choose font size</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows to choose font size which will be used to display presets</string>
+       </property>
        <property name="maximum">
         <number>32</number>
        </property>

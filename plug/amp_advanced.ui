@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Advanced Settings</string>
   </property>
+  <property name="accessibleName">
+   <string>Amplifier's advanced settings window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Allows you to set some advanced options of the amplifier</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -31,6 +37,12 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboBox">
+       <property name="accessibleName">
+        <string>Cabinet</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows you to choose cabinet to simulate</string>
+       </property>
        <property name="maxVisibleItems">
         <number>13</number>
        </property>
@@ -116,6 +128,12 @@
      </item>
      <item>
       <widget class="QComboBox" name="comboBox_2">
+       <property name="accessibleName">
+        <string>Noise gate</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows you to choose noise gate settings</string>
+       </property>
        <item>
         <property name="text">
          <string>Off</string>
@@ -150,6 +168,12 @@
      </item>
      <item>
       <widget class="QCheckBox" name="checkBox">
+       <property name="accessibleName">
+        <string>Brightness</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Allows you to turn of/off brightness setting</string>
+       </property>
        <property name="text">
         <string>&amp;Brightness</string>
        </property>
@@ -163,6 +187,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QDial" name="dial">
+         <property name="accessibleName">
+          <string>Master volume dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose master volume level</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -179,6 +209,12 @@
        </item>
        <item>
         <widget class="QSpinBox" name="spinBox">
+         <property name="accessibleName">
+          <string>Master volume box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of master volume</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -206,6 +242,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QDial" name="dial_2">
+         <property name="accessibleName">
+          <string>Gain 2 dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose gain 2 level</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -222,6 +264,12 @@
        </item>
        <item>
         <widget class="QSpinBox" name="spinBox_2">
+         <property name="accessibleName">
+          <string>Gain 2 box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of gain 2</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -249,6 +297,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QDial" name="dial_3">
+         <property name="accessibleName">
+          <string>Presence dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose presence level</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -265,6 +319,12 @@
        </item>
        <item>
         <widget class="QSpinBox" name="spinBox_3">
+         <property name="accessibleName">
+          <string>Presence box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of presence</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -296,6 +356,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QDial" name="dial_6">
+         <property name="accessibleName">
+          <string>Bias dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose bias level</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -312,6 +378,12 @@
        </item>
        <item>
         <widget class="QSpinBox" name="spinBox_6">
+         <property name="accessibleName">
+          <string>Bias box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of bias</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -339,6 +411,12 @@
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
         <widget class="QDial" name="dial_7">
+         <property name="accessibleName">
+          <string>Sag dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose sag level</string>
+         </property>
          <property name="maximum">
           <number>2</number>
          </property>
@@ -355,6 +433,12 @@
        </item>
        <item>
         <widget class="QSpinBox" name="spinBox_7">
+         <property name="accessibleName">
+          <string>Sag box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of sag</string>
+         </property>
          <property name="maximum">
           <number>2</number>
          </property>
@@ -385,6 +469,12 @@
          <property name="enabled">
           <bool>false</bool>
          </property>
+         <property name="accessibleName">
+          <string>Threshold dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose threshold level</string>
+         </property>
          <property name="maximum">
           <number>9</number>
          </property>
@@ -403,6 +493,12 @@
         <widget class="QSpinBox" name="spinBox_5">
          <property name="enabled">
           <bool>false</bool>
+         </property>
+         <property name="accessibleName">
+          <string>Threshold box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of threshold</string>
          </property>
          <property name="maximum">
           <number>9</number>
@@ -434,6 +530,12 @@
          <property name="enabled">
           <bool>false</bool>
          </property>
+         <property name="accessibleName">
+          <string>Depth dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose depth level</string>
+         </property>
          <property name="maximum">
           <number>255</number>
          </property>
@@ -452,6 +554,12 @@
         <widget class="QSpinBox" name="spinBox_4">
          <property name="enabled">
           <bool>false</bool>
+         </property>
+         <property name="accessibleName">
+          <string>Depth box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of depth</string>
          </property>
          <property name="maximum">
           <number>255</number>
@@ -495,6 +603,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="accessibleName">
+        <string>OK</string>
+       </property>
+       <property name="accessibleDescription">
+        <string>Close window. You must press &quot;Set&quot; button in the amplifier's windows to send changes to the amplifier.</string>
+       </property>
        <property name="text">
         <string>OK</string>
        </property>

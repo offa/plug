@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Amplifier</string>
   </property>
+  <property name="accessibleName">
+   <string>Amplifier's settings window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Allows you to set amplifier's settings</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
@@ -40,6 +46,12 @@
           <width>100</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="accessibleName">
+         <string>Amplifier</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Allows you to choose amplifier to emulate</string>
         </property>
         <property name="maxVisibleItems">
          <number>12</number>
@@ -121,6 +133,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="advancedButton">
+        <property name="accessibleName">
+         <string>Advanced button</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Opens window winth advanced settings</string>
+        </property>
         <property name="text">
          <string>A&amp;dvanced</string>
         </property>
@@ -136,6 +154,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="accessibleName">
+         <string>Set button</string>
+        </property>
+        <property name="accessibleDescription">
+         <string>Sends changes to the amplifier</string>
         </property>
         <property name="text">
          <string>Set</string>
@@ -153,6 +177,12 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QDial" name="dial">
+          <property name="accessibleName">
+           <string>Gain dial</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to choose gain level</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -166,6 +196,12 @@
         </item>
         <item>
          <widget class="QSpinBox" name="spinBox">
+          <property name="accessibleName">
+           <string>Gain box</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to precisely enter the level of gain</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -190,6 +226,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QDial" name="dial_2">
+          <property name="accessibleName">
+           <string>Volume dial</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to choose volume level</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -203,6 +245,12 @@
         </item>
         <item>
          <widget class="QSpinBox" name="spinBox_2">
+          <property name="accessibleName">
+           <string>Volume box</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to precisely enter the level of volume</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -240,6 +288,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QDial" name="dial_3">
+          <property name="accessibleName">
+           <string>Treble dial</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to choose treble level</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -253,6 +307,12 @@
         </item>
         <item>
          <widget class="QSpinBox" name="spinBox_3">
+          <property name="accessibleName">
+           <string>Treble box</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to precisely enter the level of treble</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -277,6 +337,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QDial" name="dial_4">
+          <property name="accessibleName">
+           <string>Middle tones dial</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to choose middle tones level</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -290,6 +356,12 @@
         </item>
         <item>
          <widget class="QSpinBox" name="spinBox_4">
+          <property name="accessibleName">
+           <string>Middle tones box</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to precisely enter the level of middle tones</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -314,6 +386,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
          <widget class="QDial" name="dial_5">
+          <property name="accessibleName">
+           <string>Bass dial</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to choose the bass level</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>
@@ -327,6 +405,12 @@
         </item>
         <item>
          <widget class="QSpinBox" name="spinBox_5">
+          <property name="accessibleName">
+           <string>Bass box</string>
+          </property>
+          <property name="accessibleDescription">
+           <string>Allows you to precisely enter the level of bass</string>
+          </property>
           <property name="maximum">
            <number>255</number>
           </property>

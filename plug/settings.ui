@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
+  <property name="accessibleName">
+   <string>Settings window</string>
+  </property>
+  <property name="accessibleDescription">
+   <string>Here you can set some settings of this program</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QCheckBox" name="checkBox">
@@ -70,6 +76,12 @@
    </item>
    <item>
     <widget class="QPushButton" name="pushButton">
+     <property name="accessibleName">
+      <string>OK</string>
+     </property>
+     <property name="accessibleDescription">
+      <string>Save settings and close this window</string>
+     </property>
      <property name="text">
       <string>OK</string>
      </property>
