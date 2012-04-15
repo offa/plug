@@ -1777,8 +1777,8 @@ void Effect::off_switch(bool value)
         ui->label_6->setDisabled(true);
         ui->label_7->setDisabled(true);
         effect_num = 0;
-        temp1=windowTitle();
-        temp2=accessibleName();
+        temp1 = windowTitle();
+        temp2 = accessibleName();
         setWindowTitle(QString(tr("FX%1: OFF")).arg(fx_slot+1));
         setAccessibleName(QString(tr("Effect's %1 window: OFF")).arg(fx_slot+1));
     }
@@ -1787,16 +1787,6 @@ void Effect::off_switch(bool value)
         ui->pushButton->setText(tr("Off"));
         ui->comboBox->setDisabled(false);
         ui->setButton->setDisabled(false);
-        ui->dial->setDisabled(false);
-        ui->dial_2->setDisabled(false);
-        ui->dial_3->setDisabled(false);
-        ui->dial_4->setDisabled(false);
-        ui->dial_5->setDisabled(false);
-        ui->spinBox->setDisabled(false);
-        ui->spinBox_2->setDisabled(false);
-        ui->spinBox_3->setDisabled(false);
-        ui->spinBox_4->setDisabled(false);
-        ui->spinBox_5->setDisabled(false);
         ui->checkBox->setDisabled(false);
         ui->label->setDisabled(false);
         ui->label_2->setDisabled(false);
@@ -1805,12 +1795,27 @@ void Effect::off_switch(bool value)
         ui->label_5->setDisabled(false);
         ui->label_6->setDisabled(false);
         ui->label_7->setDisabled(false);
+        ui->dial->setDisabled(false);
+        ui->spinBox->setDisabled(false);
         effect_num = ui->comboBox->currentIndex();
-        if(effect_num == MONO_ECHO_FILTER || effect_num == STEREO_ECHO_FILTER || effect_num == TAPE_DELAY || effect_num == STEREO_TAPE_DELAY)
+
+        if(effect_num != SIMPLE_COMP)
         {
-            ui->dial_6->setDisabled(false);
-            ui->spinBox_6->setDisabled(false);
+            ui->dial_2->setDisabled(false);
+            ui->dial_3->setDisabled(false);
+            ui->dial_4->setDisabled(false);
+            ui->dial_5->setDisabled(false);
+            ui->spinBox_2->setDisabled(false);
+            ui->spinBox_3->setDisabled(false);
+            ui->spinBox_4->setDisabled(false);
+            ui->spinBox_5->setDisabled(false);
+            if(effect_num == MONO_ECHO_FILTER || effect_num == STEREO_ECHO_FILTER || effect_num == TAPE_DELAY || effect_num == STEREO_TAPE_DELAY)
+            {
+                ui->dial_6->setDisabled(false);
+                ui->spinBox_6->setDisabled(false);
+            }
         }
+
         setWindowTitle(temp1);
         setAccessibleName(temp2);
         activateWindow();
