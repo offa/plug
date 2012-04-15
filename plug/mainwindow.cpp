@@ -153,9 +153,15 @@ void MainWindow::start_amp()
     quickpres->load_names(names);
 
     if(name[0] == 0x00)
+    {
         setWindowTitle(QString(tr("PLUG: NONE")));
+        setAccessibleName(QString(tr("Main window: NONE")));
+    }
     else
+    {
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
+        setAccessibleName(QString(tr("Main window: %1")).arg(name));
+    }
 
     current_name = name;
 
@@ -241,6 +247,7 @@ void MainWindow::stop_amp()
         ui->actionSave_effects->setDisabled(true);
         ui->action_Library_view->setDisabled(true);
         setWindowTitle(QString(tr("PLUG")));
+        setAccessibleName(QString(tr("Main window: None")));
         ui->statusBar->showMessage(tr("Disconnected"), 5000);    // show message on the status bar
 
         connected = false;
@@ -309,9 +316,15 @@ int MainWindow::save_on_amp(char *name, int slot)
     ret = amp_ops->save_on_amp(name, slot);
 
     if(name[0] == 0x00)
+    {
         setWindowTitle(QString(tr("PLUG: NONE")));
+        setAccessibleName(QString(tr("Main window: NONE")));
+    }
     else
+    {
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
+        setAccessibleName(QString(tr("Main window: %1")).arg(name));
+    }
 
     current_name=name;
     memcpy(names[slot], name, 32);
@@ -332,9 +345,15 @@ int MainWindow::load_from_amp(int slot)
     amp_ops->load_memory_bank(slot, name, &amplifier_set, effects_set);
 
     if(name[0] == 0x00)
+    {
         setWindowTitle(QString(tr("PLUG: NONE")));
+        setAccessibleName(QString(tr("Main window: NONE")));
+    }
     else
+    {
         setWindowTitle(QString(tr("PLUG: %1")).arg(name));
+        setAccessibleName(QString(tr("Main window: %1")).arg(name));
+    }
 
     current_name=name;
 
@@ -572,9 +591,15 @@ void MainWindow::change_title(QString name)
     current_name = name;
 
     if(current_name.isEmpty())
+    {
         setWindowTitle(QString(tr("PLUG: NONE")));
+        setAccessibleName(QString(tr("Main window: NONE")));
+    }
     else
+    {
         setWindowTitle(QString(tr("PLUG: %1")).arg(current_name));
+        setAccessibleName(QString(tr("Main window: %1")).arg(name));
+    }
 }
 
 void MainWindow::show_fx1()

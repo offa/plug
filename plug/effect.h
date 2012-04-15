@@ -27,6 +27,7 @@ private:
     char title[10];
     unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6;
     bool put_post_amp, changed;
+    QString temp1, temp2;
 
 public slots:
     // functions to set variables

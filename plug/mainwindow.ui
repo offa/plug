@@ -14,7 +14,7 @@
    <string>PLUG</string>
   </property>
   <property name="accessibleName">
-   <string>Main window</string>
+   <string>Main window: NONE</string>
   </property>
   <property name="accessibleDescription">
    <string>Main window containing menus and buttons to open amplifier's and effect's windows</string>
