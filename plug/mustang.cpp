@@ -213,7 +213,7 @@ int Mustang::set_effect(struct fx_pedal_settings value)
         array[EFFECT] = 0x3c;
         break;
 
-    case FIXED_WAH:
+    case WAH:
         array[DSP] = 0x06;
         array[EFFECT] = 0x49;
         array[19] = 0x01;
@@ -363,6 +363,10 @@ int Mustang::set_effect(struct fx_pedal_settings value)
         array[EFFECT] = 0x44;
         array[19] = 0x02;
         array[20] = 0x01;
+        if(array[KNOB5] > 0x03)
+        {
+            array[KNOB5] = 0x03;
+        }
         break;
 
     case PING_PONG_DELAY:
@@ -822,7 +826,7 @@ int Mustang::decode_data(unsigned char data[6][LENGTH], char *name, struct amp_s
                 break;
 
             case 0x49:
-                effects_set[j].effect_num = FIXED_WAH;
+                effects_set[j].effect_num = WAH;
                 break;
 
             case 0x4a:

@@ -246,7 +246,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case FIXED_WAH:
+        case WAH:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));

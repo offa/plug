@@ -26,7 +26,7 @@ enum effects
 {
     EMPTY,
     OVERDRIVE,
-    FIXED_WAH,
+    WAH,
     TOUCH_WAH,
     FUZZ,
     FUZZ_TOUCH_WAH,

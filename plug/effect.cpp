@@ -218,6 +218,29 @@ void Effect::choose_fx(int value)
         ui->spinBox_6->setDisabled(true);
         break;
 
+    case MULTITAP_DELAY:
+        ui->checkBox->setDisabled(false);
+        ui->dial->setMaximum(255);
+        ui->spinBox->setMaximum(255);
+        ui->dial_4->setMaximum(255);
+        ui->spinBox_4->setMaximum(255);
+        ui->dial_5->setMaximum(3);
+        ui->spinBox_5->setMaximum(3);
+        ui->dial_6->setValue(0);
+        ui->dial->setDisabled(false);
+        ui->dial_2->setDisabled(false);
+        ui->dial_3->setDisabled(false);
+        ui->dial_4->setDisabled(false);
+        ui->dial_5->setDisabled(false);
+        ui->dial_6->setDisabled(true);
+        ui->spinBox->setDisabled(false);
+        ui->spinBox_2->setDisabled(false);
+        ui->spinBox_3->setDisabled(false);
+        ui->spinBox_4->setDisabled(false);
+        ui->spinBox_5->setDisabled(false);
+        ui->spinBox_6->setDisabled(true);
+        break;
+
     case MONO_ECHO_FILTER:
     case STEREO_ECHO_FILTER:
     case TAPE_DELAY:
@@ -280,9 +303,9 @@ void Effect::choose_fx(int value)
             setAccessibleName(QString(tr("Effect's %1 window: Overdrive")).arg(fx_slot+1));
             break;
 
-        case FIXED_WAH:
-            setWindowTitle(QString(tr("FX%1: Fixed Wah")).arg(fx_slot+1));
-            setAccessibleName(QString(tr("Effect's %1 window: Fixed Wah")).arg(fx_slot+1));
+        case WAH:
+            setWindowTitle(QString(tr("FX%1: Wah")).arg(fx_slot+1));
+            setAccessibleName(QString(tr("Effect's %1 window: Wah")).arg(fx_slot+1));
             break;
 
         case TOUCH_WAH:
@@ -540,12 +563,12 @@ void Effect::choose_fx(int value)
         ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
         break;
 
-    case FIXED_WAH:
-        ui->label->setText(tr("&Level"));
-        ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Level\" dial")).arg(fx_slot+1));
-        ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
-        ui->spinBox->setAccessibleName(QString(tr("Effect's %1 \"Level\" box")).arg(fx_slot+1));
-        ui->spinBox->setAccessibleDescription(tr("Allows you to precisely set \"Level\" parameter of this effect"));
+    case WAH:
+        ui->label->setText(tr("&Mix"));
+        ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Mix\" dial")).arg(fx_slot+1));
+        ui->dial->setAccessibleDescription(tr("Allows you to set \"Mix\" parameter of this effect"));
+        ui->spinBox->setAccessibleName(QString(tr("Effect's %1 \"Mix\" box")).arg(fx_slot+1));
+        ui->spinBox->setAccessibleDescription(tr("Allows you to precisely set \"Mix\" parameter of this effect"));
 
         ui->label_2->setText(tr("&Frequency"));
         ui->dial_2->setAccessibleName(QString(tr("Effect's %1 \"Frequency\" dial")).arg(fx_slot+1));
@@ -553,23 +576,23 @@ void Effect::choose_fx(int value)
         ui->spinBox_2->setAccessibleName(QString(tr("Effect's %1 \"Frequency\" box")).arg(fx_slot+1));
         ui->spinBox_2->setAccessibleDescription(tr("Allows you to precisely set \"Frequency\" parameter of this effect"));
 
-        ui->label_3->setText(tr("Mi&n Freq"));
-        ui->dial_3->setAccessibleName(QString(tr("Effect's %1 \"Minimum Frequency\" dial")).arg(fx_slot+1));
-        ui->dial_3->setAccessibleDescription(tr("Allows you to set \"Minimum Frequency\" parameter of this effect"));
-        ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Minimum Frequency\" box")).arg(fx_slot+1));
-        ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Minimum Frequency\" parameter of this effect"));
+        ui->label_3->setText(tr("&Heel Freq"));
+        ui->dial_3->setAccessibleName(QString(tr("Effect's %1 \"Heel Frequency\" dial")).arg(fx_slot+1));
+        ui->dial_3->setAccessibleDescription(tr("Allows you to set \"Heel Frequency\" parameter of this effect"));
+        ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Heel Frequency\" box")).arg(fx_slot+1));
+        ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Heel Frequency\" parameter of this effect"));
 
-        ui->label_4->setText(tr("Ma&x Freq"));
-        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"Maximum Frequency\" dial")).arg(fx_slot+1));
-        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"Maximum Frequency\" parameter of this effect"));
-        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Maximum Frequency\" box")).arg(fx_slot+1));
-        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Maximum Frequency\" parameter of this effect"));
+        ui->label_4->setText(tr("&Toe Freq"));
+        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"Toe Frequency\" dial")).arg(fx_slot+1));
+        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"Toe Frequency\" parameter of this effect"));
+        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Toe Frequency\" box")).arg(fx_slot+1));
+        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Toe Frequency\" parameter of this effect"));
 
-        ui->label_5->setText(tr("&Q"));
-        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Q\" dial")).arg(fx_slot+1));
-        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Q\" parameter of this effect"));
-        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Q\" box")).arg(fx_slot+1));
-        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Q\" parameter of this effect"));
+        ui->label_5->setText(tr("High &Q"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"High Q\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"High Q\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"High Q\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"High Q\" parameter of this effect"));
 
         ui->label_6->setText(tr(""));
         ui->dial_6->setAccessibleName(tr("Disabled dial"));
@@ -579,11 +602,11 @@ void Effect::choose_fx(int value)
         break;
 
     case TOUCH_WAH:
-        ui->label->setText(tr("&Level"));
-        ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Level\" dial")).arg(fx_slot+1));
-        ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
-        ui->spinBox->setAccessibleName(QString(tr("Effect's %1 \"Level\" box")).arg(fx_slot+1));
-        ui->spinBox->setAccessibleDescription(tr("Allows you to precisely set \"Level\" parameter of this effect"));
+        ui->label->setText(tr("&Mix"));
+        ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Mix\" dial")).arg(fx_slot+1));
+        ui->dial->setAccessibleDescription(tr("Allows you to set \"Mix\" parameter of this effect"));
+        ui->spinBox->setAccessibleName(QString(tr("Effect's %1 \"Mix\" box")).arg(fx_slot+1));
+        ui->spinBox->setAccessibleDescription(tr("Allows you to precisely set \"Mix\" parameter of this effect"));
 
         ui->label_2->setText(tr("&Sensivity"));
         ui->dial_2->setAccessibleName(QString(tr("Effect's %1 \"Sensivity\" dial")).arg(fx_slot+1));
@@ -591,23 +614,23 @@ void Effect::choose_fx(int value)
         ui->spinBox_2->setAccessibleName(QString(tr("Effect's %1 \"Sensivity\" box")).arg(fx_slot+1));
         ui->spinBox_2->setAccessibleDescription(tr("Allows you to precisely set \"Sensivity\" parameter of this effect"));
 
-        ui->label_3->setText(tr("Mi&n Freq"));
-        ui->dial_3->setAccessibleName(QString(tr("Effect's %1 \"Minimum Frequency\" dial")).arg(fx_slot+1));
-        ui->dial_3->setAccessibleDescription(tr("Allows you to set \"Minimum Frequency\" parameter of this effect"));
-        ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Minimum Frequency\" box")).arg(fx_slot+1));
-        ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Minimum Frequency\" parameter of this effect"));
+        ui->label_3->setText(tr("&Heel Freq"));
+        ui->dial_3->setAccessibleName(QString(tr("Effect's %1 \"Heel Frequency\" dial")).arg(fx_slot+1));
+        ui->dial_3->setAccessibleDescription(tr("Allows you to set \"Heel Frequency\" parameter of this effect"));
+        ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Heel Frequency\" box")).arg(fx_slot+1));
+        ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Heel Frequency\" parameter of this effect"));
 
-        ui->label_4->setText(tr("Ma&x Freq"));
-        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"Maximum Frequency\" dial")).arg(fx_slot+1));
-        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"Maximum Frequency\" parameter of this effect"));
-        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Maximum Frequency\" box")).arg(fx_slot+1));
-        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Maximum Frequency\" parameter of this effect"));
+        ui->label_4->setText(tr("&Toe Freq"));
+        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"Toe Frequency\" dial")).arg(fx_slot+1));
+        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"Toe Frequency\" parameter of this effect"));
+        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Toe Frequency\" box")).arg(fx_slot+1));
+        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Toe Frequency\" parameter of this effect"));
 
-        ui->label_5->setText(tr("&Q"));
-        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Q\" dial")).arg(fx_slot+1));
-        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Q\" parameter of this effect"));
-        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Q\" box")).arg(fx_slot+1));
-        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Q\" parameter of this effect"));
+        ui->label_5->setText(tr("High &Q"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"High Q\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"High Q\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"High Q\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"High Q\" parameter of this effect"));
 
         ui->label_6->setText(tr(""));
         ui->dial_6->setAccessibleName(tr("Disabled dial"));
@@ -947,11 +970,11 @@ void Effect::choose_fx(int value)
         ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"LFO Clipping\" box")).arg(fx_slot+1));
         ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"LFO Clipping\" parameter of this effect"));
 
-        ui->label_5->setText(tr("&Tri Shaping"));
-        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Tri Shaping\" dial")).arg(fx_slot+1));
-        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Tri Shaping\" parameter of this effect"));
-        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Tri Shaping\" box")).arg(fx_slot+1));
-        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Tri Shaping\" parameter of this effect"));
+        ui->label_5->setText(tr("&Shape"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Shape\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Shape\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Shape\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Shape\" parameter of this effect"));
 
         ui->label_6->setText(tr(""));
         ui->dial_6->setAccessibleName(tr("Disabled dial"));
@@ -979,17 +1002,17 @@ void Effect::choose_fx(int value)
         ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Depth\" box")).arg(fx_slot+1));
         ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Depth\" parameter of this effect"));
 
-        ui->label_4->setText(tr("LFO &Shape"));
-        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"LFO Shape\" dial")).arg(fx_slot+1));
-        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"LFO Shape\" parameter of this effect"));
-        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"LFO Shape\" box")).arg(fx_slot+1));
-        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"LFO Shape\" parameter of this effect"));
+        ui->label_4->setText(tr("&Shape"));
+        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"Shape\" dial")).arg(fx_slot+1));
+        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"Shape\" parameter of this effect"));
+        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Shape\" box")).arg(fx_slot+1));
+        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Shape\" parameter of this effect"));
 
-        ui->label_5->setText(tr("LFO &Phase"));
-        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"LFO Phase\" dial")).arg(fx_slot+1));
-        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"LFO Pase\" parameter of this effect"));
-        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"LFO Phase\" box")).arg(fx_slot+1));
-        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"LFO Phase\" parameter of this effect"));
+        ui->label_5->setText(tr("&Phase"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Phase\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Pase\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Phase\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Phase\" parameter of this effect"));
 
         ui->label_6->setText(tr(""));
         ui->dial_6->setAccessibleName(tr("Disabled dial"));
@@ -1061,11 +1084,11 @@ void Effect::choose_fx(int value)
         ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Feedback\" box")).arg(fx_slot+1));
         ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Feedback\" parameter of this effect"));
 
-        ui->label_5->setText(tr("LFO &Shape"));
-        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"LFO Shape\" dial")).arg(fx_slot+1));
-        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"LFO Shape\" parameter of this effect"));
-        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"LFO Shape\" box")).arg(fx_slot+1));
-        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"LFO Shape\" parameter of this effect"));
+        ui->label_5->setText(tr("&Shape"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Shape\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Shape\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Shape\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Shape\" parameter of this effect"));
 
         ui->label_6->setText(tr(""));
         ui->dial_6->setAccessibleName(tr("Disabled dial"));
@@ -1152,9 +1175,6 @@ void Effect::choose_fx(int value)
         break;
 
     case MONO_DELAY:
-    case MULTITAP_DELAY:
-    case REVERSE_DELAY:
-    case PING_PONG_DELAY:
         ui->label->setText(tr("&Level"));
         ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Level\" dial")).arg(fx_slot+1));
         ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -1184,6 +1204,120 @@ void Effect::choose_fx(int value)
         ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Attenuation\" parameter of this effect"));
         ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Attenuation\" box")).arg(fx_slot+1));
         ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Attenuation\" parameter of this effect"));
+
+        ui->label_6->setText(tr(""));
+        ui->dial_6->setAccessibleName(tr("Disabled dial"));
+        ui->dial_6->setAccessibleDescription(tr("This dial is disabled in this effect"));
+        ui->spinBox_6->setAccessibleName(tr("Disabled box"));
+        ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
+        break;
+
+    case MULTITAP_DELAY:
+        ui->label->setText(tr("&Level"));
+        ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Level\" dial")).arg(fx_slot+1));
+        ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
+        ui->spinBox->setAccessibleName(QString(tr("Effect's %1 \"Level\" box")).arg(fx_slot+1));
+        ui->spinBox->setAccessibleDescription(tr("Allows you to precisely set \"Level\" parameter of this effect"));
+
+        ui->label_2->setText(tr("&Delay"));
+        ui->dial_2->setAccessibleName(QString(tr("Effect's %1 \"Delay\" dial")).arg(fx_slot+1));
+        ui->dial_2->setAccessibleDescription(tr("Allows you to set \"Delay\" parameter of this effect"));
+        ui->spinBox_2->setAccessibleName(QString(tr("Effect's %1 \"Delay\" box")).arg(fx_slot+1));
+        ui->spinBox_2->setAccessibleDescription(tr("Allows you to precisely set \"Delay\" parameter of this effect"));
+
+        ui->label_3->setText(tr("&Feedback"));
+        ui->dial_3->setAccessibleName(QString(tr("Effect's %1 \"Feedback\" dial")).arg(fx_slot+1));
+        ui->dial_3->setAccessibleDescription(tr("Allows you to set \"Feedback\" parameter of this effect"));
+        ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Feedback\" box")).arg(fx_slot+1));
+        ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Feedback\" parameter of this effect"));
+
+        ui->label_4->setText(tr("&Brightness"));
+        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"Brightness\" dial")).arg(fx_slot+1));
+        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"Brightness\" parameter of this effect"));
+        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Brightness\" box")).arg(fx_slot+1));
+        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Brightness\" parameter of this effect"));
+
+        ui->label_5->setText(tr("&Mode"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Mode\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Mode\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Mode\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Mode\" parameter of this effect"));
+
+        ui->label_6->setText(tr(""));
+        ui->dial_6->setAccessibleName(tr("Disabled dial"));
+        ui->dial_6->setAccessibleDescription(tr("This dial is disabled in this effect"));
+        ui->spinBox_6->setAccessibleName(tr("Disabled box"));
+        ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
+        break;
+
+    case PING_PONG_DELAY:
+        ui->label->setText(tr("&Level"));
+        ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Level\" dial")).arg(fx_slot+1));
+        ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
+        ui->spinBox->setAccessibleName(QString(tr("Effect's %1 \"Level\" box")).arg(fx_slot+1));
+        ui->spinBox->setAccessibleDescription(tr("Allows you to precisely set \"Level\" parameter of this effect"));
+
+        ui->label_2->setText(tr("&Delay"));
+        ui->dial_2->setAccessibleName(QString(tr("Effect's %1 \"Delay\" dial")).arg(fx_slot+1));
+        ui->dial_2->setAccessibleDescription(tr("Allows you to set \"Delay\" parameter of this effect"));
+        ui->spinBox_2->setAccessibleName(QString(tr("Effect's %1 \"Delay\" box")).arg(fx_slot+1));
+        ui->spinBox_2->setAccessibleDescription(tr("Allows you to precisely set \"Delay\" parameter of this effect"));
+
+        ui->label_3->setText(tr("&Feedback"));
+        ui->dial_3->setAccessibleName(QString(tr("Effect's %1 \"Feedback\" dial")).arg(fx_slot+1));
+        ui->dial_3->setAccessibleDescription(tr("Allows you to set \"Feedback\" parameter of this effect"));
+        ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Feedback\" box")).arg(fx_slot+1));
+        ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Feedback\" parameter of this effect"));
+
+        ui->label_4->setText(tr("&Brightness"));
+        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"Brightness\" dial")).arg(fx_slot+1));
+        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"Brightness\" parameter of this effect"));
+        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"Brightness\" box")).arg(fx_slot+1));
+        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"Brightness\" parameter of this effect"));
+
+        ui->label_5->setText(tr("&Stereo"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Stereo\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Stereo\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Stereo\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Stereo\" parameter of this effect"));
+
+        ui->label_6->setText(tr(""));
+        ui->dial_6->setAccessibleName(tr("Disabled dial"));
+        ui->dial_6->setAccessibleDescription(tr("This dial is disabled in this effect"));
+        ui->spinBox_6->setAccessibleName(tr("Disabled box"));
+        ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
+        break;
+
+    case REVERSE_DELAY:
+        ui->label->setText(tr("&Level"));
+        ui->dial->setAccessibleName(QString(tr("Effect's %1 \"Level\" dial")).arg(fx_slot+1));
+        ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
+        ui->spinBox->setAccessibleName(QString(tr("Effect's %1 \"Level\" box")).arg(fx_slot+1));
+        ui->spinBox->setAccessibleDescription(tr("Allows you to precisely set \"Level\" parameter of this effect"));
+
+        ui->label_2->setText(tr("&Delay"));
+        ui->dial_2->setAccessibleName(QString(tr("Effect's %1 \"Delay\" dial")).arg(fx_slot+1));
+        ui->dial_2->setAccessibleDescription(tr("Allows you to set \"Delay\" parameter of this effect"));
+        ui->spinBox_2->setAccessibleName(QString(tr("Effect's %1 \"Delay\" box")).arg(fx_slot+1));
+        ui->spinBox_2->setAccessibleDescription(tr("Allows you to precisely set \"Delay\" parameter of this effect"));
+
+        ui->label_3->setText(tr("&Feedback"));
+        ui->dial_3->setAccessibleName(QString(tr("Effect's %1 \"Feedback\" dial")).arg(fx_slot+1));
+        ui->dial_3->setAccessibleDescription(tr("Allows you to set \"Feedback\" parameter of this effect"));
+        ui->spinBox_3->setAccessibleName(QString(tr("Effect's %1 \"Feedback\" box")).arg(fx_slot+1));
+        ui->spinBox_3->setAccessibleDescription(tr("Allows you to precisely set \"Feedback\" parameter of this effect"));
+
+        ui->label_4->setText(tr("&RFDBK"));
+        ui->dial_4->setAccessibleName(QString(tr("Effect's %1 \"RFDBK\" dial")).arg(fx_slot+1));
+        ui->dial_4->setAccessibleDescription(tr("Allows you to set \"RFDBK\" parameter of this effect"));
+        ui->spinBox_4->setAccessibleName(QString(tr("Effect's %1 \"RFDBK\" box")).arg(fx_slot+1));
+        ui->spinBox_4->setAccessibleDescription(tr("Allows you to precisely set \"RFDBK\" parameter of this effect"));
+
+        ui->label_5->setText(tr("&Tone"));
+        ui->dial_5->setAccessibleName(QString(tr("Effect's %1 \"Tone\" dial")).arg(fx_slot+1));
+        ui->dial_5->setAccessibleDescription(tr("Allows you to set \"Tone\" parameter of this effect"));
+        ui->spinBox_5->setAccessibleName(QString(tr("Effect's %1 \"Tone\" box")).arg(fx_slot+1));
+        ui->spinBox_5->setAccessibleDescription(tr("Allows you to precisely set \"Tone\" parameter of this effect"));
 
         ui->label_6->setText(tr(""));
         ui->dial_6->setAccessibleName(tr("Disabled dial"));
@@ -1370,21 +1504,21 @@ void Effect::choose_fx(int value)
             ui->dial_6->setValue(0x00);
             break;
 
-        case FIXED_WAH:
-            ui->dial->setValue(0x80);
+        case WAH:
+            ui->dial->setValue(0xff);
             ui->dial_2->setValue(0x80);
-            ui->dial_3->setValue(0x80);
-            ui->dial_4->setValue(0x80);
-            ui->dial_5->setValue(0x80);
+            ui->dial_3->setValue(0x00);
+            ui->dial_4->setValue(0xff);
+            ui->dial_5->setValue(0x00);
             ui->dial_6->setValue(0x00);
             break;
 
         case TOUCH_WAH:
-            ui->dial->setValue(0x80);
+            ui->dial->setValue(0xff);
             ui->dial_2->setValue(0x80);
-            ui->dial_3->setValue(0x80);
-            ui->dial_4->setValue(0x80);
-            ui->dial_5->setValue(0x80);
+            ui->dial_3->setValue(0x00);
+            ui->dial_4->setValue(0xff);
+            ui->dial_5->setValue(0x00);
             ui->dial_6->setValue(0x00);
             break;
 

@@ -202,7 +202,7 @@ void LoadFromFile::parseFX()
                     break;
 
                 case 0x49:
-                    fx_settings[x].effect_num = FIXED_WAH;
+                    fx_settings[x].effect_num = WAH;
                     break;
 
                 case 0x4a:

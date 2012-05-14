@@ -359,7 +359,7 @@ void SaveToFile::writeFX(struct fx_pedal_settings settings)
         model = 0x3c;
         break;
 
-    case FIXED_WAH:
+    case WAH:
         model = 0x49;
         break;
 
