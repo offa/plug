@@ -30,6 +30,7 @@ public slots:
     void set_bias(int);
     void set_sag(int);
     void set_brightness(bool);
+    void set_usb_gain(int);
 
 private slots:
     void activate_custom_ng(int);

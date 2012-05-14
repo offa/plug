@@ -348,10 +348,6 @@
        </item>
       </layout>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
@@ -407,6 +403,10 @@
        </item>
       </layout>
      </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
@@ -584,6 +584,61 @@
        </item>
       </layout>
      </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <widget class="QDial" name="dial_8">
+         <property name="accessibleName">
+          <string>Bias dial</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to choose bias level</string>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="notchTarget">
+          <double>12.750000000000000</double>
+         </property>
+         <property name="notchesVisible">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox_8">
+         <property name="accessibleName">
+          <string>Bias box</string>
+         </property>
+         <property name="accessibleDescription">
+          <string>Allows you to precisely enter the level of bias</string>
+         </property>
+         <property name="maximum">
+          <number>255</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>&amp;USB Gain</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBox_8</cstring>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
    <item>
@@ -621,6 +676,28 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>comboBox</tabstop>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>dial</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>dial_2</tabstop>
+  <tabstop>spinBox_2</tabstop>
+  <tabstop>dial_3</tabstop>
+  <tabstop>spinBox_3</tabstop>
+  <tabstop>dial_6</tabstop>
+  <tabstop>spinBox_6</tabstop>
+  <tabstop>dial_7</tabstop>
+  <tabstop>spinBox_7</tabstop>
+  <tabstop>dial_5</tabstop>
+  <tabstop>spinBox_5</tabstop>
+  <tabstop>dial_4</tabstop>
+  <tabstop>spinBox_4</tabstop>
+  <tabstop>dial_8</tabstop>
+  <tabstop>spinBox_8</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -630,8 +707,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>488</x>
-     <y>414</y>
+     <x>407</x>
+     <y>297</y>
     </hint>
     <hint type="destinationlabel">
      <x>329</x>
@@ -646,12 +723,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>47</x>
-     <y>154</y>
+     <x>53</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
-     <x>46</x>
-     <y>206</y>
+     <x>52</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
@@ -662,12 +739,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>72</x>
-     <y>208</y>
+     <x>78</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
-     <x>73</x>
-     <y>157</y>
+     <x>79</x>
+     <y>102</y>
     </hint>
    </hints>
   </connection>
@@ -678,12 +755,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>170</x>
-     <y>156</y>
+     <x>202</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
-     <x>170</x>
-     <y>208</y>
+     <x>202</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
@@ -694,12 +771,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>141</x>
-     <y>207</y>
+     <x>202</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
-     <x>141</x>
-     <y>161</y>
+     <x>202</x>
+     <y>102</y>
     </hint>
    </hints>
   </connection>
@@ -710,12 +787,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>134</y>
+     <x>304</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
-     <x>246</x>
-     <y>208</y>
+     <x>304</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
@@ -726,12 +803,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>268</x>
-     <y>203</y>
+     <x>304</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
-     <x>270</x>
-     <y>155</y>
+     <x>304</x>
+     <y>102</y>
     </hint>
    </hints>
   </connection>
@@ -742,12 +819,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>53</x>
-     <y>331</y>
+     <x>262</x>
+     <y>223</y>
     </hint>
     <hint type="destinationlabel">
-     <x>55</x>
-     <y>366</y>
+     <x>264</x>
+     <y>249</y>
     </hint>
    </hints>
   </connection>
@@ -758,12 +835,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>66</x>
-     <y>363</y>
+     <x>275</x>
+     <y>249</y>
     </hint>
     <hint type="destinationlabel">
-     <x>67</x>
-     <y>335</y>
+     <x>276</x>
+     <y>223</y>
     </hint>
    </hints>
   </connection>
@@ -774,12 +851,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>412</x>
-     <y>314</y>
+     <x>202</x>
+     <y>223</y>
     </hint>
     <hint type="destinationlabel">
-     <x>410</x>
-     <y>355</y>
+     <x>202</x>
+     <y>249</y>
     </hint>
    </hints>
   </connection>
@@ -790,12 +867,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>425</x>
-     <y>349</y>
+     <x>202</x>
+     <y>249</y>
     </hint>
     <hint type="destinationlabel">
-     <x>425</x>
-     <y>312</y>
+     <x>202</x>
+     <y>223</y>
     </hint>
    </hints>
   </connection>
@@ -806,12 +883,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>184</x>
-     <y>311</y>
+     <x>406</x>
+     <y>102</y>
     </hint>
     <hint type="destinationlabel">
-     <x>186</x>
-     <y>367</y>
+     <x>406</x>
+     <y>128</y>
     </hint>
    </hints>
   </connection>
@@ -822,12 +899,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>211</x>
-     <y>363</y>
+     <x>406</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
-     <x>207</x>
-     <y>321</y>
+     <x>406</x>
+     <y>102</y>
     </hint>
    </hints>
   </connection>
@@ -838,12 +915,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>297</x>
-     <y>317</y>
+     <x>101</x>
+     <y>223</y>
     </hint>
     <hint type="destinationlabel">
-     <x>297</x>
-     <y>373</y>
+     <x>101</x>
+     <y>249</y>
     </hint>
    </hints>
   </connection>
@@ -854,12 +931,44 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>322</x>
-     <y>363</y>
+     <x>101</x>
+     <y>249</y>
     </hint>
     <hint type="destinationlabel">
-     <x>325</x>
-     <y>321</y>
+     <x>101</x>
+     <y>223</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dial_8</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_8</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>361</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>365</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_8</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>dial_8</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>344</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>

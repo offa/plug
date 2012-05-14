@@ -27,6 +27,7 @@ private:
     void manageWriteFX(struct fx_pedal_settings[4]);
     void writeFX(struct fx_pedal_settings);
     void writeFUSE();
+    void writeUSBGain(int);
 
 private slots:
     QString choose_destination();

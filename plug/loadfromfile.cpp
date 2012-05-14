@@ -26,6 +26,10 @@ void LoadFromFile::loadfile()
                 parseFX();
             else if(xml->name().toString() == "FUSE")
                 parseFUSE();
+            else if(xml->name().toString() == "UsbGain")
+            {
+                amplifier_settings->usb_gain = xml->readElementText().toInt();
+            }
         }
         xml->readNextStartElement();
     }

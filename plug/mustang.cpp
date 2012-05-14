@@ -29,7 +29,7 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 {
     int ret, recieved;
     unsigned char array[LENGTH];
-    unsigned char recieved_data[296][LENGTH], data[6][LENGTH];
+    unsigned char recieved_data[296][LENGTH], data[7][LENGTH];
     memset(recieved_data, 0x00, 296*LENGTH);
 
     if(amp_hand == NULL)
@@ -103,7 +103,7 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 
         if(name != NULL || amp_set != NULL || effects_set != NULL)
         {
-            for(j = 0; j < 6; i++, j++)
+            for(j = 0; j < 7; i++, j++)
                 memcpy(data[j], recieved_data[i], LENGTH);
             decode_data(data, name, amp_set, effects_set);
         }
@@ -628,6 +628,19 @@ int Mustang::set_amplifier(struct amp_settings value)
     ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
+    memset(array, 0x00, LENGTH);
+    array[0] = 0x1c;
+    array[1] = 0x03;
+    array[2] = 0x0d;
+    array[6] = 0x01;
+    array[7] = 0x01;
+    array[16] = value.usb_gain;
+
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+
     return ret;
 }
 
@@ -660,7 +673,7 @@ int Mustang::save_on_amp(char *name, int slot)
 int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
     int ret, recieved;
-    unsigned char array[LENGTH], data[6][LENGTH];
+    unsigned char array[LENGTH], data[7][LENGTH];
 
     memset(array, 0x00, LENGTH);
     array[0] = 0x1c;
@@ -673,7 +686,7 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
     for(int i = 0; recieved; i++)
     {
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        if(i < 6)
+        if(i < 7)
             memcpy(data[i], array, LENGTH);
     }
 
@@ -763,6 +776,7 @@ int Mustang::decode_data(unsigned char data[6][LENGTH], char *name, struct amp_s
         amp_set->bias = data[1][BIAS];
         amp_set->sag = data[1][SAG];
         amp_set->brightness = data[1][BRIGHTNESS]?true:false;
+        amp_set->usb_gain = data[6][16];
     }
 
 

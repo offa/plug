@@ -19,6 +19,7 @@ struct amp_settings
     unsigned char bias;
     unsigned char sag;
     bool brightness;
+    unsigned char usb_gain;
 };
 
 struct fx_pedal_settings

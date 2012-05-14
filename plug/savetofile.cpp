@@ -62,6 +62,7 @@ void SaveToFile::savefile()
     writeAmp(amplifier_settings);
     manageWriteFX(fx_settings);
     writeFUSE();
+    writeUSBGain(amplifier_settings.usb_gain);
 
     xml->writeEndElement();
     xml->writeEndDocument();
@@ -581,4 +582,11 @@ void SaveToFile::writeFUSE()
     xml->writeCharacters("");
     xml->writeEndElement();  // end Info
     xml->writeEndElement();  // end FUSE
+}
+
+void SaveToFile::writeUSBGain(int value)
+{
+    xml->writeStartElement("UsbGain");
+    xml->writeCharacters(QString("%1").arg(value));
+    xml->writeEndElement();
 }

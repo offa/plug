@@ -24,7 +24,7 @@ private:
     Ui::Amplifier *ui;
     Amp_Advanced *advanced;
     unsigned char amp_num, gain, volume, treble, middle, bass;
-    unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag;
+    unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag, usb_gain;
     bool changed, brightness;
 
 public slots:
@@ -47,6 +47,7 @@ public slots:
     void set_bias(int);
     void set_sag(int);
     void set_brightness(bool);
+    void set_usb_gain(int);
 
     // send settings to the amplifier
     void send_amp(void);

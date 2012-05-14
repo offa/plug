@@ -30,6 +30,7 @@ Amplifier::Amplifier(QWidget *parent) :
     bias = 128;
     sag = 1;
     brightness = 0;
+    usb_gain = 0;
 
     changed = false;
 
@@ -143,6 +144,12 @@ void Amplifier::set_sag(int value)
 void Amplifier::set_brightness(bool value)
 {
     brightness = value;
+    changed = true;
+}
+
+void Amplifier::set_usb_gain(int value)
+{
+    usb_gain = value;
     changed = true;
 }
 
@@ -268,6 +275,7 @@ void Amplifier::send_amp()
     settings.bias = bias;
     settings.sag = sag;
     settings.brightness = brightness;
+    settings.usb_gain = usb_gain;
 
     ((MainWindow*)parent())->set_amplifier(settings);
 }
@@ -294,6 +302,7 @@ void Amplifier::load(struct amp_settings settings)
     advanced->set_bias(settings.bias);
     advanced->set_sag(settings.sag);
     advanced->set_brightness(settings.brightness);
+    advanced->set_usb_gain(settings.usb_gain);
 }
 
 void Amplifier::get_settings(struct amp_settings *settings)
@@ -314,6 +323,7 @@ void Amplifier::get_settings(struct amp_settings *settings)
     settings->bias = bias;
     settings->sag = sag;
     settings->brightness = brightness;
+    settings->usb_gain = usb_gain;
 }
 
 void Amplifier::enable_set_button(bool value)
