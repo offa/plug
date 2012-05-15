@@ -26,7 +26,7 @@
 #include "defaulteffects.h"
 #include "quickpresets.h"
 
-#define VERSION "1.0.999"
+#define VERSION "1.1"
 
 namespace Ui {
     class MainWindow;
