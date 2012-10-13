@@ -17,7 +17,8 @@
 
 // amp's VID and PID while in update mode
 #define USB_UPDATE_VID 0x1ed8
-#define USB_UPDATE_PID 0x0006
+#define OLD_USB_UPDATE_PID 0x0006  //Mustang I and II
+#define NEW_USB_UPDATE_PID 0x0007  //Mustang III, IV, V
 
 // for USB communication
 #define TMOUT 500

@@ -1286,11 +1286,15 @@ int Mustang::update(char *filename)
             return ret;
 
         // get handle for the device
-        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, USB_UPDATE_PID);
+        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, OLD_USB_UPDATE_PID);
         if(amp_hand == NULL)
         {
-            libusb_exit(NULL);
-            return -100;
+	    amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, NEW_USB_UPDATE_PID);
+            if(amp_hand == NULL)
+	    {
+                libusb_exit(NULL);
+                return -100;
+	    }
         }
 
         // detach kernel driver

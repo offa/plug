@@ -1,0 +1,6 @@
+syntax: glob
+
+./plug/plug.pro.user
+./plug-build-desktop-*/*
+./tools/*
+./packages/*

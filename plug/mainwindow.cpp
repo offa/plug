@@ -664,7 +664,7 @@ void MainWindow::update_firmware()
     QString filename;
     int ret = 0;
 
-    QMessageBox::information(this, "Prepare", "Please power off the amplifier, then power it back on while holding \"Save\" button.<br>After pressing \"OK\" choose firmware file and then update will begin.<br>It will take about one minute. You will be notified when it's finished.");
+    QMessageBox::information(this, "Prepare", "Please power off the amplifier, then power it back on while holding down:<ul><li>The \"Save\" button (Mustang I and II)</li><li>The Data Wheel (Mustang III, IV and IV)</li></ul>After pressing \"OK\" choose firmware file and then update will begin.It will take about one minute. You will be notified when it's finished.");
 
     filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("Mustang firmware (*.upd)"));
     if(filename.isEmpty())
