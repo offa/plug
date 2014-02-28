@@ -42,10 +42,11 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
         // get handle for the device
         if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, OLD_USB_PID)) == NULL)
             if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, NEW_USB_PID)) == NULL)
-            {
-                libusb_exit(NULL);
-                return -100;
-            }
+            	if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, V2_USB_PID)) == NULL)
+            	{
+				    libusb_exit(NULL);
+				    return -100;
+				}
 
         // detach kernel driver
         ret = libusb_kernel_driver_active(amp_hand, 0);
