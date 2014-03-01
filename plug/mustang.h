@@ -15,11 +15,13 @@
 #define OLD_USB_PID 0x0004  //Mustang I and II
 #define NEW_USB_PID 0x0005  //Mustang III, IV and V
 #define V2_USB_PID 0x0014   // Mustang II (and I?) V2
+#define MINI_USB_PID 0x0010 //Mustang Mini
 
 // amp's VID and PID while in update mode
 #define USB_UPDATE_VID 0x1ed8
 #define OLD_USB_UPDATE_PID 0x0006  //Mustang I and II
 #define NEW_USB_UPDATE_PID 0x0007  //Mustang III, IV, V
+#define MINI_USB_UPDATE_PID 0x0011 //Mustang Mini
 
 // for USB communication
 #define TMOUT 500
