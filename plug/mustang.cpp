@@ -1274,7 +1274,6 @@ int Mustang::update(char *filename)
     int ret, recieved;
     unsigned char array[LENGTH], number = 0;
     FILE *file;
-    file = fopen(filename, "rb");
 //    struct timespec sleep;
 //    sleep.tv_nsec = NANO_SEC_SLEEP;
 //    sleep.tv_sec = 0;
@@ -1321,6 +1320,7 @@ int Mustang::update(char *filename)
     else
         return -200;
 
+    file = fopen(filename, "rb");
     // send date when firmware was created
     fseek(file, 0x1a, SEEK_SET);
     memset(array, 0x00, LENGTH);
