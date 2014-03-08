@@ -26,8 +26,6 @@
 #include "defaulteffects.h"
 #include "quickpresets.h"
 
-#define VERSION "1.1"
-
 namespace Ui {
     class MainWindow;
 }
@@ -83,6 +81,7 @@ private:
     QNetworkReply *reply;
 
 private slots:
+    void about();
     void check_for_updates();
     void httpReadyRead();
     void show_fx1();

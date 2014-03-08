@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(start_amp()));
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
-    connect(ui->actionAbout, SIGNAL(triggered()), about_window, SLOT(open()));
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(show()));
     connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(show()));
     connect(ui->actionSave_effects, SIGNAL(triggered()), seffects, SLOT(open()));
@@ -126,6 +126,12 @@ MainWindow::~MainWindow()
     delete amp_ops;    // stop the communication before exiting
     delete ui;
 }
+
+void MainWindow::about()
+{
+    QMessageBox::about(this, QString(tr("About %1")).arg(QCoreApplication::applicationName()), QString(tr("<h2>%1 %2</h2>" "<p>Copyright piorekf<br><a href=\"http://piorekf.org/plug/\">piorekf.org/plug</a></p>" "<p>%1 is a GPLv3 licensed program designed as a replacement for Fender FUSE to operate Fender Mustang amplifier and possibly some other models</p>")).arg(QCoreApplication::applicationName()).arg(QCoreApplication::applicationVersion()));
+}
+
 
 void MainWindow::start_amp()
 {
@@ -431,7 +437,7 @@ void MainWindow::check_for_updates()
 
 void MainWindow::httpReadyRead()
 {
-    if(reply->readAll() > VERSION)
+    if(reply->readAll() > QCoreApplication::applicationVersion())
     {
         QLabel *label = new QLabel(tr("<b>Update available!</b>"), this);
         ui->statusBar->addWidget(label);
