@@ -15,7 +15,6 @@
 #include "amplifier.h"
 #include "mustang.h"
 #include "data_structs.h"
-#include "about.h"
 #include "saveonamp.h"
 #include "loadfromamp.h"
 #include "save_effects.h"
@@ -68,7 +67,6 @@ private:
     Effect *effect2;
     Effect *effect3;
     Effect *effect4;
-    About *about_window;
     SaveOnAmp *save;
     LoadFromAmp *load;
     SaveEffects *seffects;

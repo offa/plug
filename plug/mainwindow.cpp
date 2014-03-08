@@ -36,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     effect3 = new Effect(this, 2);
     effect4 = new Effect(this, 3);
 
-    about_window = new About(this);
     save = new SaveOnAmp(this);
     load = new LoadFromAmp(this);
     seffects = new SaveEffects(this);
