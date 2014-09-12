@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 
-Library::Library(char names[24][32], QWidget *parent) :
+Library::Library(char names[100][32], QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Library)
 {
