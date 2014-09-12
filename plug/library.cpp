@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 
-Library::Library(char names[24][32], QWidget *parent) :
+Library::Library(char names[100][32], QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Library)
 {
@@ -56,7 +56,7 @@ void Library::load_slot(int slot)
         return;
 
     ui->listWidget_2->setCurrentRow(-1);
-    ((MainWindow*)parent())->load_from_amp(slot);
+    dynamic_cast<MainWindow*>(parent())->load_from_amp(slot);
 }
 
 void Library::get_directory()
@@ -90,7 +90,7 @@ void Library::load_file(int row)
         return;
 
     ui->listWidget->setCurrentRow(-1);
-    ((MainWindow*)parent())->loadfile((*files)[row].canonicalFilePath());
+    dynamic_cast<MainWindow*>(parent())->loadfile((*files)[row].canonicalFilePath());
 }
 
 void Library::resizeEvent(QResizeEvent *event)

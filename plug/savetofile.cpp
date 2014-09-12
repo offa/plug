@@ -46,12 +46,12 @@ void SaveToFile::savefile()
         return;
     }
 
-    ((MainWindow*)parent())->change_title(ui->lineEdit_2->text());
+    dynamic_cast<MainWindow*>(parent())->change_title(ui->lineEdit_2->text());
 
     xml = new QXmlStreamWriter(file);
     struct amp_settings amplifier_settings;
     struct fx_pedal_settings fx_settings[4];
-    ((MainWindow*)parent())->get_settings(&amplifier_settings, fx_settings);
+    dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings);
 
     xml->setAutoFormatting(true);
     xml->writeStartDocument();
@@ -281,7 +281,7 @@ void SaveToFile::writeAmp(struct amp_settings settings)
 
 void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
 {
-    struct fx_pedal_settings empty;
+    struct fx_pedal_settings empty = { 0, 0, 0, 0, 0, 0, 0, 0, false };
 
     empty.effect_num = empty.fx_slot = 0;
     empty.put_post_amp = false;

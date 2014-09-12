@@ -27,8 +27,8 @@ void LoadFromAmp::load()
 {
     QSettings settings;
 
-    ((MainWindow*)parent())->load_from_amp(ui->comboBox->currentIndex());
-    ((MainWindow*)parent())->set_index(ui->comboBox->currentIndex());
+    dynamic_cast<MainWindow*>(parent())->load_from_amp(ui->comboBox->currentIndex());
+    dynamic_cast<MainWindow*>(parent())->set_index(ui->comboBox->currentIndex());
     if(!settings.value("Settings/keepWindowsOpen").toBool())
         this->close();
 }

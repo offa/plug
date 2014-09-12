@@ -56,7 +56,7 @@ void SaveEffects::send()
             number++;
     }
 
-    ((MainWindow*)parent())->save_effects(ui->comboBox->currentIndex(), ui->lineEdit->text().toAscii().data(), number,
+    dynamic_cast<MainWindow*>(parent())->save_effects(ui->comboBox->currentIndex(), ui->lineEdit->text().toAscii().data(), number,
                               ui->checkBox->isChecked(), ui->checkBox_2->isChecked(), ui->checkBox_3->isChecked());
     this->close();
 }

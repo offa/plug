@@ -277,7 +277,7 @@ void Amplifier::send_amp()
     settings.brightness = brightness;
     settings.usb_gain = usb_gain;
 
-    ((MainWindow*)parent())->set_amplifier(settings);
+    dynamic_cast<MainWindow*>(parent())->set_amplifier(settings);
 }
 
 void Amplifier::load(struct amp_settings settings)
