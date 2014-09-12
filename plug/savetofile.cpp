@@ -281,7 +281,7 @@ void SaveToFile::writeAmp(struct amp_settings settings)
 
 void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
 {
-    struct fx_pedal_settings empty;
+    struct fx_pedal_settings empty = { 0, 0, 0, 0, 0, 0, 0, 0, false };
 
     empty.effect_num = empty.fx_slot = 0;
     empty.put_post_amp = false;
