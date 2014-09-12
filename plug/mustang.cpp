@@ -27,15 +27,15 @@ Mustang::~Mustang()
 
 int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
-    int ret, recieved;
+    int recieved;
     unsigned char array[LENGTH];
-    unsigned char recieved_data[296][LENGTH], data[7][LENGTH];
+    unsigned char recieved_data[296][LENGTH];
     memset(recieved_data, 0x00, 296*LENGTH);
 
     if(amp_hand == NULL)
     {
         // initialize libusb
-        ret = libusb_init(NULL);
+        int ret = libusb_init(NULL);
         if (ret)
             return ret;
 
@@ -106,6 +106,8 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 
         if(name != NULL || amp_set != NULL || effects_set != NULL)
         {
+            unsigned char data[7][LENGTH];
+            
             for(j = 0; j < 7; i++, j++)
                 memcpy(data[j], recieved_data[i], LENGTH);
             decode_data(data, name, amp_set, effects_set);
@@ -117,12 +119,10 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 
 int Mustang::stop_amp()
 {
-    int ret;
-
     if(amp_hand != NULL)
     {
         // release claimed interface
-        ret = libusb_release_interface(amp_hand, 0);
+        int ret = libusb_release_interface(amp_hand, 0);
         if(ret && (ret != LIBUSB_ERROR_NO_DEVICE))
             return ret;
 
