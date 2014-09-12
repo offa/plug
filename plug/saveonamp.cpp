@@ -29,8 +29,8 @@ void SaveOnAmp::save()
     QString name(QString("[%1] %2").arg(ui->comboBox->currentIndex()).arg(ui->lineEdit->text()));
 
     ui->comboBox->setItemText(ui->comboBox->currentIndex(), name);
-    ((MainWindow*)parent())->change_name(ui->comboBox->currentIndex(), &name);
-    ((MainWindow*)parent())->save_on_amp(ui->lineEdit->text().toAscii().data(), ui->comboBox->currentIndex());
+    dynamic_cast<MainWindow*>(parent())->change_name(ui->comboBox->currentIndex(), &name);
+    dynamic_cast<MainWindow*>(parent())->save_on_amp(ui->lineEdit->text().toAscii().data(), ui->comboBox->currentIndex());
     if(!settings.value("Settings/keepWindowsOpen").toBool())
         this->close();
 }

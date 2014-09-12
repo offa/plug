@@ -46,12 +46,12 @@ void SaveToFile::savefile()
         return;
     }
 
-    ((MainWindow*)parent())->change_title(ui->lineEdit_2->text());
+    dynamic_cast<MainWindow*>(parent())->change_title(ui->lineEdit_2->text());
 
     xml = new QXmlStreamWriter(file);
     struct amp_settings amplifier_settings;
     struct fx_pedal_settings fx_settings[4];
-    ((MainWindow*)parent())->get_settings(&amplifier_settings, fx_settings);
+    dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings);
 
     xml->setAutoFormatting(true);
     xml->writeStartDocument();
