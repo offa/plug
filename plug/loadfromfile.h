@@ -11,7 +11,11 @@ class LoadFromFile
 {
 public:
     LoadFromFile(QFile*, QString*, struct amp_settings*, struct fx_pedal_settings[4]);
+    LoadFromFile(const LoadFromFile& other);
     ~LoadFromFile();
+    
+    LoadFromFile& operator=(const LoadFromFile& other);
+    
     void loadfile();
 
 private:

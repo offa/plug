@@ -9,10 +9,31 @@ LoadFromFile::LoadFromFile(QFile *file, QString *name, struct amp_settings *ampl
     xml = new QXmlStreamReader(file);
 }
 
+LoadFromFile::LoadFromFile(const LoadFromFile& other) : name(other.name), 
+                                                    amplifier_settings(other.amplifier_settings), 
+                                                    fx_settings(other.fx_settings), 
+                                                    xml(other.xml)
+{
+}
+
 LoadFromFile::~LoadFromFile()
 {
     delete xml;
 }
+
+LoadFromFile& LoadFromFile::operator=(const LoadFromFile& other)
+{
+    if( &other != this )
+    {
+        name = other.name;
+        amplifier_settings = other.amplifier_settings;
+        fx_settings = other.fx_settings;
+        xml = other.xml;
+    }
+
+    return *this;
+}
+
 
 void LoadFromFile::loadfile()
 {
