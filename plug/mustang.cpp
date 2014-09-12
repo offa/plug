@@ -699,7 +699,7 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
     return ret;
 }
 
-int Mustang::decode_data(unsigned char data[6][LENGTH], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
+int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
     if(name != NULL)
     {
