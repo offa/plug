@@ -1033,7 +1033,7 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, struct
         name[24] = 0x00;
     for(int i = 0, j = 16; name[i] != 0x00; i++, j++)
         array[j] = name[i];
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
 
     array[1] = 0x03;
@@ -1268,7 +1268,7 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, struct
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
     execute[FXKNOB] = 0x00;
 
-    return 0;
+    return ret;
 }
 
 int Mustang::update(char *filename)
