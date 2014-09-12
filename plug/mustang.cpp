@@ -147,7 +147,7 @@ int Mustang::stop_amp()
 
 int Mustang::set_effect(struct fx_pedal_settings value)
 {
-    int ret, recieved;    // variables used when sending
+    int recieved;    // variables used when sending
     unsigned char slot;    // where to put the effect
     unsigned char temp[LENGTH], array[LENGTH] = {
         0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -179,9 +179,9 @@ int Mustang::set_effect(struct fx_pedal_settings value)
     array[KNOB4] = 0x00;
     array[KNOB5] = 0x00;
     array[KNOB6] = 0x00;
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
+    int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
     //DEBUG
 //    qDebug("set: DSP: %d, slot: %d, effect: %d, EMPTY", array[DSP], array[FXSLOT], array[EFFECT]);
@@ -459,7 +459,7 @@ int Mustang::set_effect(struct fx_pedal_settings value)
     }
 
     // send packet to the amp
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
     ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
@@ -487,7 +487,7 @@ int Mustang::set_effect(struct fx_pedal_settings value)
 
 int Mustang::set_amplifier(struct amp_settings value)
 {
-    int ret, recieved;
+    int recieved;
     unsigned char array[LENGTH] = {
         0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -626,9 +626,9 @@ int Mustang::set_amplifier(struct amp_settings value)
         break;
     }
 
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
     memset(array, 0x00, LENGTH);
@@ -639,9 +639,9 @@ int Mustang::set_amplifier(struct amp_settings value)
     array[7] = 0x01;
     array[16] = value.usb_gain;
 
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
+    int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
     return ret;
@@ -1366,7 +1366,7 @@ int Mustang::update(char *filename)
     memset(array, 0x00, LENGTH);
     array[0] = 0x04;
     array[1] = 0x03;
-    ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+    libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
     // release claimed interface
