@@ -330,3 +330,9 @@ void Amplifier::enable_set_button(bool value)
 {
     ui->setButton->setEnabled(value);
 }
+
+void Amplifier::showAndActivate()
+{
+    show();
+    activateWindow();
+}

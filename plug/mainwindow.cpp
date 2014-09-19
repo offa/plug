@@ -46,11 +46,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connected = false;
 
     // connect buttons to slots
-    connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(show()));
-    connect(ui->EffectButton1, SIGNAL(clicked()), effect1, SLOT(show()));
-    connect(ui->EffectButton2, SIGNAL(clicked()), effect2, SLOT(show()));
-    connect(ui->EffectButton3, SIGNAL(clicked()), effect3, SLOT(show()));
-    connect(ui->EffectButton4, SIGNAL(clicked()), effect4, SLOT(show()));
+    connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(showAndActivate()));
+    connect(ui->EffectButton1, SIGNAL(clicked()), effect1, SLOT(showAndActivate()));
+    connect(ui->EffectButton2, SIGNAL(clicked()), effect2, SLOT(showAndActivate()));
+    connect(ui->EffectButton3, SIGNAL(clicked()), effect3, SLOT(showAndActivate()));
+    connect(ui->EffectButton4, SIGNAL(clicked()), effect4, SLOT(showAndActivate()));
     connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(start_amp()));
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
