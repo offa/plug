@@ -1992,3 +1992,9 @@ void Effect::load_default_fx()
     set_changed(true);
     this->send_fx();
 }
+
+void Effect::showAndActivate()
+{
+    show();
+    activateWindow();
+}

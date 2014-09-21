@@ -55,6 +55,8 @@ public slots:
     void load(struct amp_settings);
     void get_settings(struct amp_settings*);
     void enable_set_button(bool);
+    
+    void showAndActivate();
 };
 
 #endif // AMPLIFIER_H
