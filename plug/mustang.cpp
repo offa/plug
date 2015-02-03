@@ -107,7 +107,7 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
         if(name != NULL || amp_set != NULL || effects_set != NULL)
         {
             unsigned char data[7][LENGTH];
-            
+
             for(j = 0; j < 7; i++, j++)
                 memcpy(data[j], recieved_data[i], LENGTH);
             decode_data(data, name, amp_set, effects_set);
@@ -124,16 +124,15 @@ int Mustang::stop_amp()
         // release claimed interface
         int ret = libusb_release_interface(amp_hand, 0);
         if(ret && (ret != LIBUSB_ERROR_NO_DEVICE))
-            return ret;
+            goto clean_libusb;
 
         if(ret != LIBUSB_ERROR_NO_DEVICE)
         {
             // re-attach kernel driver
             ret = libusb_attach_kernel_driver(amp_hand, 0);
-            if(ret)
-                return ret;
         }
 
+clean_libusb:
         // close opened interface
         libusb_close(amp_hand);
         amp_hand = NULL;
@@ -1373,22 +1372,7 @@ int Mustang::update(char *filename)
     libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-    // release claimed interface
-    ret = libusb_release_interface(amp_hand, 0);
-    if(ret)
-        return ret;
-
-    // re-attach kernel driver
-    ret = libusb_attach_kernel_driver(amp_hand, 0);
-    if(ret)
-        return ret;
-
-    // close opened interface
-    libusb_close(amp_hand);
-    amp_hand = NULL;
-
-    // stop using libusb
-    libusb_exit(NULL);
+    stop_amp();
 
     return 0;
 }
