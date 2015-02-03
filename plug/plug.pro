@@ -9,6 +9,9 @@ QT       += core gui network
 TARGET = plug
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -std=c++11 -pedantic -Wall -Wextra
+QMAKE_CXXFLAGS_RELEASE += -O2 -DQT_NO_DEBUG -DQT_NO_DEBUG_OUTPUT
+QMAKE_CXXFLAGS_DEBUG += -ggdb -g3 -O0
 
 SOURCES += main.cpp\
         mainwindow.cpp \

@@ -1294,14 +1294,18 @@ int Mustang::update(char *filename)
             amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, NEW_USB_UPDATE_PID);
             if(amp_hand == NULL)
             {
-                amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, MINI_USB_UPDATE_PID);
+                amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, V2_USB_UPDATE_PID);
                 if(amp_hand == NULL)
                 {
-                    amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, FLOOR_USB_UPDATE_PID);
+                    amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, MINI_USB_UPDATE_PID);
                     if(amp_hand == NULL)
                     {
-                        libusb_exit(NULL);
-                        return -100;
+                        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, FLOOR_USB_UPDATE_PID);
+                        if(amp_hand == NULL)
+                        {
+                            libusb_exit(NULL);
+                            return -100;
+                        }
                     }
                 }
             }
