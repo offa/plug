@@ -12,19 +12,21 @@
 
 // amp's VID and PID
 #define USB_VID 0x1ed8
-#define OLD_USB_PID 0x0004  //Mustang I and II
-#define NEW_USB_PID 0x0005  //Mustang III, IV and V
-#define V2_USB_PID 0x0014   // Mustang II (and I?) V2
-#define MINI_USB_PID 0x0010 //Mustang Mini
-#define FLOOR_USB_PID 0x0012 //Mustang Floor
+#define SMALL_AMPS_USB_PID 0x0004  //Mustang I and II
+#define BIG_AMPS_USB_PID 0x0005  //Mustang III, IV and V
+#define MINI_USB_PID 0x0010  //Mustang Mini
+#define FLOOR_USB_PID 0x0012  //Mustang Floor
+#define SMALL_AMPS_V2_USB_PID 0x0014  //Mustang II (and I?) V2
+#define BIG_AMPS_V2_USB_PID 0x0016  //Mustang III+ V2
 
 // amp's VID and PID while in update mode
 #define USB_UPDATE_VID 0x1ed8
-#define OLD_USB_UPDATE_PID 0x0006  //Mustang I and II
-#define NEW_USB_UPDATE_PID 0x0007  //Mustang III, IV, V
-#define V2_USB_UPDATE_PID 0x0015   //Mustang I & II V2
+#define SMALL_AMPS_USB_UPDATE_PID 0x0006  //Mustang I and II
+#define BIG_AMPS_USB_UPDATE_PID 0x0007  //Mustang III, IV, V
 #define MINI_USB_UPDATE_PID 0x0011 //Mustang Mini
 #define FLOOR_USB_UPDATE_PID 0x0013 //Mustang Floor
+#define SMALL_AMPS_V2_USB_UPDATE_PID 0x0015   //Mustang I & II V2
+#define BIG_AMPS_V2_USB_UPDATE_PID 0x0017  //Mustang III+ V2
 
 // for USB communication
 #define TMOUT 500

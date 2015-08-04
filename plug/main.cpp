@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2010  piorekf <piorekf@gmail.com>
+ * Copyright (C) 2015  piorekf <piorek@piorekf.org>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("piorekf");
     QCoreApplication::setOrganizationDomain("piorekf.org");
     QCoreApplication::setApplicationName("PLUG");
-    QCoreApplication::setApplicationVersion("1.1");
+    QCoreApplication::setApplicationVersion("1.2");
     MainWindow w;
     w.show();
 
