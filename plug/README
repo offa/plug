@@ -45,10 +45,11 @@ If you are a Mac user and want to build a project for Xcode type:
 that buttons will become active.
 
 ==========
-NOTE for Ubuntu users:
-For some reason Ubuntu allows only root to access USB devices of unknown type.
+IMPORTANT NOTE:
+Various distributions allow only root to access USB devices of unknown type.
 To change this and allow users in "plugdev" group to also have access to Mustang
-amp create file /etc/udev/rules.d/50-mustang.rules containing lines:
+amp create file /etc/udev/rules.d/50-mustang.rules (or
+/lib/udev/rules.d/50-mustang.rules on systemd systems) containing lines:
 
 SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
 ATTRS{idProduct}=="0004", GROUP="plugdev"
@@ -56,10 +57,32 @@ SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
 ATTRS{idProduct}=="0005", GROUP="plugdev"
 SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
 ATTRS{idProduct}=="0006", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0007", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0010", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0011", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0012", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0013", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0014", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0015", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0016", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8",
+ATTRS{idProduct}=="0017", GROUP="plugdev"
+
+Verify that the "plugdev" group exists in your system, OR remember to use a
+valid group containing your user.
 
 Now either restart computer or unplug amp and restart udev subsystem with the
 following command:
 ~ $ sudo service udev restart
+~ $ sudo systemctl restart udev
 ==========
 
 Button titled "Amplifier" allows you to choose amplifier model and it's
