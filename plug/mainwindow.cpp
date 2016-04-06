@@ -682,7 +682,7 @@ void MainWindow::update_firmware()
     ui->centralWidget->setDisabled(true);
     ui->menuBar->setDisabled(true);
     this->repaint();
-    ret = amp_ops->update(filename.toAscii().data());  // magic part
+    ret = amp_ops->update(filename.toLatin1().data());  // magic part
     ui->centralWidget->setDisabled(false);
     ui->menuBar->setDisabled(false);
     ui->statusBar->showMessage("", 1);

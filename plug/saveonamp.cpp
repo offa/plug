@@ -30,7 +30,7 @@ void SaveOnAmp::save()
 
     ui->comboBox->setItemText(ui->comboBox->currentIndex(), name);
     dynamic_cast<MainWindow*>(parent())->change_name(ui->comboBox->currentIndex(), &name);
-    dynamic_cast<MainWindow*>(parent())->save_on_amp(ui->lineEdit->text().toAscii().data(), ui->comboBox->currentIndex());
+    dynamic_cast<MainWindow*>(parent())->save_on_amp(ui->lineEdit->text().toLatin1().data(), ui->comboBox->currentIndex());
     if(!settings.value("Settings/keepWindowsOpen").toBool())
         this->close();
 }

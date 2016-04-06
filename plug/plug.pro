@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core widgets gui network
 
 TARGET = plug
 TEMPLATE = app
