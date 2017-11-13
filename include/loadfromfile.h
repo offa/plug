@@ -4,25 +4,28 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QXmlStreamReader>
+#include <memory>
 #include "data_structs.h"
 #include "effects_enum.h"
 
 class LoadFromFile
 {
 public:
-    LoadFromFile(QFile*, QString*, struct amp_settings*, struct fx_pedal_settings[4]);
-    LoadFromFile(const LoadFromFile& other);
+    LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, fx_pedal_settings fx_settings[4]);
+    LoadFromFile(const LoadFromFile&) = default;
     ~LoadFromFile();
 
-    LoadFromFile& operator=(const LoadFromFile& other);
 
     void loadfile();
 
+    LoadFromFile& operator=(const LoadFromFile&) = default;
+
 private:
-    QString *name;
-    struct amp_settings *amplifier_settings;
-    struct fx_pedal_settings *m_fx_settings;
-    QXmlStreamReader *xml;
+
+    QString* m_name;
+    amp_settings* m_amp_settings;
+    fx_pedal_settings* m_fx_settings;
+    std::unique_ptr<QXmlStreamReader> m_xml;
 
     void parseAmp();
     void parseFX();
