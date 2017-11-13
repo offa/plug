@@ -1,24 +1,51 @@
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 3.9.4)
 
-project(plug)
+project(plug VERSION 0.2.1)
+message(STATUS "~~~ ${PROJECT_NAME} v${PROJECT_VERSION} ~~~")
 
-
-file(GLOB SRC_FILES src/*.cpp)
-file(GLOB UI_FILES src/*.ui)
-
-
-find_package(Qt REQUIRED)
-
-include(${QT_USE_FILE})
-add_definitions(${QT_DEFINITIONS})
-set(QT_USE_QTNETWORK TRUE)
-set(CMAKE_AUTOMOC TRUE)
-qt4_wrap_ui(UI_HDR_FILES ${UI_FILES})
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+option(UNITTEST "Build Unit Tests" ON)
+option(COVERAGE "Enable Coverage" OFF)
+message(STATUS "Coverage : ${COVERAGE}")
 
 
-find_library(LIB_USB usb-1.0)
+if( CMAKE_BUILD_TYPE )
+    message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
+else()
+    message(STATUS "Build Type : None")
+endif()
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-add_executable(${PROJECT_NAME} ${SRC_FILES} ${UI_HDR_FILES})
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARY} ${LIB_USB})
+
+add_compile_options(-Wall
+                    -Wextra
+                    -pedantic
+                    -Werror
+                    -Wshadow
+                    -Wold-style-cast
+                    )
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+
+
+## Qt
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+find_package(Qt5Widgets REQUIRED)
+
+
+
+include_directories("include")
+add_subdirectory(src)
+
+
+if( UNITTEST )
+    enable_testing()
+    add_subdirectory("test")
+endif()
+
