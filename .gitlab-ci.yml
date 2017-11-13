@@ -1,8 +1,14 @@
 variables:
   DOCKER_IMG: "registry.gitlab.com/offa/plug/ci"
 
+stages:
+  - build-docker-images
+  - build
+
+
 build-ci-images:
   image: docker:latest
+  stage: build-docker-images
   variables:
     DOCKER_DRIVER: overlay2
     DEPLOY_REGISTRY: ${CI_REGISTRY_IMAGE}
@@ -19,8 +25,9 @@ build-ci-images:
    
 
 
-#gcc-7:
-  #image: ${DOCKER_IMG}/gcc-7:latest
-  #script:
-    #- script/ci_build.sh
+gcc-7:
+  image: ${DOCKER_IMG}/gcc-7:latest
+  stage: build
+  script:
+    - script/ci_build.sh
 
