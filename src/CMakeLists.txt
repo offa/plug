@@ -16,6 +16,6 @@ add_executable(plug main.cpp
                     settings.cpp
                     )
 
-qt5_use_modules(plug Core Widgets Gui)
+qt5_use_modules(plug Core Widgets Gui Network)
 target_link_libraries(plug ${LIBUSB_LIBRARIES})
 
