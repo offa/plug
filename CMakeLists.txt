@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 2.8.6)
 project(plug)
 
 
-file(GLOB SRC_FILES *.cpp)
-file(GLOB UI_FILES *.ui)
+file(GLOB SRC_FILES src/*.cpp)
+file(GLOB UI_FILES src/*.ui)
 
 
-find_package(Qt4 REQUIRED)
+find_package(Qt REQUIRED)
 
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
