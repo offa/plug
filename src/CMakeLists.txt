@@ -16,4 +16,4 @@ add_executable(plug main.cpp
                     settings.cpp
                     )
 
-qt5_use_modules(plug Core Widgets)
+qt5_use_modules(plug Core Widgets Gui)
