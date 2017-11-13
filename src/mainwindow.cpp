@@ -430,7 +430,7 @@ void MainWindow::check_for_updates()
         manual_check = false;
 
     QNetworkAccessManager *qnam = new QNetworkAccessManager(this);
-    reply = qnam->get(QNetworkRequest((QUrl)"http://piorekf.org/plug/VERSION"));
+    reply = qnam->get(QNetworkRequest(QUrl{"http://piorekf.org/plug/VERSION"}));
     connect(reply, SIGNAL(finished()), this, SLOT(httpReadyRead()));
 }
 
