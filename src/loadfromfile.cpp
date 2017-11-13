@@ -401,3 +401,4 @@ void LoadFromFile::parseFUSE()
         m_xml->readNext();
     }
 }
+
