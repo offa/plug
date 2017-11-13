@@ -1063,18 +1063,18 @@ void DefaultEffects::choose_fx(int value)
 
 void DefaultEffects::get_settings()
 {
-    struct fx_pedal_settings data[4];
+    struct fx_pedal_settings settings_data[4];
 
-    dynamic_cast<MainWindow*>(parent())->get_settings(NULL, data);
+    dynamic_cast<MainWindow*>(parent())->get_settings(NULL, settings_data);
 
-    ui->comboBox->setCurrentIndex(data[ui->comboBox_2->currentIndex()].effect_num);
-    ui->dial->setValue(data[ui->comboBox_2->currentIndex()].knob1);
-    ui->dial_2->setValue(data[ui->comboBox_2->currentIndex()].knob2);
-    ui->dial_3->setValue(data[ui->comboBox_2->currentIndex()].knob3);
-    ui->dial_4->setValue(data[ui->comboBox_2->currentIndex()].knob4);
-    ui->dial_5->setValue(data[ui->comboBox_2->currentIndex()].knob5);
-    ui->dial_6->setValue(data[ui->comboBox_2->currentIndex()].knob6);
-    ui->checkBox->setChecked(data[ui->comboBox_2->currentIndex()].put_post_amp);
+    ui->comboBox->setCurrentIndex(settings_data[ui->comboBox_2->currentIndex()].effect_num);
+    ui->dial->setValue(settings_data[ui->comboBox_2->currentIndex()].knob1);
+    ui->dial_2->setValue(settings_data[ui->comboBox_2->currentIndex()].knob2);
+    ui->dial_3->setValue(settings_data[ui->comboBox_2->currentIndex()].knob3);
+    ui->dial_4->setValue(settings_data[ui->comboBox_2->currentIndex()].knob4);
+    ui->dial_5->setValue(settings_data[ui->comboBox_2->currentIndex()].knob5);
+    ui->dial_6->setValue(settings_data[ui->comboBox_2->currentIndex()].knob6);
+    ui->checkBox->setChecked(settings_data[ui->comboBox_2->currentIndex()].put_post_amp);
 }
 
 void DefaultEffects::save_default_effects()
