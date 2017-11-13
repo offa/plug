@@ -4,14 +4,14 @@ LoadFromFile::LoadFromFile(QFile *file, QString *name, struct amp_settings *ampl
 {
     this->name = name;
     this->amplifier_settings = amplifier_settings;
-    this->fx_settings = fx_settings;
+    this->m_fx_settings = fx_settings;
 
     xml = new QXmlStreamReader(file);
 }
 
-LoadFromFile::LoadFromFile(const LoadFromFile& other) : name(other.name), 
-                                                    amplifier_settings(other.amplifier_settings), 
-                                                    fx_settings(other.fx_settings), 
+LoadFromFile::LoadFromFile(const LoadFromFile& other) : name(other.name),
+                                                    amplifier_settings(other.amplifier_settings),
+                                                    fx_settings(other.fx_settings),
                                                     xml(other.xml)
 {
 }

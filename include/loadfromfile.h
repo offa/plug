@@ -13,15 +13,15 @@ public:
     LoadFromFile(QFile*, QString*, struct amp_settings*, struct fx_pedal_settings[4]);
     LoadFromFile(const LoadFromFile& other);
     ~LoadFromFile();
-    
+
     LoadFromFile& operator=(const LoadFromFile& other);
-    
+
     void loadfile();
 
 private:
     QString *name;
     struct amp_settings *amplifier_settings;
-    struct fx_pedal_settings *fx_settings;
+    struct fx_pedal_settings *m_fx_settings;
     QXmlStreamReader *xml;
 
     void parseAmp();
