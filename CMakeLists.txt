@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9.4)
 
-project(plug VERSION 0.2.1)
+project(plug VERSION 0.1.3)
 message(STATUS "~~~ ${PROJECT_NAME} v${PROJECT_VERSION} ~~~")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
