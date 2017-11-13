@@ -19,8 +19,8 @@ build-ci-images:
    
 
 
-gcc-7:
-  image: ${DOCKER_IMG}/gcc-7:latest
-  script:
-    - script/ci_build.sh
+#gcc-7:
+  #image: ${DOCKER_IMG}/gcc-7:latest
+  #script:
+    #- script/ci_build.sh
 
