@@ -1,5 +1,22 @@
 variables:
-  DOCKER_IMG: "registry.gitlab.com/offa/docker-images"
+  DOCKER_IMG: "registry.gitlab.com/offa/plug/ci"
+
+build-ci-images:
+  image: docker:latest
+  variables:
+    DOCKER_DRIVER: overlay2
+    DEPLOY_REGISTRY: ${CI_REGISTRY_IMAGE}
+  services:
+    - docker:dind
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  script:
+    - docker build -t ${DOCKER_IMG}/gcc-7 .
+    - docker push ${DOCKER_IMG}/gcc-7
+  only:
+    - triggers
+   
 
 
 gcc-7:
