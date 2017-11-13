@@ -7,18 +7,3 @@ gcc-7:
   script:
     - script/ci_build.sh
 
-gcc-6:
-  image: ${DOCKER_IMG}/gcc-6:latest
-  script:
-    - script/ci_build.sh
-
-clang-5:
-  image: ${DOCKER_IMG}/clang-5:latest
-  script:
-    - script/ci_build.sh
-
-clang-4:
-  image: ${DOCKER_IMG}/clang-4:latest
-  script:
-    - script/ci_build.sh
-
