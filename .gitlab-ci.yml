@@ -20,8 +20,6 @@ build-ci-images:
   script:
     - docker build -pull -t ${DOCKER_IMG}/gcc-7 .
     - docker push ${DOCKER_IMG}/gcc-7
-  only:
-    - triggers
 
 
 
