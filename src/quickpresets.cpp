@@ -271,3 +271,6 @@ void QuickPresets::changeEvent(QEvent *e)
         break;
     }
 }
+
+
+#include "moc_quickpresets.moc"

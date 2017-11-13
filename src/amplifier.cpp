@@ -336,3 +336,5 @@ void Amplifier::showAndActivate()
     show();
     activateWindow();
 }
+
+#include "moc_amplifier.moc"

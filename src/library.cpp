@@ -120,3 +120,6 @@ void Library::change_font_family(QFont font)
 
     settings.setValue("Library/FontFamily", font.family());
 }
+
+
+#include "moc_library.moc"

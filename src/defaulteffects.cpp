@@ -1090,3 +1090,5 @@ void DefaultEffects::save_default_effects()
     settings.setValue(QString("DefaultEffects/Effect%1/Knob6").arg(ui->comboBox_3->currentIndex()), ui->dial_6->value());
     settings.setValue(QString("DefaultEffects/Effect%1/Post amp").arg(ui->comboBox_3->currentIndex()), ui->checkBox->checkState()?true:false);
 }
+
+#include "moc_defaulteffects.moc"

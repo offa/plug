@@ -1998,3 +1998,6 @@ void Effect::showAndActivate()
     show();
     activateWindow();
 }
+
+
+#include "moc_effect.moc"

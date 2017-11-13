@@ -590,3 +590,6 @@ void SaveToFile::writeUSBGain(int value)
     xml->writeCharacters(QString("%1").arg(value));
     xml->writeEndElement();
 }
+
+
+#include "moc_savetofile.moc"

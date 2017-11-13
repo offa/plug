@@ -847,3 +847,6 @@ void MainWindow::load_presets9()
     if(settings.contains("DefaultPresets/Preset9"))
         load_from_amp(settings.value("DefaultPresets/Preset9").toInt());
 }
+
+
+#include "moc_mainwindow.moc"

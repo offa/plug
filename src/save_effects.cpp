@@ -60,3 +60,6 @@ void SaveEffects::send()
                               ui->checkBox->isChecked(), ui->checkBox_2->isChecked(), ui->checkBox_3->isChecked());
     this->close();
 }
+
+
+#include "moc_save_effects.moc"

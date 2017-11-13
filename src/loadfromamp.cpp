@@ -55,3 +55,6 @@ void LoadFromAmp::change_name(int slot, QString *name)
     ui->comboBox->setItemText(slot, *name);
     ui->comboBox->setCurrentIndex(slot);
 }
+
+
+#include "moc_loadfromamp.moc"

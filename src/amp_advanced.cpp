@@ -104,3 +104,6 @@ void Amp_Advanced::set_brightness(bool value)
 {
     ui->checkBox->setChecked(value);
 }
+
+
+#include "moc_amp_advanced.moc"

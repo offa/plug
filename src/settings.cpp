@@ -70,3 +70,6 @@ void Settings::change_effectvalues(bool value)
 
     settings.setValue("Settings/defaultEffectValues", value);
 }
+
+
+#include "moc_settings.moc"

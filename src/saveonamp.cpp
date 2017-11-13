@@ -58,3 +58,6 @@ void SaveOnAmp::change_index(int value, QString name)
         ui->comboBox->setCurrentIndex(value);
     ui->lineEdit->setText(name);
 }
+
+
+#include "moc_saveonamp.moc"
