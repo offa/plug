@@ -106,7 +106,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
 
     // connect the functions if needed
-    if(settings.value("Settings/checkForUpdates").toBool())
+    constexpr bool updaterActive = false;
+    if(settings.value("Settings/checkForUpdates").toBool() && (updaterActive == true) )
         connect(this, SIGNAL(started()), this, SLOT(check_for_updates()));
     if(settings.value("Settings/connectOnStartup").toBool())
         connect(this, SIGNAL(started()), this, SLOT(start_amp()));
