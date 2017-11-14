@@ -2,6 +2,6 @@
 
 set -ex
 
-
-${CXX} --version
-cmake --version
+mkdir build && cd build
+cmake ..
+make
