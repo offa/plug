@@ -425,6 +425,8 @@ void MainWindow::enable_buttons(void)
 
 void MainWindow::check_for_updates()
 {
+    QMessageBox::warning(this, "Deprecated", "This updater is <b><i>deprecated</i></b> and will be removed in v1.3.x.");
+
     if(sender() == ui->actionCheck_for_Updates)
         manual_check = true;
     else
