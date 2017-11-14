@@ -6,7 +6,7 @@ stages:
   - build
 
 
-build-ci-images:
+build-ci-gcc-7:
   image: docker:latest
   stage: build-docker-images
   variables:
@@ -24,6 +24,25 @@ build-ci-images:
     - web
     - trigger
 
+build-ci-clang-5:
+  image: docker:latest
+  stage: build-docker-images
+  variables:
+    DOCKER_DRIVER: overlay2
+    DEPLOY_REGISTRY: ${CI_REGISTRY_IMAGE}
+  services:
+    - docker:dind
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  script:
+    - docker build --pull -t ${DOCKER_IMG}/clang-5 .
+    - docker push ${DOCKER_IMG}/clang-5
+  only:
+    - web
+    - trigger
+
+
 
 
 gcc-7:
@@ -31,3 +50,10 @@ gcc-7:
   stage: build
   script:
     - script/ci_build.sh
+
+clang-5:
+  image: ${DOCKER_IMG}/clang-5:latest
+  stage: build
+  script:
+    - script/ci_build.sh
+
