@@ -4,6 +4,28 @@
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
 [![C++](https://img.shields.io/badge/c++-14-green.svg)]()
 
+Software for Fender Mustang Amps. This is a fork of [piorekf's Plug](https://bitbucket.org/piorekf/plug/).
+
+Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project.
+
+
+## Goals
+
+- Port to *Modern C++*
+- Port to Qt5
+- CMake support
+- Modernization and improvement code quality
+- Unit Test Suite
+- Moving to Git
+
+
+## Requirements
+
+- [**CMake**](http://www.cmake.org/)
+- Qt5
+- libusb-1.0
+
+
 
 ## Building
 
@@ -27,6 +49,10 @@ make install
 
 The *udev* rule will allow the USB access without *root* for the users of the `plugdev` group.
 
+
+## Credits
+
+Thanks to the [piorekf and all Plug contributors](https://bitbucket.org/piorekf/plug/).
 
 
 ## License
