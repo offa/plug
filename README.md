@@ -5,6 +5,28 @@
 [![C++](https://img.shields.io/badge/c++-14-green.svg)]()
 
 
+## Building
+
+Building and Testing is done through CMake:
+
+```
+mkdir build && cd build
+cmake ..
+make
+make unittest
+```
+
+
+## Installation
+
+CMake will install the application and *udev* rule (`50-mustang.rules`) using:
+
+```
+make install
+```
+
+The *udev* rule will allow the USB access without *root* for the users of the `plugdev` group.
+
 
 
 ## License
