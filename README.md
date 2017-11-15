@@ -50,6 +50,11 @@ make install
 The *udev* rule will allow the USB access without *root* for the users of the `plugdev` group.
 
 
+## Documentation
+
+Visit the [Plug Website](https://bitbucket.org/piorekf/plug/) for documentation and technical details.
+
+
 ## Credits
 
 Thanks to the [piorekf and all Plug contributors](https://bitbucket.org/piorekf/plug/).
