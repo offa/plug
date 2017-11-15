@@ -14,7 +14,7 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 - Port to *Modern C++*
 - Port to Qt5
 - CMake support
-- Modernization and improvement code quality
+- Modernization and Improvements
 - Unit Test Suite
 - Moving to Git
 
