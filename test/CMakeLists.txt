@@ -1,1 +1,25 @@
-message(STATUS "Tests not supported yet")
+
+find_package(Threads REQUIRED)
+find_package(GTest REQUIRED)
+add_library(TestLibs INTERFACE)
+target_include_directories(TestLibs INTERFACE
+                                    ${GTest_INCLUDE_DIR}
+                                    ${GTest_Mock_INCLUDE_DIR}
+                                    )
+target_link_libraries(TestLibs INTERFACE
+                                ${GTest_LIBRARY}
+                                ${GTest_Main_LIBRARY}
+                                ${CMAKE_THREAD_LIBS_INIT}
+                                )
+
+add_executable(TypeTests TypeTest.cpp
+                        )
+target_link_libraries(TypeTests TestLibs)
+
+
+add_custom_target(unittest TypeTests
+
+                        COMMENT "Running unittests\n\n"
+                        VERBATIM
+                        )
+
