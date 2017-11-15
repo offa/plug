@@ -10,3 +10,4 @@ fi
 mkdir build && cd build
 cmake ..
 make
+make unittest
