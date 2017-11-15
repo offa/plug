@@ -57,7 +57,7 @@ Visit the [Plug Website](https://bitbucket.org/piorekf/plug/) for documentation 
 
 ## Credits
 
-Thanks to the [piorekf and all Plug contributors](https://bitbucket.org/piorekf/plug/).
+Thanks to [piorekf and all Plug contributors](https://bitbucket.org/piorekf/plug/).
 
 
 ## License
