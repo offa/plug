@@ -21,9 +21,9 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 
 ## Requirements
 
-- [**CMake**](http://www.cmake.org/)
-- Qt5
-- libusb-1.0
+- [**CMake**](https://www.cmake.org/)
+- [Qt5](https://www.qt.io/)
+- [libusb-1.0](http://libusb.info/)
 
 
 
