@@ -23,6 +23,7 @@ build-ci-gcc-7:
   only:
     - web
     - trigger
+    - /^docker-.*$/
 
 build-ci-clang-5:
   image: docker:latest
@@ -41,6 +42,7 @@ build-ci-clang-5:
   only:
     - web
     - trigger
+    - /^docker-.*$/
 
 
 
