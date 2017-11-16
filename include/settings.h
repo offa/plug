@@ -25,7 +25,7 @@ private slots:
     void change_effectvalues(bool);
 
 private:
-    std::unique_ptr<Ui::Settings> ui;
+    const std::unique_ptr<Ui::Settings> ui;
 
 };
 
