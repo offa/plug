@@ -6,6 +6,27 @@ stages:
   - build
 
 
+
+# -----------------------------------------
+# --- CI Builds
+# -----------------------------------------
+gcc-7:
+  image: ${DOCKER_IMG}/gcc-7:latest
+  stage: build
+  script:
+    - script/ci_build.sh
+
+clang-5:
+  image: ${DOCKER_IMG}/clang-5:latest
+  stage: build
+  script:
+    - script/ci_build.sh
+
+
+
+# -----------------------------------------
+# --- CI Images
+# -----------------------------------------
 build-ci-gcc-7:
   image: docker:latest
   stage: build-docker-images
@@ -43,19 +64,4 @@ build-ci-clang-5:
     - web
     - trigger
     - /^docker-.*$/
-
-
-
-
-gcc-7:
-  image: ${DOCKER_IMG}/gcc-7:latest
-  stage: build
-  script:
-    - script/ci_build.sh
-
-clang-5:
-  image: ${DOCKER_IMG}/clang-5:latest
-  stage: build
-  script:
-    - script/ci_build.sh
 
