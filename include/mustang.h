@@ -1,8 +1,8 @@
 #ifndef MUSTANG_H
 #define MUSTANG_H
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 #include <libusb-1.0/libusb.h>
 //#include <QtDebug>
