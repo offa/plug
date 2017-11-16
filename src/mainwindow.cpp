@@ -68,11 +68,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action_Quick_presets, SIGNAL(triggered()), quickpres, SLOT(show()));
 
     // shortcuts to activate effect windows
-    QShortcut *showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *showfx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *showfx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *showfx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *showfx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *showfx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *showfx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
     connect(showfx1, SIGNAL(activated()), this, SLOT(show_fx1()));
     connect(showfx2, SIGNAL(activated()), this, SLOT(show_fx2()));
     connect(showfx3, SIGNAL(activated()), this, SLOT(show_fx3()));
@@ -80,16 +80,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(showamp, SIGNAL(activated()), this, SLOT(show_amp()));
 
     // shortcuts for quick loading presets
-    QShortcut *loadpres0 = new QShortcut(QKeySequence(Qt::Key_0), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres1 = new QShortcut(QKeySequence(Qt::Key_1), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres2 = new QShortcut(QKeySequence(Qt::Key_2), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres3 = new QShortcut(QKeySequence(Qt::Key_3), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres4 = new QShortcut(QKeySequence(Qt::Key_4), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres5 = new QShortcut(QKeySequence(Qt::Key_5), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres6 = new QShortcut(QKeySequence(Qt::Key_6), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres7 = new QShortcut(QKeySequence(Qt::Key_7), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres8 = new QShortcut(QKeySequence(Qt::Key_8), this, 0, 0, Qt::ApplicationShortcut);
-    QShortcut *loadpres9 = new QShortcut(QKeySequence(Qt::Key_9), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *loadpres0 = new QShortcut(QKeySequence(Qt::Key_0), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres1 = new QShortcut(QKeySequence(Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres2 = new QShortcut(QKeySequence(Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres3 = new QShortcut(QKeySequence(Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres4 = new QShortcut(QKeySequence(Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres5 = new QShortcut(QKeySequence(Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres6 = new QShortcut(QKeySequence(Qt::Key_6), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres7 = new QShortcut(QKeySequence(Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres8 = new QShortcut(QKeySequence(Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
+    QShortcut *loadpres9 = new QShortcut(QKeySequence(Qt::Key_9), this, nullptr, nullptr, Qt::ApplicationShortcut);
     connect(loadpres0, SIGNAL(activated()), this, SLOT(load_presets0()));
     connect(loadpres1, SIGNAL(activated()), this, SLOT(load_presets1()));
     connect(loadpres2, SIGNAL(activated()), this, SLOT(load_presets2()));
@@ -583,9 +583,9 @@ void MainWindow::loadfile(QString filename)
 
 void MainWindow::get_settings(struct amp_settings *amplifier_settings, struct fx_pedal_settings fx_settings[4])
 {
-    if(amplifier_settings != NULL)
+    if(amplifier_settings != nullptr)
         amp->get_settings(amplifier_settings);
-    if(fx_settings != NULL)
+    if(fx_settings != nullptr)
     {
         effect1->get_settings(fx_settings[0]);
         effect2->get_settings(fx_settings[1]);

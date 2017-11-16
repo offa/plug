@@ -17,7 +17,7 @@ class Amplifier : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Amplifier(QWidget *parent = 0);
+    explicit Amplifier(QWidget *parent = nullptr);
     ~Amplifier();
 
 private:

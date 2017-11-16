@@ -13,7 +13,7 @@ class QuickPresets : public QDialog
     Q_OBJECT
 
 public:
-    explicit QuickPresets(QWidget *parent = 0);
+    explicit QuickPresets(QWidget *parent = nullptr);
     ~QuickPresets();
     void load_names(char names[][32]);
     void delete_items();

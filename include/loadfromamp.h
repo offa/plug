@@ -12,7 +12,7 @@ class LoadFromAmp : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit LoadFromAmp(QWidget *parent = 0);
+    explicit LoadFromAmp(QWidget *parent = nullptr);
     ~LoadFromAmp();
     void load_names(char names[][32]);
     void delete_items();

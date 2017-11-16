@@ -16,7 +16,7 @@ class SaveToFile : public QDialog
     Q_OBJECT
 
 public:
-    explicit SaveToFile(QWidget *parent = 0);
+    explicit SaveToFile(QWidget *parent = nullptr);
     ~SaveToFile();
 
 private:

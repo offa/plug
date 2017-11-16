@@ -13,7 +13,7 @@ class DefaultEffects : public QDialog
     Q_OBJECT
 
 public:
-    explicit DefaultEffects(QWidget *parent = 0);
+    explicit DefaultEffects(QWidget *parent = nullptr);
     ~DefaultEffects();
 
 private:

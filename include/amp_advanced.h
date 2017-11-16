@@ -13,7 +13,7 @@ class Amp_Advanced : public QDialog
     Q_OBJECT
 
 public:
-    explicit Amp_Advanced(QWidget *parent = 0);
+    explicit Amp_Advanced(QWidget *parent = nullptr);
     ~Amp_Advanced();
 
 private:

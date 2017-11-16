@@ -16,7 +16,7 @@ class Effect : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Effect(QWidget *parent = 0, int number = 0);
+    explicit Effect(QWidget *parent = nullptr, int number = 0);
     ~Effect();
 
     void set_changed(bool);

@@ -54,10 +54,10 @@ Effect::Effect(QWidget *parent, int number) :
     QShortcut *close = new QShortcut(QKeySequence(Qt::Key_Escape), this);
     connect(close, SIGNAL(activated()), this, SLOT(close()));
 
-    QShortcut *off = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot+1)), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *off = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot+1)), this, nullptr, nullptr, Qt::ApplicationShortcut);
     connect(off, SIGNAL(activated()), ui->pushButton, SLOT(toggle()));
 
-    QShortcut *default_fx = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot+5)), this, 0, 0, Qt::ApplicationShortcut);
+    QShortcut *default_fx = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot+5)), this, nullptr, nullptr, Qt::ApplicationShortcut);
     connect(default_fx, SIGNAL(activated()), this, SLOT(load_default_fx()));
 }
 

@@ -1065,7 +1065,7 @@ void DefaultEffects::get_settings()
 {
     struct fx_pedal_settings settings_data[4];
 
-    dynamic_cast<MainWindow*>(parent())->get_settings(NULL, settings_data);
+    dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data);
 
     ui->comboBox->setCurrentIndex(settings_data[ui->comboBox_2->currentIndex()].effect_num);
     ui->dial->setValue(settings_data[ui->comboBox_2->currentIndex()].knob1);

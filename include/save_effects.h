@@ -12,7 +12,7 @@ class SaveEffects : public QDialog
     Q_OBJECT
 
 public:
-    explicit SaveEffects(QWidget *parent = 0);
+    explicit SaveEffects(QWidget *parent = nullptr);
     ~SaveEffects();
 
 private:

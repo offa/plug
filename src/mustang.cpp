@@ -2,7 +2,7 @@
 
 Mustang::Mustang()
 {
-    amp_hand = NULL;
+    amp_hand = nullptr;
 
     // "apply efect" command
     memset(execute, 0x00, LENGTH);
@@ -32,22 +32,22 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
     unsigned char recieved_data[296][LENGTH];
     memset(recieved_data, 0x00, 296*LENGTH);
 
-    if(amp_hand == NULL)
+    if(amp_hand == nullptr)
     {
         // initialize libusb
-        int ret = libusb_init(NULL);
+        int ret = libusb_init(nullptr);
         if (ret)
             return ret;
 
         // get handle for the device
-        if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, SMALL_AMPS_USB_PID)) == NULL)
-            if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, BIG_AMPS_USB_PID)) == NULL)
-                if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, SMALL_AMPS_V2_USB_PID)) == NULL)
-                    if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, BIG_AMPS_V2_USB_PID)) == NULL)
-                        if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, MINI_USB_PID)) == NULL)
-                            if((amp_hand = libusb_open_device_with_vid_pid(NULL, USB_VID, FLOOR_USB_PID)) == NULL)
+        if((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, SMALL_AMPS_USB_PID)) == nullptr)
+            if((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, BIG_AMPS_USB_PID)) == nullptr)
+                if((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, SMALL_AMPS_V2_USB_PID)) == nullptr)
+                    if((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, BIG_AMPS_V2_USB_PID)) == nullptr)
+                        if((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, MINI_USB_PID)) == nullptr)
+                            if((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, FLOOR_USB_PID)) == nullptr)
                             {
-                                libusb_exit(NULL);
+                                libusb_exit(nullptr);
                                 return -100;
                             }
 
@@ -85,7 +85,7 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
     libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-    if(list != NULL || name != NULL || amp_set != NULL || effects_set != NULL)
+    if(list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
     {
         int i = 0, j = 0;
         memset(array, 0x00, LENGTH);
@@ -101,11 +101,11 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 
         int max_to_receive;
         i > 143 ? max_to_receive = 200 : max_to_receive = 48;
-        if(list != NULL)
+        if(list != nullptr)
             for(i = 0, j = 0; i<max_to_receive; i+=2, j++)
                 memcpy(list[j], recieved_data[i]+16, 32);
 
-        if(name != NULL || amp_set != NULL || effects_set != NULL)
+        if(name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
             unsigned char data[7][LENGTH];
 
@@ -120,7 +120,7 @@ int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set
 
 int Mustang::stop_amp()
 {
-    if(amp_hand != NULL)
+    if(amp_hand != nullptr)
     {
         // release claimed interface
         int ret = libusb_release_interface(amp_hand, 0);
@@ -136,10 +136,10 @@ int Mustang::stop_amp()
 clean_libusb:
         // close opened interface
         libusb_close(amp_hand);
-        amp_hand = NULL;
+        amp_hand = nullptr;
 
         // stop using libusb
-        libusb_exit(NULL);
+        libusb_exit(nullptr);
     }
 
     return 0;
@@ -668,7 +668,7 @@ int Mustang::save_on_amp(char *name, int slot)
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-    load_memory_bank(slot, NULL, NULL, NULL);
+    load_memory_bank(slot, nullptr, nullptr, nullptr);
 
     return ret;
 }
@@ -693,7 +693,7 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
             memcpy(data[i], array, LENGTH);
     }
 
-    if(name != NULL || amp_set != NULL || effects_set != NULL)
+    if(name != nullptr || amp_set != nullptr || effects_set != nullptr)
         decode_data(data, name, amp_set, effects_set);
 
     return ret;
@@ -701,7 +701,7 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
 
 int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
 {
-    if(name != NULL)
+    if(name != nullptr)
     {
         // NAME
         memset(name, 0x00, 32);
@@ -710,7 +710,7 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, struct amp_s
     }
 
 
-    if(amp_set != NULL)
+    if(amp_set != nullptr)
     {
         // AMPLIFIER
         switch(data[1][AMPLIFIER])
@@ -783,7 +783,7 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, struct amp_s
     }
 
 
-    if(effects_set != NULL)
+    if(effects_set != nullptr)
     {
         // EFFECTS
         for(int i = 2; i < 6; i++)
@@ -1280,33 +1280,33 @@ int Mustang::update(char *filename)
 //    sleep.tv_nsec = NANO_SEC_SLEEP;
 //    sleep.tv_sec = 0;
 
-    if(amp_hand == NULL)
+    if(amp_hand == nullptr)
     {
         // initialize libusb
-        ret = libusb_init(NULL);
+        ret = libusb_init(nullptr);
         if (ret)
             return ret;
 
         // get handle for the device
-        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, SMALL_AMPS_USB_UPDATE_PID);
-        if(amp_hand == NULL)
+        amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_UPDATE_VID, SMALL_AMPS_USB_UPDATE_PID);
+        if(amp_hand == nullptr)
         {
-            amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, BIG_AMPS_USB_UPDATE_PID);
-            if(amp_hand == NULL)
+            amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_UPDATE_VID, BIG_AMPS_USB_UPDATE_PID);
+            if(amp_hand == nullptr)
             {
-                amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, SMALL_AMPS_V2_USB_UPDATE_PID);
-                if(amp_hand == NULL)
+                amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_UPDATE_VID, SMALL_AMPS_V2_USB_UPDATE_PID);
+                if(amp_hand == nullptr)
                 {
-                    amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, BIG_AMPS_V2_USB_UPDATE_PID);
-                    if(amp_hand == NULL)
+                    amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_UPDATE_VID, BIG_AMPS_V2_USB_UPDATE_PID);
+                    if(amp_hand == nullptr)
                     {
-                        amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, MINI_USB_UPDATE_PID);
-                        if(amp_hand == NULL)
+                        amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_UPDATE_VID, MINI_USB_UPDATE_PID);
+                        if(amp_hand == nullptr)
                         {
-                            amp_hand = libusb_open_device_with_vid_pid(NULL, USB_UPDATE_VID, FLOOR_USB_UPDATE_PID);
-                            if(amp_hand == NULL)
+                            amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_UPDATE_VID, FLOOR_USB_UPDATE_PID);
+                            if(amp_hand == nullptr)
                             {
-                                libusb_exit(NULL);
+                                libusb_exit(nullptr);
                                 return -100;
                             }
                         }
