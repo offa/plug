@@ -408,7 +408,7 @@ int MainWindow::load_from_amp(int slot)
 }
 
 // activate buttons
-void MainWindow::enable_buttons(void)
+void MainWindow::enable_buttons()
 {
     amp->enable_set_button(true);
     effect1->enable_set_button(true);

@@ -24,7 +24,7 @@ private:
     Ui::SaveOnAmp *ui;
 
 private slots:
-    void save(void);
+    void save();
 };
 
 #endif // SAVEONAMP_H

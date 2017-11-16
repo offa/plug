@@ -38,13 +38,13 @@ public:
     ~MainWindow();
 
 public slots:
-    void start_amp(void);    // initialize the communication
-    void stop_amp(void);    // terminate communication
+    void start_amp();    // initialize the communication
+    void stop_amp();    // terminate communication
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
     int save_on_amp(char *, int);
     int load_from_amp(int);
-    void enable_buttons(void);
+    void enable_buttons();
     void change_name(int, QString *);
     void save_effects(int, char *, int, bool, bool, bool);
     void set_index(int);

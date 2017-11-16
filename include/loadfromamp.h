@@ -22,7 +22,7 @@ private:
     Ui::LoadFromAmp *ui;
 
 private slots:
-    void load(void);
+    void load();
 };
 
 #endif // LOADFROMAMP_H

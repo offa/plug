@@ -72,7 +72,7 @@ public:
     Mustang();
     ~Mustang();
     int start_amp(char list[][32]=nullptr, char *name=nullptr, struct amp_settings *amp_set=nullptr, struct fx_pedal_settings *effects_set=nullptr);    // initialize communication
-    int stop_amp(void);    // terminate communication
+    int stop_amp();    // terminate communication
     int set_effect(struct fx_pedal_settings);
     int set_amplifier(struct amp_settings);
     int save_on_amp(char *, int);

@@ -50,7 +50,7 @@ public slots:
     void set_usb_gain(int);
 
     // send settings to the amplifier
-    void send_amp(void);
+    void send_amp();
 
     void load(struct amp_settings);
     void get_settings(struct amp_settings*);

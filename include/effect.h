@@ -42,7 +42,7 @@ public slots:
     void enable_set_button(bool);
 
     // send settings to the amplifier
-    void send_fx(void);
+    void send_fx();
 
     void load(struct fx_pedal_settings);
     void get_settings(struct fx_pedal_settings &);
