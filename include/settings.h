@@ -1,6 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <memory>
 #include <QDialog>
 #include <QSettings>
 
@@ -14,10 +15,6 @@ class Settings : public QDialog
 
 public:
     explicit Settings(QWidget *parent = nullptr);
-    ~Settings();
-
-private:
-    Ui::Settings *ui;
 
 private slots:
     void change_updates(bool);
@@ -26,6 +23,10 @@ private slots:
     void change_keepopen(bool);
     void change_popupwindows(bool);
     void change_effectvalues(bool);
+
+private:
+    std::unique_ptr<Ui::Settings> ui;
+
 };
 
 #endif // SETTINGS_H

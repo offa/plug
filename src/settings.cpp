@@ -1,9 +1,8 @@
 #include "settings.h"
 #include "ui_settings.h"
 
-Settings::Settings(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Settings)
+Settings::Settings(QWidget *parent) : QDialog(parent),
+                                    ui(std::make_unique<Ui::Settings>())
 {
     QSettings settings;
 
@@ -22,11 +21,6 @@ Settings::Settings(QWidget *parent) :
     connect(ui->checkBox_4, SIGNAL(toggled(bool)), this, SLOT(change_keepopen(bool)));
     connect(ui->checkBox_5, SIGNAL(toggled(bool)), this, SLOT(change_popupwindows(bool)));
     connect(ui->checkBox_6, SIGNAL(toggled(bool)), this, SLOT(change_effectvalues(bool)));
-}
-
-Settings::~Settings()
-{
-    delete ui;
 }
 
 void Settings::change_updates(bool value)
