@@ -1,9 +1,8 @@
 #include "quickpresets.h"
 #include "ui_quickpresets.h"
 
-QuickPresets::QuickPresets(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::QuickPresets)
+QuickPresets::QuickPresets(QWidget *parent) : QDialog(parent),
+                                            ui(std::make_unique<Ui::QuickPresets>())
 {
     ui->setupUi(this);
 
@@ -19,11 +18,6 @@ QuickPresets::QuickPresets(QWidget *parent) :
     connect(ui->comboBox_8, SIGNAL(activated(int)), this, SLOT(setDefaultPreset7(int)));
     connect(ui->comboBox_9, SIGNAL(activated(int)), this, SLOT(setDefaultPreset8(int)));
     connect(ui->comboBox_10, SIGNAL(activated(int)), this, SLOT(setDefaultPreset9(int)));
-}
-
-QuickPresets::~QuickPresets()
-{
-    delete ui;
 }
 
 void QuickPresets::load_names(char names[][32])

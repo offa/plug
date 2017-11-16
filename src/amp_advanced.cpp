@@ -1,9 +1,8 @@
 #include "amp_advanced.h"
 #include "ui_amp_advanced.h"
 
-Amp_Advanced::Amp_Advanced(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::Amp_Advanced)
+Amp_Advanced::Amp_Advanced(QWidget *parent) : QDialog(parent),
+                                            ui(std::make_unique<Ui::Amp_Advanced>())
 {
     ui->setupUi(this);
 
@@ -29,7 +28,6 @@ Amp_Advanced::~Amp_Advanced()
 {
     QSettings settings;
     settings.setValue("Windows/amplifierAdvancedWindowGeometry", saveGeometry());
-    delete ui;
 }
 
 void Amp_Advanced::change_cabinet(int value)

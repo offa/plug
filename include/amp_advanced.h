@@ -1,6 +1,7 @@
 #ifndef AMP_ADVANCED_H
 #define AMP_ADVANCED_H
 
+#include <memory>
 #include <QDialog>
 #include <QSettings>
 
@@ -15,9 +16,6 @@ class Amp_Advanced : public QDialog
 public:
     explicit Amp_Advanced(QWidget *parent = nullptr);
     ~Amp_Advanced();
-
-private:
-    Ui::Amp_Advanced *ui;
 
 public slots:
     void change_cabinet(int);
@@ -34,6 +32,9 @@ public slots:
 
 private slots:
     void activate_custom_ng(int);
+
+private:
+    const std::unique_ptr<Ui::Amp_Advanced> ui;
 };
 
 #endif // AMP_ADVANCED_H
