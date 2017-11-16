@@ -16,6 +16,8 @@ else()
 endif()
 
 
+include(Install)
+
 
 add_compile_options(-Wall
                     -Wextra

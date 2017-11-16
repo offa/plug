@@ -1,0 +1,15 @@
+# udev rules for Fender Mustang Amps. Used by Plug.
+
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0004", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0005", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0006", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0007", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0010", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0011", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0012", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0013", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0014", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0015", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0016", GROUP="plugdev"
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0017", GROUP="plugdev"
+
