@@ -29,7 +29,7 @@ Amplifier::Amplifier(QWidget *parent) :
     depth = 128;
     bias = 128;
     sag = 1;
-    brightness = 0;
+    brightness = false;
     usb_gain = 0;
 
     changed = false;
