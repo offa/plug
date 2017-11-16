@@ -672,7 +672,7 @@ void MainWindow::update_firmware()
     QString filename;
     int ret = 0;
 
-    QMessageBox::information(this, "Prepare", "Please power off the amplifier, then power it back on while holding down:<ul><li>The \"Save\" button (Mustang I and II)</li><li>The Data Wheel (Mustang III, IV and IV)</li></ul>After pressing \"OK\" choose firmware file and then update will begin.It will take about one minute. You will be notified when it's finished.");
+    QMessageBox::information(this, "Prepare", R"(Please power off the amplifier, then power it back on while holding down:<ul><li>The "Save" button (Mustang I and II)</li><li>The Data Wheel (Mustang III, IV and IV)</li></ul>After pressing "OK" choose firmware file and then update will begin.It will take about one minute. You will be notified when it's finished.)");
 
     filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("Mustang firmware (*.upd)"));
     if(filename.isEmpty())
@@ -699,7 +699,7 @@ void MainWindow::update_firmware()
         ui->statusBar->showMessage(QString(tr("Communication error: %1")).arg(ret), 5000);
         return;
     }
-    QMessageBox::information(this, "Update finished", "<b>Update finished</b><br>If \"Exit\" button is lit - update was succesful<br>If \"Save\" button is lit - update failed<br><br>Power off the amplifier and then back on to finish the process.");
+    QMessageBox::information(this, "Update finished", R"(<b>Update finished</b><br>If "Exit" button is lit - update was succesful<br>If "Save" button is lit - update failed<br><br>Power off the amplifier and then back on to finish the process.)");
 }
 
 void MainWindow::show_default_effects()
