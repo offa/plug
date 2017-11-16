@@ -2,9 +2,8 @@
 #include "ui_savetofile.h"
 #include "mainwindow.h"
 
-SaveToFile::SaveToFile(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SaveToFile)
+SaveToFile::SaveToFile(QWidget *parent) : QDialog(parent),
+                                        ui(std::make_unique<Ui::SaveToFile>())
 {
     ui->setupUi(this);
 
@@ -12,11 +11,6 @@ SaveToFile::SaveToFile(QWidget *parent) :
     connect(this, SIGNAL(destination_chosen(QString)), ui->lineEdit, SLOT(setText(QString)));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(savefile()));
     connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(close()));
-}
-
-SaveToFile::~SaveToFile()
-{
-    delete ui;
 }
 
 QString SaveToFile::choose_destination()

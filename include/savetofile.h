@@ -1,6 +1,7 @@
 #ifndef SAVETOFILE_H
 #define SAVETOFILE_H
 
+#include <memory>
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -17,10 +18,16 @@ class SaveToFile : public QDialog
 
 public:
     explicit SaveToFile(QWidget *parent = nullptr);
-    ~SaveToFile();
+
+private slots:
+    QString choose_destination();
+    void savefile();
+
+signals:
+    void destination_chosen(QString);
 
 private:
-    Ui::SaveToFile *ui;
+    const std::unique_ptr<Ui::SaveToFile> ui;
     QXmlStreamWriter *xml;
 
     void writeAmp(struct amp_settings);
@@ -29,12 +36,6 @@ private:
     void writeFUSE();
     void writeUSBGain(int);
 
-private slots:
-    QString choose_destination();
-    void savefile();
-
-signals:
-    void destination_chosen(QString);
 };
 
 #endif // SAVETOFILE_H
