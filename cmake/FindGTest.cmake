@@ -10,6 +10,7 @@ find_path(GTest_INCLUDE_DIR "gtest/gtest.h"
 find_path(GTest_Mock_INCLUDE_DIR "gmock/gmock.h"
                                 HINTS ${PKG_GMock_INCLUDE_DIRS}
                                         "${GMock_DIR}/include"
+                                        ${GTest_INCLUDE_DIR}
                                 )
 
 find_library(GTest_LIBRARY NAMES gmock
