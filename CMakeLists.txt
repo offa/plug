@@ -5,6 +5,8 @@ message(STATUS "~~~ ${PROJECT_NAME} v${PROJECT_VERSION} ~~~")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 option(UNITTEST "Build Unit Tests" ON)
+message(STATUS "Unit Tests : ${UNITTEST}")
+
 option(COVERAGE "Enable Coverage" OFF)
 message(STATUS "Coverage : ${COVERAGE}")
 
