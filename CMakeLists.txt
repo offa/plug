@@ -10,6 +10,9 @@ message(STATUS "Unit Tests : ${UNITTEST}")
 option(COVERAGE "Enable Coverage" OFF)
 message(STATUS "Coverage : ${COVERAGE}")
 
+option(LTO "Enable LTO" OFF)
+message(STATUS "LTO : ${LTO}")
+
 
 if( CMAKE_BUILD_TYPE )
     message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
@@ -17,6 +20,9 @@ else()
     message(STATUS "Build Type : None")
 endif()
 
+if( LTO )
+    include(LTO)
+endif()
 
 include(Install)
 
