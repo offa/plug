@@ -36,7 +36,6 @@ build-ci-gcc-7:
   services:
     - docker:dind
   before_script:
-    - docker info
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   script:
     - docker build --pull --build-arg COMPILER=gcc-7 -t ${DOCKER_IMG}/gcc-7 .
@@ -55,7 +54,6 @@ build-ci-clang-5:
   services:
     - docker:dind
   before_script:
-    - docker info
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   script:
     - docker build --pull --build-arg COMPILER=clang-5 -t ${DOCKER_IMG}/clang-5 .
