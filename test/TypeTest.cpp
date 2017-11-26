@@ -2,6 +2,10 @@
 #include <gmock/gmock.h>
 
 
+/*
+ * This is only a placeholder.
+ */
+
 class TypeTest : public testing::Test
 {
 };
