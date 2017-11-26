@@ -1,5 +1,7 @@
 # Plug
 
+### [[GitHub](https://github.com/offa/plug)] [[GitLab](https://gitlab.com/offa/plug)]
+
 [![pipeline status](https://gitlab.com/offa/plug/badges/master/pipeline.svg)](https://gitlab.com/offa/plug/commits/master)
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
 [![C++](https://img.shields.io/badge/c++-17-green.svg)]()
