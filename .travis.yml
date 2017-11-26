@@ -1,0 +1,25 @@
+language: generic
+
+dist: trusty
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - DOCKER_IMG="registry.gitlab.com/offa/plug/ci"
+
+
+matrix:
+    include:
+    - env: COMPILER=gcc-7
+    - env: COMPILER=clang-5
+
+
+before_install:
+  - docker pull ${DOCKER_IMG}/${COMPILER}:latest
+
+script:
+  - docker run -v ${PWD}:/mnt -it ${DOCKER_IMG}/${COMPILER} /bin/bash -c "cd /mnt; script/ci_build.sh"
+
