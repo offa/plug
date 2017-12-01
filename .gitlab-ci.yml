@@ -27,7 +27,7 @@ clang-5:
 # -----------------------------------------
 # --- CI Images
 # -----------------------------------------
-build-ci-gcc-7:
+.docker_build_template: &build_ci_definition
   image: docker:latest
   stage: build-docker-images
   variables:
@@ -36,26 +36,18 @@ build-ci-gcc-7:
     - docker:dind
   before_script:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  only:
+    - web
+    - trigger
+    - /^docker-.*$/
+
+
+build-ci-gcc-7:
+  <<: *build_ci_definition
   script:
     - script/image_build.sh gcc-7
-  only:
-    - web
-    - trigger
-    - /^docker-.*$/
 
 build-ci-clang-5:
-  image: docker:latest
-  stage: build-docker-images
-  variables:
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  <<: *build_ci_definition
   script:
     - script/image_build.sh clang-5
-  only:
-    - web
-    - trigger
-    - /^docker-.*$/
-
