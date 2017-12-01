@@ -1,6 +1,7 @@
 #ifndef SAVEONAMP_H
 #define SAVEONAMP_H
 
+#include <memory>
 #include <QMainWindow>
 
 namespace Ui {
@@ -21,7 +22,7 @@ public slots:
     void change_index(int, QString);
 
 private:
-    Ui::SaveOnAmp *ui;
+    const std::unique_ptr<Ui::SaveOnAmp> ui;
 
 private slots:
     void save();

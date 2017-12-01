@@ -1,6 +1,7 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
+#include <memory>
 #include <QDialog>
 #include <QFileDialog>
 #include <QDir>
@@ -19,8 +20,8 @@ public:
     ~Library();
 
 private:
-    Ui::Library *ui;
-    QFileInfoList *files;
+    const std::unique_ptr<Ui::Library> ui;
+    const std::unique_ptr<QFileInfoList> files;
     void resizeEvent(QResizeEvent *);
 
 private slots:

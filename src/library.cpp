@@ -5,13 +5,12 @@
 
 Library::Library(char names[100][32], QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Library)
+    ui(std::make_unique<Ui::Library>()),
+    files(std::make_unique<QList<QFileInfo>>())
 {
     ui->setupUi(this);
     QSettings settings;
     restoreGeometry(settings.value("Windows/libraryWindowGeometry").toByteArray());
-
-    files = new QList<QFileInfo>();
 
     if(settings.contains("Library/lastDirectory"))
     {
@@ -46,8 +45,6 @@ Library::~Library()
 {
     QSettings settings;
     settings.setValue("Windows/libraryWindowGeometry", saveGeometry());
-    delete files;
-    delete ui;
 }
 
 void Library::load_slot(int slot)

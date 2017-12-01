@@ -1,11 +1,10 @@
 #include "saveonamp.h"
 #include "ui_saveonamp.h"
-
 #include "mainwindow.h"
 
 SaveOnAmp::SaveOnAmp(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::SaveOnAmp)
+    ui(std::make_unique<Ui::SaveOnAmp>())
 {
     ui->setupUi(this);
 
@@ -20,7 +19,6 @@ SaveOnAmp::~SaveOnAmp()
 {
     QSettings settings;
     settings.setValue("Windows/saveAmpPresetWindowGeometry", saveGeometry());
-    delete ui;
 }
 
 void SaveOnAmp::save()
