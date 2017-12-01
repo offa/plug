@@ -53,8 +53,7 @@ find_package(Qt5Network REQUIRED)
 
 
 ## LibUSB
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
+find_package(libusb-1.0 REQUIRED)
 
 
 include_directories("include")
