@@ -16,8 +16,14 @@ add_executable(plug main.cpp
                     settings.cpp
                     )
 
-qt5_use_modules(plug Core Widgets Gui Network)
-target_link_libraries(plug plug-version
-                        libusb
+target_link_libraries(plug
+                        PRIVATE
+                            plug-version
+                        PUBLIC
+                            Qt5::Core
+                            Qt5::Widgets
+                            Qt5::Gui
+                            Qt5::Network
+                            libusb
                         )
 
