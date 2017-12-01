@@ -18,13 +18,14 @@
 
 #include <QApplication>
 #include "mainwindow.h"
+#include "version.h"
 
 int main(int argc, char* argv[])
 {
     QApplication app{argc, argv};
     QCoreApplication::setOrganizationName("offa");
     QCoreApplication::setApplicationName("Plug");
-    QCoreApplication::setApplicationVersion("1.3");
+    QCoreApplication::setApplicationVersion(QString::fromStdString(plug::version()));
 
     MainWindow window;
     window.show();

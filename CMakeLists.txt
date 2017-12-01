@@ -25,6 +25,7 @@ if( LTO )
 endif()
 
 include(Install)
+include(Template)
 
 
 add_compile_options(-Wall
