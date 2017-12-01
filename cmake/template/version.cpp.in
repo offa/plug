@@ -9,6 +9,6 @@ namespace plug
 {
     std::string version()
     {
-        return R"(@PROJECT_VERSION@)";
+        return "@PROJECT_VERSION@";
     }
 }
