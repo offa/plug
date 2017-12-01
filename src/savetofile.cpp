@@ -33,7 +33,7 @@ void SaveToFile::savefile()
         return;
     }
 
-    QFile *file = new QFile(ui->lineEdit->text(), this);
+    auto file = std::make_unique<QFile>(ui->lineEdit->text(), this);
     if (!file->open(QFile::WriteOnly))
     {
         QMessageBox::critical(this, tr("Error!"), tr("Could not create file"));
@@ -42,7 +42,7 @@ void SaveToFile::savefile()
 
     dynamic_cast<MainWindow*>(parent())->change_title(ui->lineEdit_2->text());
 
-    xml = new QXmlStreamWriter(file);
+    xml = new QXmlStreamWriter(file.get());
     struct amp_settings amplifier_settings;
     struct fx_pedal_settings fx_settings[4];
     dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings);
@@ -62,7 +62,6 @@ void SaveToFile::savefile()
     xml->writeEndDocument();
 
     file->close();
-    delete file;
     delete xml;
 
     this->close();
