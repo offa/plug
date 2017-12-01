@@ -21,7 +21,7 @@ public:
     ~Amplifier();
 
 private:
-    Ui::Amplifier *ui;
+    const std::unique_ptr<Ui::Amplifier> ui;
     Amp_Advanced *advanced;
     unsigned char amp_num, gain, volume, treble, middle, bass;
     unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag, usb_gain;
@@ -55,7 +55,7 @@ public slots:
     void load(struct amp_settings);
     void get_settings(struct amp_settings*);
     void enable_set_button(bool);
-    
+
     void showAndActivate();
 };
 

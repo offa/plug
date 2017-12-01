@@ -5,7 +5,7 @@
 
 Amplifier::Amplifier(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::Amplifier)
+    ui(std::make_unique<Ui::Amplifier>())
 {
     ui->setupUi(this);
 
@@ -54,7 +54,6 @@ Amplifier::~Amplifier()
 {
     QSettings settings;
     settings.setValue("Windows/amplifierWindowGeometry", saveGeometry());
-    delete ui;
 }
 
 void Amplifier::set_gain(int value)

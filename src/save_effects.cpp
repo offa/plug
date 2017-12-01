@@ -5,7 +5,7 @@
 
 SaveEffects::SaveEffects(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Save_effects)
+    ui(std::make_unique<Ui::Save_effects>())
 {
     ui->setupUi(this);
 
@@ -23,7 +23,6 @@ SaveEffects::~SaveEffects()
 {
     QSettings settings;
     settings.setValue("Windows/saveEffectPresetWindowGeometry", saveGeometry());
-    delete ui;
 }
 
 void SaveEffects::select_checkbox()

@@ -1,6 +1,7 @@
 #ifndef SAVE_EFFECTS_H
 #define SAVE_EFFECTS_H
 
+#include <memory>
 #include <QDialog>
 
 namespace Ui {
@@ -16,7 +17,7 @@ public:
     ~SaveEffects();
 
 private:
-    Ui::Save_effects *ui;
+        const std::unique_ptr<Ui::Save_effects> ui;
 
 private slots:
     void select_checkbox();
