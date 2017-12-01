@@ -1,6 +1,7 @@
 #ifndef LOADFROMAMP_H
 #define LOADFROMAMP_H
 
+#include <memory>
 #include <QMainWindow>
 
 namespace Ui {
@@ -19,7 +20,7 @@ public:
     void change_name(int, QString *);
 
 private:
-    Ui::LoadFromAmp *ui;
+    const std::unique_ptr<Ui::LoadFromAmp> ui;
 
 private slots:
     void load();

@@ -1,6 +1,7 @@
 #ifndef DEFAULTEFFECTS_H
 #define DEFAULTEFFECTS_H
 
+#include <memory>
 #include <QDialog>
 #include "data_structs.h"
 
@@ -14,10 +15,9 @@ class DefaultEffects : public QDialog
 
 public:
     explicit DefaultEffects(QWidget *parent = nullptr);
-    ~DefaultEffects();
 
 private:
-    Ui::DefaultEffects *ui;
+    const std::unique_ptr<Ui::DefaultEffects> ui;
 
 private slots:
     void choose_fx(int);

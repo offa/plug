@@ -5,7 +5,7 @@
 
 LoadFromAmp::LoadFromAmp(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::LoadFromAmp)
+    ui(std::make_unique<Ui::LoadFromAmp>())
 {
     ui->setupUi(this);
 
@@ -20,7 +20,6 @@ LoadFromAmp::~LoadFromAmp()
 {
     QSettings settings;
     settings.setValue("Windows/loadAmpPresetWindowGeometry", saveGeometry());
-    delete ui;
 }
 
 void LoadFromAmp::load()

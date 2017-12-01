@@ -5,18 +5,13 @@
 
 DefaultEffects::DefaultEffects(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DefaultEffects)
+    ui(std::make_unique<Ui::DefaultEffects>())
 {
     ui->setupUi(this);
 
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(get_settings()));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(save_default_effects()));
-}
-
-DefaultEffects::~DefaultEffects()
-{
-    delete ui;
 }
 
 void DefaultEffects::choose_fx(int value)
