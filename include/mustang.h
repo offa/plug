@@ -5,10 +5,8 @@
 #include <cstring>
 #include <unistd.h>
 #include <libusb-1.0/libusb.h>
-//#include <QtDebug>
 #include "effects_enum.h"
 #include "data_structs.h"
-//#include <time.h>
 
 // amp's VID and PID
 #define USB_VID 0x1ed8
