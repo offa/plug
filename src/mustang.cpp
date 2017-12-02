@@ -1,9 +1,7 @@
 #include "mustang.h"
 
-Mustang::Mustang()
+Mustang::Mustang() : amp_hand(nullptr)
 {
-    amp_hand = nullptr;
-
     // "apply efect" command
     memset(execute, 0x00, LENGTH);
     execute[0] = 0x1c;
@@ -183,8 +181,7 @@ int Mustang::set_effect(fx_pedal_settings value)
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
     int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
-    //DEBUG
-//    qDebug("set: DSP: %d, slot: %d, effect: %d, EMPTY", array[DSP], array[FXSLOT], array[EFFECT]);
+
     if(value.effect_num == EMPTY)
         return ret;
 
@@ -463,24 +460,9 @@ int Mustang::set_effect(fx_pedal_settings value)
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
     ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
-    //DEBUG
-//    qDebug("set: DSP: %d, slot: %d, effect: %d", array[DSP], array[FXSLOT], array[EFFECT]);
 
     // save current settings
     memcpy(prev_array[array[DSP]-6], array, LENGTH);
-
-
-    //DEBUG
-//    FILE *f;
-//    static char trynum=0;
-//    char mes[16];
-//    sprintf(mes, "test%d.bin",trynum);
-//    f=fopen(mes,"w");
-//    fwrite(array, sizeof(array), 1, f);
-//    //fwrite(execute, sizeof(execute), 1, f);
-//    fclose(f);
-//    trynum++;
-
 
     return ret;
 }
@@ -1276,9 +1258,6 @@ int Mustang::update(char *filename)
     int ret, recieved;
     unsigned char array[LENGTH], number = 0;
     FILE *file;
-//    struct timespec sleep;
-//    sleep.tv_nsec = NANO_SEC_SLEEP;
-//    sleep.tv_sec = 0;
 
     if(amp_hand == nullptr)
     {
@@ -1349,7 +1328,6 @@ int Mustang::update(char *filename)
     fread(array+4, 1, 11, file);
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-//    nanosleep(&sleep, NULL);
     usleep(10000);
 
     // send firmware
@@ -1363,8 +1341,8 @@ int Mustang::update(char *filename)
         array[3] = fread(array+4, 1, LENGTH-8, file);
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-//        nanosleep(&sleep, NULL);
         usleep(10000);
+
         if(feof(file))  // if reached end of the file
             break;  // exit loop
     }
