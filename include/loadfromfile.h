@@ -12,12 +12,8 @@ class LoadFromFile
 {
 public:
     LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, fx_pedal_settings fx_settings[4]);
-    LoadFromFile(const LoadFromFile&) = default;
-
 
     void loadfile();
-
-    LoadFromFile& operator=(const LoadFromFile&) = default;
 
 private:
 

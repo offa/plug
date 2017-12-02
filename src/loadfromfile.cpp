@@ -1,13 +1,11 @@
 #include "loadfromfile.h"
 
 LoadFromFile::LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, fx_pedal_settings fx_settings[4])
+                            : m_name(name),
+                            m_amp_settings(amp_settings),
+                            m_fx_settings(fx_settings),
+                            m_xml(std::make_unique<QXmlStreamReader>(file))
 {
-    // TODO: Use init list
-    this->m_name = name;
-    this->m_amp_settings = amp_settings;
-    this->m_fx_settings = fx_settings;
-
-    m_xml = std::make_unique<QXmlStreamReader>(file);
 }
 
 void LoadFromFile::loadfile()
