@@ -25,7 +25,7 @@ Mustang::~Mustang()
     this->stop_amp();
 }
 
-int Mustang::start_amp(char list[][32], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
+int Mustang::start_amp(char list[][32], char *name, amp_settings *amp_set, fx_pedal_settings *effects_set)
 {
     int recieved;
     unsigned char array[LENGTH];
@@ -145,7 +145,7 @@ clean_libusb:
     return 0;
 }
 
-int Mustang::set_effect(struct fx_pedal_settings value)
+int Mustang::set_effect(fx_pedal_settings value)
 {
     int recieved;    // variables used when sending
     unsigned char slot;    // where to put the effect
@@ -485,7 +485,7 @@ int Mustang::set_effect(struct fx_pedal_settings value)
     return ret;
 }
 
-int Mustang::set_amplifier(struct amp_settings value)
+int Mustang::set_amplifier(amp_settings value)
 {
     int recieved;
     unsigned char array[LENGTH] = {
@@ -673,7 +673,7 @@ int Mustang::save_on_amp(char *name, int slot)
     return ret;
 }
 
-int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
+int Mustang::load_memory_bank(int slot, char *name, amp_settings *amp_set, fx_pedal_settings *effects_set)
 {
     int ret, recieved;
     unsigned char array[LENGTH], data[7][LENGTH];
@@ -699,7 +699,7 @@ int Mustang::load_memory_bank(int slot, char *name, struct amp_settings *amp_set
     return ret;
 }
 
-int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, struct amp_settings *amp_set, struct fx_pedal_settings *effects_set)
+int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings *amp_set, fx_pedal_settings *effects_set)
 {
     if(name != nullptr)
     {
@@ -992,7 +992,7 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, struct amp_s
     return 0;
 }
 
-int Mustang::save_effects(int slot, char name[24], int number_of_effects, struct fx_pedal_settings effects[2])
+int Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_pedal_settings effects[2])
 {
     int ret, recieved;
     unsigned char fxknob, repeat;

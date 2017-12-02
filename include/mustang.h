@@ -69,13 +69,13 @@ class Mustang
 public:
     Mustang();
     ~Mustang();
-    int start_amp(char list[][32]=nullptr, char *name=nullptr, struct amp_settings *amp_set=nullptr, struct fx_pedal_settings *effects_set=nullptr);    // initialize communication
+    int start_amp(char list[][32]=nullptr, char *name=nullptr, amp_settings *amp_set=nullptr, fx_pedal_settings *effects_set=nullptr);    // initialize communication
     int stop_amp();    // terminate communication
-    int set_effect(struct fx_pedal_settings);
-    int set_amplifier(struct amp_settings);
+    int set_effect(fx_pedal_settings);
+    int set_amplifier(amp_settings);
     int save_on_amp(char *, int);
-    int load_memory_bank(int, char *name=nullptr, struct amp_settings *amp_set=nullptr, struct fx_pedal_settings *effects_set=nullptr);
-    int save_effects(int , char *, int , struct fx_pedal_settings *);
+    int load_memory_bank(int, char *name=nullptr, amp_settings *amp_set=nullptr, fx_pedal_settings *effects_set=nullptr);
+    int save_effects(int , char *, int , fx_pedal_settings *);
     int update(char *);
 
 private:
@@ -83,7 +83,7 @@ private:
     unsigned char execute[LENGTH];    // "apply" command sent after each instruction
     unsigned char prev_array[4][LENGTH];    // array used to clear the effect
 
-    int decode_data(unsigned char [7][LENGTH], char *name=nullptr, struct amp_settings *amp_set=nullptr, struct fx_pedal_settings *effects_set=nullptr);
+    int decode_data(unsigned char [7][LENGTH], char *name=nullptr, amp_settings *amp_set=nullptr, fx_pedal_settings *effects_set=nullptr);
 };
 
 #endif // MUSTANG_H
