@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/offa/plug.svg?branch=master)](https://travis-ci.org/offa/plug)
 [![Pipeline Status](https://gitlab.com/offa/plug/badges/master/pipeline.svg)](https://gitlab.com/offa/plug/commits/master)
+[![GitHub release](https://img.shields.io/github/release/offa/plug.svg)](https://github.com/offa/plug/releases)
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
 [![C++](https://img.shields.io/badge/c++-17-green.svg)]()
 
