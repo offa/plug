@@ -151,7 +151,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, QString(tr("About %1")).arg(QCoreApplication::applicationName()), QString(tr("<h2>%1 %2</h2>" "<p>Copyright piorekf<br><a href=\"http://piorekf.org/plug/\">piorekf.org/plug</a></p>" "<p>%1 is a GPLv3 licensed program designed as a replacement for Fender FUSE to operate Fender Mustang amplifier and possibly some other models</p>")).arg(QCoreApplication::applicationName()).arg(QCoreApplication::applicationVersion()));
+    const QString title{tr("About %1").arg(QCoreApplication::applicationName())};
+    const QString text{tr("<center>"
+                        "<h2>%1</h2>"
+                        "<i>v%2</i>"
+                        "<p>%1 is a GPLv3 licensed program designed as a replacement for Fender FUSE to operate Fender Mustang amplifier and possibly some other models.</p>"
+                        "<p><a href=\"https://github.com/offa/plug/\">Plug (GitHub)</a> / <a href=\"https://gitlab.com/offa/plug/\">Plug (GitLab)</a></p>"
+                        "<p><a href=\"http://piorekf.org/plug/\">piorekf.org/plug</a></p>"
+                        "<hr>"
+                        "<p>Copyright © 2017  offa</p>"
+                        "<p>Copyright © 2010-2016  piorekf <piorek@piorekf.org></p>"
+                        "<p>License: <a href=\"http://www.gnu.org/licenses/gpl.txt\">GPLv3</a></p>"
+                        "</center>"
+                      ).arg(QCoreApplication::applicationName(),
+                            QCoreApplication::applicationVersion())};
+
+    QMessageBox::about(this, title, text);
 }
 
 
