@@ -22,8 +22,6 @@
 #ifndef EFFECTS_ENUM_H
 #define EFFECTS_ENUM_H
 
-// enums used for switches (looks nicer
-// and is more practical than numbers)
 
 // list of all amplifiers
 enum class amps
