@@ -40,12 +40,6 @@ enum class amps
     METAL_2000
 };
 
-constexpr auto value(amps a)
-{
-    return static_cast<unsigned char>(a);
-}
-
-
 
 // list of all effects
 enum effects
@@ -94,7 +88,7 @@ enum effects
 };
 
 // list of all cabinets
-enum cabinets
+enum class cabinets
 {
     OFF,
     cab57DLX,
@@ -110,5 +104,20 @@ enum cabinets
     cabSS212,
     cabSS112
 };
+
+
+
+// Helper functions - for compatibility only.
+constexpr auto value(amps a)
+{
+    return static_cast<unsigned char>(a);
+}
+
+constexpr auto value(cabinets c)
+{
+    return static_cast<unsigned char>(c);
+}
+
+
 
 #endif // EFFECTS_ENUM_H
