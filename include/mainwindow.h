@@ -101,7 +101,6 @@ private:
 
 private slots:
     void about();
-    void check_for_updates();
     void httpReadyRead();
     void show_fx1();
     void show_fx2();

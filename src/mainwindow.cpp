@@ -80,7 +80,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSave_to_amplifier, SIGNAL(triggered()), save, SLOT(show()));
     connect(ui->action_Load_from_amplifier, SIGNAL(triggered()), load, SLOT(show()));
     connect(ui->actionSave_effects, SIGNAL(triggered()), seffects, SLOT(open()));
-    connect(ui->actionCheck_for_Updates, SIGNAL(triggered()), this, SLOT(check_for_updates()));
     connect(ui->action_Options, SIGNAL(triggered()), settings_win, SLOT(show()));
     connect(ui->actionL_oad_from_file, SIGNAL(triggered()), this, SLOT(loadfile()));
     connect(ui->actionS_ave_to_file, SIGNAL(triggered()), saver, SLOT(show()));
@@ -128,9 +127,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
 
     // connect the functions if needed
-    constexpr bool updaterActive = false;
-    if(settings.value("Settings/checkForUpdates").toBool() && (updaterActive == true) )
-        connect(this, SIGNAL(started()), this, SLOT(check_for_updates()));
     if(settings.value("Settings/connectOnStartup").toBool())
         connect(this, SIGNAL(started()), this, SLOT(start_amp()));
 
@@ -458,20 +454,6 @@ void MainWindow::enable_buttons()
     ui->action_Load_from_amplifier->setDisabled(false);
     ui->actionSave_effects->setDisabled(false);
     ui->action_Library_view->setDisabled(false);
-}
-
-void MainWindow::check_for_updates()
-{
-    QMessageBox::warning(this, "Deprecated", "This updater is <b><i>deprecated</i></b> and will be removed in v1.3.x.");
-
-    if(sender() == ui->actionCheck_for_Updates)
-        manual_check = true;
-    else
-        manual_check = false;
-
-    QNetworkAccessManager *qnam = new QNetworkAccessManager(this);
-    reply = qnam->get(QNetworkRequest(QUrl{"http://piorekf.org/plug/VERSION"}));
-    connect(reply, SIGNAL(finished()), this, SLOT(httpReadyRead()));
 }
 
 void MainWindow::httpReadyRead()

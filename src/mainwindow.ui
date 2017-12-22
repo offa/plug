@@ -164,7 +164,7 @@
      <x>0</x>
      <y>0</y>
      <width>350</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="accessibleName">
@@ -206,8 +206,6 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="actionCheck_for_Updates"/>
-    <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuConnection">
