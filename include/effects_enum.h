@@ -42,7 +42,7 @@ enum class amps
 
 
 // list of all effects
-enum effects
+enum class effects
 {
     EMPTY,
     OVERDRIVE,
@@ -111,6 +111,11 @@ enum class cabinets
 constexpr auto value(amps a)
 {
     return static_cast<unsigned char>(a);
+}
+
+constexpr auto value(effects e)
+{
+    return static_cast<unsigned char>(e);
 }
 
 constexpr auto value(cabinets c)

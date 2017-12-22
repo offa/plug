@@ -38,155 +38,155 @@ DefaultEffects::DefaultEffects(QWidget *parent) :
 void DefaultEffects::choose_fx(int value)
 {
     // activate proper knobs and set their max values
-    switch (value)
+    switch (static_cast<effects>(value))
     {
-    case EMPTY:
-        ui->checkBox->setDisabled(true);
-        if(sender() == ui->comboBox)
-        {
-            ui->dial->setValue(0);
+        case effects::EMPTY:
+            ui->checkBox->setDisabled(true);
+            if(sender() == ui->comboBox)
+            {
+                ui->dial->setValue(0);
+                ui->dial_2->setValue(0);
+                ui->dial_3->setValue(0);
+                ui->dial_4->setValue(0);
+                ui->dial_5->setValue(0);
+                ui->dial_6->setValue(0);
+            }
+            ui->dial->setDisabled(true);
+            ui->dial_2->setDisabled(true);
+            ui->dial_3->setDisabled(true);
+            ui->dial_4->setDisabled(true);
+            ui->dial_5->setDisabled(true);
+            ui->dial_6->setDisabled(true);
+            ui->spinBox->setDisabled(true);
+            ui->spinBox_2->setDisabled(true);
+            ui->spinBox_3->setDisabled(true);
+            ui->spinBox_4->setDisabled(true);
+            ui->spinBox_5->setDisabled(true);
+            ui->spinBox_6->setDisabled(true);
+            break;
+
+        case effects::SIMPLE_COMP:
+            ui->checkBox->setDisabled(false);
+            ui->dial->setMaximum(3);
+            ui->spinBox->setMaximum(3);
             ui->dial_2->setValue(0);
             ui->dial_3->setValue(0);
             ui->dial_4->setValue(0);
             ui->dial_5->setValue(0);
             ui->dial_6->setValue(0);
-        }
-        ui->dial->setDisabled(true);
-        ui->dial_2->setDisabled(true);
-        ui->dial_3->setDisabled(true);
-        ui->dial_4->setDisabled(true);
-        ui->dial_5->setDisabled(true);
-        ui->dial_6->setDisabled(true);
-        ui->spinBox->setDisabled(true);
-        ui->spinBox_2->setDisabled(true);
-        ui->spinBox_3->setDisabled(true);
-        ui->spinBox_4->setDisabled(true);
-        ui->spinBox_5->setDisabled(true);
-        ui->spinBox_6->setDisabled(true);
-        break;
+            ui->dial->setDisabled(false);
+            ui->dial_2->setDisabled(true);
+            ui->dial_3->setDisabled(true);
+            ui->dial_4->setDisabled(true);
+            ui->dial_5->setDisabled(true);
+            ui->dial_6->setDisabled(true);
+            ui->spinBox->setDisabled(false);
+            ui->spinBox_2->setDisabled(true);
+            ui->spinBox_3->setDisabled(true);
+            ui->spinBox_4->setDisabled(true);
+            ui->spinBox_5->setDisabled(true);
+            ui->spinBox_6->setDisabled(true);
+            break;
 
-    case SIMPLE_COMP:
-        ui->checkBox->setDisabled(false);
-        ui->dial->setMaximum(3);
-        ui->spinBox->setMaximum(3);
-        ui->dial_2->setValue(0);
-        ui->dial_3->setValue(0);
-        ui->dial_4->setValue(0);
-        ui->dial_5->setValue(0);
-        ui->dial_6->setValue(0);
-        ui->dial->setDisabled(false);
-        ui->dial_2->setDisabled(true);
-        ui->dial_3->setDisabled(true);
-        ui->dial_4->setDisabled(true);
-        ui->dial_5->setDisabled(true);
-        ui->dial_6->setDisabled(true);
-        ui->spinBox->setDisabled(false);
-        ui->spinBox_2->setDisabled(true);
-        ui->spinBox_3->setDisabled(true);
-        ui->spinBox_4->setDisabled(true);
-        ui->spinBox_5->setDisabled(true);
-        ui->spinBox_6->setDisabled(true);
-        break;
+        case effects::RING_MODULATOR:
+            ui->checkBox->setDisabled(false);
+            ui->dial->setMaximum(255);
+            ui->spinBox->setMaximum(255);
+            ui->dial_4->setMaximum(1);
+            ui->spinBox_4->setMaximum(1);
+            ui->dial_5->setMaximum(255);
+            ui->spinBox_5->setMaximum(255);
+            ui->dial_6->setValue(0);
+            ui->dial->setDisabled(false);
+            ui->dial_2->setDisabled(false);
+            ui->dial_3->setDisabled(false);
+            ui->dial_4->setDisabled(false);
+            ui->dial_5->setDisabled(false);
+            ui->dial_6->setDisabled(true);
+            ui->spinBox->setDisabled(false);
+            ui->spinBox_2->setDisabled(false);
+            ui->spinBox_3->setDisabled(false);
+            ui->spinBox_4->setDisabled(false);
+            ui->spinBox_5->setDisabled(false);
+            ui->spinBox_6->setDisabled(true);
+            break;
 
-    case RING_MODULATOR:
-        ui->checkBox->setDisabled(false);
-        ui->dial->setMaximum(255);
-        ui->spinBox->setMaximum(255);
-        ui->dial_4->setMaximum(1);
-        ui->spinBox_4->setMaximum(1);
-        ui->dial_5->setMaximum(255);
-        ui->spinBox_5->setMaximum(255);
-        ui->dial_6->setValue(0);
-        ui->dial->setDisabled(false);
-        ui->dial_2->setDisabled(false);
-        ui->dial_3->setDisabled(false);
-        ui->dial_4->setDisabled(false);
-        ui->dial_5->setDisabled(false);
-        ui->dial_6->setDisabled(true);
-        ui->spinBox->setDisabled(false);
-        ui->spinBox_2->setDisabled(false);
-        ui->spinBox_3->setDisabled(false);
-        ui->spinBox_4->setDisabled(false);
-        ui->spinBox_5->setDisabled(false);
-        ui->spinBox_6->setDisabled(true);
-        break;
+        case effects::PHASER:
+            ui->checkBox->setDisabled(false);
+            ui->dial->setMaximum(255);
+            ui->spinBox->setMaximum(255);
+            ui->dial_4->setMaximum(255);
+            ui->spinBox_4->setMaximum(255);
+            ui->dial_5->setMaximum(1);
+            ui->spinBox_5->setMaximum(1);
+            ui->dial_6->setValue(0);
+            ui->dial->setDisabled(false);
+            ui->dial_2->setDisabled(false);
+            ui->dial_3->setDisabled(false);
+            ui->dial_4->setDisabled(false);
+            ui->dial_5->setDisabled(false);
+            ui->dial_6->setDisabled(true);
+            ui->spinBox->setDisabled(false);
+            ui->spinBox_2->setDisabled(false);
+            ui->spinBox_3->setDisabled(false);
+            ui->spinBox_4->setDisabled(false);
+            ui->spinBox_5->setDisabled(false);
+            ui->spinBox_6->setDisabled(true);
+            break;
 
-    case PHASER:
-        ui->checkBox->setDisabled(false);
-        ui->dial->setMaximum(255);
-        ui->spinBox->setMaximum(255);
-        ui->dial_4->setMaximum(255);
-        ui->spinBox_4->setMaximum(255);
-        ui->dial_5->setMaximum(1);
-        ui->spinBox_5->setMaximum(1);
-        ui->dial_6->setValue(0);
-        ui->dial->setDisabled(false);
-        ui->dial_2->setDisabled(false);
-        ui->dial_3->setDisabled(false);
-        ui->dial_4->setDisabled(false);
-        ui->dial_5->setDisabled(false);
-        ui->dial_6->setDisabled(true);
-        ui->spinBox->setDisabled(false);
-        ui->spinBox_2->setDisabled(false);
-        ui->spinBox_3->setDisabled(false);
-        ui->spinBox_4->setDisabled(false);
-        ui->spinBox_5->setDisabled(false);
-        ui->spinBox_6->setDisabled(true);
-        break;
+        case effects::MONO_ECHO_FILTER:
+        case effects::STEREO_ECHO_FILTER:
+        case effects::TAPE_DELAY:
+        case effects::STEREO_TAPE_DELAY:
+            ui->checkBox->setDisabled(false);
+            ui->dial->setMaximum(255);
+            ui->spinBox->setMaximum(255);
+            ui->dial_4->setMaximum(255);
+            ui->spinBox_4->setMaximum(255);
+            ui->dial_5->setMaximum(255);
+            ui->spinBox_5->setMaximum(255);
+            ui->dial->setDisabled(false);
+            ui->dial_2->setDisabled(false);
+            ui->dial_3->setDisabled(false);
+            ui->dial_4->setDisabled(false);
+            ui->dial_5->setDisabled(false);
+            ui->dial_6->setDisabled(false);
+            ui->spinBox->setDisabled(false);
+            ui->spinBox_2->setDisabled(false);
+            ui->spinBox_3->setDisabled(false);
+            ui->spinBox_4->setDisabled(false);
+            ui->spinBox_5->setDisabled(false);
+            ui->spinBox_6->setDisabled(false);
+            break;
 
-    case MONO_ECHO_FILTER:
-    case STEREO_ECHO_FILTER:
-    case TAPE_DELAY:
-    case STEREO_TAPE_DELAY:
-        ui->checkBox->setDisabled(false);
-        ui->dial->setMaximum(255);
-        ui->spinBox->setMaximum(255);
-        ui->dial_4->setMaximum(255);
-        ui->spinBox_4->setMaximum(255);
-        ui->dial_5->setMaximum(255);
-        ui->spinBox_5->setMaximum(255);
-        ui->dial->setDisabled(false);
-        ui->dial_2->setDisabled(false);
-        ui->dial_3->setDisabled(false);
-        ui->dial_4->setDisabled(false);
-        ui->dial_5->setDisabled(false);
-        ui->dial_6->setDisabled(false);
-        ui->spinBox->setDisabled(false);
-        ui->spinBox_2->setDisabled(false);
-        ui->spinBox_3->setDisabled(false);
-        ui->spinBox_4->setDisabled(false);
-        ui->spinBox_5->setDisabled(false);
-        ui->spinBox_6->setDisabled(false);
-        break;
-
-    default:
-        ui->checkBox->setDisabled(false);
-        ui->dial->setMaximum(255);
-        ui->spinBox->setMaximum(255);
-        ui->dial_4->setMaximum(255);
-        ui->spinBox_4->setMaximum(255);
-        ui->dial_5->setMaximum(255);
-        ui->spinBox_5->setMaximum(255);
-        ui->dial_6->setValue(0);
-        ui->dial->setDisabled(false);
-        ui->dial_2->setDisabled(false);
-        ui->dial_3->setDisabled(false);
-        ui->dial_4->setDisabled(false);
-        ui->dial_5->setDisabled(false);
-        ui->dial_6->setDisabled(true);
-        ui->spinBox->setDisabled(false);
-        ui->spinBox_2->setDisabled(false);
-        ui->spinBox_3->setDisabled(false);
-        ui->spinBox_4->setDisabled(false);
-        ui->spinBox_5->setDisabled(false);
-        ui->spinBox_6->setDisabled(true);
-        break;
+        default:
+            ui->checkBox->setDisabled(false);
+            ui->dial->setMaximum(255);
+            ui->spinBox->setMaximum(255);
+            ui->dial_4->setMaximum(255);
+            ui->spinBox_4->setMaximum(255);
+            ui->dial_5->setMaximum(255);
+            ui->spinBox_5->setMaximum(255);
+            ui->dial_6->setValue(0);
+            ui->dial->setDisabled(false);
+            ui->dial_2->setDisabled(false);
+            ui->dial_3->setDisabled(false);
+            ui->dial_4->setDisabled(false);
+            ui->dial_5->setDisabled(false);
+            ui->dial_6->setDisabled(true);
+            ui->spinBox->setDisabled(false);
+            ui->spinBox_2->setDisabled(false);
+            ui->spinBox_3->setDisabled(false);
+            ui->spinBox_4->setDisabled(false);
+            ui->spinBox_5->setDisabled(false);
+            ui->spinBox_6->setDisabled(true);
+            break;
     }
 
     // set knobs labels
-    switch (value)
+    switch (static_cast<effects>(value))
     {
-        case EMPTY:
+        case effects::EMPTY:
             ui->label->setText(tr(""));
             ui->dial->setAccessibleName(tr("Default effect's dial 1"));
             ui->dial->setAccessibleDescription(tr("When you choose an effect you can set value of a parameter here"));
@@ -224,7 +224,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("When you choose an effect you can set precise value of a parameter here"));
             break;
 
-        case OVERDRIVE:
+        case effects::OVERDRIVE:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -262,7 +262,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case WAH:
+        case effects::WAH:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -300,7 +300,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case TOUCH_WAH:
+        case effects::TOUCH_WAH:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -338,7 +338,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case FUZZ:
+        case effects::FUZZ:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -376,7 +376,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case FUZZ_TOUCH_WAH:
+        case effects::FUZZ_TOUCH_WAH:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -414,7 +414,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case SIMPLE_COMP:
+        case effects::SIMPLE_COMP:
             ui->label->setText(tr("&Type"));
             ui->dial->setAccessibleName(tr("Default effect's \"Type\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Type\" parameter of this effect"));
@@ -452,7 +452,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case COMPRESSOR:
+        case effects::COMPRESSOR:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -490,8 +490,8 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case SINE_CHORUS:
-        case TRIANGLE_CHORUS:
+        case effects::SINE_CHORUS:
+        case effects::TRIANGLE_CHORUS:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -529,8 +529,8 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case SINE_FLANGER:
-        case TRIANGLE_FLANGER:
+        case effects::SINE_FLANGER:
+        case effects::TRIANGLE_FLANGER:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -568,7 +568,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case VIBRATONE:
+        case effects::VIBRATONE:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -606,7 +606,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case VINTAGE_TREMOLO:
+        case effects::VINTAGE_TREMOLO:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -644,7 +644,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case SINE_TREMOLO:
+        case effects::SINE_TREMOLO:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -682,7 +682,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case RING_MODULATOR:
+        case effects::RING_MODULATOR:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -720,7 +720,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case STEP_FILTER:
+        case effects::STEP_FILTER:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -758,7 +758,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case PHASER:
+        case effects::PHASER:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -796,7 +796,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case PITCH_SHIFTER:
+        case effects::PITCH_SHIFTER:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -834,8 +834,8 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case MONO_ECHO_FILTER:
-        case STEREO_ECHO_FILTER:
+        case effects::MONO_ECHO_FILTER:
+        case effects::STEREO_ECHO_FILTER:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -873,10 +873,10 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("Allows you to precisely set \"In Level\" parameter of this effect"));
             break;
 
-        case MONO_DELAY:
-        case MULTITAP_DELAY:
-        case REVERSE_DELAY:
-        case PING_PONG_DELAY:
+        case effects::MONO_DELAY:
+        case effects::MULTITAP_DELAY:
+        case effects::REVERSE_DELAY:
+        case effects::PING_PONG_DELAY:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -914,7 +914,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case DUCKING_DELAY:
+        case effects::DUCKING_DELAY:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -952,7 +952,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("This box is disabled in this effect"));
             break;
 
-        case TAPE_DELAY:
+        case effects::TAPE_DELAY:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -990,7 +990,7 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("Allows you to precisely set \"Stereo\" parameter of this effect"));
             break;
 
-        case STEREO_TAPE_DELAY:
+        case effects::STEREO_TAPE_DELAY:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));
@@ -1028,16 +1028,16 @@ void DefaultEffects::choose_fx(int value)
             ui->spinBox_6->setAccessibleDescription(tr("Allows you to precisely set \"Brightness\" parameter of this effect"));
             break;
 
-        case SMALL_HALL_REVERB:
-        case LARGE_HALL_REVERB:
-        case SMALL_ROOM_REVERB:
-        case LARGE_ROOM_REVERB:
-        case SMALL_PLATE_REVERB:
-        case LARGE_PLATE_REVERB:
-        case AMBIENT_REVERB:
-        case ARENA_REVERB:
-        case FENDER_63_SPRING_REVERB:
-        case FENDER_65_SPRING_REVERB:
+        case effects::SMALL_HALL_REVERB:
+        case effects::LARGE_HALL_REVERB:
+        case effects::SMALL_ROOM_REVERB:
+        case effects::LARGE_ROOM_REVERB:
+        case effects::SMALL_PLATE_REVERB:
+        case effects::LARGE_PLATE_REVERB:
+        case effects::AMBIENT_REVERB:
+        case effects::ARENA_REVERB:
+        case effects::FENDER_63_SPRING_REVERB:
+        case effects::FENDER_65_SPRING_REVERB:
             ui->label->setText(tr("&Level"));
             ui->dial->setAccessibleName(tr("Default effect's \"Level\" dial"));
             ui->dial->setAccessibleDescription(tr("Allows you to set \"Level\" parameter of this effect"));

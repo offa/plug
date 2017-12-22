@@ -203,7 +203,9 @@ int Mustang::set_effect(fx_pedal_settings value)
     int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
     libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
 
-    if(value.effect_num == EMPTY)
+    const auto effectType = static_cast<effects>(value.effect_num);
+
+    if(effectType == effects::EMPTY)
         return ret;
 
     if(value.put_post_amp)    // put effect in a slot after amplifier
@@ -219,261 +221,265 @@ int Mustang::set_effect(fx_pedal_settings value)
     array[KNOB4] = value.knob4;
     array[KNOB5] = value.knob5;
     // some effects have more knobs
-    if (value.effect_num == MONO_ECHO_FILTER ||
-            value.effect_num == STEREO_ECHO_FILTER ||
-            value.effect_num == TAPE_DELAY ||
-            value.effect_num == STEREO_TAPE_DELAY)
+    if (effectType == effects::MONO_ECHO_FILTER ||
+            effectType == effects::STEREO_ECHO_FILTER ||
+            effectType == effects::TAPE_DELAY ||
+            effectType == effects::STEREO_TAPE_DELAY)
     {
         array[KNOB6] = value.knob6;
     }
 
     // fill the form with missing data
-    switch (value.effect_num) {
-    case OVERDRIVE:
-        array[DSP] = 0x06;
-        array[EFFECT] = 0x3c;
-        break;
+    switch (effectType)
+    {
+        case effects::OVERDRIVE:
+            array[DSP] = 0x06;
+            array[EFFECT] = 0x3c;
+            break;
 
-    case WAH:
-        array[DSP] = 0x06;
-        array[EFFECT] = 0x49;
-        array[19] = 0x01;
-        break;
+        case effects::WAH:
+            array[DSP] = 0x06;
+            array[EFFECT] = 0x49;
+            array[19] = 0x01;
+            break;
 
-    case TOUCH_WAH:
-        array[DSP] = 0x06;
-        array[EFFECT] = 0x4a;
-        array[19] = 0x01;
-        break;
+        case effects::TOUCH_WAH:
+            array[DSP] = 0x06;
+            array[EFFECT] = 0x4a;
+            array[19] = 0x01;
+            break;
 
-    case FUZZ:
-        array[DSP] = 0x06;
-        array[EFFECT] = 0x1a;
-        break;
+        case effects::FUZZ:
+            array[DSP] = 0x06;
+            array[EFFECT] = 0x1a;
+            break;
 
-    case FUZZ_TOUCH_WAH:
-        array[DSP] = 0x06;
-        array[EFFECT] = 0x1c;
-        break;
+        case effects::FUZZ_TOUCH_WAH:
+            array[DSP] = 0x06;
+            array[EFFECT] = 0x1c;
+            break;
 
-    case SIMPLE_COMP:
-        array[DSP] = 0x06;
-        array[EFFECT] = 0x88;
-        array[19] = 0x08;
-        if(array[KNOB1] > 0x03)
-        {
-            array[KNOB1] = 0x03;
-        }
-        array[KNOB2] = 0x00;
-        array[KNOB3] = 0x00;
-        array[KNOB4] = 0x00;
-        array[KNOB5] = 0x00;
-        break;
+        case effects::SIMPLE_COMP:
+            array[DSP] = 0x06;
+            array[EFFECT] = 0x88;
+            array[19] = 0x08;
+            if(array[KNOB1] > 0x03)
+            {
+                array[KNOB1] = 0x03;
+            }
+            array[KNOB2] = 0x00;
+            array[KNOB3] = 0x00;
+            array[KNOB4] = 0x00;
+            array[KNOB5] = 0x00;
+            break;
 
-    case COMPRESSOR:
-        array[DSP] = 0x06;
-        array[EFFECT] = 0x07;
-        break;
+        case effects::COMPRESSOR:
+            array[DSP] = 0x06;
+            array[EFFECT] = 0x07;
+            break;
 
-    case SINE_CHORUS:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x12;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::SINE_CHORUS:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x12;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case TRIANGLE_CHORUS:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x13;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::TRIANGLE_CHORUS:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x13;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case SINE_FLANGER:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x18;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::SINE_FLANGER:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x18;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case TRIANGLE_FLANGER:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x19;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::TRIANGLE_FLANGER:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x19;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case VIBRATONE:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x2d;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::VIBRATONE:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x2d;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case VINTAGE_TREMOLO:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x40;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::VINTAGE_TREMOLO:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x40;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case SINE_TREMOLO:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x41;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::SINE_TREMOLO:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x41;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case RING_MODULATOR:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x22;
-        array[19] = 0x01;
-        if(array[KNOB4] > 0x01)
-        {
-            array[KNOB4] = 0x01;
-        }
-        break;
+        case effects::RING_MODULATOR:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x22;
+            array[19] = 0x01;
+            if(array[KNOB4] > 0x01)
+            {
+                array[KNOB4] = 0x01;
+            }
+            break;
 
-    case STEP_FILTER:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x29;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        break;
+        case effects::STEP_FILTER:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x29;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            break;
 
-    case PHASER:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x4f;
-        array[19] = 0x01;
-        array[20] = 0x01;
-        if(array[KNOB5] > 0x01)
-        {
-            array[KNOB5] = 0x01;
-        }
-        break;
+        case effects::PHASER:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x4f;
+            array[19] = 0x01;
+            array[20] = 0x01;
+            if(array[KNOB5] > 0x01)
+            {
+                array[KNOB5] = 0x01;
+            }
+            break;
 
-    case PITCH_SHIFTER:
-        array[DSP] = 0x07;
-        array[EFFECT] = 0x1f;
-        array[19] = 0x01;
-        break;
+        case effects::PITCH_SHIFTER:
+            array[DSP] = 0x07;
+            array[EFFECT] = 0x1f;
+            array[19] = 0x01;
+            break;
 
-    case MONO_DELAY:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x16;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::MONO_DELAY:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x16;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case MONO_ECHO_FILTER:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x43;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::MONO_ECHO_FILTER:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x43;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case STEREO_ECHO_FILTER:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x48;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::STEREO_ECHO_FILTER:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x48;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case MULTITAP_DELAY:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x44;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        if(array[KNOB5] > 0x03)
-        {
-            array[KNOB5] = 0x03;
-        }
-        break;
+        case effects::MULTITAP_DELAY:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x44;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            if(array[KNOB5] > 0x03)
+            {
+                array[KNOB5] = 0x03;
+            }
+            break;
 
-    case PING_PONG_DELAY:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x45;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::PING_PONG_DELAY:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x45;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case DUCKING_DELAY:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x15;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::DUCKING_DELAY:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x15;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case REVERSE_DELAY:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x46;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::REVERSE_DELAY:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x46;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case TAPE_DELAY:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x2b;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::TAPE_DELAY:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x2b;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case STEREO_TAPE_DELAY:
-        array[DSP] = 0x08;
-        array[EFFECT] = 0x2a;
-        array[19] = 0x02;
-        array[20] = 0x01;
-        break;
+        case effects::STEREO_TAPE_DELAY:
+            array[DSP] = 0x08;
+            array[EFFECT] = 0x2a;
+            array[19] = 0x02;
+            array[20] = 0x01;
+            break;
 
-    case SMALL_HALL_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x24;
-        break;
+        case effects::SMALL_HALL_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x24;
+            break;
 
-    case LARGE_HALL_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x3a;
-        break;
+        case effects::LARGE_HALL_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x3a;
+            break;
 
-    case SMALL_ROOM_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x26;
-        break;
+        case effects::SMALL_ROOM_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x26;
+            break;
 
-    case LARGE_ROOM_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x3b;
-        break;
+        case effects::LARGE_ROOM_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x3b;
+            break;
 
-    case SMALL_PLATE_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x4e;
-        break;
+        case effects::SMALL_PLATE_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x4e;
+            break;
 
-    case LARGE_PLATE_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x4b;
-        break;
+        case effects::LARGE_PLATE_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x4b;
+            break;
 
-    case AMBIENT_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x4c;
-        break;
+        case effects::AMBIENT_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x4c;
+            break;
 
-    case ARENA_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x4d;
-        break;
+        case effects::ARENA_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x4d;
+            break;
 
-    case FENDER_63_SPRING_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x21;
-        break;
+        case effects::FENDER_63_SPRING_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x21;
+            break;
 
-    case FENDER_65_SPRING_REVERB:
-        array[DSP] = 0x09;
-        array[EFFECT] = 0x0b;
-        break;
+        case effects::FENDER_65_SPRING_REVERB:
+            array[DSP] = 0x09;
+            array[EFFECT] = 0x0b;
+            break;
+
+        default:
+            break;
     }
 
     // send packet to the amp
@@ -838,155 +844,155 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings
             switch(data[i][EFFECT])
             {
             case 0x00:
-                effects_set[j].effect_num = EMPTY;
+                effects_set[j].effect_num = value(effects::EMPTY);
                 break;
 
             case 0x3c:
-                effects_set[j].effect_num =  OVERDRIVE;
+                effects_set[j].effect_num = value(effects::OVERDRIVE);
                 break;
 
             case 0x49:
-                effects_set[j].effect_num = WAH;
+                effects_set[j].effect_num = value(effects::WAH);
                 break;
 
             case 0x4a:
-                effects_set[j].effect_num = TOUCH_WAH;
+                effects_set[j].effect_num = value(effects::TOUCH_WAH);
                 break;
 
             case 0x1a:
-                effects_set[j].effect_num = FUZZ;
+                effects_set[j].effect_num = value(effects::FUZZ);
                 break;
 
             case 0x1c:
-                effects_set[j].effect_num = FUZZ_TOUCH_WAH;
+                effects_set[j].effect_num = value(effects::FUZZ_TOUCH_WAH);
                 break;
 
             case 0x88:
-                effects_set[j].effect_num = SIMPLE_COMP;
+                effects_set[j].effect_num = value(effects::SIMPLE_COMP);
                 break;
 
             case 0x07:
-                effects_set[j].effect_num = COMPRESSOR;
+                effects_set[j].effect_num = value(effects::COMPRESSOR);
                 break;
 
             case 0x12:
-                effects_set[j].effect_num = SINE_CHORUS;
+                effects_set[j].effect_num = value(effects::SINE_CHORUS);
                 break;
 
             case 0x13:
-                effects_set[j].effect_num = TRIANGLE_CHORUS;
+                effects_set[j].effect_num = value(effects::TRIANGLE_CHORUS);
                 break;
 
             case 0x18:
-                effects_set[j].effect_num = SINE_FLANGER;
+                effects_set[j].effect_num = value(effects::SINE_FLANGER);
                 break;
 
             case 0x19:
-                effects_set[j].effect_num = TRIANGLE_FLANGER;
+                effects_set[j].effect_num = value(effects::TRIANGLE_FLANGER);
                 break;
 
             case 0x2d:
-                effects_set[j].effect_num = VIBRATONE;
+                effects_set[j].effect_num = value(effects::VIBRATONE);
                 break;
 
             case 0x40:
-                effects_set[j].effect_num = VINTAGE_TREMOLO;
+                effects_set[j].effect_num = value(effects::VINTAGE_TREMOLO);
                 break;
 
             case 0x41:
-                effects_set[j].effect_num = SINE_TREMOLO;
+                effects_set[j].effect_num = value(effects::SINE_TREMOLO);
                 break;
 
             case 0x22:
-                effects_set[j].effect_num = RING_MODULATOR;
+                effects_set[j].effect_num = value(effects::RING_MODULATOR);
                 break;
 
             case 0x29:
-                effects_set[j].effect_num = STEP_FILTER;
+                effects_set[j].effect_num = value(effects::STEP_FILTER);
                 break;
 
             case 0x4f:
-                effects_set[j].effect_num = PHASER;
+                effects_set[j].effect_num = value(effects::PHASER);
                 break;
 
             case 0x1f:
-                effects_set[j].effect_num = PITCH_SHIFTER;
+                effects_set[j].effect_num = value(effects::PITCH_SHIFTER);
                 break;
 
             case 0x16:
-                effects_set[j].effect_num = MONO_DELAY;
+                effects_set[j].effect_num = value(effects::MONO_DELAY);
                 break;
 
             case 0x43:
-                effects_set[j].effect_num = MONO_ECHO_FILTER;
+                effects_set[j].effect_num = value(effects::MONO_ECHO_FILTER);
                 break;
 
             case 0x48:
-                effects_set[j].effect_num = STEREO_ECHO_FILTER;
+                effects_set[j].effect_num = value(effects::STEREO_ECHO_FILTER);
                 break;
 
             case 0x44:
-                effects_set[j].effect_num = MULTITAP_DELAY;
+                effects_set[j].effect_num = value(effects::MULTITAP_DELAY);
                 break;
 
             case 0x45:
-                effects_set[j].effect_num = PING_PONG_DELAY;
+                effects_set[j].effect_num = value(effects::PING_PONG_DELAY);
                 break;
 
             case 0x15:
-                effects_set[j].effect_num = DUCKING_DELAY;
+                effects_set[j].effect_num = value(effects::DUCKING_DELAY);
                 break;
 
             case 0x46:
-                effects_set[j].effect_num = REVERSE_DELAY;
+                effects_set[j].effect_num = value(effects::REVERSE_DELAY);
                 break;
 
             case 0x2b:
-                effects_set[j].effect_num = TAPE_DELAY;
+                effects_set[j].effect_num = value(effects::TAPE_DELAY);
                 break;
 
             case 0x2a:
-                effects_set[j].effect_num = STEREO_TAPE_DELAY;
+                effects_set[j].effect_num = value(effects::STEREO_TAPE_DELAY);
                 break;
 
             case 0x24:
-                effects_set[j].effect_num = SMALL_HALL_REVERB;
+                effects_set[j].effect_num = value(effects::SMALL_HALL_REVERB);
                 break;
 
             case 0x3a:
-                effects_set[j].effect_num = LARGE_HALL_REVERB;
+                effects_set[j].effect_num = value(effects::LARGE_HALL_REVERB);
                 break;
 
             case 0x26:
-                effects_set[j].effect_num = SMALL_ROOM_REVERB;
+                effects_set[j].effect_num = value(effects::SMALL_ROOM_REVERB);
                 break;
 
             case 0x3b:
-                effects_set[j].effect_num = LARGE_ROOM_REVERB;
+                effects_set[j].effect_num = value(effects::LARGE_ROOM_REVERB);
                 break;
 
             case 0x4e:
-                effects_set[j].effect_num = SMALL_PLATE_REVERB;
+                effects_set[j].effect_num = value(effects::SMALL_PLATE_REVERB);
                 break;
 
             case 0x4b:
-                effects_set[j].effect_num = LARGE_PLATE_REVERB;
+                effects_set[j].effect_num = value(effects::LARGE_PLATE_REVERB);
                 break;
 
             case 0x4c:
-                effects_set[j].effect_num = AMBIENT_REVERB;
+                effects_set[j].effect_num = value(effects::AMBIENT_REVERB);
                 break;
 
             case 0x4d:
-                effects_set[j].effect_num = ARENA_REVERB;
+                effects_set[j].effect_num = value(effects::ARENA_REVERB);
                 break;
 
             case 0x21:
-                effects_set[j].effect_num = FENDER_63_SPRING_REVERB;
+                effects_set[j].effect_num = value(effects::FENDER_63_SPRING_REVERB);
                 break;
 
             case 0x0b:
-                effects_set[j].effect_num = FENDER_65_SPRING_REVERB;
+                effects_set[j].effect_num = value(effects::FENDER_65_SPRING_REVERB);
                 break;
             }
         }
@@ -1017,16 +1023,23 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_ped
         repeat = number_of_effects;
 
     for(int i = 0; i < repeat; i++)
-        if(effects[i].effect_num < SINE_CHORUS)
+    {
+        if(effects[i].effect_num < value(effects::SINE_CHORUS))
+        {
             return -1;
+        }
+    }
 
-    if(effects[0].effect_num>=SINE_CHORUS && effects[0].effect_num<=PITCH_SHIFTER)
+    if(effects[0].effect_num>=value(effects::SINE_CHORUS) && effects[0].effect_num<=value(effects::PITCH_SHIFTER))
     {
         fxknob = 0x01;
         repeat = 1;  //just to be sure
     }
     else
+    {
         fxknob = 0x02;
+    }
+
     array[FXKNOB] = fxknob;
 
     array[SAVE_SLOT] = slot;
@@ -1059,207 +1072,211 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_ped
         array[KNOB4] = effects[i].knob4;
         array[KNOB5] = effects[i].knob5;
         // some effects have more knobs
-        if (effects[i].effect_num == MONO_ECHO_FILTER ||
-                effects[i].effect_num == STEREO_ECHO_FILTER ||
-                effects[i].effect_num == TAPE_DELAY ||
-                effects[i].effect_num == STEREO_TAPE_DELAY)
+        if (effects[i].effect_num == value(effects::MONO_ECHO_FILTER) ||
+            effects[i].effect_num == value(effects::STEREO_ECHO_FILTER) ||
+            effects[i].effect_num == value(effects::TAPE_DELAY) ||
+            effects[i].effect_num == value(effects::STEREO_TAPE_DELAY))
         {
             array[KNOB6] = effects[i].knob6;
         }
 
         // fill the form with missing data
-        switch (effects[i].effect_num) {
-        case SINE_CHORUS:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x12;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+        switch (static_cast<::effects>(effects[i].effect_num))
+        {
+            case effects::SINE_CHORUS:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x12;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case TRIANGLE_CHORUS:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x13;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+            case effects::TRIANGLE_CHORUS:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x13;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case SINE_FLANGER:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x18;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+            case effects::SINE_FLANGER:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x18;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case TRIANGLE_FLANGER:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x19;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+            case effects::TRIANGLE_FLANGER:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x19;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case VIBRATONE:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x2d;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+            case effects::VIBRATONE:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x2d;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case VINTAGE_TREMOLO:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x40;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+            case effects::VINTAGE_TREMOLO:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x40;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case SINE_TREMOLO:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x41;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+            case effects::SINE_TREMOLO:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x41;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case RING_MODULATOR:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x22;
-            array[19] = 0x01;
-            if(array[KNOB4] > 0x01)
-                array[KNOB4] = 0x01;
-            break;
+            case effects::RING_MODULATOR:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x22;
+                array[19] = 0x01;
+                if(array[KNOB4] > 0x01)
+                    array[KNOB4] = 0x01;
+                break;
 
-        case STEP_FILTER:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x29;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            break;
+            case effects::STEP_FILTER:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x29;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                break;
 
-        case PHASER:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x4f;
-            array[19] = 0x01;
-            array[20] = 0x01;
-            if(array[KNOB5] > 0x01)
-                array[KNOB5] = 0x01;
-            break;
+            case effects::PHASER:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x4f;
+                array[19] = 0x01;
+                array[20] = 0x01;
+                if(array[KNOB5] > 0x01)
+                    array[KNOB5] = 0x01;
+                break;
 
-        case PITCH_SHIFTER:
-            array[DSP] = 0x07;
-            array[EFFECT] = 0x1f;
-            array[19] = 0x01;
-            break;
+            case effects::PITCH_SHIFTER:
+                array[DSP] = 0x07;
+                array[EFFECT] = 0x1f;
+                array[19] = 0x01;
+                break;
 
-        case MONO_DELAY:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x16;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::MONO_DELAY:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x16;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case MONO_ECHO_FILTER:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x43;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::MONO_ECHO_FILTER:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x43;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case STEREO_ECHO_FILTER:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x48;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::STEREO_ECHO_FILTER:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x48;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case MULTITAP_DELAY:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x44;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::MULTITAP_DELAY:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x44;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case PING_PONG_DELAY:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x45;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::PING_PONG_DELAY:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x45;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case DUCKING_DELAY:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x15;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::DUCKING_DELAY:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x15;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case REVERSE_DELAY:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x46;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::REVERSE_DELAY:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x46;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case TAPE_DELAY:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x2b;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::TAPE_DELAY:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x2b;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case STEREO_TAPE_DELAY:
-            array[DSP] = 0x08;
-            array[EFFECT] = 0x2a;
-            array[19] = 0x02;
-            array[20] = 0x01;
-            break;
+            case effects::STEREO_TAPE_DELAY:
+                array[DSP] = 0x08;
+                array[EFFECT] = 0x2a;
+                array[19] = 0x02;
+                array[20] = 0x01;
+                break;
 
-        case SMALL_HALL_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x24;
-            break;
+            case effects::SMALL_HALL_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x24;
+                break;
 
-        case LARGE_HALL_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x3a;
-            break;
+            case effects::LARGE_HALL_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x3a;
+                break;
 
-        case SMALL_ROOM_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x26;
-            break;
+            case effects::SMALL_ROOM_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x26;
+                break;
 
-        case LARGE_ROOM_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x3b;
-            break;
+            case effects::LARGE_ROOM_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x3b;
+                break;
 
-        case SMALL_PLATE_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x4e;
-            break;
+            case effects::SMALL_PLATE_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x4e;
+                break;
 
-        case LARGE_PLATE_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x4b;
-            break;
+            case effects::LARGE_PLATE_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x4b;
+                break;
 
-        case AMBIENT_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x4c;
-            break;
+            case effects::AMBIENT_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x4c;
+                break;
 
-        case ARENA_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x4d;
-            break;
+            case effects::ARENA_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x4d;
+                break;
 
-        case FENDER_63_SPRING_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x21;
-            break;
+            case effects::FENDER_63_SPRING_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x21;
+                break;
 
-        case FENDER_65_SPRING_REVERB:
-            array[DSP] = 0x09;
-            array[EFFECT] = 0x0b;
-            break;
+            case effects::FENDER_65_SPRING_REVERB:
+                array[DSP] = 0x09;
+                array[EFFECT] = 0x0b;
+                break;
+
+            default:
+                break;
         }
         // send packet
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);

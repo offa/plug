@@ -213,155 +213,155 @@ void LoadFromFile::parseFX()
                 switch(m_xml->attributes().value("ID").toString().toInt())
                 {
                 case 0x00:
-                    m_fx_settings[x].effect_num = EMPTY;
+                    m_fx_settings[x].effect_num = value(effects::EMPTY);
                     break;
 
                 case 0x3c:
-                    m_fx_settings[x].effect_num =  OVERDRIVE;
+                    m_fx_settings[x].effect_num = value(effects::OVERDRIVE);
                     break;
 
                 case 0x49:
-                    m_fx_settings[x].effect_num = WAH;
+                    m_fx_settings[x].effect_num = value(effects::WAH);
                     break;
 
                 case 0x4a:
-                    m_fx_settings[x].effect_num = TOUCH_WAH;
+                    m_fx_settings[x].effect_num = value(effects::TOUCH_WAH);
                     break;
 
                 case 0x1a:
-                    m_fx_settings[x].effect_num = FUZZ;
+                    m_fx_settings[x].effect_num = value(effects::FUZZ);
                     break;
 
                 case 0x1c:
-                    m_fx_settings[x].effect_num = FUZZ_TOUCH_WAH;
+                    m_fx_settings[x].effect_num = value(effects::FUZZ_TOUCH_WAH);
                     break;
 
                 case 0x88:
-                    m_fx_settings[x].effect_num = SIMPLE_COMP;
+                    m_fx_settings[x].effect_num = value(effects::SIMPLE_COMP);
                     break;
 
                 case 0x07:
-                    m_fx_settings[x].effect_num = COMPRESSOR;
+                    m_fx_settings[x].effect_num = value(effects::COMPRESSOR);
                     break;
 
                 case 0x12:
-                    m_fx_settings[x].effect_num = SINE_CHORUS;
+                    m_fx_settings[x].effect_num = value(effects::SINE_CHORUS);
                     break;
 
                 case 0x13:
-                    m_fx_settings[x].effect_num = TRIANGLE_CHORUS;
+                    m_fx_settings[x].effect_num = value(effects::TRIANGLE_CHORUS);
                     break;
 
                 case 0x18:
-                    m_fx_settings[x].effect_num = SINE_FLANGER;
+                    m_fx_settings[x].effect_num = value(effects::SINE_FLANGER);
                     break;
 
                 case 0x19:
-                    m_fx_settings[x].effect_num = TRIANGLE_FLANGER;
+                    m_fx_settings[x].effect_num = value(effects::TRIANGLE_FLANGER);
                     break;
 
                 case 0x2d:
-                    m_fx_settings[x].effect_num = VIBRATONE;
+                    m_fx_settings[x].effect_num = value(effects::VIBRATONE);
                     break;
 
                 case 0x40:
-                    m_fx_settings[x].effect_num = VINTAGE_TREMOLO;
+                    m_fx_settings[x].effect_num = value(effects::VINTAGE_TREMOLO);
                     break;
 
                 case 0x41:
-                    m_fx_settings[x].effect_num = SINE_TREMOLO;
+                    m_fx_settings[x].effect_num = value(effects::SINE_TREMOLO);
                     break;
 
                 case 0x22:
-                    m_fx_settings[x].effect_num = RING_MODULATOR;
+                    m_fx_settings[x].effect_num = value(effects::RING_MODULATOR);
                     break;
 
                 case 0x29:
-                    m_fx_settings[x].effect_num = STEP_FILTER;
+                    m_fx_settings[x].effect_num = value(effects::STEP_FILTER);
                     break;
 
                 case 0x4f:
-                    m_fx_settings[x].effect_num = PHASER;
+                    m_fx_settings[x].effect_num = value(effects::PHASER);
                     break;
 
                 case 0x1f:
-                    m_fx_settings[x].effect_num = PITCH_SHIFTER;
+                    m_fx_settings[x].effect_num = value(effects::PITCH_SHIFTER);
                     break;
 
                 case 0x16:
-                    m_fx_settings[x].effect_num = MONO_DELAY;
+                    m_fx_settings[x].effect_num = value(effects::MONO_DELAY);
                     break;
 
                 case 0x43:
-                    m_fx_settings[x].effect_num = MONO_ECHO_FILTER;
+                    m_fx_settings[x].effect_num = value(effects::MONO_ECHO_FILTER);
                     break;
 
                 case 0x48:
-                    m_fx_settings[x].effect_num = STEREO_ECHO_FILTER;
+                    m_fx_settings[x].effect_num = value(effects::STEREO_ECHO_FILTER);
                     break;
 
                 case 0x44:
-                    m_fx_settings[x].effect_num = MULTITAP_DELAY;
+                    m_fx_settings[x].effect_num = value(effects::MULTITAP_DELAY);
                     break;
 
                 case 0x45:
-                    m_fx_settings[x].effect_num = PING_PONG_DELAY;
+                    m_fx_settings[x].effect_num = value(effects::PING_PONG_DELAY);
                     break;
 
                 case 0x15:
-                    m_fx_settings[x].effect_num = DUCKING_DELAY;
+                    m_fx_settings[x].effect_num = value(effects::DUCKING_DELAY);
                     break;
 
                 case 0x46:
-                    m_fx_settings[x].effect_num = REVERSE_DELAY;
+                    m_fx_settings[x].effect_num = value(effects::REVERSE_DELAY);
                     break;
 
                 case 0x2b:
-                    m_fx_settings[x].effect_num = TAPE_DELAY;
+                    m_fx_settings[x].effect_num = value(effects::TAPE_DELAY);
                     break;
 
                 case 0x2a:
-                    m_fx_settings[x].effect_num = STEREO_TAPE_DELAY;
+                    m_fx_settings[x].effect_num = value(effects::STEREO_TAPE_DELAY);
                     break;
 
                 case 0x24:
-                    m_fx_settings[x].effect_num = SMALL_HALL_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::SMALL_HALL_REVERB);
                     break;
 
                 case 0x3a:
-                    m_fx_settings[x].effect_num = LARGE_HALL_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::LARGE_HALL_REVERB);
                     break;
 
                 case 0x26:
-                    m_fx_settings[x].effect_num = SMALL_ROOM_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::SMALL_ROOM_REVERB);
                     break;
 
                 case 0x3b:
-                    m_fx_settings[x].effect_num = LARGE_ROOM_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::LARGE_ROOM_REVERB);
                     break;
 
                 case 0x4e:
-                    m_fx_settings[x].effect_num = SMALL_PLATE_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::SMALL_PLATE_REVERB);
                     break;
 
                 case 0x4b:
-                    m_fx_settings[x].effect_num = LARGE_PLATE_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::LARGE_PLATE_REVERB);
                     break;
 
                 case 0x4c:
-                    m_fx_settings[x].effect_num = AMBIENT_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::AMBIENT_REVERB);
                     break;
 
                 case 0x4d:
-                    m_fx_settings[x].effect_num = ARENA_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::ARENA_REVERB);
                     break;
 
                 case 0x21:
-                    m_fx_settings[x].effect_num = FENDER_63_SPRING_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::FENDER_63_SPRING_REVERB);
                     break;
 
                 case 0x0b:
-                    m_fx_settings[x].effect_num = FENDER_65_SPRING_REVERB;
+                    m_fx_settings[x].effect_num = value(effects::FENDER_65_SPRING_REVERB);
                     break;
                 }
             }

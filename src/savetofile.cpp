@@ -304,13 +304,13 @@ void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
 
     xml->writeStartElement("Stompbox");
     xml->writeAttribute("ID", "1");
-    if((settings[0].effect_num > EMPTY) && (settings[0].effect_num <= COMPRESSOR))
+    if((settings[0].effect_num > value(effects::EMPTY)) && (settings[0].effect_num <= value(effects::COMPRESSOR)))
         writeFX(settings[0]);
-    else if((settings[1].effect_num > EMPTY) && (settings[1].effect_num <= COMPRESSOR))
+    else if((settings[1].effect_num > value(effects::EMPTY)) && (settings[1].effect_num <= value(effects::COMPRESSOR)))
         writeFX(settings[1]);
-    else if((settings[2].effect_num > EMPTY) && (settings[2].effect_num <= COMPRESSOR))
+    else if((settings[2].effect_num > value(effects::EMPTY)) && (settings[2].effect_num <= value(effects::COMPRESSOR)))
         writeFX(settings[2]);
-    else if((settings[3].effect_num > EMPTY) && (settings[3].effect_num <= COMPRESSOR))
+    else if((settings[3].effect_num > value(effects::EMPTY)) && (settings[3].effect_num <= value(effects::COMPRESSOR)))
         writeFX(settings[3]);
     else
         writeFX(empty);
@@ -318,13 +318,13 @@ void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
 
     xml->writeStartElement("Modulation");
     xml->writeAttribute("ID", "2");
-    if((settings[0].effect_num >= SINE_CHORUS) && (settings[0].effect_num <= PITCH_SHIFTER))
+    if((settings[0].effect_num >= value(effects::SINE_CHORUS)) && (settings[0].effect_num <= value(effects::PITCH_SHIFTER)))
         writeFX(settings[0]);
-    else if((settings[1].effect_num >= SINE_CHORUS) && (settings[1].effect_num <= PITCH_SHIFTER))
+    else if((settings[1].effect_num >= value(effects::SINE_CHORUS)) && (settings[1].effect_num <= value(effects::PITCH_SHIFTER)))
         writeFX(settings[1]);
-    else if((settings[2].effect_num >= SINE_CHORUS) && (settings[2].effect_num <= PITCH_SHIFTER))
+    else if((settings[2].effect_num >= value(effects::SINE_CHORUS)) && (settings[2].effect_num <= value(effects::PITCH_SHIFTER)))
         writeFX(settings[2]);
-    else if((settings[3].effect_num >= SINE_CHORUS) && (settings[3].effect_num <= PITCH_SHIFTER))
+    else if((settings[3].effect_num >= value(effects::SINE_CHORUS)) && (settings[3].effect_num <= value(effects::PITCH_SHIFTER)))
         writeFX(settings[3]);
     else
         writeFX(empty);
@@ -332,13 +332,13 @@ void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
 
     xml->writeStartElement("Delay");
     xml->writeAttribute("ID", "3");
-    if((settings[0].effect_num >= MONO_DELAY) && (settings[0].effect_num <= STEREO_TAPE_DELAY))
+    if((settings[0].effect_num >= value(effects::MONO_DELAY)) && (settings[0].effect_num <= value(effects::STEREO_TAPE_DELAY)))
         writeFX(settings[0]);
-    else if((settings[1].effect_num >= MONO_DELAY) && (settings[1].effect_num <= STEREO_TAPE_DELAY))
+    else if((settings[1].effect_num >= value(effects::MONO_DELAY)) && (settings[1].effect_num <= value(effects::STEREO_TAPE_DELAY)))
         writeFX(settings[1]);
-    else if((settings[2].effect_num >= MONO_DELAY) && (settings[2].effect_num <= STEREO_TAPE_DELAY))
+    else if((settings[2].effect_num >= value(effects::MONO_DELAY)) && (settings[2].effect_num <= value(effects::STEREO_TAPE_DELAY)))
         writeFX(settings[2]);
-    else if((settings[3].effect_num >= MONO_DELAY) && (settings[3].effect_num <= STEREO_TAPE_DELAY))
+    else if((settings[3].effect_num >= value(effects::MONO_DELAY)) && (settings[3].effect_num <= value(effects::STEREO_TAPE_DELAY)))
         writeFX(settings[3]);
     else
         writeFX(empty);
@@ -346,13 +346,13 @@ void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
 
     xml->writeStartElement("Reverb");
     xml->writeAttribute("ID", "4");
-    if((settings[0].effect_num >= SMALL_HALL_REVERB) && (settings[0].effect_num <= FENDER_65_SPRING_REVERB))
+    if((settings[0].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[0].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
         writeFX(settings[0]);
-    else if((settings[1].effect_num >= SMALL_HALL_REVERB) && (settings[1].effect_num <= FENDER_65_SPRING_REVERB))
+    else if((settings[1].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[1].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
         writeFX(settings[1]);
-    else if((settings[2].effect_num >= SMALL_HALL_REVERB) && (settings[2].effect_num <= FENDER_65_SPRING_REVERB))
+    else if((settings[2].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[2].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
         writeFX(settings[2]);
-    else if((settings[3].effect_num >= SMALL_HALL_REVERB) && (settings[3].effect_num <= FENDER_65_SPRING_REVERB))
+    else if((settings[3].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[3].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
         writeFX(settings[3]);
     else
         writeFX(empty);
@@ -365,158 +365,159 @@ void SaveToFile::writeFX(struct fx_pedal_settings settings)
 {
     int model=0, position;
 
-    switch (settings.effect_num) {
-    case EMPTY:
-        model = 0x00;
-        break;
+    switch (static_cast<effects>(settings.effect_num))
+    {
+        case effects::EMPTY:
+            model = 0x00;
+            break;
 
-    case OVERDRIVE:
-        model = 0x3c;
-        break;
+        case effects::OVERDRIVE:
+            model = 0x3c;
+            break;
 
-    case WAH:
-        model = 0x49;
-        break;
+        case effects::WAH:
+            model = 0x49;
+            break;
 
-    case TOUCH_WAH:
-        model = 0x4a;
-        break;
+        case effects::TOUCH_WAH:
+            model = 0x4a;
+            break;
 
-    case FUZZ:
-        model = 0x1a;
-        break;
+        case effects::FUZZ:
+            model = 0x1a;
+            break;
 
-    case FUZZ_TOUCH_WAH:
-        model = 0x1c;
-        break;
+        case effects::FUZZ_TOUCH_WAH:
+            model = 0x1c;
+            break;
 
-    case SIMPLE_COMP:
-        model = 0x88;
-        break;
+        case effects::SIMPLE_COMP:
+            model = 0x88;
+            break;
 
-    case COMPRESSOR:
-        model = 0x07;
-        break;
+        case effects::COMPRESSOR:
+            model = 0x07;
+            break;
 
-    case SINE_CHORUS:
-        model = 0x12;
-        break;
+        case effects::SINE_CHORUS:
+            model = 0x12;
+            break;
 
-    case TRIANGLE_CHORUS:
-        model = 0x13;
-        break;
+        case effects::TRIANGLE_CHORUS:
+            model = 0x13;
+            break;
 
-    case SINE_FLANGER:
-        model = 0x18;
-        break;
+        case effects::SINE_FLANGER:
+            model = 0x18;
+            break;
 
-    case TRIANGLE_FLANGER:
-        model = 0x19;
-        break;
+        case effects::TRIANGLE_FLANGER:
+            model = 0x19;
+            break;
 
-    case VIBRATONE:
-        model = 0x2d;
-        break;
+        case effects::VIBRATONE:
+            model = 0x2d;
+            break;
 
-    case VINTAGE_TREMOLO:
-        model = 0x40;
-        break;
+        case effects::VINTAGE_TREMOLO:
+            model = 0x40;
+            break;
 
-    case SINE_TREMOLO:
-        model = 0x41;
-        break;
+        case effects::SINE_TREMOLO:
+            model = 0x41;
+            break;
 
-    case RING_MODULATOR:
-        model = 0x22;
-        break;
+        case effects::RING_MODULATOR:
+            model = 0x22;
+            break;
 
-    case STEP_FILTER:
-        model = 0x29;
-        break;
+        case effects::STEP_FILTER:
+            model = 0x29;
+            break;
 
-    case PHASER:
-        model = 0x4f;
-        break;
+        case effects::PHASER:
+            model = 0x4f;
+            break;
 
-    case PITCH_SHIFTER:
-        model = 0x1f;
-        break;
+        case effects::PITCH_SHIFTER:
+            model = 0x1f;
+            break;
 
-    case MONO_DELAY:
-        model = 0x16;
-        break;
+        case effects::MONO_DELAY:
+            model = 0x16;
+            break;
 
-    case MONO_ECHO_FILTER:
-        model = 0x43;
-        break;
+        case effects::MONO_ECHO_FILTER:
+            model = 0x43;
+            break;
 
-    case STEREO_ECHO_FILTER:
-        model = 0x48;
-        break;
+        case effects::STEREO_ECHO_FILTER:
+            model = 0x48;
+            break;
 
-    case MULTITAP_DELAY:
-        model = 0x44;
-        break;
+        case effects::MULTITAP_DELAY:
+            model = 0x44;
+            break;
 
-    case PING_PONG_DELAY:
-        model = 0x45;
-        break;
+        case effects::PING_PONG_DELAY:
+            model = 0x45;
+            break;
 
-    case DUCKING_DELAY:
-        model = 0x15;
-        break;
+        case effects::DUCKING_DELAY:
+            model = 0x15;
+            break;
 
-    case REVERSE_DELAY:
-        model = 0x46;
-        break;
+        case effects::REVERSE_DELAY:
+            model = 0x46;
+            break;
 
-    case TAPE_DELAY:
-        model = 0x2b;
-        break;
+        case effects::TAPE_DELAY:
+            model = 0x2b;
+            break;
 
-    case STEREO_TAPE_DELAY:
-        model = 0x2a;
-        break;
+        case effects::STEREO_TAPE_DELAY:
+            model = 0x2a;
+            break;
 
-    case SMALL_HALL_REVERB:
-        model = 0x24;
-        break;
+        case effects::SMALL_HALL_REVERB:
+            model = 0x24;
+            break;
 
-    case LARGE_HALL_REVERB:
-        model = 0x3a;
-        break;
+        case effects::LARGE_HALL_REVERB:
+            model = 0x3a;
+            break;
 
-    case SMALL_ROOM_REVERB:
-        model = 0x26;
-        break;
+        case effects::SMALL_ROOM_REVERB:
+            model = 0x26;
+            break;
 
-    case LARGE_ROOM_REVERB:
-        model = 0x3b;
-        break;
+        case effects::LARGE_ROOM_REVERB:
+            model = 0x3b;
+            break;
 
-    case SMALL_PLATE_REVERB:
-        model = 0x4e;
-        break;
+        case effects::SMALL_PLATE_REVERB:
+            model = 0x4e;
+            break;
 
-    case LARGE_PLATE_REVERB:
-        model = 0x4b;
-        break;
+        case effects::LARGE_PLATE_REVERB:
+            model = 0x4b;
+            break;
 
-    case AMBIENT_REVERB:
-        model = 0x4c;
-        break;
+        case effects::AMBIENT_REVERB:
+            model = 0x4c;
+            break;
 
-    case ARENA_REVERB:
-        model = 0x4d;
-        break;
+        case effects::ARENA_REVERB:
+            model = 0x4d;
+            break;
 
-    case FENDER_63_SPRING_REVERB:
-        model = 0x21;
-        break;
+        case effects::FENDER_63_SPRING_REVERB:
+            model = 0x21;
+            break;
 
-    case FENDER_65_SPRING_REVERB:
-        model = 0x0b;
-        break;
+        case effects::FENDER_65_SPRING_REVERB:
+            model = 0x0b;
+            break;
     }
 
     position = settings.put_post_amp ? (settings.fx_slot+4) : (settings.fx_slot);
@@ -526,7 +527,7 @@ void SaveToFile::writeFX(struct fx_pedal_settings settings)
     xml->writeAttribute("POS", QString("%1").arg(position));
     xml->writeAttribute("BypassState", "1");
 
-    if(model == EMPTY)
+    if(model == value(effects::EMPTY))
     {
         xml->writeCharacters("");
         xml->writeEndElement();  // end Module
@@ -538,7 +539,7 @@ void SaveToFile::writeFX(struct fx_pedal_settings settings)
     xml->writeCharacters(QString("%1").arg((settings.knob1<<8)|settings.knob1));
     xml->writeEndElement();
 
-    if(settings.effect_num == SIMPLE_COMP)
+    if(settings.effect_num == value(effects::SIMPLE_COMP))
     {
         xml->writeEndElement();  // end Module
         return;
@@ -564,10 +565,10 @@ void SaveToFile::writeFX(struct fx_pedal_settings settings)
     xml->writeCharacters(QString("%1").arg((settings.knob5<<8)|settings.knob5));
     xml->writeEndElement();
 
-    if(settings.effect_num != MONO_ECHO_FILTER &&
-            settings.effect_num != STEREO_ECHO_FILTER &&
-            settings.effect_num != TAPE_DELAY &&
-            settings.effect_num != STEREO_TAPE_DELAY)
+    if(settings.effect_num != value(effects::MONO_ECHO_FILTER) &&
+       settings.effect_num != value(effects::STEREO_ECHO_FILTER) &&
+       settings.effect_num != value(effects::TAPE_DELAY) &&
+       settings.effect_num != value(effects::STEREO_TAPE_DELAY))
     {
         xml->writeEndElement();  // end Module
         return;
