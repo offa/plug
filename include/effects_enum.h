@@ -26,7 +26,7 @@
 // and is more practical than numbers)
 
 // list of all amplifiers
-enum amps
+enum class amps
 {
     FENDER_57_DELUXE,
     FENDER_59_BASSMAN,
@@ -41,6 +41,13 @@ enum amps
     AMERICAN_90S,
     METAL_2000
 };
+
+constexpr auto value(amps a)
+{
+    return static_cast<unsigned char>(a);
+}
+
+
 
 // list of all effects
 enum effects

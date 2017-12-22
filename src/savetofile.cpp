@@ -92,80 +92,80 @@ void SaveToFile::writeAmp(struct amp_settings settings)
 {
     int model=0, something=0, something2=0, something3 = 128;
 
-    switch (settings.amp_num)
+    switch (static_cast<amps>(settings.amp_num))
     {
-    case FENDER_57_DELUXE:
-        model = 0x67;
-        something = 0x01;
-        something2 = 0x53;
-        break;
+        case amps::FENDER_57_DELUXE:
+            model = 0x67;
+            something = 0x01;
+            something2 = 0x53;
+            break;
 
-    case FENDER_59_BASSMAN:
-        model = 0x64;
-        something = 0x02;
-        something2 = 0x67;
-        break;
+        case amps::FENDER_59_BASSMAN:
+            model = 0x64;
+            something = 0x02;
+            something2 = 0x67;
+            break;
 
-    case FENDER_57_CHAMP:
-        model = 0x7c;
-        something = 0x0c;
-        something2 = 0x00;
-        break;
+        case amps::FENDER_57_CHAMP:
+            model = 0x7c;
+            something = 0x0c;
+            something2 = 0x00;
+            break;
 
-    case FENDER_65_DELUXE_REVERB:
-        model = 0x53;
-        something = 0x03;
-        something2 = 0x6a;
-        something3 = 0x00;
-        break;
+        case amps::FENDER_65_DELUXE_REVERB:
+            model = 0x53;
+            something = 0x03;
+            something2 = 0x6a;
+            something3 = 0x00;
+            break;
 
-    case FENDER_65_PRINCETON:
-        model = 0x6a;
-        something = 0x04;
-        something2 = 0x61;
-        break;
+        case amps::FENDER_65_PRINCETON:
+            model = 0x6a;
+            something = 0x04;
+            something2 = 0x61;
+            break;
 
-    case FENDER_65_TWIN_REVERB:
-        model = 0x75;
-        something = 0x05;
-        something2 = 0x72;
-        break;
+        case amps::FENDER_65_TWIN_REVERB:
+            model = 0x75;
+            something = 0x05;
+            something2 = 0x72;
+            break;
 
-    case FENDER_SUPER_SONIC:
-        model = 0x72;
-        something = 0x06;
-        something2 = 0x79;
-        break;
+        case amps::FENDER_SUPER_SONIC:
+            model = 0x72;
+            something = 0x06;
+            something2 = 0x79;
+            break;
 
-    case BRITISH_60S:
-        model = 0x61;
-        something = 0x07;
-        something2 = 0x5e;
-        break;
+        case amps::BRITISH_60S:
+            model = 0x61;
+            something = 0x07;
+            something2 = 0x5e;
+            break;
 
-    case BRITISH_70S:
-        model = 0x79;
-        something = 0x0b;
-        something2 = 0x7c;
-        break;
+        case amps::BRITISH_70S:
+            model = 0x79;
+            something = 0x0b;
+            something2 = 0x7c;
+            break;
 
-    case BRITISH_80S:
-        model = 0x5e;
-        something = 0x09;
-        something2 = 0x5d;
-        break;
+        case amps::BRITISH_80S:
+            model = 0x5e;
+            something = 0x09;
+            something2 = 0x5d;
+            break;
 
-    case AMERICAN_90S:
-        model = 0x5d;
-        something = 0x0a;
-        something2 = 0x6d;
-        break;
+        case amps::AMERICAN_90S:
+            model = 0x5d;
+            something = 0x0a;
+            something2 = 0x6d;
+            break;
 
-    case METAL_2000:
-        model = 0x6d;
-        something = 0x08;
-        something2 = 0x75;
-        break;
+        case amps::METAL_2000:
+            model = 0x6d;
+            something = 0x08;
+            something2 = 0x75;
+            break;
     }
 
     xml->writeStartElement("Amplifier");

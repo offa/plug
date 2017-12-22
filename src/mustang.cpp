@@ -541,92 +541,92 @@ int Mustang::set_amplifier(amp_settings value)
 
     array[BRIGHTNESS] = value.brightness?1:0;
 
-    switch (value.amp_num)
+    switch( static_cast<amps>(value.amp_num) )
     {
-    case FENDER_57_DELUXE:
-        array[AMPLIFIER] = 0x67;
-        array[44] = array[45] = array[46] = 0x01;
-        array[50] = 0x01;
-        array[54] = 0x53;
-        break;
+        case amps::FENDER_57_DELUXE:
+            array[AMPLIFIER] = 0x67;
+            array[44] = array[45] = array[46] = 0x01;
+            array[50] = 0x01;
+            array[54] = 0x53;
+            break;
 
-    case FENDER_59_BASSMAN:
-        array[AMPLIFIER] = 0x64;
-        array[44] = array[45] = array[46] = 0x02;
-        array[50] = 0x02;
-        array[54] = 0x67;
-        break;
+        case amps::FENDER_59_BASSMAN:
+            array[AMPLIFIER] = 0x64;
+            array[44] = array[45] = array[46] = 0x02;
+            array[50] = 0x02;
+            array[54] = 0x67;
+            break;
 
-    case FENDER_57_CHAMP:
-        array[AMPLIFIER] = 0x7c;
-        array[44] = array[45] = array[46] = 0x0c;
-        array[50] = 0x0c;
-        array[54] = 0x00;
-        break;
+        case amps::FENDER_57_CHAMP:
+            array[AMPLIFIER] = 0x7c;
+            array[44] = array[45] = array[46] = 0x0c;
+            array[50] = 0x0c;
+            array[54] = 0x00;
+            break;
 
-    case FENDER_65_DELUXE_REVERB:
-        array[AMPLIFIER] = 0x53;
-        array[40] = array[43] = 0x00;
-        array[44] = array[45] = array[46] = 0x03;
-        array[50] = 0x03;
-        array[54] = 0x6a;
-        break;
+        case amps::FENDER_65_DELUXE_REVERB:
+            array[AMPLIFIER] = 0x53;
+            array[40] = array[43] = 0x00;
+            array[44] = array[45] = array[46] = 0x03;
+            array[50] = 0x03;
+            array[54] = 0x6a;
+            break;
 
-    case FENDER_65_PRINCETON:
-        array[AMPLIFIER] = 0x6a;
-        array[44] = array[45] = array[46] = 0x04;
-        array[50] = 0x04;
-        array[54] = 0x61;
-        break;
+        case amps::FENDER_65_PRINCETON:
+            array[AMPLIFIER] = 0x6a;
+            array[44] = array[45] = array[46] = 0x04;
+            array[50] = 0x04;
+            array[54] = 0x61;
+            break;
 
-    case FENDER_65_TWIN_REVERB:
-        array[AMPLIFIER] = 0x75;
-        array[44] = array[45] = array[46] = 0x05;
-        array[50] = 0x05;
-        array[54] = 0x72;
-        break;
+        case amps::FENDER_65_TWIN_REVERB:
+            array[AMPLIFIER] = 0x75;
+            array[44] = array[45] = array[46] = 0x05;
+            array[50] = 0x05;
+            array[54] = 0x72;
+            break;
 
-    case FENDER_SUPER_SONIC:
-        array[AMPLIFIER] = 0x72;
-        array[44] = array[45] = array[46] = 0x06;
-        array[50] = 0x06;
-        array[54] = 0x79;
-        break;
+        case amps::FENDER_SUPER_SONIC:
+            array[AMPLIFIER] = 0x72;
+            array[44] = array[45] = array[46] = 0x06;
+            array[50] = 0x06;
+            array[54] = 0x79;
+            break;
 
-    case BRITISH_60S:
-        array[AMPLIFIER] = 0x61;
-        array[44] = array[45] = array[46] = 0x07;
-        array[50] = 0x07;
-        array[54] = 0x5e;
-        break;
+        case amps::BRITISH_60S:
+            array[AMPLIFIER] = 0x61;
+            array[44] = array[45] = array[46] = 0x07;
+            array[50] = 0x07;
+            array[54] = 0x5e;
+            break;
 
-    case BRITISH_70S:
-        array[AMPLIFIER] = 0x79;
-        array[44] = array[45] = array[46] = 0x0b;
-        array[50] = 0x0b;
-        array[54] = 0x7c;
-        break;
+        case amps::BRITISH_70S:
+            array[AMPLIFIER] = 0x79;
+            array[44] = array[45] = array[46] = 0x0b;
+            array[50] = 0x0b;
+            array[54] = 0x7c;
+            break;
 
-    case BRITISH_80S:
-        array[AMPLIFIER] = 0x5e;
-        array[44] = array[45] = array[46] = 0x09;
-        array[50] = 0x09;
-        array[54] = 0x5d;
-        break;
+        case amps::BRITISH_80S:
+            array[AMPLIFIER] = 0x5e;
+            array[44] = array[45] = array[46] = 0x09;
+            array[50] = 0x09;
+            array[54] = 0x5d;
+            break;
 
-    case AMERICAN_90S:
-        array[AMPLIFIER] = 0x5d;
-        array[44] = array[45] = array[46] = 0x0a;
-        array[50] = 0x0a;
-        array[54] = 0x6d;
-        break;
+        case amps::AMERICAN_90S:
+            array[AMPLIFIER] = 0x5d;
+            array[44] = array[45] = array[46] = 0x0a;
+            array[50] = 0x0a;
+            array[54] = 0x6d;
+            break;
 
-    case METAL_2000:
-        array[AMPLIFIER] = 0x6d;
-        array[44] = array[45] = array[46] = 0x08;
-        array[50] = 0x08;
-        array[54] = 0x75;
-        break;
+        case amps::METAL_2000:
+            array[AMPLIFIER] = 0x6d;
+            array[44] = array[45] = array[46] = 0x08;
+            array[50] = 0x08;
+            array[54] = 0x75;
+            break;
     }
 
     libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
@@ -719,51 +719,51 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings
         switch(data[1][AMPLIFIER])
         {
         case 0x67:
-            amp_set->amp_num = FENDER_57_DELUXE;
+            amp_set->amp_num = value(amps::FENDER_57_DELUXE);
             break;
 
         case 0x64:
-            amp_set->amp_num = FENDER_59_BASSMAN;
+            amp_set->amp_num = value(amps::FENDER_59_BASSMAN);
             break;
 
         case 0x7c:
-            amp_set->amp_num = FENDER_57_CHAMP;
+            amp_set->amp_num = value(amps::FENDER_57_CHAMP);
             break;
 
         case 0x53:
-            amp_set->amp_num = FENDER_65_DELUXE_REVERB;
+            amp_set->amp_num = value(amps::FENDER_65_DELUXE_REVERB);
             break;
 
         case 0x6a:
-            amp_set->amp_num = FENDER_65_PRINCETON;
+            amp_set->amp_num = value(amps::FENDER_65_PRINCETON);
             break;
 
         case 0x75:
-            amp_set->amp_num = FENDER_65_TWIN_REVERB;
+            amp_set->amp_num = value(amps::FENDER_65_TWIN_REVERB);
             break;
 
         case 0x72:
-            amp_set->amp_num = FENDER_SUPER_SONIC;
+            amp_set->amp_num = value(amps::FENDER_SUPER_SONIC);
             break;
 
         case 0x61:
-            amp_set->amp_num = BRITISH_60S;
+            amp_set->amp_num = value(amps::BRITISH_60S);
             break;
 
         case 0x79:
-            amp_set->amp_num = BRITISH_70S;
+            amp_set->amp_num = value(amps::BRITISH_70S);
             break;
 
         case 0x5e:
-            amp_set->amp_num = BRITISH_80S;
+            amp_set->amp_num = value(amps::BRITISH_80S);
             break;
 
         case 0x5d:
-            amp_set->amp_num = AMERICAN_90S;
+            amp_set->amp_num = value(amps::AMERICAN_90S);
             break;
 
         case 0x6d:
-            amp_set->amp_num = METAL_2000;
+            amp_set->amp_num = value(amps::METAL_2000);
             break;
         }
 
