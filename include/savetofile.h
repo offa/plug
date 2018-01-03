@@ -49,7 +49,7 @@ signals:
 
 private:
     const std::unique_ptr<Ui::SaveToFile> ui;
-    QXmlStreamWriter *xml;
+    std::unique_ptr<QXmlStreamWriter> xml;
 
     void writeAmp(struct amp_settings);
     void manageWriteFX(struct fx_pedal_settings[4]);

@@ -63,7 +63,7 @@ void SaveToFile::savefile()
 
     dynamic_cast<MainWindow*>(parent())->change_title(ui->lineEdit_2->text());
 
-    xml = new QXmlStreamWriter(file.get());
+    xml = std::make_unique<QXmlStreamWriter>(file.get());
     amp_settings amplifier_settings;
     fx_pedal_settings fx_settings[4];
     dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings);
@@ -83,7 +83,7 @@ void SaveToFile::savefile()
     xml->writeEndDocument();
 
     file->close();
-    delete xml;
+    xml.reset();
 
     this->close();
 }
