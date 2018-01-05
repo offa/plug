@@ -73,8 +73,8 @@ extern "C"
         unused(endpoint);
         unused(data);
         unused(length);
-        unused(actual_length);
         unused(timeout);
+        *actual_length = 0;
         return 0;
     }
 
