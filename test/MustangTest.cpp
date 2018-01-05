@@ -115,7 +115,10 @@ extern "C"
     }
 
 
-    struct libusb_device_handle { };
+    struct libusb_device_handle
+    {
+        char dummy;
+    };
 }
 
 
