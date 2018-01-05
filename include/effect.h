@@ -22,6 +22,7 @@
 #ifndef EFFECT_H
 #define EFFECT_H
 
+#include <memory>
 #include <QMainWindow>
 #include <QSettings>
 #include <QShortcut>
@@ -44,7 +45,7 @@ public:
     bool get_changed();
 
 private:
-    Ui::Effect *ui;
+    const std::unique_ptr<Ui::Effect> ui;
     unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6;
     bool put_post_amp, changed;
     QString temp1, temp2;
@@ -65,8 +66,8 @@ public slots:
     // send settings to the amplifier
     void send_fx();
 
-    void load(struct fx_pedal_settings);
-    void get_settings(struct fx_pedal_settings &);
+    void load(fx_pedal_settings);
+    void get_settings(fx_pedal_settings &);
     void load_default_fx();
 
     void showAndActivate();

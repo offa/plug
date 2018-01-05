@@ -26,7 +26,7 @@
 
 Effect::Effect(QWidget *parent, int number) :
     QMainWindow(parent),
-    ui(new Ui::Effect)
+    ui(std::make_unique<Ui::Effect>())
 {
     ui->setupUi(this);
 
@@ -86,7 +86,6 @@ Effect::~Effect()
 {
     QSettings settings;
     settings.setValue(QString("Windows/Effect%1WindowGeometry").arg(fx_slot), saveGeometry());
-    delete ui;
 }
 
 // functions setting variables
@@ -1858,7 +1857,7 @@ void Effect::choose_fx(int value)
 // send settings to the amplifier
 void Effect::send_fx()
 {
-    struct fx_pedal_settings pedal;
+    fx_pedal_settings pedal;
 
     if(!get_changed())
         return;
@@ -1877,7 +1876,7 @@ void Effect::send_fx()
     dynamic_cast<MainWindow*>(parent())->set_effect(pedal);
 }
 
-void Effect::load(struct fx_pedal_settings settings)
+void Effect::load(fx_pedal_settings settings)
 {
     set_changed(true);
 
@@ -1891,7 +1890,7 @@ void Effect::load(struct fx_pedal_settings settings)
     ui->checkBox->setChecked(settings.put_post_amp);
 }
 
-void Effect::get_settings(struct fx_pedal_settings &pedal)
+void Effect::get_settings(fx_pedal_settings &pedal)
 {
     pedal.effect_num = effect_num;
     pedal.fx_slot = fx_slot;

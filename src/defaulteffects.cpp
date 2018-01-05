@@ -1079,7 +1079,7 @@ void DefaultEffects::choose_fx(int value)
 
 void DefaultEffects::get_settings()
 {
-    struct fx_pedal_settings settings_data[4];
+    fx_pedal_settings settings_data[4];
 
     dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data);
 
