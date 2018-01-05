@@ -26,7 +26,8 @@
 
 Amplifier::Amplifier(QWidget *parent) :
     QMainWindow(parent),
-    ui(std::make_unique<Ui::Amplifier>())
+    ui(std::make_unique<Ui::Amplifier>()),
+    advanced(std::make_unique<Amp_Advanced>(this))
 {
     ui->setupUi(this);
 
@@ -55,8 +56,7 @@ Amplifier::Amplifier(QWidget *parent) :
 
     changed = false;
 
-    advanced = new Amp_Advanced(this);
-    connect(ui->advancedButton, SIGNAL(clicked()), advanced, SLOT(open()));
+    connect(ui->advancedButton, SIGNAL(clicked()), advanced.get(), SLOT(open()));
     choose_amp(0);
 
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_amp(int)));

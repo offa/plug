@@ -43,7 +43,7 @@ public:
 
 private:
     const std::unique_ptr<Ui::Amplifier> ui;
-    Amp_Advanced *advanced;
+    std::unique_ptr<Amp_Advanced> advanced;
     unsigned char amp_num, gain, volume, treble, middle, bass;
     unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag, usb_gain;
     bool changed, brightness;
