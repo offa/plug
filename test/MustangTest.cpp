@@ -129,6 +129,7 @@ protected:
 
     void SetUp() override
     {
+        m = std::make_unique<Mustang>();
         usbmock = std::make_unique<UsbMock>();
     }
 
@@ -137,24 +138,23 @@ protected:
         usbmock = nullptr;
     }
 
+    std::unique_ptr<Mustang> m;
     libusb_device_handle handle;
 };
 
 TEST_F(MustangTest, stoppingAmpDoesNothingIfNotStartedYet)
 {
-    Mustang m;
-    m.stop_amp();
+    m->stop_amp();
 }
 
 
 TEST_F(MustangTest, stoppingAmpClosesConnection)
 {
-    Mustang m;
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, close(_));
 
     char dontCare{'x'};
-    m.start_amp(nullptr, &dontCare, nullptr, nullptr);
+    m->start_amp(nullptr, &dontCare, nullptr, nullptr);
 
-    m.stop_amp();
+    m->stop_amp();
 }
