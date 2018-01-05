@@ -24,6 +24,10 @@ if( LTO )
     include(LTO)
 endif()
 
+if( COVERAGE )
+    include(Coverage)
+endif()
+
 include(Install)
 include(Template)
 
