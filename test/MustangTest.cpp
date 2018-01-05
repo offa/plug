@@ -138,6 +138,14 @@ protected:
         usbmock = nullptr;
     }
 
+    void expectStart()
+    {
+        EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+
+        char dontCare{'x'};
+        m->start_amp(nullptr, &dontCare, nullptr, nullptr);
+    }
+
     std::unique_ptr<Mustang> m;
     libusb_device_handle handle;
 };
@@ -150,11 +158,7 @@ TEST_F(MustangTest, stoppingAmpDoesNothingIfNotStartedYet)
 
 TEST_F(MustangTest, stoppingAmpClosesConnection)
 {
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+    expectStart();
     EXPECT_CALL(*usbmock, close(_));
-
-    char dontCare{'x'};
-    m->start_amp(nullptr, &dontCare, nullptr, nullptr);
-
     m->stop_amp();
 }
