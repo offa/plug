@@ -24,6 +24,18 @@
 template<class T>
 void unused(T&&) { }
 
+
+namespace
+{
+    class UsbMock
+    {
+    public:
+
+        MOCK_METHOD1(close, void(libusb_device_handle*));
+    };
+}
+
+
 // Stubs
 extern "C"
 {
