@@ -21,6 +21,85 @@
 #include <gmock/gmock.h>
 #include "mustang.h"
 
+template<class T>
+void unused(T&&) { }
+
+// Stubs
+extern "C"
+{
+    int libusb_init(libusb_context **ctx)
+    {
+        unused(ctx);
+        return 0;
+    }
+
+    void libusb_exit(libusb_context *ctx)
+    {
+        unused(ctx);
+    }
+
+    libusb_device_handle*  libusb_open_device_with_vid_pid(libusb_context *ctx, uint16_t vendor_id, uint16_t product_id)
+    {
+        unused(ctx);
+        unused(vendor_id);
+        unused(product_id);
+        return nullptr;
+    }
+
+    int libusb_interrupt_transfer(libusb_device_handle *dev_handle, unsigned char endpoint,
+                                unsigned char *data, int length, int *actual_length, unsigned int timeout)
+    {
+        unused(dev_handle);
+        unused(endpoint);
+        unused(data);
+        unused(length);
+        unused(actual_length);
+        unused(timeout);
+        return 0;
+    }
+
+    int libusb_claim_interface(libusb_device_handle *dev_handle, int interface_number)
+    {
+        unused(dev_handle);
+        unused(interface_number);
+        return 0;
+    }
+
+    int libusb_detach_kernel_driver(libusb_device_handle *dev_handle, int interface_number)
+    {
+        unused(dev_handle);
+        unused(interface_number);
+        return 0;
+    }
+
+    int libusb_kernel_driver_active(libusb_device_handle *dev_handle, int interface_number)
+    {
+        unused(dev_handle);
+        unused(interface_number);
+        return 0;
+    }
+
+    int libusb_release_interface(libusb_device_handle *dev_handle, int interface_number)
+    {
+        unused(dev_handle);
+        unused(interface_number);
+        return 0;
+    }
+
+    int libusb_attach_kernel_driver(libusb_device_handle *dev_handle, int interface_number)
+    {
+        unused(dev_handle);
+        unused(interface_number);
+        return 0;
+    }
+
+    void libusb_close(libusb_device_handle *dev_handle)
+    {
+        unused(dev_handle);
+    }
+
+}
+
 
 
 class MustangTest : public testing::Test
