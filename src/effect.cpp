@@ -1964,7 +1964,10 @@ void Effect::off_switch(bool value)
             ui->spinBox_3->setDisabled(false);
             ui->spinBox_4->setDisabled(false);
             ui->spinBox_5->setDisabled(false);
-            if(effectType == effects::MONO_ECHO_FILTER || effectType == effects::STEREO_ECHO_FILTER || effectType == effects::TAPE_DELAY || effectType == effects::STEREO_TAPE_DELAY)
+            if(effectType == effects::MONO_ECHO_FILTER
+                || effectType == effects::STEREO_ECHO_FILTER
+                || effectType == effects::TAPE_DELAY
+                || effectType == effects::STEREO_TAPE_DELAY)
             {
                 ui->dial_6->setDisabled(false);
                 ui->spinBox_6->setDisabled(false);
