@@ -21,6 +21,9 @@
 #include <gmock/gmock.h>
 #include "mustang.h"
 
+using namespace testing;
+
+
 template<class T>
 void unused(T&&) { }
 
@@ -33,6 +36,9 @@ namespace
 
         MOCK_METHOD1(close, void(libusb_device_handle*));
     };
+
+
+    std::unique_ptr<UsbMock> usbmock;
 }
 
 
@@ -105,9 +111,9 @@ extern "C"
         return 0;
     }
 
-    void libusb_close(libusb_device_handle *dev_handle)
+    void libusb_close(libusb_device_handle* dev_handle)
     {
-        unused(dev_handle);
+        usbmock->close(dev_handle);
     }
 
 }
@@ -116,10 +122,21 @@ extern "C"
 
 class MustangTest : public testing::Test
 {
+    void SetUp() override
+    {
+        usbmock = std::make_unique<UsbMock>();
+    }
+
+    void TearDown() override
+    {
+        usbmock = nullptr;
+    }
+
 };
 
-TEST_F(MustangTest, stoppingAmpCleansUpConnection)
+TEST_F(MustangTest, stoppingAmpDoesNothingIfNotStartedYet)
 {
     Mustang m;
+    m.stop_amp();
 }
 
