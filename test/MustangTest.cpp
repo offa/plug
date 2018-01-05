@@ -114,12 +114,16 @@ extern "C"
         usbmock->close(dev_handle);
     }
 
+
+    struct libusb_device_handle { };
 }
 
 
 
 class MustangTest : public testing::Test
 {
+protected:
+
     void SetUp() override
     {
         usbmock = std::make_unique<UsbMock>();
@@ -130,6 +134,7 @@ class MustangTest : public testing::Test
         usbmock = nullptr;
     }
 
+    libusb_device_handle handle;
 };
 
 TEST_F(MustangTest, stoppingAmpDoesNothingIfNotStartedYet)
@@ -138,3 +143,15 @@ TEST_F(MustangTest, stoppingAmpDoesNothingIfNotStartedYet)
     m.stop_amp();
 }
 
+
+TEST_F(MustangTest, stoppingAmpClosesConnection)
+{
+    Mustang m;
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, close(_));
+
+    char dontCare{'x'};
+    m.start_amp(nullptr, &dontCare, nullptr, nullptr);
+
+    m.stop_amp();
+}
