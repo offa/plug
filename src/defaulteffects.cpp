@@ -21,8 +21,8 @@
 
 #include "defaulteffects.h"
 #include "ui_defaulteffects.h"
-
 #include "mainwindow.h"
+#include <array>
 
 DefaultEffects::DefaultEffects(QWidget *parent) :
     QDialog(parent),
