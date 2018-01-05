@@ -13,12 +13,19 @@ message(STATUS "Coverage : ${COVERAGE}")
 option(LTO "Enable LTO" OFF)
 message(STATUS "LTO : ${LTO}")
 
+option(SANITIZER_ASAN "Enable ASan" OFF)
+message(STATUS "ASan : " ${SANITIZER_ASAN})
+
+option(SANITIZER_UBSAN "Enable UBSan" OFF)
+message(STATUS "UBSan : " ${SANITIZER_UBSAN})
+
 
 if( CMAKE_BUILD_TYPE )
     message(STATUS "Build Type : ${CMAKE_BUILD_TYPE}")
 else()
     message(STATUS "Build Type : None")
 endif()
+
 
 if( LTO )
     include(LTO)
@@ -27,6 +34,11 @@ endif()
 if( COVERAGE )
     include(Coverage)
 endif()
+
+if( SANITIZER_ASAN OR SANITIZER_UBSAN )
+    include(Sanitizer)
+endif()
+
 
 include(Install)
 include(Template)
