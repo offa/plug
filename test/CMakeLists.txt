@@ -12,9 +12,6 @@ target_link_libraries(TestLibs INTERFACE
                                 ${CMAKE_THREAD_LIBS_INIT}
                                 )
 
-add_executable(TypeTests TypeTest.cpp
-                        )
-target_link_libraries(TypeTests TestLibs)
 
 
 add_executable(MustangTest MustangTest.cpp
