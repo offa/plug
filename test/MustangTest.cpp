@@ -141,9 +141,7 @@ protected:
     void expectStart()
     {
         EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
-
-        char dontCare{'x'};
-        m->start_amp(nullptr, &dontCare, nullptr, nullptr);
+        m->start_amp(nullptr, nullptr, nullptr, nullptr);
     }
 
 
