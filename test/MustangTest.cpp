@@ -37,6 +37,9 @@ namespace
         MOCK_METHOD1(close, void(libusb_device_handle*));
         MOCK_METHOD3(open_device_with_vid_pid, libusb_device_handle*(libusb_context*, uint16_t, uint16_t));
         MOCK_METHOD1(exit, void(libusb_context*));
+        MOCK_METHOD2(release_interface, int(libusb_device_handle*, int));
+        MOCK_METHOD2(attach_kernel_driver, int(libusb_device_handle*, int));
+
     };
 
 
@@ -58,7 +61,7 @@ extern "C"
         usbmock->exit(ctx);
     }
 
-    libusb_device_handle*  libusb_open_device_with_vid_pid(libusb_context *ctx, uint16_t vendor_id, uint16_t product_id)
+    libusb_device_handle* libusb_open_device_with_vid_pid(libusb_context *ctx, uint16_t vendor_id, uint16_t product_id)
     {
         return usbmock->open_device_with_vid_pid(ctx, vendor_id, product_id);
     }
@@ -96,18 +99,14 @@ extern "C"
         return 0;
     }
 
-    int libusb_release_interface(libusb_device_handle *dev_handle, int interface_number)
+    int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
     {
-        unused(dev_handle);
-        unused(interface_number);
-        return 0;
+        return usbmock->release_interface(dev_handle, interface_number);
     }
 
-    int libusb_attach_kernel_driver(libusb_device_handle *dev_handle, int interface_number)
+    int libusb_attach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
     {
-        unused(dev_handle);
-        unused(interface_number);
-        return 0;
+        return usbmock->attach_kernel_driver(dev_handle, interface_number);
     }
 
     void libusb_close(libusb_device_handle* dev_handle)
@@ -160,6 +159,17 @@ TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
 TEST_F(MustangTest, stopAmpClosesConnection)
 {
     expectStart();
+    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, attach_kernel_driver(&handle, 0));
+    EXPECT_CALL(*usbmock, close(_));
+    EXPECT_CALL(*usbmock, exit(nullptr));
+    m->stop_amp();
+}
+
+TEST_F(MustangTest, stopAmpClosesConnectionIfNoDevice)
+{
+    expectStart();
+    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_ERROR_NO_DEVICE));
     EXPECT_CALL(*usbmock, close(_));
     EXPECT_CALL(*usbmock, exit(nullptr));
     m->stop_amp();
@@ -168,6 +178,8 @@ TEST_F(MustangTest, stopAmpClosesConnection)
 TEST_F(MustangTest, stopAmpTwiceDoesNothing)
 {
     expectStart();
+    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, attach_kernel_driver(&handle, 0));
     EXPECT_CALL(*usbmock, close(_));
     EXPECT_CALL(*usbmock, exit(nullptr));
     m->stop_amp();
