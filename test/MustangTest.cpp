@@ -36,6 +36,7 @@ namespace
 
         MOCK_METHOD1(close, void(libusb_device_handle*));
         MOCK_METHOD3(open_device_with_vid_pid, libusb_device_handle*(libusb_context*, uint16_t, uint16_t));
+        MOCK_METHOD1(exit, void(libusb_context*));
     };
 
 
@@ -46,15 +47,15 @@ namespace
 // Stubs
 extern "C"
 {
-    int libusb_init(libusb_context **ctx)
+    int libusb_init(libusb_context** ctx)
     {
         unused(ctx);
         return 0;
     }
 
-    void libusb_exit(libusb_context *ctx)
+    void libusb_exit(libusb_context* ctx)
     {
-        unused(ctx);
+        usbmock->exit(ctx);
     }
 
     libusb_device_handle*  libusb_open_device_with_vid_pid(libusb_context *ctx, uint16_t vendor_id, uint16_t product_id)
@@ -146,19 +147,29 @@ protected:
         m->start_amp(nullptr, &dontCare, nullptr, nullptr);
     }
 
+
     std::unique_ptr<Mustang> m;
     libusb_device_handle handle;
 };
 
-TEST_F(MustangTest, stoppingAmpDoesNothingIfNotStartedYet)
+TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
 {
     m->stop_amp();
 }
 
-
-TEST_F(MustangTest, stoppingAmpClosesConnection)
+TEST_F(MustangTest, stopAmpClosesConnection)
 {
     expectStart();
     EXPECT_CALL(*usbmock, close(_));
+    EXPECT_CALL(*usbmock, exit(nullptr));
+    m->stop_amp();
+}
+
+TEST_F(MustangTest, stopAmpTwiceDoesNothing)
+{
+    expectStart();
+    EXPECT_CALL(*usbmock, close(_));
+    EXPECT_CALL(*usbmock, exit(nullptr));
+    m->stop_amp();
     m->stop_amp();
 }
