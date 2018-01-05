@@ -17,7 +17,13 @@ add_executable(TypeTests TypeTest.cpp
 target_link_libraries(TypeTests TestLibs)
 
 
-add_custom_target(unittest TypeTests
+add_executable(MustangTest MustangTest.cpp
+                    )
+add_test(MustangTest MustangTest)
+target_link_libraries(MustangTest TestLibs)
+
+
+add_custom_target(unittest MustangTest
 
                         COMMENT "Running unittests\n\n"
                         VERBATIM
