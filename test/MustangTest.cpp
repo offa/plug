@@ -35,6 +35,7 @@ namespace
     public:
 
         MOCK_METHOD1(close, void(libusb_device_handle*));
+        MOCK_METHOD3(open_device_with_vid_pid, libusb_device_handle*(libusb_context*, uint16_t, uint16_t));
     };
 
 
@@ -58,10 +59,7 @@ extern "C"
 
     libusb_device_handle*  libusb_open_device_with_vid_pid(libusb_context *ctx, uint16_t vendor_id, uint16_t product_id)
     {
-        unused(ctx);
-        unused(vendor_id);
-        unused(product_id);
-        return nullptr;
+        return usbmock->open_device_with_vid_pid(ctx, vendor_id, product_id);
     }
 
     int libusb_interrupt_transfer(libusb_device_handle *dev_handle, unsigned char endpoint,
