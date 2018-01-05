@@ -27,34 +27,31 @@
 Amplifier::Amplifier(QWidget *parent) :
     QMainWindow(parent),
     ui(std::make_unique<Ui::Amplifier>()),
-    advanced(std::make_unique<Amp_Advanced>(this))
+    advanced(std::make_unique<Amp_Advanced>(this)),
+    amp_num(0),
+    gain(0),
+    volume(0),
+    treble(0),
+    middle(0),
+    bass(0),
+    cabinet(0),
+    noise_gate(0),
+    presence(128),
+    gain2(128),
+    master_vol(128),
+    threshold(0),
+    depth(128),
+    bias(128),
+    sag(1),
+    usb_gain(0),
+    changed(false),
+    brightness(false)
 {
     ui->setupUi(this);
 
     // load window size
     QSettings settings;
     restoreGeometry(settings.value("Windows/amplifierWindowGeometry").toByteArray());
-
-    // initialize variables
-    gain = 0;
-    volume = 0;
-    treble = 0;
-    middle = 0;
-    bass = 0;
-
-    cabinet = 0;
-    noise_gate = 0;
-    master_vol = 128;
-    gain2 = 128;
-    presence = 128;
-    threshold = 0;
-    depth = 128;
-    bias = 128;
-    sag = 1;
-    brightness = false;
-    usb_gain = 0;
-
-    changed = false;
 
     connect(ui->advancedButton, SIGNAL(clicked()), advanced.get(), SLOT(open()));
     choose_amp(0);
