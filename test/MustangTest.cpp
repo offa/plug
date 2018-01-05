@@ -19,15 +19,16 @@
  */
 
 #include <gmock/gmock.h>
+#include "mustang.h"
+
 
 
 class MustangTest : public testing::Test
 {
 };
 
-TEST_F(MustangTest, buildAndTestWorks)
+TEST_F(MustangTest, stoppingAmpCleansUpConnection)
 {
-    FAIL(); // Not implemented yet
+    Mustang m;
 }
-
 

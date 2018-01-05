@@ -17,7 +17,9 @@ target_link_libraries(TestLibs INTERFACE
 add_executable(MustangTest MustangTest.cpp
                     )
 add_test(MustangTest MustangTest)
-target_link_libraries(MustangTest TestLibs)
+target_link_libraries(MustangTest plug-mustang
+                                TestLibs
+                                )
 
 
 add_custom_target(unittest MustangTest

@@ -8,7 +8,6 @@ add_executable(plug main.cpp
                     loadfromamp.cpp
                     loadfromfile.cpp
                     mainwindow.cpp
-                    mustang.cpp
                     quickpresets.cpp
                     save_effects.cpp
                     saveonamp.cpp
@@ -16,9 +15,12 @@ add_executable(plug main.cpp
                     settings.cpp
                     )
 
+add_library(plug-mustang mustang.cpp)
+
 target_link_libraries(plug
                         PRIVATE
                             plug-version
+                            plug-mustang
                         PUBLIC
                             Qt5::Core
                             Qt5::Widgets
