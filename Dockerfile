@@ -2,9 +2,7 @@ ARG COMPILER
 
 FROM registry.gitlab.com/offa/docker-images/${COMPILER}:stable
 
-RUN apt-get install -y --no-install-recommends pkg-config \
-                                            qt5-default \
-                                            libusb-1.0-0-dev && \
+RUN apt-get install -y --no-install-recommends pkg-config qt5-default libusb-1.0-0-dev lcov && \
                                             mkdir deps && cd deps && \
                                             git clone --depth=1 https://github.com/google/googletest.git && \
                                             if [ "$(echo ${CXX} | cut -c -5)" = "clang" ]; then \
