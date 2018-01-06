@@ -29,3 +29,12 @@ target_link_libraries(plug
                             libusb
                         )
 
+
+if( SANITIZER_ASAN )
+    target_link_libraries(plug PRIVATE -fsanitize=address)
+endif()
+
+if( SANITIZER_UBSAN )
+    target_link_libraries(plug PRIVATE -fsanitize=undefined)
+endif()
+
