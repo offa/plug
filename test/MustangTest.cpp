@@ -205,6 +205,25 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     EXPECT_THAT(result, Eq(0));
 }
 
+TEST_F(MustangTest, loadMemoryBankReceivesName)
+{
+    constexpr int recvSize{1};
+    constexpr int slot{8};
+    std::array<std::uint8_t, packetSize> recvData;
+    recvData.fill(0x00);
+    recvData[16] = 'a';
+    recvData[17] = 'b';
+    recvData[18] = 'c';
+
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, _, packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _)).WillOnce(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(0), Return(0)));
+
+    std::array<char, packetSize> name{{0}};
+    m->load_memory_bank(slot, name.data(), nullptr, nullptr);
+    EXPECT_THAT(name.data(), StrEq("abc"));
+}
+
 TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
 {
     constexpr int errorCode{1};
