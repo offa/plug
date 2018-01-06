@@ -140,6 +140,7 @@ protected:
 
     std::unique_ptr<Mustang> m;
     libusb_device_handle handle;
+    static constexpr std::size_t packetSize{64};
 };
 
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
@@ -177,6 +178,16 @@ TEST_F(MustangTest, stopAmpTwiceDoesNothing)
     m->stop_amp();
 }
 
+TEST_F(MustangTest, loadMemoryBank)
+{
+    std::array<std::uint8_t, packetSize> data;
+    data.fill(0x00);
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, _, _, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(0));
+}
+
 TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
 {
     constexpr int errorCode{1};
@@ -184,4 +195,5 @@ TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
     const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(errorCode));
 }
+
 
