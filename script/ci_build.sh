@@ -10,10 +10,10 @@ for arg in "$@"
 do
     case "${arg}" in
         -asan)
-            BUILD_ARGS="${BUILD_ARGS} -DSANITZIER_ASAN=ON"
+            BUILD_ARGS="${BUILD_ARGS} -DSANITZER_ASAN=ON"
             ;;
         -ubsan)
-            BUILD_ARGS="${BUILD_ARGS} -DSANITZIER_UBSAN=ON"
+            BUILD_ARGS="${BUILD_ARGS} -DSANITZER_UBSAN=ON"
             ;;
         -cov)
             BUILD_ARGS="${BUILD_ARGS} -DCOVERAGE=ON"
