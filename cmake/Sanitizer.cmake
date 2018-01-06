@@ -1,11 +1,16 @@
 
+macro(enable_sanitizer san)
+    set(SAN_FLAG "-fsanitize=${san}")
+    add_compile_options(${SAN_FLAG})
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${SAN_FLAG}")
+endmacro()
+
+
 if( SANITIZER_ASAN )
-    add_compile_options(-fsanitize=address)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+    enable_sanitizer(address)
 endif()
 
 if( SANITIZER_UBSAN )
-    add_compile_options(-fsanitize=undefined)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")
+    enable_sanitizer(undefined)
 endif()
 
