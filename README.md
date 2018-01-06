@@ -7,6 +7,7 @@
 [![GitHub release](https://img.shields.io/github/release/offa/plug.svg)](https://github.com/offa/plug/releases)
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
 [![C++](https://img.shields.io/badge/c++-17-green.svg)]()
+[![Coverage Report](https://gitlab.com/offa/plug/badges/master/coverage.svg)](https://gitlab.com/offa/plug/commits/master)
 
 Software for Fender Mustang Amps. This is a fork of [piorekf's Plug](https://bitbucket.org/piorekf/plug/).
 
