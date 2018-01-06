@@ -15,11 +15,12 @@ matrix:
     include:
     - env: COMPILER=gcc-7
     - env: COMPILER=clang-5
+    - env: COMPILER=gcc-7 ANALYSE="-asan -ubsan -cov"
 
 
 before_install:
   - docker pull ${DOCKER_IMG}/${COMPILER}:latest
 
 script:
-  - docker run -v ${PWD}:/mnt -it ${DOCKER_IMG}/${COMPILER} /bin/bash -c "cd /mnt; script/ci_build.sh"
+  - docker run -v ${PWD}:/mnt -it ${DOCKER_IMG}/${COMPILER} /bin/bash -c "cd /mnt; script/ci_build.sh ${ANALYSE}"
 
