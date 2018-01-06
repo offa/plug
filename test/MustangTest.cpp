@@ -18,9 +18,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gmock/gmock.h>
-#include "common.h"
 #include "mustang.h"
+#include "common.h"
+#include <array>
+#include <gmock/gmock.h>
 
 using namespace plug;
 using namespace testing;
@@ -36,6 +37,7 @@ namespace
         MOCK_METHOD1(exit, void(libusb_context*));
         MOCK_METHOD2(release_interface, int(libusb_device_handle*, int));
         MOCK_METHOD2(attach_kernel_driver, int(libusb_device_handle*, int));
+        MOCK_METHOD6(interrupt_transfer, int(libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
 
     };
 
@@ -62,16 +64,10 @@ extern "C"
         return usbmock->open_device_with_vid_pid(ctx, vendor_id, product_id);
     }
 
-    int libusb_interrupt_transfer(libusb_device_handle *dev_handle, unsigned char endpoint,
-                                unsigned char *data, int length, int *actual_length, unsigned int timeout)
+    int libusb_interrupt_transfer(libusb_device_handle* dev_handle, unsigned char endpoint,
+                                unsigned char* data, int length, int* actual_length, unsigned int timeout)
     {
-        unused(dev_handle);
-        unused(endpoint);
-        unused(data);
-        unused(length);
-        unused(timeout);
-        *actual_length = 0;
-        return 0;
+        return usbmock->interrupt_transfer(dev_handle, endpoint, data, length, actual_length, timeout);
     }
 
     int libusb_claim_interface(libusb_device_handle *dev_handle, int interface_number)
@@ -137,6 +133,7 @@ protected:
     void expectStart()
     {
         EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+        EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
         m->start_amp(nullptr, nullptr, nullptr, nullptr);
     }
 
