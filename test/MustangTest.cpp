@@ -19,14 +19,11 @@
  */
 
 #include <gmock/gmock.h>
+#include "common.h"
 #include "mustang.h"
 
+using namespace plug;
 using namespace testing;
-
-
-template<class T>
-void unused(T&&) { }
-
 
 namespace
 {
@@ -47,7 +44,6 @@ namespace
 }
 
 
-// Stubs
 extern "C"
 {
     int libusb_init(libusb_context** ctx)
