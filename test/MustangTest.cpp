@@ -176,3 +176,12 @@ TEST_F(MustangTest, stopAmpTwiceDoesNothing)
     m->stop_amp();
     m->stop_amp();
 }
+
+TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
+{
+    constexpr int errorCode{1};
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
+    const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(errorCode));
+}
+
