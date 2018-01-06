@@ -10,6 +10,7 @@ target_link_libraries(TestLibs INTERFACE
                                 ${GTest_LIBRARY}
                                 ${GTest_Main_LIBRARY}
                                 ${CMAKE_THREAD_LIBS_INIT}
+                                build-libs
                                 )
 
 
@@ -20,14 +21,6 @@ add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest plug-mustang
                                 TestLibs
                                 )
-
-if( SANITIZER_ASAN )
-    target_link_libraries(MustangTest -fsanitize=address)
-endif()
-
-if( SANITIZER_UBSAN )
-    target_link_libraries(MustangTest -fsanitize=undefined)
-endif()
 
 
 add_custom_target(unittest MustangTest

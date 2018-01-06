@@ -21,6 +21,7 @@ target_link_libraries(plug
                         PRIVATE
                             plug-version
                             plug-mustang
+                            build-libs
                         PUBLIC
                             Qt5::Core
                             Qt5::Widgets
@@ -28,13 +29,4 @@ target_link_libraries(plug
                             Qt5::Network
                             libusb
                         )
-
-
-if( SANITIZER_ASAN )
-    target_link_libraries(plug PRIVATE -fsanitize=address)
-endif()
-
-if( SANITIZER_UBSAN )
-    target_link_libraries(plug PRIVATE -fsanitize=undefined)
-endif()
 

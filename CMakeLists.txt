@@ -35,11 +35,7 @@ if( COVERAGE )
     include(Coverage)
 endif()
 
-if( SANITIZER_ASAN OR SANITIZER_UBSAN )
-    include(Sanitizer)
-endif()
-
-
+include(Sanitizer)
 include(Install)
 include(Template)
 
