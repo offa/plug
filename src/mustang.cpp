@@ -20,6 +20,7 @@
  */
 
 #include "mustang.h"
+#include "IdLookup.h"
 
 Mustang::Mustang() : amp_hand(nullptr)
 {
@@ -710,6 +711,8 @@ int Mustang::load_memory_bank(int slot, char *name, amp_settings *amp_set, fx_pe
 
 int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings *amp_set, fx_pedal_settings *effects_set)
 {
+    using namespace plug;
+
     if(name != nullptr)
     {
         // NAME
@@ -722,56 +725,7 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings
     if(amp_set != nullptr)
     {
         // AMPLIFIER
-        switch(data[1][AMPLIFIER])
-        {
-        case 0x67:
-            amp_set->amp_num = value(amps::FENDER_57_DELUXE);
-            break;
-
-        case 0x64:
-            amp_set->amp_num = value(amps::FENDER_59_BASSMAN);
-            break;
-
-        case 0x7c:
-            amp_set->amp_num = value(amps::FENDER_57_CHAMP);
-            break;
-
-        case 0x53:
-            amp_set->amp_num = value(amps::FENDER_65_DELUXE_REVERB);
-            break;
-
-        case 0x6a:
-            amp_set->amp_num = value(amps::FENDER_65_PRINCETON);
-            break;
-
-        case 0x75:
-            amp_set->amp_num = value(amps::FENDER_65_TWIN_REVERB);
-            break;
-
-        case 0x72:
-            amp_set->amp_num = value(amps::FENDER_SUPER_SONIC);
-            break;
-
-        case 0x61:
-            amp_set->amp_num = value(amps::BRITISH_60S);
-            break;
-
-        case 0x79:
-            amp_set->amp_num = value(amps::BRITISH_70S);
-            break;
-
-        case 0x5e:
-            amp_set->amp_num = value(amps::BRITISH_80S);
-            break;
-
-        case 0x5d:
-            amp_set->amp_num = value(amps::AMERICAN_90S);
-            break;
-
-        case 0x6d:
-            amp_set->amp_num = value(amps::METAL_2000);
-            break;
-        }
+        amp_set->amp_num = value(lookupAmpById(data[1][AMPLIFIER]));
 
         amp_set->gain = data[1][GAIN];
         amp_set->volume = data[1][VOLUME];
