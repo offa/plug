@@ -22,6 +22,7 @@
 
 #include "effects_enum.h"
 #include <cstdint>
+#include <string>
 #include <stdexcept>
 
 namespace plug
