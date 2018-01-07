@@ -21,6 +21,7 @@
 #pragma once
 
 #include "effects_enum.h"
+#include <cstdint>
 #include <stdexcept>
 
 namespace plug
