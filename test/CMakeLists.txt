@@ -22,8 +22,14 @@ target_link_libraries(MustangTest plug-mustang
                                 TestLibs
                                 )
 
+add_executable(IdLookupTest IdLookupTest.cpp)
+add_test(IdLookupTest IdLookupTest)
+target_link_libraries(IdLookupTest TestLibs
+                                )
+
 
 add_custom_target(unittest MustangTest
+                        COMMAND IdLookupTest
 
                         COMMENT "Running unittests\n\n"
                         VERBATIM
