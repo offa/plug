@@ -33,6 +33,9 @@ namespace Ui {
     class Amplifier;
 }
 
+namespace plug
+{
+
 class Amplifier : public QMainWindow
 {
     Q_OBJECT
@@ -79,5 +82,7 @@ public slots:
 
     void showAndActivate();
 };
+
+}
 
 #endif // AMPLIFIER_H

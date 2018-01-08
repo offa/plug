@@ -22,6 +22,9 @@
 #include "amp_advanced.h"
 #include "ui_amp_advanced.h"
 
+namespace plug
+{
+
 Amp_Advanced::Amp_Advanced(QWidget *parent) : QDialog(parent),
                                             ui(std::make_unique<Ui::Amp_Advanced>())
 {
@@ -124,5 +127,6 @@ void Amp_Advanced::set_brightness(bool value)
     ui->checkBox->setChecked(value);
 }
 
+}
 
 #include "moc_amp_advanced.moc"

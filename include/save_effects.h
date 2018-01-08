@@ -29,6 +29,9 @@ namespace Ui {
     class Save_effects;
 }
 
+namespace plug
+{
+
 class SaveEffects : public QDialog
 {
     Q_OBJECT
@@ -44,5 +47,7 @@ private slots:
     void select_checkbox();
     void send();
 };
+
+}
 
 #endif // SAVE_EFFECTS_H

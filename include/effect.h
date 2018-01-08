@@ -33,6 +33,9 @@ namespace Ui {
     class Effect;
 }
 
+namespace plug
+{
+
 class Effect : public QMainWindow
 {
     Q_OBJECT
@@ -72,5 +75,7 @@ public slots:
 
     void showAndActivate();
 };
+
+}
 
 #endif // EFFECT_H

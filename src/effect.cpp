@@ -21,8 +21,10 @@
 
 #include "effect.h"
 #include "ui_effect.h"
-
 #include "mainwindow.h"
+
+namespace plug
+{
 
 Effect::Effect(QWidget *parent, int number) :
     QMainWindow(parent),
@@ -2023,5 +2025,6 @@ void Effect::showAndActivate()
     activateWindow();
 }
 
+}
 
 #include "moc_effect.moc"

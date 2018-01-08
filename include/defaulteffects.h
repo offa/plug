@@ -30,6 +30,9 @@ namespace Ui {
     class DefaultEffects;
 }
 
+namespace plug
+{
+
 class DefaultEffects : public QDialog
 {
     Q_OBJECT
@@ -45,5 +48,7 @@ private slots:
     void get_settings();
     void save_default_effects();
 };
+
+}
 
 #endif // DEFAULTEFFECTS_H

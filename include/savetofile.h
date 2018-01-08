@@ -33,6 +33,9 @@ namespace Ui {
     class SaveToFile;
 }
 
+namespace plug
+{
+
 class SaveToFile : public QDialog
 {
     Q_OBJECT
@@ -58,5 +61,7 @@ private:
     void writeUSBGain(int);
 
 };
+
+}
 
 #endif // SAVETOFILE_H

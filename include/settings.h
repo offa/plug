@@ -30,6 +30,9 @@ namespace Ui {
     class Settings;
 }
 
+namespace plug
+{
+
 class Settings : public QDialog
 {
     Q_OBJECT
@@ -49,5 +52,7 @@ private:
     const std::unique_ptr<Ui::Settings> ui;
 
 };
+
+}
 
 #endif // SETTINGS_H

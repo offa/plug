@@ -22,6 +22,9 @@
 #include "quickpresets.h"
 #include "ui_quickpresets.h"
 
+namespace plug
+{
+
 QuickPresets::QuickPresets(QWidget *parent) : QDialog(parent),
                                             ui(std::make_unique<Ui::QuickPresets>())
 {
@@ -287,5 +290,6 @@ void QuickPresets::changeEvent(QEvent *e)
     }
 }
 
+}
 
 #include "moc_quickpresets.moc"

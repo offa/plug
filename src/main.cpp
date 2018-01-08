@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     QCoreApplication::setApplicationName("Plug");
     QCoreApplication::setApplicationVersion(QString::fromStdString(plug::version()));
 
-    MainWindow window;
+    plug::MainWindow window;
     window.show();
 
     return app.exec();

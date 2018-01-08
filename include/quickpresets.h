@@ -27,8 +27,11 @@
 #include <QSettings>
 
 namespace Ui {
-class QuickPresets;
+    class QuickPresets;
 }
+
+namespace plug
+{
 
 class QuickPresets : public QDialog
 {
@@ -59,5 +62,7 @@ private slots:
 private:
     const std::unique_ptr<Ui::QuickPresets> ui;
 };
+
+}
 
 #endif // QUICKPRESETS_H

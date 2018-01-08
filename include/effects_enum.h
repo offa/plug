@@ -22,6 +22,8 @@
 #ifndef EFFECTS_ENUM_H
 #define EFFECTS_ENUM_H
 
+namespace plug
+{
 
 // list of all amplifiers
 enum class amps
@@ -123,6 +125,6 @@ constexpr auto value(cabinets c)
     return static_cast<unsigned char>(c);
 }
 
-
+}
 
 #endif // EFFECTS_ENUM_H

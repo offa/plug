@@ -21,6 +21,9 @@
 
 #include "loadfromfile.h"
 
+namespace plug
+{
+
 LoadFromFile::LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, fx_pedal_settings fx_settings[4])
                             : m_name(name),
                             m_amp_settings(amp_settings),
@@ -419,5 +422,7 @@ void LoadFromFile::parseFUSE()
             m_name->operator =(m_xml->attributes().value("name").toString());
         m_xml->readNext();
     }
+}
+
 }
 

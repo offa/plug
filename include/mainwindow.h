@@ -50,6 +50,9 @@ namespace Ui {
     class MainWindow;
 }
 
+namespace plug
+{
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -125,5 +128,7 @@ private slots:
 signals:
     void started();
 };
+
+}
 
 #endif // MAINWINDOW_H

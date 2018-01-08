@@ -21,8 +21,10 @@
 
 #include "library.h"
 #include "ui_library.h"
-
 #include "mainwindow.h"
+
+namespace plug
+{
 
 Library::Library(char names[100][32], QWidget *parent) :
     QDialog(parent),
@@ -139,5 +141,6 @@ void Library::change_font_family(QFont font)
     settings.setValue("Library/FontFamily", font.family());
 }
 
+}
 
 #include "moc_library.moc"

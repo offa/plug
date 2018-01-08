@@ -21,8 +21,10 @@
 
 #include "amplifier.h"
 #include "ui_amplifier.h"
-
 #include "mainwindow.h"
+
+namespace plug
+{
 
 Amplifier::Amplifier(QWidget *parent) :
     QMainWindow(parent),
@@ -354,4 +356,7 @@ void Amplifier::showAndActivate()
     activateWindow();
 }
 
+}
+
 #include "moc_amplifier.moc"
+

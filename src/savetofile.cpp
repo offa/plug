@@ -23,6 +23,9 @@
 #include "ui_savetofile.h"
 #include "mainwindow.h"
 
+namespace plug
+{
+
 SaveToFile::SaveToFile(QWidget *parent) : QDialog(parent),
                                         ui(std::make_unique<Ui::SaveToFile>())
 {
@@ -606,5 +609,6 @@ void SaveToFile::writeUSBGain(int value)
     xml->writeEndElement();
 }
 
+}
 
 #include "moc_savetofile.moc"

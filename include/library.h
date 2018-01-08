@@ -32,6 +32,9 @@ namespace Ui {
     class Library;
 }
 
+namespace plug
+{
+
 class Library : public QDialog
 {
     Q_OBJECT
@@ -56,5 +59,7 @@ private slots:
 signals:
     void directory_changed(QString);
 };
+
+}
 
 #endif // LIBRARY_H

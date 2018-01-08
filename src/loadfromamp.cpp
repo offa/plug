@@ -21,8 +21,10 @@
 
 #include "loadfromamp.h"
 #include "ui_loadfromamp.h"
-
 #include "mainwindow.h"
+
+namespace plug
+{
 
 LoadFromAmp::LoadFromAmp(QWidget *parent) :
     QMainWindow(parent),
@@ -76,5 +78,6 @@ void LoadFromAmp::change_name(int slot, QString *name)
     ui->comboBox->setCurrentIndex(slot);
 }
 
+}
 
 #include "moc_loadfromamp.moc"

@@ -29,6 +29,9 @@
 #include "data_structs.h"
 #include "effects_enum.h"
 
+namespace plug
+{
+
 class LoadFromFile
 {
 public:
@@ -47,5 +50,7 @@ private:
     void parseFX();
     void parseFUSE();
 };
+
+}
 
 #endif // LOADFROMFILE_H

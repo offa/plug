@@ -29,6 +29,9 @@ namespace Ui {
     class LoadFromAmp;
 }
 
+namespace plug
+{
+
 class LoadFromAmp : public QMainWindow
 {
     Q_OBJECT
@@ -46,5 +49,7 @@ private:
 private slots:
     void load();
 };
+
+}
 
 #endif // LOADFROMAMP_H

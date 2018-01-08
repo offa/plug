@@ -30,6 +30,9 @@ namespace Ui {
     class Amp_Advanced;
 }
 
+namespace plug
+{
+
 class Amp_Advanced : public QDialog
 {
     Q_OBJECT
@@ -57,5 +60,7 @@ private slots:
 private:
     const std::unique_ptr<Ui::Amp_Advanced> ui;
 };
+
+}
 
 #endif // AMP_ADVANCED_H

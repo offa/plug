@@ -23,6 +23,9 @@
 #include "ui_saveonamp.h"
 #include "mainwindow.h"
 
+namespace plug
+{
+
 SaveOnAmp::SaveOnAmp(QWidget *parent) :
     QMainWindow(parent),
     ui(std::make_unique<Ui::SaveOnAmp>())
@@ -78,5 +81,6 @@ void SaveOnAmp::change_index(int value, QString name)
     ui->lineEdit->setText(name);
 }
 
+}
 
 #include "moc_saveonamp.moc"

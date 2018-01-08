@@ -22,6 +22,9 @@
 #include "settings.h"
 #include "ui_settings.h"
 
+namespace plug
+{
+
 Settings::Settings(QWidget *parent) : QDialog(parent),
                                     ui(std::make_unique<Ui::Settings>())
 {
@@ -86,5 +89,6 @@ void Settings::change_effectvalues(bool value)
     settings.setValue("Settings/defaultEffectValues", value);
 }
 
+}
 
 #include "moc_settings.moc"

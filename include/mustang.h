@@ -29,6 +29,9 @@
 #include "effects_enum.h"
 #include "data_structs.h"
 
+namespace plug
+{
+
 // amp's VID and PID
 #define USB_VID 0x1ed8
 #define SMALL_AMPS_USB_PID 0x0004  //Mustang I and II
@@ -106,5 +109,7 @@ private:
 
     int decode_data(unsigned char [7][LENGTH], char *name=nullptr, amp_settings *amp_set=nullptr, fx_pedal_settings *effects_set=nullptr);
 };
+
+}
 
 #endif // MUSTANG_H

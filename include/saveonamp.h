@@ -29,6 +29,9 @@ namespace Ui {
     class SaveOnAmp;
 }
 
+namespace plug
+{
+
 class SaveOnAmp : public QMainWindow
 {
     Q_OBJECT
@@ -48,5 +51,7 @@ private:
 private slots:
     void save();
 };
+
+}
 
 #endif // SAVEONAMP_H

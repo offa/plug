@@ -22,6 +22,9 @@
 #ifndef DATA_STRUCTS_H
 #define DATA_STRUCTS_H
 
+namespace plug
+{
+
 struct amp_settings
 {
     unsigned char amp_num;
@@ -55,5 +58,7 @@ struct fx_pedal_settings
     unsigned char knob6;
     bool put_post_amp;
 };
+
+}
 
 #endif // DATA_STRUCTS_H

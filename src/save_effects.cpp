@@ -21,8 +21,10 @@
 
 #include "save_effects.h"
 #include "ui_save_effects.h"
-
 #include "mainwindow.h"
+
+namespace plug
+{
 
 SaveEffects::SaveEffects(QWidget *parent) :
     QDialog(parent),
@@ -81,5 +83,6 @@ void SaveEffects::send()
     this->close();
 }
 
+}
 
 #include "moc_save_effects.moc"

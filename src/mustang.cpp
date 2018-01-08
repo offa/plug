@@ -22,6 +22,9 @@
 #include "mustang.h"
 #include "IdLookup.h"
 
+namespace plug
+{
+
 Mustang::Mustang() : amp_hand(nullptr)
 {
     // "apply efect" command
@@ -711,8 +714,6 @@ int Mustang::load_memory_bank(int slot, char *name, amp_settings *amp_set, fx_pe
 
 int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings *amp_set, fx_pedal_settings *effects_set)
 {
-    using namespace plug;
-
     if(name != nullptr)
     {
         // NAME
@@ -1035,7 +1036,7 @@ int Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_ped
         }
 
         // fill the form with missing data
-        switch (static_cast<::effects>(effects[i].effect_num))
+        switch (static_cast<plug::effects>(effects[i].effect_num))
         {
             case effects::SINE_CHORUS:
                 array[DSP] = 0x07;
@@ -1351,3 +1352,6 @@ int Mustang::update(char *filename)
 
     return 0;
 }
+
+}
+

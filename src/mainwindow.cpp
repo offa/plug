@@ -23,6 +23,9 @@
 #include "ui_mainwindow.h"
 #include "ui_defaulteffects.h"
 
+namespace plug
+{
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -870,5 +873,6 @@ void MainWindow::load_presets9()
         load_from_amp(settings.value("DefaultPresets/Preset9").toInt());
 }
 
+}
 
 #include "moc_mainwindow.moc"
