@@ -40,8 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
     restoreState(settings.value("Windows/mainWindowState").toByteArray());
 
     // setting default values if there was none
-    if(!settings.contains("Settings/checkForUpdates"))
-        settings.setValue("Settings/checkForUpdates", true);
     if(!settings.contains("Settings/connectOnStartup"))
         settings.setValue("Settings/connectOnStartup", true);
     if(!settings.contains("Settings/oneSetToSetThemAll"))
