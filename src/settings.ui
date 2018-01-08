@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>200</height>
+    <height>201</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,16 +20,6 @@
    <string>Here you can set some settings of this program</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QCheckBox" name="checkBox">
-     <property name="text">
-      <string>Check for updates on startup</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item>
     <widget class="QCheckBox" name="checkBox_2">
      <property name="text">
