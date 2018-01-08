@@ -74,6 +74,7 @@ TEST_F(IdLookupTest, lookupEffectById)
     EXPECT_EQ(lookupEffectById(0x1f), effects::PITCH_SHIFTER);
     EXPECT_EQ(lookupEffectById(0x16), effects::MONO_DELAY);
     EXPECT_EQ(lookupEffectById(0x43), effects::MONO_ECHO_FILTER);
+    EXPECT_EQ(lookupEffectById(0x48), effects::STEREO_ECHO_FILTER);
     EXPECT_EQ(lookupEffectById(0x44), effects::MULTITAP_DELAY);
     EXPECT_EQ(lookupEffectById(0x45), effects::PING_PONG_DELAY);
     EXPECT_EQ(lookupEffectById(0x15), effects::DUCKING_DELAY);
