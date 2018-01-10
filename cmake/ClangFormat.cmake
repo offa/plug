@@ -14,14 +14,3 @@ if( CLANG_FORMAT )
     add_custom_target(clang-format COMMAND ${CLANG_FORMAT} -i ${FORMAT_SRC_FILES})
 endif()
 
-## Get all project files
-#file(GLOB_RECURSE ALL_SOURCE_FILES *.cpp *.hpp)
-#
-#add_custom_target(
-#        clang-format
-#        COMMAND /usr/bin/clang-format
-#        -style=file
-#        -i
-#        ${ALL_SOURCE_FILES}
-#)
-
