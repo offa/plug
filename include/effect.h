@@ -22,12 +22,12 @@
 #ifndef EFFECT_H
 #define EFFECT_H
 
-#include <memory>
+#include "data_structs.h"
+#include "effects_enum.h"
 #include <QMainWindow>
 #include <QSettings>
 #include <QShortcut>
-#include "effects_enum.h"
-#include "data_structs.h"
+#include <memory>
 
 namespace Ui {
     class Effect;

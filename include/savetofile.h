@@ -22,12 +22,12 @@
 #ifndef SAVETOFILE_H
 #define SAVETOFILE_H
 
-#include <memory>
+#include "data_structs.h"
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QXmlStreamWriter>
-#include "data_structs.h"
+#include <memory>
 
 namespace Ui {
     class SaveToFile;

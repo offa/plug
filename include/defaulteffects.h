@@ -22,9 +22,9 @@
 #ifndef DEFAULTEFFECTS_H
 #define DEFAULTEFFECTS_H
 
-#include <memory>
-#include <QDialog>
 #include "data_structs.h"
+#include <QDialog>
+#include <memory>
 
 namespace Ui {
     class DefaultEffects;

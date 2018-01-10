@@ -22,8 +22,8 @@
 #ifndef LOADFROMAMP_H
 #define LOADFROMAMP_H
 
-#include <memory>
 #include <QMainWindow>
+#include <memory>
 
 namespace Ui {
     class LoadFromAmp;

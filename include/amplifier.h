@@ -22,12 +22,12 @@
 #ifndef AMPLIFIER_H
 #define AMPLIFIER_H
 
+#include "amp_advanced.h"
+#include "data_structs.h"
+#include "effects_enum.h"
 #include <QMainWindow>
 #include <QSettings>
 #include <QShortcut>
-#include "amp_advanced.h"
-#include "effects_enum.h"
-#include "data_structs.h"
 
 namespace Ui {
     class Amplifier;

@@ -22,9 +22,9 @@
 #ifndef QUICKPRESETS_H
 #define QUICKPRESETS_H
 
-#include <memory>
 #include <QDialog>
 #include <QSettings>
+#include <memory>
 
 namespace Ui {
     class QuickPresets;

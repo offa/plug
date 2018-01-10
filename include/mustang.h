@@ -22,12 +22,12 @@
 #ifndef MUSTANG_H
 #define MUSTANG_H
 
+#include "data_structs.h"
+#include "effects_enum.h"
 #include <cstdio>
 #include <cstring>
-#include <unistd.h>
 #include <libusb-1.0/libusb.h>
-#include "effects_enum.h"
-#include "data_structs.h"
+#include <unistd.h>
 
 namespace plug
 {

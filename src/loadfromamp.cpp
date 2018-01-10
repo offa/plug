@@ -20,8 +20,8 @@
  */
 
 #include "loadfromamp.h"
-#include "ui_loadfromamp.h"
 #include "mainwindow.h"
+#include "ui_loadfromamp.h"
 
 namespace plug
 {

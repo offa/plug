@@ -20,8 +20,8 @@
  */
 
 #include "library.h"
-#include "ui_library.h"
 #include "mainwindow.h"
+#include "ui_library.h"
 
 namespace plug
 {

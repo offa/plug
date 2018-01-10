@@ -22,11 +22,11 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
-#include <memory>
 #include <QDialog>
-#include <QFileDialog>
 #include <QDir>
+#include <QFileDialog>
 #include <QResizeEvent>
+#include <memory>
 
 namespace Ui {
     class Library;

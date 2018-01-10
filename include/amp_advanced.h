@@ -22,9 +22,9 @@
 #ifndef AMP_ADVANCED_H
 #define AMP_ADVANCED_H
 
-#include <memory>
 #include <QDialog>
 #include <QSettings>
+#include <memory>
 
 namespace Ui {
     class Amp_Advanced;

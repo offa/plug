@@ -20,8 +20,8 @@
  */
 
 #include "effect.h"
-#include "ui_effect.h"
 #include "mainwindow.h"
+#include "ui_effect.h"
 
 namespace plug
 {

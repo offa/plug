@@ -20,8 +20,8 @@
  */
 
 #include "amplifier.h"
-#include "ui_amplifier.h"
 #include "mainwindow.h"
+#include "ui_amplifier.h"
 
 namespace plug
 {

@@ -22,12 +22,12 @@
 #ifndef LOADFROMFILE_H
 #define LOADFROMFILE_H
 
-#include <QTextEdit>
-#include <QFile>
-#include <QXmlStreamReader>
-#include <memory>
 #include "data_structs.h"
 #include "effects_enum.h"
+#include <QFile>
+#include <QTextEdit>
+#include <QXmlStreamReader>
+#include <memory>
 
 namespace plug
 {

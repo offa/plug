@@ -22,8 +22,8 @@
 #ifndef SAVE_EFFECTS_H
 #define SAVE_EFFECTS_H
 
-#include <memory>
 #include <QDialog>
+#include <memory>
 
 namespace Ui {
     class Save_effects;

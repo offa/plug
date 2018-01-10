@@ -20,8 +20,8 @@
  */
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "ui_defaulteffects.h"
+#include "ui_mainwindow.h"
 
 namespace plug
 {

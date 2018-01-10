@@ -22,8 +22,8 @@
 #ifndef SAVEONAMP_H
 #define SAVEONAMP_H
 
-#include <memory>
 #include <QMainWindow>
+#include <memory>
 
 namespace Ui {
     class SaveOnAmp;

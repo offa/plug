@@ -20,8 +20,8 @@
  */
 
 #include "saveonamp.h"
-#include "ui_saveonamp.h"
 #include "mainwindow.h"
+#include "ui_saveonamp.h"
 
 namespace plug
 {
