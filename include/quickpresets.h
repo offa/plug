@@ -26,43 +26,43 @@
 #include <QSettings>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class QuickPresets;
 }
 
 namespace plug
 {
 
-class QuickPresets : public QDialog
-{
-    Q_OBJECT
+    class QuickPresets : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit QuickPresets(QWidget *parent = nullptr);
+    public:
+        explicit QuickPresets(QWidget* parent = nullptr);
 
-    void load_names(char names[][32]);
-    void delete_items();
-    void change_name(int, QString *);
+        void load_names(char names[][32]);
+        void delete_items();
+        void change_name(int, QString*);
 
-protected:
-    void changeEvent(QEvent *e) override;
+    protected:
+        void changeEvent(QEvent* e) override;
 
-private slots:
-    void setDefaultPreset0(int);
-    void setDefaultPreset1(int);
-    void setDefaultPreset2(int);
-    void setDefaultPreset3(int);
-    void setDefaultPreset4(int);
-    void setDefaultPreset5(int);
-    void setDefaultPreset6(int);
-    void setDefaultPreset7(int);
-    void setDefaultPreset8(int);
-    void setDefaultPreset9(int);
+    private slots:
+        void setDefaultPreset0(int);
+        void setDefaultPreset1(int);
+        void setDefaultPreset2(int);
+        void setDefaultPreset3(int);
+        void setDefaultPreset4(int);
+        void setDefaultPreset5(int);
+        void setDefaultPreset6(int);
+        void setDefaultPreset7(int);
+        void setDefaultPreset8(int);
+        void setDefaultPreset9(int);
 
-private:
-    const std::unique_ptr<Ui::QuickPresets> ui;
-};
-
+    private:
+        const std::unique_ptr<Ui::QuickPresets> ui;
+    };
 }
 
 #endif // QUICKPRESETS_H

@@ -25,29 +25,29 @@
 #include <QDialog>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class Save_effects;
 }
 
 namespace plug
 {
 
-class SaveEffects : public QDialog
-{
-    Q_OBJECT
+    class SaveEffects : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit SaveEffects(QWidget *parent = nullptr);
-    ~SaveEffects() override;
+    public:
+        explicit SaveEffects(QWidget* parent = nullptr);
+        ~SaveEffects() override;
 
-private:
+    private:
         const std::unique_ptr<Ui::Save_effects> ui;
 
-private slots:
-    void select_checkbox();
-    void send();
-};
-
+    private slots:
+        void select_checkbox();
+        void send();
+    };
 }
 
 #endif // SAVE_EFFECTS_H

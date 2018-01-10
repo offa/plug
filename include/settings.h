@@ -26,32 +26,31 @@
 #include <QSettings>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class Settings;
 }
 
 namespace plug
 {
 
-class Settings : public QDialog
-{
-    Q_OBJECT
+    class Settings : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit Settings(QWidget *parent = nullptr);
+    public:
+        explicit Settings(QWidget* parent = nullptr);
 
-private slots:
-    void change_connect(bool);
-    void change_oneset(bool);
-    void change_keepopen(bool);
-    void change_popupwindows(bool);
-    void change_effectvalues(bool);
+    private slots:
+        void change_connect(bool);
+        void change_oneset(bool);
+        void change_keepopen(bool);
+        void change_popupwindows(bool);
+        void change_effectvalues(bool);
 
-private:
-    const std::unique_ptr<Ui::Settings> ui;
-
-};
-
+    private:
+        const std::unique_ptr<Ui::Settings> ui;
+    };
 }
 
 #endif // SETTINGS_H

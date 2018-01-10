@@ -29,60 +29,60 @@
 #include <QSettings>
 #include <QShortcut>
 
-namespace Ui {
+namespace Ui
+{
     class Amplifier;
 }
 
 namespace plug
 {
 
-class Amplifier : public QMainWindow
-{
-    Q_OBJECT
+    class Amplifier : public QMainWindow
+    {
+        Q_OBJECT
 
-public:
-    explicit Amplifier(QWidget *parent = nullptr);
-    ~Amplifier() override;
+    public:
+        explicit Amplifier(QWidget* parent = nullptr);
+        ~Amplifier() override;
 
-private:
-    const std::unique_ptr<Ui::Amplifier> ui;
-    std::unique_ptr<Amp_Advanced> advanced;
-    unsigned char amp_num, gain, volume, treble, middle, bass;
-    unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag, usb_gain;
-    bool changed, brightness;
+    private:
+        const std::unique_ptr<Ui::Amplifier> ui;
+        std::unique_ptr<Amp_Advanced> advanced;
+        unsigned char amp_num, gain, volume, treble, middle, bass;
+        unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag, usb_gain;
+        bool changed, brightness;
 
-public slots:
-    // set basic variables
-    void set_gain(int);
-    void set_volume(int);
-    void set_treble(int);
-    void set_middle(int);
-    void set_bass(int);
-    void choose_amp(int);
+    public slots:
+        // set basic variables
+        void set_gain(int);
+        void set_volume(int);
+        void set_treble(int);
+        void set_middle(int);
+        void set_bass(int);
+        void choose_amp(int);
 
-    // set advanced variables
-    void set_cabinet(int);
-    void set_noise_gate(int);
-    void set_presence(int);
-    void set_gain2(int);
-    void set_master_vol(int);
-    void set_threshold(int);
-    void set_depth(int);
-    void set_bias(int);
-    void set_sag(int);
-    void set_brightness(bool);
-    void set_usb_gain(int);
+        // set advanced variables
+        void set_cabinet(int);
+        void set_noise_gate(int);
+        void set_presence(int);
+        void set_gain2(int);
+        void set_master_vol(int);
+        void set_threshold(int);
+        void set_depth(int);
+        void set_bias(int);
+        void set_sag(int);
+        void set_brightness(bool);
+        void set_usb_gain(int);
 
-    // send settings to the amplifier
-    void send_amp();
+        // send settings to the amplifier
+        void send_amp();
 
-    void load(struct amp_settings);
-    void get_settings(struct amp_settings*);
-    void enable_set_button(bool);
+        void load(struct amp_settings);
+        void get_settings(struct amp_settings*);
+        void enable_set_button(bool);
 
-    void showAndActivate();
-};
-
+        void showAndActivate();
+    };
 }
 
 #endif // AMPLIFIER_H

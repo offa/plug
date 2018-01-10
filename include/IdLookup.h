@@ -30,7 +30,7 @@ namespace plug
 
     constexpr amps lookupAmpById(std::uint8_t id)
     {
-        switch(id)
+        switch (id)
         {
             case 0x67:
                 return amps::FENDER_57_DELUXE;
@@ -64,7 +64,7 @@ namespace plug
 
     constexpr effects lookupEffectById(std::uint8_t id)
     {
-        switch(id)
+        switch (id)
         {
             case 0x00:
                 return effects::EMPTY;
@@ -146,5 +146,4 @@ namespace plug
                 throw std::invalid_argument{"Invalid effect id: " + std::to_string(id)};
         }
     }
-
 }

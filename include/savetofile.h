@@ -29,39 +29,38 @@
 #include <QXmlStreamWriter>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class SaveToFile;
 }
 
 namespace plug
 {
 
-class SaveToFile : public QDialog
-{
-    Q_OBJECT
+    class SaveToFile : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit SaveToFile(QWidget *parent = nullptr);
+    public:
+        explicit SaveToFile(QWidget* parent = nullptr);
 
-private slots:
-    QString choose_destination();
-    void savefile();
+    private slots:
+        QString choose_destination();
+        void savefile();
 
-signals:
-    void destination_chosen(QString);
+    signals:
+        void destination_chosen(QString);
 
-private:
-    const std::unique_ptr<Ui::SaveToFile> ui;
-    std::unique_ptr<QXmlStreamWriter> xml;
+    private:
+        const std::unique_ptr<Ui::SaveToFile> ui;
+        std::unique_ptr<QXmlStreamWriter> xml;
 
-    void writeAmp(struct amp_settings);
-    void manageWriteFX(struct fx_pedal_settings[4]);
-    void writeFX(struct fx_pedal_settings);
-    void writeFUSE();
-    void writeUSBGain(int);
-
-};
-
+        void writeAmp(struct amp_settings);
+        void manageWriteFX(struct fx_pedal_settings[4]);
+        void writeFX(struct fx_pedal_settings);
+        void writeFUSE();
+        void writeUSBGain(int);
+    };
 }
 
 #endif // SAVETOFILE_H

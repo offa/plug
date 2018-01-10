@@ -31,14 +31,12 @@ namespace
     class UsbMock
     {
     public:
-
         MOCK_METHOD1(close, void(libusb_device_handle*));
         MOCK_METHOD3(open_device_with_vid_pid, libusb_device_handle*(libusb_context*, uint16_t, uint16_t));
         MOCK_METHOD1(exit, void(libusb_context*));
         MOCK_METHOD2(release_interface, int(libusb_device_handle*, int));
         MOCK_METHOD2(attach_kernel_driver, int(libusb_device_handle*, int));
         MOCK_METHOD6(interrupt_transfer, int(libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
-
     };
 
 
@@ -46,71 +44,70 @@ namespace
 }
 
 
-extern "C"
+extern "C" {
+int libusb_init(libusb_context** ctx)
 {
-    int libusb_init(libusb_context** ctx)
-    {
-        unused(ctx);
-        return 0;
-    }
+    unused(ctx);
+    return 0;
+}
 
-    void libusb_exit(libusb_context* ctx)
-    {
-        usbmock->exit(ctx);
-    }
+void libusb_exit(libusb_context* ctx)
+{
+    usbmock->exit(ctx);
+}
 
-    libusb_device_handle* libusb_open_device_with_vid_pid(libusb_context *ctx, uint16_t vendor_id, uint16_t product_id)
-    {
-        return usbmock->open_device_with_vid_pid(ctx, vendor_id, product_id);
-    }
+libusb_device_handle* libusb_open_device_with_vid_pid(libusb_context* ctx, uint16_t vendor_id, uint16_t product_id)
+{
+    return usbmock->open_device_with_vid_pid(ctx, vendor_id, product_id);
+}
 
-    int libusb_interrupt_transfer(libusb_device_handle* dev_handle, unsigned char endpoint,
-                                unsigned char* data, int length, int* actual_length, unsigned int timeout)
-    {
-        return usbmock->interrupt_transfer(dev_handle, endpoint, data, length, actual_length, timeout);
-    }
+int libusb_interrupt_transfer(libusb_device_handle* dev_handle, unsigned char endpoint,
+                              unsigned char* data, int length, int* actual_length, unsigned int timeout)
+{
+    return usbmock->interrupt_transfer(dev_handle, endpoint, data, length, actual_length, timeout);
+}
 
-    int libusb_claim_interface(libusb_device_handle *dev_handle, int interface_number)
-    {
-        unused(dev_handle);
-        unused(interface_number);
-        return 0;
-    }
+int libusb_claim_interface(libusb_device_handle* dev_handle, int interface_number)
+{
+    unused(dev_handle);
+    unused(interface_number);
+    return 0;
+}
 
-    int libusb_detach_kernel_driver(libusb_device_handle *dev_handle, int interface_number)
-    {
-        unused(dev_handle);
-        unused(interface_number);
-        return 0;
-    }
+int libusb_detach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
+{
+    unused(dev_handle);
+    unused(interface_number);
+    return 0;
+}
 
-    int libusb_kernel_driver_active(libusb_device_handle *dev_handle, int interface_number)
-    {
-        unused(dev_handle);
-        unused(interface_number);
-        return 0;
-    }
+int libusb_kernel_driver_active(libusb_device_handle* dev_handle, int interface_number)
+{
+    unused(dev_handle);
+    unused(interface_number);
+    return 0;
+}
 
-    int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
-    {
-        return usbmock->release_interface(dev_handle, interface_number);
-    }
+int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
+{
+    return usbmock->release_interface(dev_handle, interface_number);
+}
 
-    int libusb_attach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
-    {
-        return usbmock->attach_kernel_driver(dev_handle, interface_number);
-    }
+int libusb_attach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
+{
+    return usbmock->attach_kernel_driver(dev_handle, interface_number);
+}
 
-    void libusb_close(libusb_device_handle* dev_handle)
-    {
-        usbmock->close(dev_handle);
-    }
+void libusb_close(libusb_device_handle* dev_handle)
+{
+    usbmock->close(dev_handle);
+}
 
 
-    struct libusb_device_handle
-    {
-        char dummy;
-    };
+struct libusb_device_handle
+{
+    char dummy;
+};
 }
 
 
@@ -120,11 +117,9 @@ MATCHER_P(BufferIs, expected, "")
 }
 
 
-
 class MustangTest : public testing::Test
 {
 protected:
-
     void SetUp() override
     {
         m = std::make_unique<Mustang>();
@@ -199,7 +194,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     std::array<std::uint8_t, packetSize> dummy{{0}};
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, BufferIs(sendCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _)).WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize-1), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _)).WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 1), Return(0)));
 
     const auto result = m->load_memory_bank(slot, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(0));
@@ -264,8 +259,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     recvData[brightnessPos] = 0;
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, _, packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _)).WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize-1), Return(0)))
-                                                                        .WillOnce(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(recvSize-2), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _)).WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 1), Return(0))).WillOnce(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(recvSize - 2), Return(0)));
 
     amp_settings settings{};
     m->load_memory_bank(slot, nullptr, &settings, nullptr);
@@ -294,5 +288,3 @@ TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
     const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(errorCode));
 }
-
-

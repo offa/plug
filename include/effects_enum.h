@@ -25,106 +25,104 @@
 namespace plug
 {
 
-// list of all amplifiers
-enum class amps
-{
-    FENDER_57_DELUXE,
-    FENDER_59_BASSMAN,
-    FENDER_57_CHAMP,
-    FENDER_65_DELUXE_REVERB,
-    FENDER_65_PRINCETON,
-    FENDER_65_TWIN_REVERB,
-    FENDER_SUPER_SONIC,
-    BRITISH_60S,
-    BRITISH_70S,
-    BRITISH_80S,
-    AMERICAN_90S,
-    METAL_2000
-};
+    // list of all amplifiers
+    enum class amps
+    {
+        FENDER_57_DELUXE,
+        FENDER_59_BASSMAN,
+        FENDER_57_CHAMP,
+        FENDER_65_DELUXE_REVERB,
+        FENDER_65_PRINCETON,
+        FENDER_65_TWIN_REVERB,
+        FENDER_SUPER_SONIC,
+        BRITISH_60S,
+        BRITISH_70S,
+        BRITISH_80S,
+        AMERICAN_90S,
+        METAL_2000
+    };
 
 
-// list of all effects
-enum class effects
-{
-    EMPTY,
-    OVERDRIVE,
-    WAH,
-    TOUCH_WAH,
-    FUZZ,
-    FUZZ_TOUCH_WAH,
-    SIMPLE_COMP,
-    COMPRESSOR,
+    // list of all effects
+    enum class effects
+    {
+        EMPTY,
+        OVERDRIVE,
+        WAH,
+        TOUCH_WAH,
+        FUZZ,
+        FUZZ_TOUCH_WAH,
+        SIMPLE_COMP,
+        COMPRESSOR,
 
-    SINE_CHORUS,
-    TRIANGLE_CHORUS,
-    SINE_FLANGER,
-    TRIANGLE_FLANGER,
-    VIBRATONE,
-    VINTAGE_TREMOLO,
-    SINE_TREMOLO,
-    RING_MODULATOR,
-    STEP_FILTER,
-    PHASER,
-    PITCH_SHIFTER,
+        SINE_CHORUS,
+        TRIANGLE_CHORUS,
+        SINE_FLANGER,
+        TRIANGLE_FLANGER,
+        VIBRATONE,
+        VINTAGE_TREMOLO,
+        SINE_TREMOLO,
+        RING_MODULATOR,
+        STEP_FILTER,
+        PHASER,
+        PITCH_SHIFTER,
 
-    MONO_DELAY,
-    MONO_ECHO_FILTER,
-    STEREO_ECHO_FILTER,
-    MULTITAP_DELAY,
-    PING_PONG_DELAY,
-    DUCKING_DELAY,
-    REVERSE_DELAY,
-    TAPE_DELAY,
-    STEREO_TAPE_DELAY,
+        MONO_DELAY,
+        MONO_ECHO_FILTER,
+        STEREO_ECHO_FILTER,
+        MULTITAP_DELAY,
+        PING_PONG_DELAY,
+        DUCKING_DELAY,
+        REVERSE_DELAY,
+        TAPE_DELAY,
+        STEREO_TAPE_DELAY,
 
-    SMALL_HALL_REVERB,
-    LARGE_HALL_REVERB,
-    SMALL_ROOM_REVERB,
-    LARGE_ROOM_REVERB,
-    SMALL_PLATE_REVERB,
-    LARGE_PLATE_REVERB,
-    AMBIENT_REVERB,
-    ARENA_REVERB,
-    FENDER_63_SPRING_REVERB,
-    FENDER_65_SPRING_REVERB
-};
+        SMALL_HALL_REVERB,
+        LARGE_HALL_REVERB,
+        SMALL_ROOM_REVERB,
+        LARGE_ROOM_REVERB,
+        SMALL_PLATE_REVERB,
+        LARGE_PLATE_REVERB,
+        AMBIENT_REVERB,
+        ARENA_REVERB,
+        FENDER_63_SPRING_REVERB,
+        FENDER_65_SPRING_REVERB
+    };
 
-// list of all cabinets
-enum class cabinets
-{
-    OFF,
-    cab57DLX,
-    cabBSSMN,
-    cab65DLX,
-    cab65PRN,
-    cabCHAMP,
-    cab4x12M,
-    cab2x12C,
-    cab4x12G,
-    cab65TWN,
-    cab4x12V,
-    cabSS212,
-    cabSS112
-};
+    // list of all cabinets
+    enum class cabinets
+    {
+        OFF,
+        cab57DLX,
+        cabBSSMN,
+        cab65DLX,
+        cab65PRN,
+        cabCHAMP,
+        cab4x12M,
+        cab2x12C,
+        cab4x12G,
+        cab65TWN,
+        cab4x12V,
+        cabSS212,
+        cabSS112
+    };
 
 
+    // Helper functions - for compatibility only.
+    constexpr auto value(amps a)
+    {
+        return static_cast<unsigned char>(a);
+    }
 
-// Helper functions - for compatibility only.
-constexpr auto value(amps a)
-{
-    return static_cast<unsigned char>(a);
-}
+    constexpr auto value(effects e)
+    {
+        return static_cast<unsigned char>(e);
+    }
 
-constexpr auto value(effects e)
-{
-    return static_cast<unsigned char>(e);
-}
-
-constexpr auto value(cabinets c)
-{
-    return static_cast<unsigned char>(c);
-}
-
+    constexpr auto value(cabinets c)
+    {
+        return static_cast<unsigned char>(c);
+    }
 }
 
 #endif // EFFECTS_ENUM_H

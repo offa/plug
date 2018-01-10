@@ -23,10 +23,8 @@
 namespace plug
 {
 
-    template<class T>
+    template <class T>
     void unused(T&&)
     {
     }
-
 }
-

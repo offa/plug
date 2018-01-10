@@ -29,53 +29,53 @@
 #include <QShortcut>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class Effect;
 }
 
 namespace plug
 {
 
-class Effect : public QMainWindow
-{
-    Q_OBJECT
+    class Effect : public QMainWindow
+    {
+        Q_OBJECT
 
-public:
-    explicit Effect(QWidget *parent = nullptr, int number = 0);
-    ~Effect() override;
+    public:
+        explicit Effect(QWidget* parent = nullptr, int number = 0);
+        ~Effect() override;
 
-    void set_changed(bool);
-    bool get_changed();
+        void set_changed(bool);
+        bool get_changed();
 
-private:
-    const std::unique_ptr<Ui::Effect> ui;
-    unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6;
-    bool put_post_amp, changed;
-    QString temp1, temp2;
+    private:
+        const std::unique_ptr<Ui::Effect> ui;
+        unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6;
+        bool put_post_amp, changed;
+        QString temp1, temp2;
 
-public slots:
-    // functions to set variables
-    void set_post_amp(bool);
-    void set_knob1(int);
-    void set_knob2(int);
-    void set_knob3(int);
-    void set_knob4(int);
-    void set_knob5(int);
-    void set_knob6(int);
-    void choose_fx(int);
-    void off_switch(bool);
-    void enable_set_button(bool);
+    public slots:
+        // functions to set variables
+        void set_post_amp(bool);
+        void set_knob1(int);
+        void set_knob2(int);
+        void set_knob3(int);
+        void set_knob4(int);
+        void set_knob5(int);
+        void set_knob6(int);
+        void choose_fx(int);
+        void off_switch(bool);
+        void enable_set_button(bool);
 
-    // send settings to the amplifier
-    void send_fx();
+        // send settings to the amplifier
+        void send_fx();
 
-    void load(fx_pedal_settings);
-    void get_settings(fx_pedal_settings &);
-    void load_default_fx();
+        void load(fx_pedal_settings);
+        void get_settings(fx_pedal_settings&);
+        void load_default_fx();
 
-    void showAndActivate();
-};
-
+        void showAndActivate();
+    };
 }
 
 #endif // EFFECT_H

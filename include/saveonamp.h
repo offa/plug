@@ -25,33 +25,33 @@
 #include <QMainWindow>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class SaveOnAmp;
 }
 
 namespace plug
 {
 
-class SaveOnAmp : public QMainWindow
-{
-    Q_OBJECT
+    class SaveOnAmp : public QMainWindow
+    {
+        Q_OBJECT
 
-public:
-    explicit SaveOnAmp(QWidget *parent = nullptr);
-    ~SaveOnAmp() override;
-    void load_names(char names[][32]);
-    void delete_items();
+    public:
+        explicit SaveOnAmp(QWidget* parent = nullptr);
+        ~SaveOnAmp() override;
+        void load_names(char names[][32]);
+        void delete_items();
 
-public slots:
-    void change_index(int, const QString&);
+    public slots:
+        void change_index(int, const QString&);
 
-private:
-    const std::unique_ptr<Ui::SaveOnAmp> ui;
+    private:
+        const std::unique_ptr<Ui::SaveOnAmp> ui;
 
-private slots:
-    void save();
-};
-
+    private slots:
+        void save();
+    };
 }
 
 #endif // SAVEONAMP_H

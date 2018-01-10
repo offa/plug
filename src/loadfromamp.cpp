@@ -26,58 +26,57 @@
 namespace plug
 {
 
-LoadFromAmp::LoadFromAmp(QWidget *parent) :
-    QMainWindow(parent),
-    ui(std::make_unique<Ui::LoadFromAmp>())
-{
-    ui->setupUi(this);
-
-    QSettings settings;
-    restoreGeometry(settings.value("Windows/loadAmpPresetWindowGeometry").toByteArray());
-
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(load()));
-    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
-}
-
-LoadFromAmp::~LoadFromAmp()
-{
-    QSettings settings;
-    settings.setValue("Windows/loadAmpPresetWindowGeometry", saveGeometry());
-}
-
-void LoadFromAmp::load()
-{
-    QSettings settings;
-
-    dynamic_cast<MainWindow*>(parent())->load_from_amp(ui->comboBox->currentIndex());
-    dynamic_cast<MainWindow*>(parent())->set_index(ui->comboBox->currentIndex());
-    if(!settings.value("Settings/keepWindowsOpen").toBool())
-        this->close();
-}
-
-void LoadFromAmp::load_names(char names[][32])
-{
-    for(int i = 0; i < 100; i++)
+    LoadFromAmp::LoadFromAmp(QWidget* parent)
+        : QMainWindow(parent),
+          ui(std::make_unique<Ui::LoadFromAmp>())
     {
-        if(names[i][0] == 0x00)
-            break;
-        ui->comboBox->addItem(QString("[%1] %2").arg(i+1).arg(names[i]));
+        ui->setupUi(this);
+
+        QSettings settings;
+        restoreGeometry(settings.value("Windows/loadAmpPresetWindowGeometry").toByteArray());
+
+        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(load()));
+        connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
     }
-}
 
-void LoadFromAmp::delete_items()
-{
-    int j = ui->comboBox->count();
-    for(int i = 0; i < j; i++)
-        ui->comboBox->removeItem(0);
-}
+    LoadFromAmp::~LoadFromAmp()
+    {
+        QSettings settings;
+        settings.setValue("Windows/loadAmpPresetWindowGeometry", saveGeometry());
+    }
 
-void LoadFromAmp::change_name(int slot, QString *name)
-{
-    ui->comboBox->setItemText(slot, *name);
-    ui->comboBox->setCurrentIndex(slot);
-}
+    void LoadFromAmp::load()
+    {
+        QSettings settings;
 
+        dynamic_cast<MainWindow*>(parent())->load_from_amp(ui->comboBox->currentIndex());
+        dynamic_cast<MainWindow*>(parent())->set_index(ui->comboBox->currentIndex());
+        if (!settings.value("Settings/keepWindowsOpen").toBool())
+            this->close();
+    }
+
+    void LoadFromAmp::load_names(char names[][32])
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            if (names[i][0] == 0x00)
+                break;
+            ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
+        }
+    }
+
+    void LoadFromAmp::delete_items()
+    {
+        int j = ui->comboBox->count();
+        for (int i = 0; i < j; i++)
+            ui->comboBox->removeItem(0);
+    }
+
+    void LoadFromAmp::change_name(int slot, QString* name)
+    {
+        ui->comboBox->setItemText(slot, *name);
+        ui->comboBox->setCurrentIndex(slot);
+    }
 }
 
 #include "moc_loadfromamp.moc"

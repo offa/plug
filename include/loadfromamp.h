@@ -25,31 +25,31 @@
 #include <QMainWindow>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class LoadFromAmp;
 }
 
 namespace plug
 {
 
-class LoadFromAmp : public QMainWindow
-{
-    Q_OBJECT
+    class LoadFromAmp : public QMainWindow
+    {
+        Q_OBJECT
 
-public:
-    explicit LoadFromAmp(QWidget *parent = nullptr);
-    ~LoadFromAmp() override;
-    void load_names(char names[][32]);
-    void delete_items();
-    void change_name(int, QString *);
+    public:
+        explicit LoadFromAmp(QWidget* parent = nullptr);
+        ~LoadFromAmp() override;
+        void load_names(char names[][32]);
+        void delete_items();
+        void change_name(int, QString*);
 
-private:
-    const std::unique_ptr<Ui::LoadFromAmp> ui;
+    private:
+        const std::unique_ptr<Ui::LoadFromAmp> ui;
 
-private slots:
-    void load();
-};
-
+    private slots:
+        void load();
+    };
 }
 
 #endif // LOADFROMAMP_H

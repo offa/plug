@@ -28,38 +28,38 @@
 #include <QResizeEvent>
 #include <memory>
 
-namespace Ui {
+namespace Ui
+{
     class Library;
 }
 
 namespace plug
 {
 
-class Library : public QDialog
-{
-    Q_OBJECT
+    class Library : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    explicit Library(char names[100][32], QWidget *parent = nullptr);
-    ~Library() override;
+    public:
+        explicit Library(char names[100][32], QWidget* parent = nullptr);
+        ~Library() override;
 
-private:
-    const std::unique_ptr<Ui::Library> ui;
-    const std::unique_ptr<QFileInfoList> files;
-    void resizeEvent(QResizeEvent *) override;
+    private:
+        const std::unique_ptr<Ui::Library> ui;
+        const std::unique_ptr<QFileInfoList> files;
+        void resizeEvent(QResizeEvent*) override;
 
-private slots:
-    void load_slot(int);
-    void get_directory();
-    void get_files(const QString&);
-    void load_file(int);
-    void change_font_size(int);
-    void change_font_family(QFont);
+    private slots:
+        void load_slot(int);
+        void get_directory();
+        void get_files(const QString&);
+        void load_file(int);
+        void change_font_size(int);
+        void change_font_family(QFont);
 
-signals:
-    void directory_changed(QString);
-};
-
+    signals:
+        void directory_changed(QString);
+    };
 }
 
 #endif // LIBRARY_H
