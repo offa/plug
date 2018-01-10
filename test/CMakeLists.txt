@@ -2,7 +2,8 @@
 find_package(Threads REQUIRED)
 find_package(GTest REQUIRED)
 add_library(TestLibs INTERFACE)
-target_include_directories(TestLibs INTERFACE
+target_include_directories(TestLibs SYSTEM
+                                INTERFACE
                                     ${GTest_INCLUDE_DIR}
                                     ${GTest_Mock_INCLUDE_DIR}
                                     )
