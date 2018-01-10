@@ -45,7 +45,7 @@ public:
     void change_name(int, QString *);
 
 protected:
-    void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e) override;
 
 private slots:
     void setDefaultPreset0(int);

@@ -38,7 +38,7 @@ class SaveEffects : public QDialog
 
 public:
     explicit SaveEffects(QWidget *parent = nullptr);
-    ~SaveEffects();
+    ~SaveEffects() override;
 
 private:
         const std::unique_ptr<Ui::Save_effects> ui;

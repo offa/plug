@@ -39,7 +39,7 @@ class Amp_Advanced : public QDialog
 
 public:
     explicit Amp_Advanced(QWidget *parent = nullptr);
-    ~Amp_Advanced();
+    ~Amp_Advanced() override;
 
 public slots:
     void change_cabinet(int);

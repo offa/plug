@@ -42,7 +42,7 @@ class Effect : public QMainWindow
 
 public:
     explicit Effect(QWidget *parent = nullptr, int number = 0);
-    ~Effect();
+    ~Effect() override;
 
     void set_changed(bool);
     bool get_changed();

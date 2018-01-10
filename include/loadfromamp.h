@@ -38,7 +38,7 @@ class LoadFromAmp : public QMainWindow
 
 public:
     explicit LoadFromAmp(QWidget *parent = nullptr);
-    ~LoadFromAmp();
+    ~LoadFromAmp() override;
     void load_names(char names[][32]);
     void delete_items();
     void change_name(int, QString *);

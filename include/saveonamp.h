@@ -38,7 +38,7 @@ class SaveOnAmp : public QMainWindow
 
 public:
     explicit SaveOnAmp(QWidget *parent = nullptr);
-    ~SaveOnAmp();
+    ~SaveOnAmp() override;
     void load_names(char names[][32]);
     void delete_items();
 

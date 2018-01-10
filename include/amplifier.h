@@ -42,7 +42,7 @@ class Amplifier : public QMainWindow
 
 public:
     explicit Amplifier(QWidget *parent = nullptr);
-    ~Amplifier();
+    ~Amplifier() override;
 
 private:
     const std::unique_ptr<Ui::Amplifier> ui;

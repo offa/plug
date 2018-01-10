@@ -41,12 +41,12 @@ class Library : public QDialog
 
 public:
     explicit Library(char names[100][32], QWidget *parent = nullptr);
-    ~Library();
+    ~Library() override;
 
 private:
     const std::unique_ptr<Ui::Library> ui;
     const std::unique_ptr<QFileInfoList> files;
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
 private slots:
     void load_slot(int);
