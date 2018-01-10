@@ -38,7 +38,7 @@ endif()
 include(Sanitizer)
 include(Install)
 include(Template)
-
+include(ClangFormat)
 
 add_compile_options(-Wall
                     -Wextra
