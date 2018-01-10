@@ -74,7 +74,7 @@ void SaveOnAmp::delete_items()
         ui->comboBox->removeItem(0);
 }
 
-void SaveOnAmp::change_index(int value, QString name)
+void SaveOnAmp::change_index(int value, const QString& name)
 {
     if(value > 0)
         ui->comboBox->setCurrentIndex(value);

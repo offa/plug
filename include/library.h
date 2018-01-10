@@ -51,7 +51,7 @@ private:
 private slots:
     void load_slot(int);
     void get_directory();
-    void get_files(QString);
+    void get_files(const QString&);
     void load_file(int);
     void change_font_size(int);
     void change_font_family(QFont);

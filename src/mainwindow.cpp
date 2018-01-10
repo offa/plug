@@ -614,7 +614,7 @@ void MainWindow::get_settings(struct amp_settings *amplifier_settings, struct fx
     }
 }
 
-void MainWindow::change_title(QString name)
+void MainWindow::change_title(const QString& name)
 {
     current_name = name;
 

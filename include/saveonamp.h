@@ -43,7 +43,7 @@ public:
     void delete_items();
 
 public slots:
-    void change_index(int, QString);
+    void change_index(int, const QString&);
 
 private:
     const std::unique_ptr<Ui::SaveOnAmp> ui;

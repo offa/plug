@@ -92,7 +92,7 @@ void Library::get_directory()
     emit directory_changed(directory);
 }
 
-void Library::get_files(QString path)
+void Library::get_files(const QString& path)
 {
     QDir directory(path, "*.fuse", (QDir::Name | QDir::IgnoreCase), (QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
 

@@ -74,7 +74,7 @@ public slots:
     void set_index(int);
     void loadfile(QString filename = QString());
     void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
-    void change_title(QString);
+    void change_title(const QString&);
     void update_firmware();
     void empty_other(int, Effect*);
 
