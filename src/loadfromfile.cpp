@@ -175,7 +175,7 @@ void LoadFromFile::parseAmp()
                     m_amp_settings->sag = i;
                     break;
                 case 20:
-                    m_amp_settings->brightness = (m_xml->readElementText().toInt()?true:false);
+                    m_amp_settings->brightness = (m_xml->readElementText().toInt() != 0?true:false);
                     break;
                 }
             }
@@ -405,7 +405,7 @@ void LoadFromFile::parseFX()
 
     for(int i = 0, j = 0; i < 8; i++)
     {
-        if(fx_slots[i])
+        if(fx_slots[i] != 0)
         {
             m_fx_settings[fx_slots[i]-1].fx_slot = j;
             ++j;

@@ -215,7 +215,7 @@ void MainWindow::start_amp()
         case 0x00:
         case 0x04:
             effect1->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect1->show();
             break;
@@ -223,7 +223,7 @@ void MainWindow::start_amp()
         case 0x01:
         case 0x05:
             effect2->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect2->show();
             break;
@@ -231,7 +231,7 @@ void MainWindow::start_amp()
         case 0x02:
         case 0x06:
             effect3->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect3->show();
             break;
@@ -239,7 +239,7 @@ void MainWindow::start_amp()
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect4->show();
             break;
@@ -407,7 +407,7 @@ int MainWindow::load_from_amp(int slot)
         case 0x00:
         case 0x04:
             effect1->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect1->show();
             break;
@@ -415,7 +415,7 @@ int MainWindow::load_from_amp(int slot)
         case 0x01:
         case 0x05:
             effect2->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect2->show();
             break;
@@ -423,7 +423,7 @@ int MainWindow::load_from_amp(int slot)
         case 0x02:
         case 0x06:
             effect3->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect3->show();
             break;
@@ -431,7 +431,7 @@ int MainWindow::load_from_amp(int slot)
         case 0x03:
         case 0x07:
             effect4->load(effects_set[i]);
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect4->show();
             break;
@@ -566,7 +566,7 @@ void MainWindow::loadfile(QString filename)
             effect1->load(effects_set[i]);
             if(connected)
                 effect1->send_fx();
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect1->show();
             break;
@@ -575,7 +575,7 @@ void MainWindow::loadfile(QString filename)
             effect2->load(effects_set[i]);
             if(connected)
                 effect2->send_fx();
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect2->show();
             break;
@@ -584,7 +584,7 @@ void MainWindow::loadfile(QString filename)
             effect3->load(effects_set[i]);
             if(connected)
                 effect3->send_fx();
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect3->show();
             break;
@@ -593,7 +593,7 @@ void MainWindow::loadfile(QString filename)
             effect4->load(effects_set[i]);
             if(connected)
                 effect4->send_fx();
-            if(effects_set[i].effect_num)
+            if(effects_set[i].effect_num != 0u)
                 if(settings.value("Settings/popupChangedWindows").toBool())
                     effect4->show();
             break;
@@ -714,7 +714,7 @@ void MainWindow::update_firmware()
         ui->statusBar->showMessage(tr("Error: Suitable device not found!"), 5000);
         return;
     }
-    else if(ret)
+    else if(ret != 0)
     {
         ui->statusBar->showMessage(QString(tr("Communication error: %1")).arg(ret), 5000);
         return;

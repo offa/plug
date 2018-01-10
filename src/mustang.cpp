@@ -59,7 +59,7 @@ int Mustang::start_amp(char list[][32], char *name, amp_settings *amp_set, fx_pe
     {
         // initialize libusb
         int ret = libusb_init(nullptr);
-        if (ret)
+        if (ret != 0)
             return ret;
 
         // get handle for the device
@@ -76,10 +76,10 @@ int Mustang::start_amp(char list[][32], char *name, amp_settings *amp_set, fx_pe
 
         // detach kernel driver
         ret = libusb_kernel_driver_active(amp_hand, 0);
-        if(ret)
+        if(ret != 0)
         {
             ret = libusb_detach_kernel_driver(amp_hand, 0);
-            if(ret)
+            if(ret != 0)
             {
                 stop_amp();
                 return ret;
@@ -88,7 +88,7 @@ int Mustang::start_amp(char list[][32], char *name, amp_settings *amp_set, fx_pe
 
         // claim the device
         ret = libusb_claim_interface(amp_hand, 0);
-        if(ret)
+        if(ret != 0)
         {
             stop_amp();
             return ret;
@@ -116,7 +116,7 @@ int Mustang::start_amp(char list[][32], char *name, amp_settings *amp_set, fx_pe
         array[1] = 0xc1;
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
 
-        for(i = 0; recieved; i++)
+        for(i = 0; recieved != 0; i++)
         {
             libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
             memcpy(recieved_data[i], array, LENGTH);
@@ -147,7 +147,7 @@ int Mustang::stop_amp()
     {
         // release claimed interface
         int ret = libusb_release_interface(amp_hand, 0);
-        if(ret && (ret != LIBUSB_ERROR_NO_DEVICE))
+        if((ret != 0) && (ret != LIBUSB_ERROR_NO_DEVICE))
             goto clean_libusb;
 
         if(ret != LIBUSB_ERROR_NO_DEVICE)
@@ -699,7 +699,7 @@ int Mustang::load_memory_bank(int slot, char *name, amp_settings *amp_set, fx_pe
     array[6] = 0x01;
 
     ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-    for(int i = 0; recieved; i++)
+    for(int i = 0; recieved != 0; i++)
     {
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
         if(i < 7)
@@ -742,7 +742,7 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings
         amp_set->depth = data[1][DEPTH];
         amp_set->bias = data[1][BIAS];
         amp_set->sag = data[1][SAG];
-        amp_set->brightness = data[1][BRIGHTNESS]?true:false;
+        amp_set->brightness = data[1][BRIGHTNESS] != 0u?true:false;
         amp_set->usb_gain = data[6][16];
     }
 
@@ -1104,7 +1104,7 @@ int Mustang::update(char *filename)
     {
         // initialize libusb
         ret = libusb_init(nullptr);
-        if (ret)
+        if (ret != 0)
             return ret;
 
         // get handle for the device
@@ -1137,10 +1137,10 @@ int Mustang::update(char *filename)
 
         // detach kernel driver
         ret = libusb_kernel_driver_active(amp_hand, 0);
-        if(ret)
+        if(ret != 0)
         {
             ret = libusb_detach_kernel_driver(amp_hand, 0);
-            if(ret)
+            if(ret != 0)
             {
                 stop_amp();
                 return ret;
@@ -1149,7 +1149,7 @@ int Mustang::update(char *filename)
 
         // claim the device
         ret = libusb_claim_interface(amp_hand, 0);
-        if(ret)
+        if(ret != 0)
         {
             stop_amp();
             return ret;
@@ -1184,7 +1184,7 @@ int Mustang::update(char *filename)
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
         usleep(10000);
 
-        if(feof(file))  // if reached end of the file
+        if(feof(file) != 0)  // if reached end of the file
             break;  // exit loop
     }
     fclose(file);
