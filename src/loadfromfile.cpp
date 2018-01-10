@@ -175,7 +175,7 @@ void LoadFromFile::parseAmp()
                     m_amp_settings->sag = i;
                     break;
                 case 20:
-                    m_amp_settings->brightness = (m_xml->readElementText().toInt() != 0?true:false);
+                    m_amp_settings->brightness = (m_xml->readElementText().toInt() != 0);
                     break;
                 }
             }

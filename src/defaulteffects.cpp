@@ -1107,7 +1107,7 @@ void DefaultEffects::save_default_effects()
     settings.setValue(QString("DefaultEffects/Effect%1/Knob4").arg(ui->comboBox_3->currentIndex()), ui->dial_4->value());
     settings.setValue(QString("DefaultEffects/Effect%1/Knob5").arg(ui->comboBox_3->currentIndex()), ui->dial_5->value());
     settings.setValue(QString("DefaultEffects/Effect%1/Knob6").arg(ui->comboBox_3->currentIndex()), ui->dial_6->value());
-    settings.setValue(QString("DefaultEffects/Effect%1/Post amp").arg(ui->comboBox_3->currentIndex()), ui->checkBox->checkState() != 0u?true:false);
+    settings.setValue(QString("DefaultEffects/Effect%1/Post amp").arg(ui->comboBox_3->currentIndex()), ui->checkBox->checkState() != 0u);
 }
 
 }

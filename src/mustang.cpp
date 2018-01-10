@@ -742,7 +742,7 @@ int Mustang::decode_data(unsigned char data[7][LENGTH], char *name, amp_settings
         amp_set->depth = data[1][DEPTH];
         amp_set->bias = data[1][BIAS];
         amp_set->sag = data[1][SAG];
-        amp_set->brightness = data[1][BRIGHTNESS] != 0u?true:false;
+        amp_set->brightness = data[1][BRIGHTNESS] != 0u;
         amp_set->usb_gain = data[6][16];
     }
 

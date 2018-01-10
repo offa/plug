@@ -714,7 +714,7 @@ void MainWindow::update_firmware()
         ui->statusBar->showMessage(tr("Error: Suitable device not found!"), 5000);
         return;
     }
-    else if(ret != 0)
+    if(ret != 0)
     {
         ui->statusBar->showMessage(QString(tr("Communication error: %1")).arg(ret), 5000);
         return;
