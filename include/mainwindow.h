@@ -35,6 +35,7 @@
 #include "saveonamp.h"
 #include "savetofile.h"
 #include "settings.h"
+#include <memory>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMainWindow>
@@ -80,7 +81,7 @@ namespace plug
         void empty_other(int, Effect*);
 
     private:
-        Ui::MainWindow* ui;
+        const std::unique_ptr<Ui::MainWindow> ui;
 
         // pointers to objects
         QString current_name;

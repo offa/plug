@@ -28,7 +28,7 @@ namespace plug
 
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
-          ui(new Ui::MainWindow)
+          ui(std::make_unique<Ui::MainWindow>())
     {
         ui->setupUi(this);
 
@@ -143,7 +143,6 @@ namespace plug
         settings.setValue("Windows/mainWindowGeometry", saveGeometry());
         settings.setValue("Windows/mainWindowState", saveState());
         delete amp_ops; // stop the communication before exiting
-        delete ui;
     }
 
     void MainWindow::about()
