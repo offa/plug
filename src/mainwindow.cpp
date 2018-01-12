@@ -665,7 +665,7 @@ namespace plug
 
         settings.setValue("Settings/popupChangedWindows", false);
 
-        library = new Library(names, this);
+        library = std::make_unique<Library>(names, this);
         effect1->close();
         effect2->close();
         effect3->close();
@@ -676,7 +676,6 @@ namespace plug
 
         settings.setValue("Settings/popupChangedWindows", previous);
         this->show();
-        delete library;
     }
 
     void MainWindow::update_firmware()

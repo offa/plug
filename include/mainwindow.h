@@ -98,7 +98,7 @@ namespace plug
         SaveEffects* seffects;
         Settings* settings_win;
         SaveToFile* saver;
-        Library* library;
+        std::unique_ptr<Library> library;
         std::unique_ptr<DefaultEffects> deffx;
         QuickPresets* quickpres;
 
