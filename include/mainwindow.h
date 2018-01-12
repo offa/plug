@@ -87,7 +87,7 @@ namespace plug
         QString current_name;
         char names[100][32];
         bool manual_check, connected;
-        std::unique_ptr<Mustang> amp_ops;
+        const std::unique_ptr<Mustang> amp_ops;
         Amplifier* amp;
         Effect* effect1;
         Effect* effect2;
@@ -99,7 +99,7 @@ namespace plug
         Settings* settings_win;
         SaveToFile* saver;
         Library* library;
-        DefaultEffects* deffx;
+        std::unique_ptr<DefaultEffects> deffx;
         QuickPresets* quickpres;
 
         QNetworkReply* reply;

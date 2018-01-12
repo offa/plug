@@ -522,7 +522,7 @@ namespace plug
             return;
 
         settings.setValue("LoadFile/lastDirectory", QFileInfo(filename).absolutePath());
-        QFile* file = new QFile(filename, this);
+        auto file = std::make_unique<QFile>(filename, this);
 
         if (file->exists())
         {
@@ -541,12 +541,9 @@ namespace plug
         struct amp_settings amplifier_set;
         struct fx_pedal_settings effects_set[4];
         QString name;
-        LoadFromFile* loader = new LoadFromFile(file, &name, &amplifier_set, effects_set);
-
+        auto loader = std::make_unique<LoadFromFile>(file.get(), &name, &amplifier_set, effects_set);
         loader->loadfile();
         file->close();
-        delete loader;
-        delete file;
 
         change_title(name);
 
@@ -722,9 +719,9 @@ namespace plug
 
     void MainWindow::show_default_effects()
     {
-        deffx = new DefaultEffects(this);
+        deffx = std::make_unique<DefaultEffects>(this);
         deffx->exec();
-        delete deffx;
+        deffx.reset();
     }
 
     void MainWindow::empty_other(int value, Effect* caller)
