@@ -28,7 +28,8 @@ namespace plug
 
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
-          ui(std::make_unique<Ui::MainWindow>())
+          ui(std::make_unique<Ui::MainWindow>()),
+          amp_ops(std::make_unique<Mustang>())
     {
         ui->setupUi(this);
 
@@ -52,7 +53,6 @@ namespace plug
             settings.setValue("Settings/defaultEffectValues", true);
 
         // create child objects
-        amp_ops = new Mustang();
         amp = new Amplifier(this);
         effect1 = new Effect(this, 0);
         effect2 = new Effect(this, 1);
@@ -142,7 +142,6 @@ namespace plug
         QSettings settings;
         settings.setValue("Windows/mainWindowGeometry", saveGeometry());
         settings.setValue("Windows/mainWindowState", saveState());
-        delete amp_ops; // stop the communication before exiting
     }
 
     void MainWindow::about()
