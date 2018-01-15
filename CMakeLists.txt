@@ -14,10 +14,10 @@ option(LTO "Enable LTO" OFF)
 message(STATUS "LTO : ${LTO}")
 
 option(SANITIZER_ASAN "Enable ASan" OFF)
-message(STATUS "ASan : " ${SANITIZER_ASAN})
+message(STATUS "ASan : ${SANITIZER_ASAN}")
 
 option(SANITIZER_UBSAN "Enable UBSan" OFF)
-message(STATUS "UBSan : " ${SANITIZER_UBSAN})
+message(STATUS "UBSan : ${SANITIZER_UBSAN}")
 
 
 if( CMAKE_BUILD_TYPE )
