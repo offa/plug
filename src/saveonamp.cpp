@@ -54,7 +54,9 @@ namespace plug
         dynamic_cast<MainWindow*>(parent())->change_name(ui->comboBox->currentIndex(), &name);
         dynamic_cast<MainWindow*>(parent())->save_on_amp(ui->lineEdit->text().toLatin1().data(), ui->comboBox->currentIndex());
         if (!settings.value("Settings/keepWindowsOpen").toBool())
+        {
             this->close();
+        }
     }
 
     void SaveOnAmp::load_names(char names[][32])
@@ -62,7 +64,9 @@ namespace plug
         for (int i = 0; i < 100; i++)
         {
             if (names[i][0] == 0x00)
+            {
                 break;
+            }
             ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
         }
     }
@@ -71,13 +75,17 @@ namespace plug
     {
         int j = ui->comboBox->count();
         for (int i = 0; i < j; i++)
+        {
             ui->comboBox->removeItem(0);
+        }
     }
 
     void SaveOnAmp::change_index(int value, const QString& name)
     {
         if (value > 0)
+        {
             ui->comboBox->setCurrentIndex(value);
+        }
         ui->lineEdit->setText(name);
     }
 }
