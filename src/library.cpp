@@ -51,7 +51,9 @@ namespace plug
         for (int i = 0; i < 100; i++)
         {
             if (names[i][0] == 0x00)
+            {
                 break;
+            }
             ui->listWidget->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
         }
 
@@ -73,7 +75,9 @@ namespace plug
     void Library::load_slot(int slot)
     {
         if (slot < 0)
+        {
             return;
+        }
 
         ui->listWidget_2->setCurrentRow(-1);
         dynamic_cast<MainWindow*>(parent())->load_from_amp(slot);
@@ -86,7 +90,9 @@ namespace plug
         QString directory = QFileDialog::getExistingDirectory(this, QString(tr("Choose directory")), settings.value("Library/lastDirectory", QString(QDir::homePath())).toString());
 
         if (directory.isEmpty())
+        {
             return;
+        }
 
         settings.setValue("Library/lastDirectory", directory);
         emit directory_changed(directory);
@@ -97,7 +103,9 @@ namespace plug
         QDir directory(path, "*.fuse", (QDir::Name | QDir::IgnoreCase), (QDir::Files | QDir::NoDotAndDotDot | QDir::Readable));
 
         if (!files->isEmpty())
+        {
             files->clear();
+        }
         ui->listWidget_2->clear();
         *files = directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
         for (int i = 0; i < files->size(); i++)
@@ -107,7 +115,9 @@ namespace plug
     void Library::load_file(int row)
     {
         if (row < 0)
+        {
             return;
+        }
 
         ui->listWidget->setCurrentRow(-1);
         dynamic_cast<MainWindow*>(parent())->loadfile((*files)[row].canonicalFilePath());

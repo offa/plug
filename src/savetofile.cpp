@@ -44,8 +44,9 @@ namespace plug
 
         QFileInfo info(filename);
         if (info.suffix().isEmpty())
+        {
             filename.append(".fuse");
-
+        }
         emit destination_chosen(filename);
         return filename;
     }
@@ -309,57 +310,97 @@ namespace plug
         xml->writeStartElement("Stompbox");
         xml->writeAttribute("ID", "1");
         if ((settings[0].effect_num > value(effects::EMPTY)) && (settings[0].effect_num <= value(effects::COMPRESSOR)))
+        {
             writeFX(settings[0]);
+        }
         else if ((settings[1].effect_num > value(effects::EMPTY)) && (settings[1].effect_num <= value(effects::COMPRESSOR)))
+        {
             writeFX(settings[1]);
+        }
         else if ((settings[2].effect_num > value(effects::EMPTY)) && (settings[2].effect_num <= value(effects::COMPRESSOR)))
+        {
             writeFX(settings[2]);
+        }
         else if ((settings[3].effect_num > value(effects::EMPTY)) && (settings[3].effect_num <= value(effects::COMPRESSOR)))
+        {
             writeFX(settings[3]);
+        }
         else
+        {
             writeFX(empty);
+        }
         xml->writeEndElement(); // end Stompbox
 
         xml->writeStartElement("Modulation");
         xml->writeAttribute("ID", "2");
         if ((settings[0].effect_num >= value(effects::SINE_CHORUS)) && (settings[0].effect_num <= value(effects::PITCH_SHIFTER)))
+        {
             writeFX(settings[0]);
+        }
         else if ((settings[1].effect_num >= value(effects::SINE_CHORUS)) && (settings[1].effect_num <= value(effects::PITCH_SHIFTER)))
+        {
             writeFX(settings[1]);
+        }
         else if ((settings[2].effect_num >= value(effects::SINE_CHORUS)) && (settings[2].effect_num <= value(effects::PITCH_SHIFTER)))
+        {
             writeFX(settings[2]);
+        }
         else if ((settings[3].effect_num >= value(effects::SINE_CHORUS)) && (settings[3].effect_num <= value(effects::PITCH_SHIFTER)))
+        {
             writeFX(settings[3]);
+        }
         else
+        {
             writeFX(empty);
+        }
         xml->writeEndElement(); // end Modulation
 
         xml->writeStartElement("Delay");
         xml->writeAttribute("ID", "3");
         if ((settings[0].effect_num >= value(effects::MONO_DELAY)) && (settings[0].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        {
             writeFX(settings[0]);
+        }
         else if ((settings[1].effect_num >= value(effects::MONO_DELAY)) && (settings[1].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        {
             writeFX(settings[1]);
+        }
         else if ((settings[2].effect_num >= value(effects::MONO_DELAY)) && (settings[2].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        {
             writeFX(settings[2]);
+        }
         else if ((settings[3].effect_num >= value(effects::MONO_DELAY)) && (settings[3].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        {
             writeFX(settings[3]);
+        }
         else
+        {
             writeFX(empty);
+        }
         xml->writeEndElement(); // end Delay
 
         xml->writeStartElement("Reverb");
         xml->writeAttribute("ID", "4");
         if ((settings[0].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[0].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        {
             writeFX(settings[0]);
+        }
         else if ((settings[1].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[1].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        {
             writeFX(settings[1]);
+        }
         else if ((settings[2].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[2].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        {
             writeFX(settings[2]);
+        }
         else if ((settings[3].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[3].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        {
             writeFX(settings[3]);
+        }
         else
+        {
             writeFX(empty);
+        }
         xml->writeEndElement(); // end Reverb
 
         xml->writeEndElement(); // end FX
