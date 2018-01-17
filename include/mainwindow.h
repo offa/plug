@@ -35,7 +35,6 @@
 #include "saveonamp.h"
 #include "savetofile.h"
 #include "settings.h"
-#include <memory>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMainWindow>
@@ -46,6 +45,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
+#include <memory>
 
 namespace Ui
 {
