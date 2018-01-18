@@ -100,7 +100,6 @@ TEST_F(MustangTest, stopAmpTwiceDoesNothing)
     m->stop_amp();
     m->stop_amp();
 }
-
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 {
     constexpr int recvSize{1};
@@ -210,3 +209,56 @@ TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
     const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(errorCode));
 }
+
+TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
+{
+    constexpr std::size_t posDsp{2};
+    constexpr std::size_t posEffect{16};
+    constexpr std::size_t posFxSlot{18};
+    constexpr std::size_t posKnob1{32};
+    constexpr std::size_t posKnob2{33};
+    constexpr std::size_t posKnob3{34};
+    constexpr std::size_t posKnob4{35};
+    constexpr std::size_t posKnob5{36};
+    constexpr std::size_t posKnob6{37};
+
+    constexpr int recvSize{6};
+    constexpr int slot{8};
+    std::array<std::uint8_t, packetSize> dummy{{0}};
+    std::array<std::uint8_t, packetSize> recvData0{{0}};
+    recvData0[posDsp] = 8;
+    recvData0[posEffect] = 0x4f;
+    recvData0[posFxSlot] = 0x04;
+    recvData0[posKnob1] = 11;
+    recvData0[posKnob2] = 22;
+    recvData0[posKnob3] = 33;
+    recvData0[posKnob4] = 44;
+    recvData0[posKnob5] = 55;
+    recvData0[posKnob6] = 66;
+    auto& recvData1 = recvData0;
+    auto& recvData2 = recvData0;
+    auto& recvData3 = recvData0;
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, _, packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 1), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 2), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(recvData0.cbegin(), recvData0.cend()), SetArgPointee<4>(recvSize - 3), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(recvData1.cbegin(), recvData1.cend()), SetArgPointee<4>(recvSize - 4), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(recvData2.cbegin(), recvData2.cend()), SetArgPointee<4>(recvSize - 5), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(recvData3.cbegin(), recvData3.cend()), SetArgPointee<4>(recvSize - 6), Return(0)));
+
+    std::array<fx_pedal_settings, 4> settings;
+    m->load_memory_bank(slot, nullptr, nullptr, settings.data());
+
+    EXPECT_THAT(settings[0].fx_slot, Eq(0));
+    EXPECT_THAT(settings[0].knob1, Eq(11));
+    EXPECT_THAT(settings[0].knob2, Eq(22));
+    EXPECT_THAT(settings[0].knob3, Eq(33));
+    EXPECT_THAT(settings[0].knob4, Eq(44));
+    EXPECT_THAT(settings[0].knob5, Eq(55));
+    EXPECT_THAT(settings[0].knob6, Eq(66));
+    EXPECT_THAT(settings[0].put_post_amp, Eq(true));
+    EXPECT_THAT(settings[0].effect_num, Eq(value(effects::PHASER)));
+}
+
