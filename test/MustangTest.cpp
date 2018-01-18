@@ -29,9 +29,12 @@ using namespace testing;
 using mock::UsbMock;
 
 
-MATCHER_P(BufferIs, expected, "")
+namespace
 {
-    return std::equal(expected.cbegin(), expected.cend(), arg);
+    MATCHER_P(BufferIs, expected, "")
+    {
+        return std::equal(expected.cbegin(), expected.cend(), arg);
+    }
 }
 
 
