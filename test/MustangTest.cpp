@@ -242,7 +242,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     constexpr int recvSize{6};
     constexpr int slot{8};
     std::array<std::uint8_t, packetSize> dummy{{0}};
-    auto recvData0 = createEffectData(0x04, 0x4f, {11, 22, 33, 44, 55, 66});
+    auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
     auto& recvData1 = recvData0;
     auto& recvData2 = recvData0;
     auto& recvData3 = recvData0;
