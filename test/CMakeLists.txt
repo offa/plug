@@ -14,6 +14,8 @@ target_link_libraries(TestLibs INTERFACE
                                 build-libs
                                 )
 
+add_subdirectory(mocks)
+
 
 
 add_executable(MustangTest MustangTest.cpp
@@ -21,6 +23,7 @@ add_executable(MustangTest MustangTest.cpp
 add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest plug-mustang
                                 TestLibs
+                                LibUsbMocks
                                 )
 
 add_executable(IdLookupTest IdLookupTest.cpp)

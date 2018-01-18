@@ -19,96 +19,14 @@
  */
 
 #include "mustang.h"
+#include "LibUsbMocks.h"
 #include "common.h"
 #include <array>
 #include <gmock/gmock.h>
 
 using namespace plug;
 using namespace testing;
-
-namespace
-{
-    class UsbMock
-    {
-    public:
-        MOCK_METHOD1(close, void(libusb_device_handle*));
-        MOCK_METHOD3(open_device_with_vid_pid, libusb_device_handle*(libusb_context*, uint16_t, uint16_t));
-        MOCK_METHOD1(exit, void(libusb_context*));
-        MOCK_METHOD2(release_interface, int(libusb_device_handle*, int));
-        MOCK_METHOD2(attach_kernel_driver, int(libusb_device_handle*, int));
-        MOCK_METHOD6(interrupt_transfer, int(libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
-    };
-
-
-    std::unique_ptr<UsbMock> usbmock;
-}
-
-
-extern "C" {
-int libusb_init(libusb_context** ctx)
-{
-    unused(ctx);
-    return 0;
-}
-
-void libusb_exit(libusb_context* ctx)
-{
-    usbmock->exit(ctx);
-}
-
-libusb_device_handle* libusb_open_device_with_vid_pid(libusb_context* ctx, uint16_t vendor_id, uint16_t product_id)
-{
-    return usbmock->open_device_with_vid_pid(ctx, vendor_id, product_id);
-}
-
-int libusb_interrupt_transfer(libusb_device_handle* dev_handle, unsigned char endpoint,
-                              unsigned char* data, int length, int* actual_length, unsigned int timeout)
-{
-    return usbmock->interrupt_transfer(dev_handle, endpoint, data, length, actual_length, timeout);
-}
-
-int libusb_claim_interface(libusb_device_handle* dev_handle, int interface_number)
-{
-    unused(dev_handle);
-    unused(interface_number);
-    return 0;
-}
-
-int libusb_detach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
-{
-    unused(dev_handle);
-    unused(interface_number);
-    return 0;
-}
-
-int libusb_kernel_driver_active(libusb_device_handle* dev_handle, int interface_number)
-{
-    unused(dev_handle);
-    unused(interface_number);
-    return 0;
-}
-
-int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
-{
-    return usbmock->release_interface(dev_handle, interface_number);
-}
-
-int libusb_attach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
-{
-    return usbmock->attach_kernel_driver(dev_handle, interface_number);
-}
-
-void libusb_close(libusb_device_handle* dev_handle)
-{
-    usbmock->close(dev_handle);
-}
-
-
-struct libusb_device_handle
-{
-    char dummy;
-};
-}
+using mock::UsbMock;
 
 
 MATCHER_P(BufferIs, expected, "")
@@ -123,12 +41,13 @@ protected:
     void SetUp() override
     {
         m = std::make_unique<Mustang>();
-        usbmock = std::make_unique<UsbMock>();
+        mock::resetUsbMock();
+        usbmock = mock::getUsbMock();
     }
 
     void TearDown() override
     {
-        usbmock = nullptr;
+        mock::clearUsbMock();
     }
 
     void expectStart()
@@ -140,6 +59,7 @@ protected:
 
 
     std::unique_ptr<Mustang> m;
+    mock::UsbMock* usbmock;
     libusb_device_handle handle;
     static constexpr std::size_t packetSize{64};
 };
