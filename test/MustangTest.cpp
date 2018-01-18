@@ -41,8 +41,7 @@ protected:
     void SetUp() override
     {
         m = std::make_unique<Mustang>();
-        mock::resetUsbMock();
-        usbmock = mock::getUsbMock();
+        usbmock = mock::resetUsbMock();
     }
 
     void TearDown() override

@@ -36,9 +36,10 @@ namespace mock
         return usbmock.get();
     }
 
-    void resetUsbMock()
+    UsbMock* resetUsbMock()
     {
         usbmock = std::make_unique<UsbMock>();
+        return getUsbMock();
     }
 
 

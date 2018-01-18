@@ -38,7 +38,7 @@ namespace mock
 
 
     UsbMock* getUsbMock();
-    void resetUsbMock();
+    UsbMock* resetUsbMock();
     void clearUsbMock();
 }
 
