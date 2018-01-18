@@ -243,9 +243,9 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     constexpr int slot{8};
     std::array<std::uint8_t, packetSize> dummy{{0}};
     auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
-    auto& recvData1 = recvData0;
-    auto& recvData2 = recvData0;
-    auto& recvData3 = recvData0;
+    auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
+    auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
+    auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, _, packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _))
@@ -268,5 +268,35 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[0].knob6, Eq(66));
     EXPECT_THAT(settings[0].put_post_amp, Eq(true));
     EXPECT_THAT(settings[0].effect_num, Eq(value(effects::PHASER)));
+
+    EXPECT_THAT(settings[1].fx_slot, Eq(1));
+    EXPECT_THAT(settings[1].knob1, Eq(0));
+    EXPECT_THAT(settings[1].knob2, Eq(0));
+    EXPECT_THAT(settings[1].knob3, Eq(0));
+    EXPECT_THAT(settings[1].knob4, Eq(1));
+    EXPECT_THAT(settings[1].knob5, Eq(1));
+    EXPECT_THAT(settings[1].knob6, Eq(1));
+    EXPECT_THAT(settings[1].put_post_amp, Eq(false));
+    EXPECT_THAT(settings[1].effect_num, Eq(value(effects::TRIANGLE_CHORUS)));
+
+    EXPECT_THAT(settings[2].fx_slot, Eq(2));
+    EXPECT_THAT(settings[2].knob1, Eq(0));
+    EXPECT_THAT(settings[2].knob2, Eq(0));
+    EXPECT_THAT(settings[2].knob3, Eq(0));
+    EXPECT_THAT(settings[2].knob4, Eq(0));
+    EXPECT_THAT(settings[2].knob5, Eq(0));
+    EXPECT_THAT(settings[2].knob6, Eq(0));
+    EXPECT_THAT(settings[2].put_post_amp, Eq(false));
+    EXPECT_THAT(settings[2].effect_num, Eq(value(effects::EMPTY)));
+
+    EXPECT_THAT(settings[3].fx_slot, Eq(3));
+    EXPECT_THAT(settings[3].knob1, Eq(1));
+    EXPECT_THAT(settings[3].knob2, Eq(2));
+    EXPECT_THAT(settings[3].knob3, Eq(3));
+    EXPECT_THAT(settings[3].knob4, Eq(4));
+    EXPECT_THAT(settings[3].knob5, Eq(5));
+    EXPECT_THAT(settings[3].knob6, Eq(6));
+    EXPECT_THAT(settings[3].put_post_amp, Eq(true));
+    EXPECT_THAT(settings[3].effect_num, Eq(value(effects::TAPE_DELAY)));
 }
 
