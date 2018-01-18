@@ -35,6 +35,17 @@ namespace
     {
         return std::equal(expected.cbegin(), expected.cend(), arg);
     }
+
+    constexpr std::size_t posDsp{2};
+    constexpr std::size_t posEffect{16};
+    constexpr std::size_t posFxSlot{18};
+    constexpr std::size_t posKnob1{32};
+    constexpr std::size_t posKnob2{33};
+    constexpr std::size_t posKnob3{34};
+    constexpr std::size_t posKnob4{35};
+    constexpr std::size_t posKnob5{36};
+    constexpr std::size_t posKnob6{37};
+
 }
 
 
@@ -58,6 +69,22 @@ protected:
         EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
         m->start_amp(nullptr, nullptr, nullptr, nullptr);
     }
+
+    constexpr auto createEffectData(std::uint8_t slot, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
+    {
+        std::array<std::uint8_t, packetSize> data{{0}};
+        data[posDsp] = 8;
+        data[posEffect] = effect;
+        data[posFxSlot] = slot;
+        data[posKnob1] = values[0];
+        data[posKnob2] = values[1];
+        data[posKnob3] = values[2];
+        data[posKnob4] = values[3];
+        data[posKnob5] = values[4];
+        data[posKnob6] = values[5];
+        return data;
+    }
+
 
 
     std::unique_ptr<Mustang> m;
@@ -212,29 +239,10 @@ TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 {
-    constexpr std::size_t posDsp{2};
-    constexpr std::size_t posEffect{16};
-    constexpr std::size_t posFxSlot{18};
-    constexpr std::size_t posKnob1{32};
-    constexpr std::size_t posKnob2{33};
-    constexpr std::size_t posKnob3{34};
-    constexpr std::size_t posKnob4{35};
-    constexpr std::size_t posKnob5{36};
-    constexpr std::size_t posKnob6{37};
-
     constexpr int recvSize{6};
     constexpr int slot{8};
     std::array<std::uint8_t, packetSize> dummy{{0}};
-    std::array<std::uint8_t, packetSize> recvData0{{0}};
-    recvData0[posDsp] = 8;
-    recvData0[posEffect] = 0x4f;
-    recvData0[posFxSlot] = 0x04;
-    recvData0[posKnob1] = 11;
-    recvData0[posKnob2] = 22;
-    recvData0[posKnob3] = 33;
-    recvData0[posKnob4] = 44;
-    recvData0[posKnob5] = 55;
-    recvData0[posKnob6] = 66;
+    auto recvData0 = createEffectData(0x04, 0x4f, {11, 22, 33, 44, 55, 66});
     auto& recvData1 = recvData0;
     auto& recvData2 = recvData0;
     auto& recvData3 = recvData0;
