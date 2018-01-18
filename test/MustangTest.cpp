@@ -86,7 +86,6 @@ protected:
     }
 
 
-
     std::unique_ptr<Mustang> m;
     mock::UsbMock* usbmock;
     libusb_device_handle handle;
@@ -229,14 +228,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     EXPECT_THAT(settings.brightness, Eq(recvData[brightnessPos]));
 }
 
-TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
-{
-    constexpr int errorCode{1};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
-    const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(errorCode));
-}
-
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 {
     constexpr int recvSize{6};
@@ -300,3 +291,49 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[3].effect_num, Eq(value(effects::TAPE_DELAY)));
 }
 
+TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
+{
+    constexpr int errorCode{1};
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
+    const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(errorCode));
+}
+
+TEST_F(MustangTest, saveOnAmp)
+{
+    constexpr int slot{8};
+    constexpr std::size_t slotPos{4};
+    std::array<std::uint8_t, packetSize> sendCmd{{0}};
+    sendCmd[0] = 0x1c;
+    sendCmd[1] = 0x01;
+    sendCmd[2] = 0x03;
+    sendCmd[slotPos] = slot;
+    sendCmd[6] = 0x01;
+    sendCmd[7] = 0x01;
+    std::array<char, 34> nameOversized;
+    nameOversized.fill('a');
+
+    for( std::size_t i=0; i<31; ++i )
+    {
+        sendCmd[16+i] = nameOversized[i];
+    }
+    nameOversized[31] = char{0x0f};
+    nameOversized[32] = 'b';
+    nameOversized[33] = '\0';
+
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, BufferIs(sendCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x81, _, packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+
+    std::array<unsigned char, 64> memBank;
+    memBank.fill(0x00);
+    memBank[0] = 0x1c;
+    memBank[1] = 0x01;
+    memBank[2] = 0x01;
+    memBank[slotPos] = slot;
+    memBank[6] = 0x01;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, 0x01, BufferIs(memBank), _, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+
+    const auto result = m->save_on_amp(nameOversized.data(), slot);
+    EXPECT_THAT(result, Eq(0));
+}
