@@ -67,9 +67,6 @@ find_package(Qt5Network REQUIRED)
 
 ## LibUSB
 find_package(libusb-1.0 REQUIRED)
-add_library(libusb INTERFACE)
-target_link_libraries(libusb INTERFACE ${libusb-1.0_LIBRARY})
-target_include_directories(libusb INTERFACE ${libusb-1.0_INCLUDE_DIR})
 
 
 include_directories("include")

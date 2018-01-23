@@ -20,3 +20,9 @@ find_package_handle_standard_args(libusb-1.0 DEFAULT_MSG
 mark_as_advanced(libusb-1.0_INCLUDE_DIR libusb-1.0_LIBRARY)
 
 
+add_library(libusb-1.0::libusb-1.0 UNKNOWN IMPORTED)
+set_target_properties(libusb-1.0::libusb-1.0 PROPERTIES
+                        IMPORTED_LOCATION "${libusb-1.0_LIBRARY}"
+                        IMPORTED_LINK_INTERFACE_LANGUAGES C
+                        INTERFACE_INCLUDE_DIRECTORIES "${libusb-1.0_INCLUDE_DIR}"
+                        )

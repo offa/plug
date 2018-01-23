@@ -27,6 +27,6 @@ target_link_libraries(plug
                             Qt5::Widgets
                             Qt5::Gui
                             Qt5::Network
-                            libusb
+                            libusb-1.0::libusb-1.0
                         )
 
