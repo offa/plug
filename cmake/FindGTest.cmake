@@ -31,12 +31,18 @@ find_library(GTest_Main_LIBRARY NAMES gtest_main
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GTest DEFAULT_MSG
+                                    GTest_INCLUDE_DIR
+                                    GTest_Mock_INCLUDE_DIR
                                     GTest_LIBRARY
                                     GTest_Mock_LIBRARY
                                     GTest_Main_LIBRARY
-                                    GTest_INCLUDE_DIR
-                                    GTest_Mock_INCLUDE_DIR
                                     )
+mark_as_advanced(GTest_INCLUDE_DIR
+                GTest_Mock_INCLUDE_DIR
+                GTest_LIBRARY
+                GTest_Mock_LIBRARY
+                GTest_Main_LIBRARY
+                )
 
 
 add_library(GTest::GTest UNKNOWN IMPORTED)
@@ -59,13 +65,4 @@ set_target_properties(GTest::Mock PROPERTIES
                         IMPORTED_LINK_INTERFACE_LANGUAGES CXX
                         INTERFACE_INCLUDE_DIRECTORIES "${GTest_Mock_INCLUDE_DIR}"
                         )
-
-
-
-mark_as_advanced(GTest_INCLUDE_DIR
-                GTest_Mock_INCLUDE_DIR
-                GTest_LIBRARY
-                GTest_Mock_LIBRARY
-                GTest_Main_LIBRARY
-                )
 
