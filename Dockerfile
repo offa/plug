@@ -13,8 +13,6 @@ RUN apt-get install -y --no-install-recommends pkg-config qt5-default libusb-1.0
             curl -sSL ${CXX_ABIURL}/__cxxabi_config.h -o /usr/include/c++/v1/__cxxabi_config.h; \
         fi && \
         cd googletest && \
-        # Workaround for #51; use commit prior the broken one
-        git checkout 0663ce9^ && \
         mkdir build && cd build && \
         cmake .. && \
         make && make install && \

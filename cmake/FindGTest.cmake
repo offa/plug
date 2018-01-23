@@ -13,27 +13,32 @@ find_path(GTest_Mock_INCLUDE_DIR "gmock/gmock.h"
                                         ${GTest_INCLUDE_DIR}
                                 )
 
-find_library(GTest_LIBRARY NAMES gmock
+find_library(GTest_LIBRARY NAMES gtest
                                 HINTS ${PKG_GTest_LIBDIR}
                                         ${PKG_GTest_LIBRARY_DIRS}
                                 )
-find_library(GTest_Main_LIBRARY NAMES gmock_main
+find_library(GTest_Mock_LIBRARY NAMES gmock
                                 HINTS ${PKG_GTest_LIBDIR}
                                         ${PKG_GTest_LIBRARY_DIRS}
-                                        ${GTest_LIBRARY}/..
+                                )
+find_library(GTest_Main_LIBRARY NAMES gtest_main
+                                HINTS ${PKG_GTest_LIBDIR}
+                                        ${PKG_GTest_LIBRARY_DIRS}
+                                        ${GTest_Mock_LIBRARY}/..
                                 )
 
 
-set(GTest_LIBRARIES ${GTest_LIBRARY} ${GTest_Main_LIBRARY})
+set(GTest_LIBRARIES ${GTest_LIBRARY} ${GTest_Mock_LIBRARY} ${GTest_Main_LIBRARY})
 set(GTest_INCLUDE_DIRS ${GTest_INCLUDE_DIR} ${GTest_Mock_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GTest DEFAULT_MSG
                                         GTest_LIBRARY
+                                        GTest_Mock_LIBRARY
                                         GTest_Main_LIBRARY
                                         GTest_INCLUDE_DIR
                                         GTest_Mock_INCLUDE_DIR
                                         )
 
-mark_as_advanced(GTest_INCLUDE_DIR GTest_Mock_INCLUDE_DIR GTest_LIBRARY GTest_Main_LIBRARY)
+mark_as_advanced(GTest_INCLUDE_DIR GTest_Mock_INCLUDE_DIR GTest_LIBRARY GTest_Mock_LIBRARY GTest_Main_LIBRARY)
 

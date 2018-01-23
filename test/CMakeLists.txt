@@ -9,6 +9,7 @@ target_include_directories(TestLibs SYSTEM
                                     )
 target_link_libraries(TestLibs INTERFACE
                                 ${GTest_LIBRARY}
+                                ${GTest_Mock_LIBRARY}
                                 ${GTest_Main_LIBRARY}
                                 ${CMAKE_THREAD_LIBS_INIT}
                                 build-libs
