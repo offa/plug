@@ -30,9 +30,6 @@ find_library(GTest_Main_LIBRARY NAMES gtest_main
                                 )
 
 
-set(GTest_LIBRARIES ${GTest_LIBRARY} ${GTest_Mock_LIBRARY} ${GTest_Main_LIBRARY})
-set(GTest_INCLUDE_DIRS ${GTest_INCLUDE_DIR} ${GTest_Mock_INCLUDE_DIR})
-
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GTest DEFAULT_MSG
                                     GTest_LIBRARY
