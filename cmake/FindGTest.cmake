@@ -26,7 +26,6 @@ find_library(GTest_Mock_LIBRARY NAMES gmock
 find_library(GTest_Main_LIBRARY NAMES gtest_main
                                 HINTS ${PKG_GTest_LIBDIR}
                                         ${PKG_GTest_LIBRARY_DIRS}
-                                        ${GTest_Mock_LIBRARY}/..
                                 )
 
 
@@ -60,5 +59,10 @@ set_target_properties(GTest::Mock PROPERTIES
 
 
 
-mark_as_advanced(GTest_INCLUDE_DIR GTest_Mock_INCLUDE_DIR GTest_LIBRARY GTest_Mock_LIBRARY GTest_Main_LIBRARY)
+mark_as_advanced(GTest_INCLUDE_DIR
+                GTest_Mock_INCLUDE_DIR
+                GTest_LIBRARY
+                GTest_Mock_LIBRARY
+                GTest_Main_LIBRARY
+                )
 
