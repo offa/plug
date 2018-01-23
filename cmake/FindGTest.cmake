@@ -42,6 +42,7 @@ find_package_handle_standard_args(GTest DEFAULT_MSG
 add_library(GTest::GTest UNKNOWN IMPORTED)
 set_target_properties(GTest::GTest PROPERTIES
                         IMPORTED_LOCATION "${GTest_LIBRARY}"
+                        IMPORTED_LINK_INTERFACE_LANGUAGES CXX
                         INTERFACE_INCLUDE_DIRECTORIES "${GTest_INCLUDE_DIR}"
                         INTERFACE_LINK_LIBRARIES Threads::Threads
                         )
@@ -49,11 +50,13 @@ set_target_properties(GTest::GTest PROPERTIES
 add_library(GTest::Main UNKNOWN IMPORTED)
 set_target_properties(GTest::Main PROPERTIES
                         IMPORTED_LOCATION "${GTest_Main_LIBRARY}"
+                        IMPORTED_LINK_INTERFACE_LANGUAGES CXX
                         )
 
 add_library(GTest::Mock UNKNOWN IMPORTED)
 set_target_properties(GTest::Mock PROPERTIES
                         IMPORTED_LOCATION "${GTest_Mock_LIBRARY}"
+                        IMPORTED_LINK_INTERFACE_LANGUAGES CXX
                         INTERFACE_INCLUDE_DIRECTORIES "${GTest_Mock_INCLUDE_DIR}"
                         )
 
