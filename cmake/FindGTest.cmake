@@ -1,5 +1,7 @@
-
 find_package(PkgConfig)
+find_package(Threads REQUIRED)
+
+
 pkg_check_modules(PKG_GTest QUIET libGTest)
 set(GTest_DEFINITIONS ${PKG_GTest_CFLAGS_OTHER})
 
@@ -33,12 +35,33 @@ set(GTest_INCLUDE_DIRS ${GTest_INCLUDE_DIR} ${GTest_Mock_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GTest DEFAULT_MSG
-                                        GTest_LIBRARY
-                                        GTest_Mock_LIBRARY
-                                        GTest_Main_LIBRARY
-                                        GTest_INCLUDE_DIR
-                                        GTest_Mock_INCLUDE_DIR
-                                        )
+                                    GTest_LIBRARY
+                                    GTest_Mock_LIBRARY
+                                    GTest_Main_LIBRARY
+                                    GTest_INCLUDE_DIR
+                                    GTest_Mock_INCLUDE_DIR
+                                    )
+
+
+add_library(GTest::GTest UNKNOWN IMPORTED)
+set_target_properties(GTest::GTest PROPERTIES
+                        IMPORTED_LOCATION "${GTest_LIBRARY}"
+                        INTERFACE_INCLUDE_DIRECTORIES "${GTest_INCLUDE_DIR}"
+                        INTERFACE_LINK_LIBRARIES Threads::Threads
+                        )
+
+add_library(GTest::Main UNKNOWN IMPORTED)
+set_target_properties(GTest::Main PROPERTIES
+                        IMPORTED_LOCATION "${GTest_Main_LIBRARY}"
+                        )
+
+add_library(GTest::Mock UNKNOWN IMPORTED)
+set_target_properties(GTest::Mock PROPERTIES
+                        IMPORTED_LOCATION "${GTest_Mock_LIBRARY}"
+                        INTERFACE_INCLUDE_DIRECTORIES "${GTest_Mock_INCLUDE_DIR}"
+                        )
+
+
 
 mark_as_advanced(GTest_INCLUDE_DIR GTest_Mock_INCLUDE_DIR GTest_LIBRARY GTest_Mock_LIBRARY GTest_Main_LIBRARY)
 

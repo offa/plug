@@ -1,19 +1,12 @@
-
-find_package(Threads REQUIRED)
 find_package(GTest REQUIRED)
+
 add_library(TestLibs INTERFACE)
-target_include_directories(TestLibs SYSTEM
-                                INTERFACE
-                                    ${GTest_INCLUDE_DIR}
-                                    ${GTest_Mock_INCLUDE_DIR}
-                                    )
 target_link_libraries(TestLibs INTERFACE
-                                ${GTest_LIBRARY}
-                                ${GTest_Mock_LIBRARY}
-                                ${GTest_Main_LIBRARY}
-                                ${CMAKE_THREAD_LIBS_INIT}
-                                build-libs
-                                )
+                        GTest::GTest
+                        GTest::Mock
+                        GTest::Main
+                        build-libs
+                        )
 
 add_subdirectory(mocks)
 
