@@ -12,15 +12,11 @@ find_library(libusb-1.0_LIBRARY NAMES usb-1.0
                                         "${libusb-1.0_DIR}/lib"
                                 )
 
-
-set(libusb-1.0_LIBRARIES ${libusb-1.0_LIBRARY})
-set(libusb-1.0_INCLUDE_DIRS ${libusb-1.0_INCLUDE_DIR})
-
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(libusb-1.0 DEFAULT_MSG
                                     libusb-1.0_LIBRARY
                                     libusb-1.0_INCLUDE_DIR
                                     )
-
 mark_as_advanced(libusb-1.0_INCLUDE_DIR libusb-1.0_LIBRARY)
+
 
