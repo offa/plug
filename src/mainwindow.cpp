@@ -169,8 +169,8 @@ namespace plug
     {
         QSettings settings;
         int x;
-        struct amp_settings amplifier_set;
-        struct fx_pedal_settings effects_set[4];
+        amp_settings amplifier_set;
+        fx_pedal_settings effects_set[4];
         char name[32];
 
         ui->statusBar->showMessage(tr("Connecting..."));
@@ -295,7 +295,7 @@ namespace plug
     }
 
     // pass the message to the amp
-    int MainWindow::set_effect(struct fx_pedal_settings pedal)
+    int MainWindow::set_effect(fx_pedal_settings pedal)
     {
         QSettings settings;
 
@@ -308,7 +308,7 @@ namespace plug
         return 0;
     }
 
-    int MainWindow::set_amplifier(struct amp_settings amp_settings)
+    int MainWindow::set_amplifier(amp_settings amp_settings)
     {
         QSettings settings;
 
@@ -317,7 +317,7 @@ namespace plug
 
         if (settings.value("Settings/oneSetToSetThemAll").toBool())
         {
-            struct fx_pedal_settings pedal;
+            fx_pedal_settings pedal;
 
             if (effect1->get_changed())
             {
@@ -373,8 +373,8 @@ namespace plug
     int MainWindow::load_from_amp(int slot)
     {
         QSettings settings;
-        struct amp_settings amplifier_set;
-        struct fx_pedal_settings effects_set[4];
+        amp_settings amplifier_set;
+        fx_pedal_settings effects_set[4];
         char name[32];
 
         if (!connected)
@@ -480,7 +480,7 @@ namespace plug
 
     void MainWindow::save_effects(int slot, char* name, int fx_num, bool mod, bool dly, bool rev)
     {
-        struct fx_pedal_settings effects[2];
+        fx_pedal_settings effects[2];
 
         if (fx_num == 1)
         {
@@ -538,8 +538,8 @@ namespace plug
             return;
         }
 
-        struct amp_settings amplifier_set;
-        struct fx_pedal_settings effects_set[4];
+        amp_settings amplifier_set;
+        fx_pedal_settings effects_set[4];
         QString name;
         auto loader = std::make_unique<LoadFromFile>(file.get(), &name, &amplifier_set, effects_set);
         loader->loadfile();
@@ -596,7 +596,7 @@ namespace plug
         }
     }
 
-    void MainWindow::get_settings(struct amp_settings* amplifier_settings, struct fx_pedal_settings fx_settings[4])
+    void MainWindow::get_settings(amp_settings* amplifier_settings, fx_pedal_settings fx_settings[4])
     {
         if (amplifier_settings != nullptr)
             amp->get_settings(amplifier_settings);
@@ -725,7 +725,7 @@ namespace plug
 
     void MainWindow::empty_other(int value, Effect* caller)
     {
-        struct fx_pedal_settings settings;
+        fx_pedal_settings settings;
         int fx_family = check_fx_family(value);
 
         if (caller != effect1)

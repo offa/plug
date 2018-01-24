@@ -93,7 +93,7 @@ namespace plug
         this->close();
     }
 
-    void SaveToFile::writeAmp(struct amp_settings settings)
+    void SaveToFile::writeAmp(amp_settings settings)
     {
         int model = 0, something = 0, something2 = 0, something3 = 128;
 
@@ -300,7 +300,7 @@ namespace plug
 
     void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
     {
-        struct fx_pedal_settings empty = {0, 0, 0, 0, 0, 0, 0, 0, false};
+        fx_pedal_settings empty = {0, 0, 0, 0, 0, 0, 0, 0, false};
 
         empty.effect_num = empty.fx_slot = 0;
         empty.put_post_amp = false;
@@ -406,7 +406,7 @@ namespace plug
         xml->writeEndElement(); // end FX
     }
 
-    void SaveToFile::writeFX(struct fx_pedal_settings settings)
+    void SaveToFile::writeFX(fx_pedal_settings settings)
     {
         int model = 0, position;
 

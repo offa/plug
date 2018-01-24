@@ -2001,7 +2001,9 @@ namespace plug
         QSettings settings;
 
         if (!settings.contains(QString("DefaultEffects/Effect%1/Effect").arg(fx_slot)))
+        {
             return;
+        }
 
         ui->comboBox->setCurrentIndex(settings.value(QString("DefaultEffects/Effect%1/Effect").arg(fx_slot)).toInt());
         ui->dial->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob1").arg(fx_slot)).toInt());

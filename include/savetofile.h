@@ -55,9 +55,9 @@ namespace plug
         const std::unique_ptr<Ui::SaveToFile> ui;
         std::unique_ptr<QXmlStreamWriter> xml;
 
-        void writeAmp(struct amp_settings);
-        void manageWriteFX(struct fx_pedal_settings[4]);
-        void writeFX(struct fx_pedal_settings);
+        void writeAmp(amp_settings);
+        void manageWriteFX(fx_pedal_settings[4]);
+        void writeFX(fx_pedal_settings);
         void writeFUSE();
         void writeUSBGain(int);
     };

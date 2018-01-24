@@ -66,8 +66,8 @@ namespace plug
     public slots:
         void start_amp(); // initialize the communication
         void stop_amp();  // terminate communication
-        int set_effect(struct fx_pedal_settings);
-        int set_amplifier(struct amp_settings);
+        int set_effect(fx_pedal_settings);
+        int set_amplifier(amp_settings);
         int save_on_amp(char*, int);
         int load_from_amp(int);
         void enable_buttons();
@@ -75,7 +75,7 @@ namespace plug
         void save_effects(int, char*, int, bool, bool, bool);
         void set_index(int);
         void loadfile(QString filename = QString());
-        void get_settings(struct amp_settings*, struct fx_pedal_settings[4]);
+        void get_settings(amp_settings*, fx_pedal_settings[4]);
         void change_title(const QString&);
         void update_firmware();
         void empty_other(int, Effect*);
