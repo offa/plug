@@ -45,7 +45,6 @@ namespace
     constexpr std::size_t posKnob4{35};
     constexpr std::size_t posKnob5{36};
     constexpr std::size_t posKnob6{37};
-
 }
 
 
@@ -313,9 +312,9 @@ TEST_F(MustangTest, saveOnAmp)
     std::array<char, 34> nameOversized;
     nameOversized.fill('a');
 
-    for( std::size_t i=0; i<31; ++i )
+    for (std::size_t i = 0; i < 31; ++i)
     {
-        sendCmd[16+i] = nameOversized[i];
+        sendCmd[16 + i] = nameOversized[i];
     }
     nameOversized[31] = char{0x0f};
     nameOversized[32] = 'b';

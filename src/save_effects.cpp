@@ -51,9 +51,13 @@ namespace plug
     void SaveEffects::select_checkbox()
     {
         if (!ui->checkBox->isChecked() && !ui->checkBox_2->isChecked() && !ui->checkBox_3->isChecked())
+        {
             ui->pushButton->setDisabled(true);
+        }
         else
+        {
             ui->pushButton->setDisabled(false);
+        }
 
         if (sender() == ui->checkBox)
         {
@@ -61,7 +65,9 @@ namespace plug
             ui->checkBox_3->setChecked(false);
         }
         else
+        {
             ui->checkBox->setChecked(false);
+        }
     }
 
     void SaveEffects::send()
@@ -69,7 +75,9 @@ namespace plug
         int number = 0;
 
         if (ui->checkBox->isChecked())
+        {
             number = 1;
+        }
         else
         {
             if (ui->checkBox_2->isChecked())
