@@ -22,7 +22,6 @@ target_link_libraries(plug
                             plug-version
                             plug-mustang
                             build-libs
-                        PUBLIC
                             Qt5::Core
                             Qt5::Widgets
                             Qt5::Gui
