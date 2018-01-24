@@ -109,7 +109,9 @@ namespace plug
         ui->listWidget_2->clear();
         *files = directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
         for (int i = 0; i < files->size(); i++)
+        {
             ui->listWidget_2->addItem((*files)[i].completeBaseName());
+        }
     }
 
     void Library::load_file(int row)
