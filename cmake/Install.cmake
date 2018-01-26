@@ -4,3 +4,5 @@ install(FILES ${CMAKE_SOURCE_DIR}/cmake/50-mustang.rules
         DESTINATION ${PLUG_UDEV_RULE_PATH}
         )
 
+install(EXPORT plug-config DESTINATION share/plug/cmake)
+

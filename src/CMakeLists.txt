@@ -29,3 +29,5 @@ target_link_libraries(plug
                             libusb-1.0::libusb-1.0
                         )
 
+install(TARGETS plug EXPORT plug-config DESTINATION bin)
+
