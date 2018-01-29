@@ -225,6 +225,57 @@ TEST_F(MustangTest, startFailsIfClaimFails)
     EXPECT_THAT(result, Eq(19));
 }
 
+TEST_F(MustangTest, startRequestsAmpPresetNames)
+{
+    std::array<std::uint8_t, packetSize> recvData0{{0}};
+    std::array<std::uint8_t, packetSize> recvData1{{0}};
+    std::array<std::uint8_t, packetSize> recvData2{{0}};
+    recvData0[16] = 'a';
+    recvData0[17] = 'b';
+    recvData0[18] = 'c';
+    recvData1[16] = 'd';
+    recvData1[17] = 'e';
+    recvData1[18] = 'f';
+    recvData2[16] = 'g';
+    recvData2[17] = 'h';
+    recvData2[18] = 'i';
+    std::array<std::uint8_t, packetSize> dummy{{0}};
+
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+
+    constexpr int recvSize{0};
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(recvData0.cbegin(), recvData0.cend()), SetArgPointee<4>(4), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(3), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(recvData1.cbegin(), recvData1.cend()), SetArgPointee<4>(2), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(1), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(recvData2.cbegin(), recvData2.cend()), SetArgPointee<4>(0), Return(0)));
+
+    constexpr int recvSizeResponse{1};
+    std::array<std::uint8_t, packetSize> initCmd{{0}};
+    initCmd[0] = 0xff;
+    initCmd[1] = 0xc1;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
+
+    char names[48][32];
+    const auto result = m->start_amp(names, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(names[0], StrEq("abc"));
+    EXPECT_THAT(names[1], StrEq("def"));
+    EXPECT_THAT(names[2], StrEq("ghi"));
+
+    ignoreClose();
+}
+
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
 {
     m->stop_amp();
@@ -259,6 +310,7 @@ TEST_F(MustangTest, stopAmpTwiceDoesNothing)
     m->stop_amp();
     m->stop_amp();
 }
+
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 {
     constexpr int recvSize{1};

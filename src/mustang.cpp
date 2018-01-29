@@ -134,7 +134,9 @@ namespace plug
                 unsigned char data[7][LENGTH];
 
                 for (j = 0; j < 7; i++, j++)
+                {
                     memcpy(data[j], recieved_data[i], LENGTH);
+                }
                 decode_data(data, name, amp_set, effects_set);
             }
         }
