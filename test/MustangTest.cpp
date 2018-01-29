@@ -49,6 +49,13 @@ namespace
     constexpr std::uint8_t endpointSend{0x01};
     constexpr std::uint8_t endpointReceive{0x81};
     constexpr std::uint16_t usbVid{0x1ed8};
+    constexpr std::uint16_t pidMustangI_II{0x0004};
+    constexpr std::uint16_t pidMustangIII_IV_V{0x0005};
+    constexpr std::uint16_t pidMustangMini{0x0010};
+    constexpr std::uint16_t pidMustangFloor{0x0012};
+    constexpr std::uint16_t pidMustangI_II_v2{0x0014};
+    constexpr std::uint16_t pidMustangIII_IV_V_v2{0x0016};
+
 }
 
 
@@ -148,6 +155,35 @@ TEST_F(MustangTest, startReturnsErrorOnInitFailure)
     EXPECT_CALL(*usbmock, init(nullptr)).WillOnce(Return(17));
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(17));
+}
+
+TEST_F(MustangTest, startDeterminesAmpType)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II_v2)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V_v2)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangMini)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangFloor)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
+    EXPECT_CALL(*usbmock, claim_interface(_, 0));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
+
+    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(0));
+
+    ignoreClose();
+}
+
+TEST_F(MustangTest, startFailsIfNoDeviceFound)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillRepeatedly(Return(nullptr));
+    EXPECT_CALL(*usbmock, exit(nullptr));
+
+    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(-100));
 }
 
 TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
