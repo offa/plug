@@ -1,7 +1,3 @@
-if( INTEGRATIONTEST )
-    add_subdirectory(integration)
-endif()
-
 find_package(GTest REQUIRED)
 
 add_library(TestLibs INTERFACE)

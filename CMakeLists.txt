@@ -81,3 +81,6 @@ if( UNITTEST )
     add_subdirectory("test")
 endif()
 
+if( INTEGRATIONTEST )
+    add_subdirectory("test/integration")
+endif()
