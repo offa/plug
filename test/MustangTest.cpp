@@ -55,7 +55,6 @@ namespace
     constexpr std::uint16_t pidMustangFloor{0x0012};
     constexpr std::uint16_t pidMustangI_II_v2{0x0014};
     constexpr std::uint16_t pidMustangIII_IV_V_v2{0x0016};
-
 }
 
 

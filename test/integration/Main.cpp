@@ -28,7 +28,7 @@ int main()
 
     plug::Mustang m;
 
-    if( m.start_amp(nullptr, nullptr, nullptr, nullptr) == 0 )
+    if (m.start_amp(nullptr, nullptr, nullptr, nullptr) == 0)
     {
         std::cout << " * Connection OK\n";
     }
