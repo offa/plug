@@ -421,6 +421,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     constexpr std::size_t biasPos{42};
     constexpr std::size_t sagPos{51};
     constexpr std::size_t brightnessPos{52};
+    constexpr std::size_t usbGainPos{16};
     std::array<std::uint8_t, packetSize> dummy{{0}};
     std::array<std::uint8_t, packetSize> recvData;
     recvData.fill(0x00);
@@ -440,9 +441,25 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     recvData[biasPos] = 13;
     recvData[sagPos] = 14;
     recvData[brightnessPos] = 0;
+    std::array<std::uint8_t, packetSize> extendedData{{0}};
+    extendedData[usbGainPos] = 0xab;
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _)).WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 1), Return(0))).WillOnce(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(recvSize - 2), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 1), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .Times(5)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(recvSize - 1), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .Times(1)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(extendedData.cbegin(), extendedData.cend()), SetArgPointee<4>(0), Return(0)))
+        .RetiresOnSaturation();
 
     amp_settings settings{};
     m->load_memory_bank(slot, nullptr, &settings, nullptr);
@@ -462,6 +479,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     EXPECT_THAT(settings.bias, Eq(recvData[biasPos]));
     EXPECT_THAT(settings.sag, Eq(recvData[sagPos]));
     EXPECT_THAT(settings.brightness, Eq(recvData[brightnessPos]));
+    EXPECT_THAT(settings.usb_gain, Eq(0xab));
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
