@@ -57,7 +57,7 @@ using plug::unused;
 
 int libusb_init(libusb_context** ctx)
 {
-    unused(ctx);
+    usbmock->init(ctx);
     return 0;
 }
 
@@ -79,9 +79,7 @@ int libusb_interrupt_transfer(libusb_device_handle* dev_handle, unsigned char en
 
 int libusb_claim_interface(libusb_device_handle* dev_handle, int interface_number)
 {
-    unused(dev_handle);
-    unused(interface_number);
-    return 0;
+    return usbmock->claim_interface(dev_handle, interface_number);
 }
 
 int libusb_detach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
@@ -93,9 +91,7 @@ int libusb_detach_kernel_driver(libusb_device_handle* dev_handle, int interface_
 
 int libusb_kernel_driver_active(libusb_device_handle* dev_handle, int interface_number)
 {
-    unused(dev_handle);
-    unused(interface_number);
-    return 0;
+    return usbmock->kernel_driver_active(dev_handle, interface_number);
 }
 
 int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)

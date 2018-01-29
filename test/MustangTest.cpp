@@ -48,6 +48,7 @@ namespace
 
     constexpr std::uint8_t endpointSend{0x01};
     constexpr std::uint8_t endpointReceive{0x81};
+    constexpr std::uint16_t usbVid{0x1ed8};
 }
 
 
@@ -67,7 +68,10 @@ protected:
 
     void expectStart()
     {
+        EXPECT_CALL(*usbmock, init(_));
         EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+        EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(0));
+        EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(0));
         EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
         m->start_amp(nullptr, nullptr, nullptr, nullptr);
     }
@@ -93,6 +97,39 @@ protected:
     libusb_device_handle handle;
     static constexpr std::size_t packetSize{64};
 };
+
+TEST_F(MustangTest, startInitializesUsb)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+
+    // Init Step 1
+    constexpr int recvSize{0};
+    std::array<std::uint8_t, packetSize> initCmd1{{0}};
+    initCmd1[1] = 0xc3;
+    std::array<std::uint8_t, packetSize> dummyResponse{{0}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd1), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummyResponse.cbegin(), dummyResponse.cend()), SetArgPointee<4>(recvSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummyResponse.cbegin(), dummyResponse.cend()), SetArgPointee<4>(recvSize), Return(0)));
+    // Init Step 2
+    std::array<std::uint8_t, packetSize> initCmd2{{0}};
+    initCmd2[0] = 0x1a;
+    initCmd2[1] = 0x03;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd2), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+
+    m->start_amp(nullptr, nullptr, nullptr, nullptr);
+
+
+
+    EXPECT_CALL(*usbmock, release_interface(_, _));
+    EXPECT_CALL(*usbmock, attach_kernel_driver(_, _));
+    EXPECT_CALL(*usbmock, close(_));
+    EXPECT_CALL(*usbmock, exit(_));
+    m = nullptr;
+}
 
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
 {
