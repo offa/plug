@@ -76,12 +76,12 @@ protected:
         m->start_amp(nullptr, nullptr, nullptr, nullptr);
     }
 
-    void expectClose()
+    void ignoreClose()
     {
-        EXPECT_CALL(*usbmock, release_interface(_, _));
-        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _));
-        EXPECT_CALL(*usbmock, close(_));
-        EXPECT_CALL(*usbmock, exit(_));
+        EXPECT_CALL(*usbmock, release_interface(_, _)).RetiresOnSaturation();
+        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _)).RetiresOnSaturation();
+        EXPECT_CALL(*usbmock, close(_)).RetiresOnSaturation();
+        EXPECT_CALL(*usbmock, exit(_)).RetiresOnSaturation();
         m = nullptr;
     }
 
@@ -132,7 +132,7 @@ TEST_F(MustangTest, startInitializesUsb)
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(0));
 
-    expectClose();
+    ignoreClose();
 }
 
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
