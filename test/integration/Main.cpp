@@ -35,6 +35,7 @@ int main()
     else
     {
         std::cout << " * Connection FAILED\n";
+        return 1;
     }
 
     return 0;
