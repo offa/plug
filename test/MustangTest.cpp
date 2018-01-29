@@ -76,6 +76,14 @@ protected:
         m->start_amp(nullptr, nullptr, nullptr, nullptr);
     }
 
+    void expectClose()
+    {
+        EXPECT_CALL(*usbmock, release_interface(_, _));
+        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _));
+        EXPECT_CALL(*usbmock, close(_));
+        EXPECT_CALL(*usbmock, exit(_));
+    }
+
     void ignoreClose()
     {
         EXPECT_CALL(*usbmock, release_interface(_, _)).RetiresOnSaturation();
@@ -155,6 +163,30 @@ TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
     EXPECT_THAT(result, Eq(0));
 
     ignoreClose();
+}
+
+TEST_F(MustangTest, startFailsIfDriverFails)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(1));
+    EXPECT_CALL(*usbmock, detach_kernel_driver(&handle, 0)).WillOnce(Return(18));
+    expectClose();
+
+    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(18));
+}
+
+TEST_F(MustangTest, startFailsIfClaimFails)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(19));
+    expectClose();
+
+    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(19));
 }
 
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
