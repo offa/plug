@@ -76,6 +76,15 @@ protected:
         m->start_amp(nullptr, nullptr, nullptr, nullptr);
     }
 
+    void expectClose()
+    {
+        EXPECT_CALL(*usbmock, release_interface(_, _));
+        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _));
+        EXPECT_CALL(*usbmock, close(_));
+        EXPECT_CALL(*usbmock, exit(_));
+        m = nullptr;
+    }
+
     constexpr auto createEffectData(std::uint8_t slot, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
     {
         std::array<std::uint8_t, packetSize> data{{0}};
@@ -120,15 +129,10 @@ TEST_F(MustangTest, startInitializesUsb)
     initCmd2[1] = 0x03;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd2), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
 
-    m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(0));
 
-
-
-    EXPECT_CALL(*usbmock, release_interface(_, _));
-    EXPECT_CALL(*usbmock, attach_kernel_driver(_, _));
-    EXPECT_CALL(*usbmock, close(_));
-    EXPECT_CALL(*usbmock, exit(_));
-    m = nullptr;
+    expectClose();
 }
 
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
