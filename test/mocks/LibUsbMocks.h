@@ -28,7 +28,7 @@ namespace mock
     class UsbMock
     {
     public:
-        MOCK_METHOD1(init, void(libusb_context**));
+        MOCK_METHOD1(init, int(libusb_context**));
         MOCK_METHOD1(close, void(libusb_device_handle*));
         MOCK_METHOD3(open_device_with_vid_pid, libusb_device_handle*(libusb_context*, uint16_t, uint16_t));
         MOCK_METHOD1(exit, void(libusb_context*));

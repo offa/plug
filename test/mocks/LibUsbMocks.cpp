@@ -57,8 +57,7 @@ using plug::unused;
 
 int libusb_init(libusb_context** ctx)
 {
-    usbmock->init(ctx);
-    return 0;
+    return usbmock->init(ctx);
 }
 
 void libusb_exit(libusb_context* ctx)
