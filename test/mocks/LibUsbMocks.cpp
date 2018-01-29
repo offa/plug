@@ -83,9 +83,7 @@ int libusb_claim_interface(libusb_device_handle* dev_handle, int interface_numbe
 
 int libusb_detach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
 {
-    unused(dev_handle);
-    unused(interface_number);
-    return 0;
+    return usbmock->detach_kernel_driver(dev_handle, interface_number);
 }
 
 int libusb_kernel_driver_active(libusb_device_handle* dev_handle, int interface_number)

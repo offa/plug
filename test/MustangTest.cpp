@@ -142,6 +142,21 @@ TEST_F(MustangTest, startReturnsErrorOnInitFailure)
     EXPECT_THAT(result, Eq(17));
 }
 
+TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(1));
+    EXPECT_CALL(*usbmock, detach_kernel_driver(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
+
+    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(0));
+
+    ignoreClose();
+}
+
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
 {
     m->stop_amp();
