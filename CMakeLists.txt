@@ -7,6 +7,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 option(UNITTEST "Build Unit Tests" ON)
 message(STATUS "Unit Tests : ${UNITTEST}")
 
+option(INTEGRATIONTEST "Build Integrationtests" OFF)
+message(STATUS "Integrationtests : ${INTEGRATIONTEST}")
+
 option(COVERAGE "Enable Coverage" OFF)
 message(STATUS "Coverage : ${COVERAGE}")
 
