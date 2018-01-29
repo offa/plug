@@ -266,7 +266,9 @@ TEST_F(MustangTest, startRequestsAmpPresetNames)
     initCmd[1] = 0xc1;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
 
-    char names[48][32];
+    constexpr std::size_t nameLength{32};
+    constexpr std::size_t numberOfNames{48};
+    char names[numberOfNames][nameLength];
     const auto result = m->start_amp(names, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(0));
     EXPECT_THAT(names[0], StrEq("abc"));
