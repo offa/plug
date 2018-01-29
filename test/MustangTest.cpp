@@ -135,6 +135,13 @@ TEST_F(MustangTest, startInitializesUsb)
     ignoreClose();
 }
 
+TEST_F(MustangTest, startReturnsErrorOnInitFailure)
+{
+    EXPECT_CALL(*usbmock, init(nullptr)).WillOnce(Return(17));
+    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result, Eq(17));
+}
+
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
 {
     m->stop_amp();
