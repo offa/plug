@@ -671,7 +671,7 @@ namespace plug
 
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
+        const int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
         return ret;
