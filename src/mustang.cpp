@@ -521,14 +521,22 @@ namespace plug
         array[BASS] = value.bass;
 
         if (value.cabinet > 0x0c)
+        {
             array[CABINET] = 0x00;
+        }
         else
+        {
             array[CABINET] = value.cabinet;
+        }
 
         if (value.noise_gate > 0x05)
+        {
             array[NOISE_GATE] = 0x00;
+        }
         else
+        {
             array[NOISE_GATE] = value.noise_gate;
+        }
 
         array[MASTER_VOL] = value.master_vol;
         array[GAIN2] = value.gain2;
@@ -537,18 +545,26 @@ namespace plug
         if (value.noise_gate == 0x05)
         {
             if (value.threshold > 0x09)
+            {
                 array[THRESHOLD] = 0x00;
+            }
             else
+            {
                 array[THRESHOLD] = value.threshold;
+            }
 
             array[DEPTH] = value.depth;
         }
         array[BIAS] = value.bias;
 
         if (value.sag > 0x02)
+        {
             array[SAG] = 0x01;
+        }
         else
+        {
             array[SAG] = value.sag;
+        }
 
         array[BRIGHTNESS] = value.brightness ? 1 : 0;
 
