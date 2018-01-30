@@ -1524,6 +1524,90 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     EXPECT_THAT(result, Eq(0));
 }
 
+TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
+{
+    fx_pedal_settings settings;
+    settings.fx_slot = 3;
+    settings.effect_num = value(effects::STEREO_TAPE_DELAY);
+    settings.knob1 = 1;
+    settings.knob2 = 1;
+    settings.knob3 = 1;
+    settings.knob4 = 1;
+    settings.knob5 = 1;
+    settings.knob6 = 7;
+    settings.put_post_amp = false;
+
+    std::array<std::uint8_t, packetSize> dummy{{0}};
+    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    cmdExecute[0] = 0x1c;
+    cmdExecute[1] = 0x03;
+    std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    clearCmd[posEffect] = 0x00;
+    clearCmd[posKnob1] = 0x00;
+    clearCmd[posKnob2] = 0x00;
+    clearCmd[posKnob3] = 0x00;
+    clearCmd[posKnob4] = 0x00;
+    clearCmd[posKnob5] = 0x00;
+    clearCmd[posKnob6] = 0x00;
+
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(clearCmd), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+    std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    data[posFxSlot] = settings.fx_slot;
+    data[posKnob1] = settings.knob1;
+    data[posKnob2] = settings.knob2;
+    data[posKnob3] = settings.knob3;
+    data[posKnob4] = settings.knob4;
+    data[posKnob5] = settings.knob5;
+    data[posKnob6] = settings.knob6;
+    data[posDsp] = 0x08;
+    data[posEffect] = 0x2a;
+    data[19] = 0x02;
+    data[20] = 0x01;
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+    const auto result = m->set_effect(settings);
+    EXPECT_THAT(result, Eq(0));
+}
+
 TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
 {
     constexpr int errorCode{10};
