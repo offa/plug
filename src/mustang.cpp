@@ -212,12 +212,18 @@ namespace plug
         const auto effectType = static_cast<effects>(value.effect_num);
 
         if (effectType == effects::EMPTY)
+        {
             return ret;
+        }
 
         if (value.put_post_amp) // put effect in a slot after amplifier
+        {
             slot = value.fx_slot + 4;
+        }
         else
+        {
             slot = value.fx_slot;
+        }
 
         // fill the form with data
         array[FXSLOT] = slot;
