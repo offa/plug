@@ -224,6 +224,112 @@ TEST_F(MustangTest, startFailsIfClaimFails)
     EXPECT_THAT(result, Eq(19));
 }
 
+TEST_F(MustangTest, startRequestsCurrentAmp)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+
+    constexpr std::size_t ampPos{16};
+    constexpr std::size_t volumePos{32};
+    constexpr std::size_t gainPos{33};
+    constexpr std::size_t treblePos{36};
+    constexpr std::size_t middlePos{37};
+    constexpr std::size_t bassPos{38};
+    constexpr std::size_t cabinetPos{49};
+    constexpr std::size_t noiseGatePos{47};
+    constexpr std::size_t thresholdPos{48};
+    constexpr std::size_t masterVolPos{35};
+    constexpr std::size_t gain2Pos{34};
+    constexpr std::size_t presencePos{39};
+    constexpr std::size_t depthPos{41};
+    constexpr std::size_t biasPos{42};
+    constexpr std::size_t sagPos{51};
+    constexpr std::size_t brightnessPos{52};
+    constexpr std::size_t usbGainPos{16};
+    std::array<std::uint8_t, packetSize> recvData;
+    recvData.fill(0x00);
+    recvData[ampPos] = 0x5e;
+    recvData[volumePos] = 1;
+    recvData[gainPos] = 2;
+    recvData[treblePos] = 3;
+    recvData[middlePos] = 4;
+    recvData[bassPos] = 5;
+    recvData[cabinetPos] = 6;
+    recvData[noiseGatePos] = 7;
+    recvData[thresholdPos] = 8;
+    recvData[masterVolPos] = 9;
+    recvData[gain2Pos] = 10;
+    recvData[presencePos] = 11;
+    recvData[depthPos] = 12;
+    recvData[biasPos] = 13;
+    recvData[sagPos] = 14;
+    recvData[brightnessPos] = 0;
+    std::array<std::uint8_t, packetSize> extendedData{{0}};
+    extendedData[usbGainPos] = 0xab;
+
+    std::array<std::uint8_t, packetSize> initCmd{{0}};
+    initCmd[0] = 0xff;
+    initCmd[1] = 0xc1;
+    std::array<std::uint8_t, packetSize> dummy{{0}};
+    constexpr int recvSize{0};
+    constexpr int recvSizeResponse{1};
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
+
+    Sequence s;
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(200)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(200), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .Times(5)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(recvSize - 1), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .Times(1)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(extendedData.cbegin(), extendedData.cend()), SetArgPointee<4>(0), Return(0)))
+        .RetiresOnSaturation();
+
+    char nameList[100][32];
+    amp_settings settings;
+    const auto result = m->start_amp(nameList, nullptr, &settings, nullptr);
+    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_80S)));
+    EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
+    EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
+    EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
+    EXPECT_THAT(settings.middle, Eq(recvData[middlePos]));
+    EXPECT_THAT(settings.bass, Eq(recvData[bassPos]));
+    EXPECT_THAT(settings.cabinet, Eq(recvData[cabinetPos]));
+    EXPECT_THAT(settings.noise_gate, Eq(recvData[noiseGatePos]));
+    EXPECT_THAT(settings.threshold, Eq(recvData[thresholdPos]));
+    EXPECT_THAT(settings.master_vol, Eq(recvData[masterVolPos]));
+    EXPECT_THAT(settings.gain2, Eq(recvData[gain2Pos]));
+    EXPECT_THAT(settings.presence, Eq(recvData[presencePos]));
+    EXPECT_THAT(settings.depth, Eq(recvData[depthPos]));
+    EXPECT_THAT(settings.bias, Eq(recvData[biasPos]));
+    EXPECT_THAT(settings.sag, Eq(recvData[sagPos]));
+    EXPECT_THAT(settings.brightness, Eq(recvData[brightnessPos]));
+    EXPECT_THAT(settings.usb_gain, Eq(0xab));
+
+    ignoreClose();
+}
+
 TEST_F(MustangTest, startRequestsCurrentEffects)
 {
     EXPECT_CALL(*usbmock, init(nullptr));
