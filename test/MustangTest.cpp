@@ -250,24 +250,24 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     constexpr std::size_t usbGainPos{16};
     std::array<std::uint8_t, packetSize> recvData;
     recvData.fill(0x00);
-    recvData[ampPos] = 0x5e;
-    recvData[volumePos] = 1;
-    recvData[gainPos] = 2;
-    recvData[treblePos] = 3;
-    recvData[middlePos] = 4;
-    recvData[bassPos] = 5;
-    recvData[cabinetPos] = 6;
-    recvData[noiseGatePos] = 7;
-    recvData[thresholdPos] = 8;
-    recvData[masterVolPos] = 9;
-    recvData[gain2Pos] = 10;
-    recvData[presencePos] = 11;
-    recvData[depthPos] = 12;
-    recvData[biasPos] = 13;
-    recvData[sagPos] = 14;
-    recvData[brightnessPos] = 0;
+    recvData[ampPos] = 0x61;
+    recvData[volumePos] = 8;
+    recvData[gainPos] = 4;
+    recvData[treblePos] = 5;
+    recvData[middlePos] = 9;
+    recvData[bassPos] = 1;
+    recvData[cabinetPos] = 2;
+    recvData[noiseGatePos] = 5;
+    recvData[thresholdPos] = 4;
+    recvData[masterVolPos] = 3;
+    recvData[gain2Pos] = 4;
+    recvData[presencePos] = 7;
+    recvData[depthPos] = 2;
+    recvData[biasPos] = 6;
+    recvData[sagPos] = 5;
+    recvData[brightnessPos] = 1;
     std::array<std::uint8_t, packetSize> extendedData{{0}};
-    extendedData[usbGainPos] = 0xab;
+    extendedData[usbGainPos] = 0x44;
 
     std::array<std::uint8_t, packetSize> initCmd{{0}};
     initCmd[0] = 0xff;
@@ -309,7 +309,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     amp_settings settings;
     const auto result = m->start_amp(nameList, nullptr, &settings, nullptr);
     EXPECT_THAT(result, Eq(0));
-    EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_80S)));
+    EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_60S)));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
     EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
@@ -325,7 +325,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_THAT(settings.bias, Eq(recvData[biasPos]));
     EXPECT_THAT(settings.sag, Eq(recvData[sagPos]));
     EXPECT_THAT(settings.brightness, Eq(recvData[brightnessPos]));
-    EXPECT_THAT(settings.usb_gain, Eq(0xab));
+    EXPECT_THAT(settings.usb_gain, Eq(0x44));
 
     ignoreClose();
 }
