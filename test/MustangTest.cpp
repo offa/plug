@@ -337,7 +337,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
-    auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
+    auto recvData0 = createEffectData(0x04, 0x19, {{10, 20, 30, 40, 50, 60}});
     auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
     auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
     auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
@@ -380,14 +380,14 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     const auto result = m->start_amp(nameList, nullptr, nullptr, settings.data());
     EXPECT_THAT(result, Eq(0));
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
-    EXPECT_THAT(settings[0].knob1, Eq(11));
-    EXPECT_THAT(settings[0].knob2, Eq(22));
-    EXPECT_THAT(settings[0].knob3, Eq(33));
-    EXPECT_THAT(settings[0].knob4, Eq(44));
-    EXPECT_THAT(settings[0].knob5, Eq(55));
-    EXPECT_THAT(settings[0].knob6, Eq(66));
+    EXPECT_THAT(settings[0].knob1, Eq(10));
+    EXPECT_THAT(settings[0].knob2, Eq(20));
+    EXPECT_THAT(settings[0].knob3, Eq(30));
+    EXPECT_THAT(settings[0].knob4, Eq(40));
+    EXPECT_THAT(settings[0].knob5, Eq(50));
+    EXPECT_THAT(settings[0].knob6, Eq(60));
     EXPECT_THAT(settings[0].put_post_amp, Eq(true));
-    EXPECT_THAT(settings[0].effect_num, Eq(value(effects::PHASER)));
+    EXPECT_THAT(settings[0].effect_num, Eq(value(effects::TRIANGLE_FLANGER)));
 
     ignoreClose();
 }
