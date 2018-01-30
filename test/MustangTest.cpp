@@ -748,15 +748,14 @@ TEST_F(MustangTest, setAmpSendsValues)
     settings.brightness = true;
     settings.usb_gain = 4;
 
-    std::array<std::uint8_t, packetSize> data{{
-            0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
-            0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
-            0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
+                                               0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
+                                               0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
     data[posDsp] = 0x05;
     data[gainPos] = settings.gain;
     data[volumePos] = settings.volume;
@@ -820,6 +819,101 @@ TEST_F(MustangTest, setAmpSendsValues)
     const auto result = m->set_amplifier(settings);
     EXPECT_THAT(result, Eq(0));
 }
+
+TEST_F(MustangTest, setAmpHandlesInvalidCabinet)
+{
+    constexpr int invalidCabinet{0x0d};
+    amp_settings settings;
+    settings.amp_num = value(amps::FENDER_57_CHAMP);
+    settings.gain = 8;
+    settings.volume = 9;
+    settings.treble = 1;
+    settings.middle = 2;
+    settings.bass = 3;
+    settings.cabinet = invalidCabinet;
+    settings.noise_gate = 3;
+    settings.master_vol = 5;
+    settings.gain2 = 3;
+    settings.presence = 2;
+    settings.threshold = 1;
+    settings.depth = 4;
+    settings.bias = 1;
+    settings.sag = 5;
+    settings.brightness = true;
+    settings.usb_gain = 4;
+
+    std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                               0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
+                                               0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
+                                               0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
+                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    data[posDsp] = 0x05;
+    data[gainPos] = settings.gain;
+    data[volumePos] = settings.volume;
+    data[treblePos] = settings.treble;
+    data[middlePos] = settings.middle;
+    data[bassPos] = settings.bass;
+    data[cabinetPos] = 0x00;
+    data[noiseGatePos] = settings.noise_gate;
+    data[masterVolPos] = settings.master_vol;
+    data[gain2Pos] = settings.gain2;
+    data[presencePos] = settings.presence;
+    data[biasPos] = settings.bias;
+    data[sagPos] = 0x01;
+    data[brightnessPos] = 1;
+    data[ampPos] = 0x7c;
+    data[44] = 0x0c;
+    data[45] = 0x0c;
+    data[46] = 0x0c;
+    data[50] = 0x0c;
+    data[54] = 0x00;
+    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    cmdExecute[0] = 0x1c;
+    cmdExecute[1] = 0x03;
+    std::array<std::uint8_t, packetSize> data2{{0}};
+    data2[0] = 0x1c;
+    data2[1] = 0x03;
+    data2[2] = 0x0d;
+    data2[6] = 0x01;
+    data2[7] = 0x01;
+    data2[usbGainPos] = settings.usb_gain;
+
+
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data2), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+
+    const auto result = m->set_amplifier(settings);
+    EXPECT_THAT(result, Eq(0));
+}
+
 
 TEST_F(MustangTest, setAmpReturnsErrorOnFailure)
 {
