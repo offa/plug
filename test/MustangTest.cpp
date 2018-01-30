@@ -812,13 +812,50 @@ TEST_F(MustangTest, setAmpSendsValues)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
         .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0))); // TODO: Determines return value
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .InSequence(s)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
 
     const auto result = m->set_amplifier(settings);
     EXPECT_THAT(result, Eq(0));
+}
+
+TEST_F(MustangTest, setAmpReturnsErrorOnFailure)
+{
+    constexpr int rtnFailure{18};
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
+        .Times(6)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(rtnFailure)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+
+    amp_settings settings;
+    settings.amp_num = value(amps::BRITISH_70S);
+    settings.gain = 8;
+    settings.volume = 9;
+    settings.treble = 1;
+    settings.middle = 2;
+    settings.bass = 3;
+    settings.cabinet = value(cabinets::cab4x12G);
+    settings.noise_gate = 3;
+    settings.master_vol = 5;
+    settings.gain2 = 3;
+    settings.presence = 2;
+    settings.threshold = 1;
+    settings.depth = 4;
+    settings.bias = 1;
+    settings.sag = 5;
+    settings.brightness = true;
+    settings.usb_gain = 4;
+    const auto result = m->set_amplifier(settings);
+    EXPECT_THAT(result, Eq(rtnFailure));
 }
 
 TEST_F(MustangTest, saveOnAmp)
