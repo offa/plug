@@ -37,6 +37,8 @@ namespace
     }
 
     constexpr std::size_t posDsp{2};
+
+    // Effects
     constexpr std::size_t posEffect{16};
     constexpr std::size_t posFxSlot{18};
     constexpr std::size_t posKnob1{32};
@@ -46,6 +48,26 @@ namespace
     constexpr std::size_t posKnob5{36};
     constexpr std::size_t posKnob6{37};
 
+    // Amp
+    constexpr std::size_t ampPos{16};
+    constexpr std::size_t volumePos{32};
+    constexpr std::size_t gainPos{33};
+    constexpr std::size_t treblePos{36};
+    constexpr std::size_t middlePos{37};
+    constexpr std::size_t bassPos{38};
+    constexpr std::size_t cabinetPos{49};
+    constexpr std::size_t noiseGatePos{47};
+    constexpr std::size_t thresholdPos{48};
+    constexpr std::size_t masterVolPos{35};
+    constexpr std::size_t gain2Pos{34};
+    constexpr std::size_t presencePos{39};
+    constexpr std::size_t depthPos{41};
+    constexpr std::size_t biasPos{42};
+    constexpr std::size_t sagPos{51};
+    constexpr std::size_t brightnessPos{52};
+    constexpr std::size_t usbGainPos{16};
+
+    // USB Data
     constexpr std::uint8_t endpointSend{0x01};
     constexpr std::uint8_t endpointReceive{0x81};
     constexpr std::uint16_t usbVid{0x1ed8};
@@ -281,23 +303,6 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
-    constexpr std::size_t ampPos{16};
-    constexpr std::size_t volumePos{32};
-    constexpr std::size_t gainPos{33};
-    constexpr std::size_t treblePos{36};
-    constexpr std::size_t middlePos{37};
-    constexpr std::size_t bassPos{38};
-    constexpr std::size_t cabinetPos{49};
-    constexpr std::size_t noiseGatePos{47};
-    constexpr std::size_t thresholdPos{48};
-    constexpr std::size_t masterVolPos{35};
-    constexpr std::size_t gain2Pos{34};
-    constexpr std::size_t presencePos{39};
-    constexpr std::size_t depthPos{41};
-    constexpr std::size_t biasPos{42};
-    constexpr std::size_t sagPos{51};
-    constexpr std::size_t brightnessPos{52};
-    constexpr std::size_t usbGainPos{16};
     std::array<std::uint8_t, packetSize> recvData;
     recvData.fill(0x00);
     recvData[ampPos] = 0x61;
@@ -720,6 +725,100 @@ TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
     const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
     EXPECT_THAT(result, Eq(errorCode));
+}
+
+TEST_F(MustangTest, setAmpSendsValues)
+{
+    amp_settings settings;
+    settings.amp_num = value(amps::BRITISH_70S);
+    settings.gain = 8;
+    settings.volume = 9;
+    settings.treble = 1;
+    settings.middle = 2;
+    settings.bass = 3;
+    settings.cabinet = value(cabinets::cab4x12G);
+    settings.noise_gate = 3;
+    settings.master_vol = 5;
+    settings.gain2 = 3;
+    settings.presence = 2;
+    settings.threshold = 1;
+    settings.depth = 4;
+    settings.bias = 1;
+    settings.sag = 5;
+    settings.brightness = true;
+    settings.usb_gain = 4;
+
+    std::array<std::uint8_t, packetSize> data{{
+            0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
+            0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
+            0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    data[posDsp] = 0x05;
+    data[gainPos] = settings.gain;
+    data[volumePos] = settings.volume;
+    data[treblePos] = settings.treble;
+    data[middlePos] = settings.middle;
+    data[bassPos] = settings.bass;
+    data[cabinetPos] = settings.cabinet;
+    data[noiseGatePos] = settings.noise_gate;
+    data[masterVolPos] = settings.master_vol;
+    data[gain2Pos] = settings.gain2;
+    data[presencePos] = settings.presence;
+    data[biasPos] = settings.bias;
+    data[sagPos] = 0x01;
+    data[brightnessPos] = 1;
+    data[ampPos] = 0x79;
+    data[44] = 0x0b;
+    data[45] = 0x0b;
+    data[46] = 0x0b;
+    data[50] = 0x0b;
+    data[54] = 0x7c;
+    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    cmdExecute[0] = 0x1c;
+    cmdExecute[1] = 0x03;
+    std::array<std::uint8_t, packetSize> data2{{0}};
+    data2[0] = 0x1c;
+    data2[1] = 0x03;
+    data2[2] = 0x0d;
+    data2[6] = 0x01;
+    data2[7] = 0x01;
+    data2[usbGainPos] = settings.usb_gain;
+
+
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data2), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0))); // TODO: Determines return value
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+
+    const auto result = m->set_amplifier(settings);
+    EXPECT_THAT(result, Eq(0));
 }
 
 TEST_F(MustangTest, saveOnAmp)
