@@ -13,9 +13,9 @@ env:
 
 matrix:
     include:
-    - env: COMPILER=gcc-7
-    - env: COMPILER=clang-5
-    - env: COMPILER=gcc-7 ANALYSE="-asan -ubsan -cov"
+    - env: COMPILER=gcc-7 ANALYSE="-asan -ubsan"
+    - env: COMPILER=clang-5 ANALYSE="-asan -ubsan"
+    - env: COMPILER=gcc-7 ANALYSE="-cov"
 
 
 before_install:

@@ -14,19 +14,19 @@ gcc-7:
   image: ${DOCKER_IMG}/gcc-7:latest
   stage: build
   script:
-    - script/ci_build.sh
+    - script/ci_build.sh -asan -ubsan
 
 clang-5:
   image: ${DOCKER_IMG}/clang-5:latest
   stage: build
   script:
-    - script/ci_build.sh
+    - script/ci_build.sh -asan -ubsan
 
 analyze:
   image: ${DOCKER_IMG}/gcc-7:latest
   stage: build
   script:
-    - script/ci_build.sh -asan -ubsan -cov
+    - script/ci_build.sh -cov
 
 
 # -----------------------------------------
