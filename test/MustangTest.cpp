@@ -579,23 +579,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 {
     constexpr int recvSize{2};
     constexpr int slot{8};
-    constexpr std::size_t ampPos{16};
-    constexpr std::size_t volumePos{32};
-    constexpr std::size_t gainPos{33};
-    constexpr std::size_t treblePos{36};
-    constexpr std::size_t middlePos{37};
-    constexpr std::size_t bassPos{38};
-    constexpr std::size_t cabinetPos{49};
-    constexpr std::size_t noiseGatePos{47};
-    constexpr std::size_t thresholdPos{48};
-    constexpr std::size_t masterVolPos{35};
-    constexpr std::size_t gain2Pos{34};
-    constexpr std::size_t presencePos{39};
-    constexpr std::size_t depthPos{41};
-    constexpr std::size_t biasPos{42};
-    constexpr std::size_t sagPos{51};
-    constexpr std::size_t brightnessPos{52};
-    constexpr std::size_t usbGainPos{16};
     std::array<std::uint8_t, packetSize> dummy{{0}};
     std::array<std::uint8_t, packetSize> recvData;
     recvData.fill(0x00);
