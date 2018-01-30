@@ -899,6 +899,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
 
 TEST_F(MustangTest, setAmpHandlesNoiseGate)
 {
+    constexpr int limitValue{0x05} ;
     amp_settings settings;
     settings.amp_num = value(amps::FENDER_SUPER_SONIC);
     settings.gain = 8;
@@ -907,7 +908,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGate)
     settings.middle = 2;
     settings.bass = 3;
     settings.cabinet = value(cabinets::cab57DLX);
-    settings.noise_gate = 0x5;
+    settings.noise_gate = limitValue;
     settings.master_vol = 5;
     settings.gain2 = 3;
     settings.presence = 2;
