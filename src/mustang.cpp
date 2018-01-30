@@ -843,9 +843,13 @@ namespace plug
         execute[2] = 0x00; // why this must be here?
 
         if (number_of_effects > 2)
+        {
             repeat = 1;
+        }
         else
+        {
             repeat = number_of_effects;
+        }
 
         for (int i = 0; i < repeat; i++)
         {
@@ -871,9 +875,13 @@ namespace plug
 
         // set and send the name
         if (name[24] != 0x00)
+        {
             name[24] = 0x00;
+        }
         for (int i = 0, j = 16; name[i] != 0x00; i++, j++)
+        {
             array[j] = name[i];
+        }
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
 
@@ -888,9 +896,13 @@ namespace plug
             array[KNOB6] = 0x00;
 
             if (effects[i].put_post_amp)
+            {
                 array[FXSLOT] = effects[i].fx_slot + 4;
+            }
             else
+            {
                 array[FXSLOT] = effects[i].fx_slot;
+            }
             array[KNOB1] = effects[i].knob1;
             array[KNOB2] = effects[i].knob2;
             array[KNOB3] = effects[i].knob3;
