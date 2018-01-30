@@ -243,7 +243,8 @@ TEST_F(MustangTest, startRequestsSettings)
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
 
     Sequence s;
