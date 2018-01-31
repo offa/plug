@@ -1978,6 +1978,47 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
     EXPECT_THAT(result, Eq(0));
 }
 
+TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
+{
+    constexpr int slot{5};
+    std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
+    constexpr int numOfEffects = settings.size();
+    constexpr int fxKnob{0x01};
+    std::array<char, 24> name;
+    name.fill('x');
+    std::array<std::uint8_t, packetSize> dummy{{0}};
+    std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    dataName[posFxKnob] = fxKnob;
+    dataName[posSaveField] = slot;
+    std::copy(name.cbegin(), name.cend(), std::next(dataName.begin(), 16));
+    dataName[16 + name.size() - 1] = '\0';
+
+
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataName), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
+        .Times(4)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
+
+
+    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    EXPECT_THAT(result, Eq(0));
+}
+
 TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 {
     constexpr int errorCode{9};
