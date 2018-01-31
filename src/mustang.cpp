@@ -874,9 +874,9 @@ namespace plug
         array[SAVE_SLOT] = slot;
 
         // set and send the name
-        if (name[24] != 0x00)
+        if (name[23] != 0x00)
         {
-            name[24] = 0x00;
+            name[23] = 0x00;
         }
         for (int i = 0, j = 16; name[i] != 0x00; i++, j++)
         {
