@@ -1793,6 +1793,34 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     EXPECT_THAT(result, Eq(0));
 }
 
+TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
+{
+    constexpr int errorCode{9};
+    constexpr int slot{5};
+    std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
+                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
+
+    }};
+    constexpr int numOfEffects = settings.size();
+    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
+        .Times(6)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+
+
+    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    EXPECT_THAT(result, Eq(errorCode));
+}
+
 TEST_F(MustangTest, saveOnAmp)
 {
     constexpr int slot{8};
