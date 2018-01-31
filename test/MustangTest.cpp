@@ -1798,8 +1798,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     constexpr int slot{5};
     std::array<fx_pedal_settings, 3> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true},
-                                               fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}
-    }};
+                                               fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
