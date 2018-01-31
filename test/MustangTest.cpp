@@ -1893,6 +1893,91 @@ TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
     EXPECT_THAT(result, Eq(errorCode));
 }
 
+TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
+{
+    constexpr int slot{5};
+    std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
+    constexpr int numOfEffects = settings.size();
+    constexpr int fxKnob{0x01};
+    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+    std::array<std::uint8_t, packetSize> dummy{{0}};
+    std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    std::array<std::uint8_t, packetSize> dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    dataName[posFxKnob] = fxKnob;
+    dataName[posSaveField] = slot;
+    std::copy(name.cbegin(), std::next(name.cbegin(), 4), std::next(dataName.begin(), 16));
+
+    dataValues[posSaveField] = slot;
+    dataValues[1] = 0x03;
+    dataValues[6] = 0x00;
+
+    std::fill(std::next(dataValues.begin(), 16), dataValues.end(), 0x00);
+    dataValues[19] = 0x00;
+    dataValues[20] = 0x08;
+    dataValues[21] = 0x01;
+    dataValues[posKnob6] = 0x00;
+
+    auto dataEffect0 = dataValues;
+    dataEffect0[posFxKnob] = fxKnob;
+    dataEffect0[posFxSlot] = settings[0].fx_slot;
+    dataEffect0[posKnob1] = settings[0].knob1;
+    dataEffect0[posKnob2] = settings[0].knob2;
+    dataEffect0[posKnob3] = settings[0].knob3;
+    dataEffect0[posKnob4] = settings[0].knob4;
+    dataEffect0[posKnob5] = settings[0].knob5;
+    dataEffect0[posDsp] = 0x07;
+    dataEffect0[posEffect] = 0x12;
+    dataEffect0[19] = 0x01;
+    dataEffect0[20] = 0x01;
+
+    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    cmdExecute[0] = 0x1c;
+    cmdExecute[1] = 0x03;
+    cmdExecute[2] = 0x00;
+    cmdExecute[posFxKnob] = fxKnob;
+
+    Sequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataName), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+    // Effect #0
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataEffect0), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Execute Cmd
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+
+    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    EXPECT_THAT(result, Eq(0));
+}
+
 TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 {
     constexpr int errorCode{9};
