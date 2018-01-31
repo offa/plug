@@ -1881,6 +1881,18 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     EXPECT_THAT(result, Eq(0));
 }
 
+TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
+{
+    constexpr int slot{5};
+    constexpr int errorCode{-1};
+    std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}}};
+    constexpr int numOfEffects = settings.size();
+    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+
+    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    EXPECT_THAT(result, Eq(errorCode));
+}
+
 TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 {
     constexpr int errorCode{9};
