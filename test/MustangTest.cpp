@@ -151,6 +151,7 @@ protected:
     mock::UsbMock* usbmock;
     libusb_device_handle handle;
     static constexpr std::size_t packetSize{64};
+    static constexpr std::size_t nameLength{32};
 };
 
 TEST_F(MustangTest, startInitializesUsb)
@@ -297,11 +298,11 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
         .InSequence(s)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(0), Return(0)));
 
-    char nameList[100][32];
-    char name[32];
-    const auto result = m->start_amp(nameList, name, nullptr, nullptr);
+    char nameList[100][nameLength];
+    std::array<char, nameLength> name;
+    const auto result = m->start_amp(nameList, name.data(), nullptr, nullptr);
     EXPECT_THAT(result, Eq(0));
-    EXPECT_THAT(name, StrEq("abc"));
+    EXPECT_THAT(name.data(), StrEq("abc"));
 
     ignoreClose();
 }
