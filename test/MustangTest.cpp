@@ -2128,11 +2128,7 @@ TEST_F(MustangTest, saveOnAmp)
     sendCmd[7] = 0x01;
     std::array<char, 34> nameOversized;
     nameOversized.fill('a');
-
-    for (std::size_t i = 0; i < 31; ++i)
-    {
-        sendCmd[16 + i] = nameOversized[i];
-    }
+    std::copy_n(nameOversized.cbegin(), 31, std::next(sendCmd.begin(), 16));
     nameOversized[31] = char{0x0f};
     nameOversized[32] = 'b';
     nameOversized[33] = '\0';
