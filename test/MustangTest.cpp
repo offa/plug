@@ -125,9 +125,15 @@ protected:
         m = nullptr;
     }
 
-    constexpr auto createEffectData(std::uint8_t slot, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
+    constexpr auto createEmptyPacket() const
     {
         std::array<std::uint8_t, packetSize> data{{0}};
+        return data;
+    }
+
+    constexpr auto createEffectData(std::uint8_t slot, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
+    {
+        auto data = createEmptyPacket();
         data[posDsp] = 8;
         data[posEffect] = effect;
         data[posFxSlot] = slot;
@@ -156,15 +162,15 @@ TEST_F(MustangTest, startInitializesUsb)
 
     // Init Step 1
     constexpr int recvSize{0};
-    std::array<std::uint8_t, packetSize> initCmd1{{0}};
+    auto initCmd1 = createEmptyPacket();
     initCmd1[1] = 0xc3;
-    std::array<std::uint8_t, packetSize> dummyResponse{{0}};
+    auto dummyResponse = createEmptyPacket();
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd1), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummyResponse.cbegin(), dummyResponse.cend()), SetArgPointee<4>(recvSize), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(dummyResponse.cbegin(), dummyResponse.cend()), SetArgPointee<4>(recvSize), Return(0)));
     // Init Step 2
-    std::array<std::uint8_t, packetSize> initCmd2{{0}};
+    auto initCmd2 = createEmptyPacket();
     initCmd2[0] = 0x1a;
     initCmd2[1] = 0x03;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd2), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
@@ -257,11 +263,11 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
-    std::array<std::uint8_t, packetSize> recvData{{0}};
+    auto recvData = createEmptyPacket();
     recvData[16] = 'a';
     recvData[17] = 'b';
     recvData[18] = 'c';
-    std::array<std::uint8_t, packetSize> initCmd{{0}};
+    auto initCmd = createEmptyPacket();
     initCmd[0] = 0xff;
     initCmd[1] = 0xc1;
     constexpr int recvSize{0};
@@ -307,7 +313,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
-    std::array<std::uint8_t, packetSize> recvData;
+    auto recvData = createEmptyPacket();
     recvData.fill(0x00);
     recvData[ampPos] = 0x61;
     recvData[volumePos] = 8;
@@ -325,13 +331,13 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     recvData[biasPos] = 6;
     recvData[sagPos] = 5;
     recvData[brightnessPos] = 1;
-    std::array<std::uint8_t, packetSize> extendedData{{0}};
+    auto extendedData = createEmptyPacket();
     extendedData[usbGainPos] = 0x44;
 
-    std::array<std::uint8_t, packetSize> initCmd{{0}};
+    auto initCmd = createEmptyPacket();
     initCmd[0] = 0xff;
     initCmd[1] = 0xc1;
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     constexpr int recvSize{0};
     constexpr int recvSizeResponse{1};
 
@@ -400,10 +406,10 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
     auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
     auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
-    std::array<std::uint8_t, packetSize> initCmd{{0}};
+    auto initCmd = createEmptyPacket();
     initCmd[0] = 0xff;
     initCmd[1] = 0xc1;
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     constexpr int recvSize{0};
     constexpr int recvSizeResponse{1};
 
@@ -453,9 +459,9 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 TEST_F(MustangTest, startRequestsAmpPresetList)
 {
-    std::array<std::uint8_t, packetSize> recvData0{{0}};
-    std::array<std::uint8_t, packetSize> recvData1{{0}};
-    std::array<std::uint8_t, packetSize> recvData2{{0}};
+    auto recvData0 = createEmptyPacket();
+    auto recvData1 = createEmptyPacket();
+    auto recvData2 = createEmptyPacket();
     recvData0[16] = 'a';
     recvData0[17] = 'b';
     recvData0[18] = 'c';
@@ -465,7 +471,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     recvData2[16] = 'g';
     recvData2[17] = 'h';
     recvData2[18] = 'i';
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
 
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
@@ -487,7 +493,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
         .WillOnce(DoAll(SetArrayArgument<2>(recvData2.cbegin(), recvData2.cend()), SetArgPointee<4>(0), Return(0)));
 
     constexpr int recvSizeResponse{1};
-    std::array<std::uint8_t, packetSize> initCmd{{0}};
+    auto initCmd = createEmptyPacket();
     initCmd[0] = 0xff;
     initCmd[1] = 0xc1;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
@@ -545,14 +551,13 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     constexpr int recvSize{1};
     constexpr int slot{8};
     constexpr std::size_t slotPos{4};
-    std::array<std::uint8_t, packetSize> sendCmd;
-    sendCmd.fill(0x00);
+    auto sendCmd = createEmptyPacket();;
     sendCmd[0] = 0x1c;
     sendCmd[1] = 0x01;
     sendCmd[2] = 0x01;
     sendCmd[slotPos] = slot;
     sendCmd[6] = 0x01;
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _)).WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 1), Return(0)));
@@ -565,8 +570,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
     constexpr int recvSize{1};
     constexpr int slot{8};
-    std::array<std::uint8_t, packetSize> recvData;
-    recvData.fill(0x00);
+    auto recvData = createEmptyPacket();
     recvData[16] = 'a';
     recvData[17] = 'b';
     recvData[18] = 'c';
@@ -583,9 +587,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 {
     constexpr int recvSize{2};
     constexpr int slot{8};
-    std::array<std::uint8_t, packetSize> dummy{{0}};
-    std::array<std::uint8_t, packetSize> recvData;
-    recvData.fill(0x00);
+    auto dummy = createEmptyPacket();
+    auto recvData = createEmptyPacket();
     recvData[ampPos] = 0x5e;
     recvData[volumePos] = 1;
     recvData[gainPos] = 2;
@@ -602,7 +605,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     recvData[biasPos] = 13;
     recvData[sagPos] = 14;
     recvData[brightnessPos] = 0;
-    std::array<std::uint8_t, packetSize> extendedData{{0}};
+    auto extendedData = createEmptyPacket();
     extendedData[usbGainPos] = 0xab;
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
@@ -647,7 +650,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 {
     constexpr int recvSize{6};
     constexpr int slot{8};
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
     auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
     auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
@@ -857,10 +860,10 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
     data[46] = 0x0c;
     data[50] = 0x0c;
     data[54] = 0x00;
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
-    std::array<std::uint8_t, packetSize> data2{{0}};
+    auto data2 = createEmptyPacket();
     data2[0] = 0x1c;
     data2[1] = 0x03;
     data2[2] = 0x0d;
@@ -953,10 +956,10 @@ TEST_F(MustangTest, setAmpHandlesNoiseGate)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
-    std::array<std::uint8_t, packetSize> data2{{0}};
+    auto data2 = createEmptyPacket();
     data2[0] = 0x1c;
     data2[1] = 0x03;
     data2[2] = 0x0d;
@@ -1050,10 +1053,10 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
-    std::array<std::uint8_t, packetSize> data2{{0}};
+    auto data2 = createEmptyPacket();
     data2[0] = 0x1c;
     data2[1] = 0x03;
     data2[2] = 0x0d;
@@ -1146,10 +1149,10 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
-    std::array<std::uint8_t, packetSize> data2{{0}};
+    auto data2 = createEmptyPacket();
     data2[0] = 0x1c;
     data2[1] = 0x03;
     data2[2] = 0x0d;
@@ -1241,10 +1244,10 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     data[46] = 0x07;
     data[50] = 0x07;
     data[54] = 0x5e;
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
-    std::array<std::uint8_t, packetSize> data2{{0}};
+    auto data2 = createEmptyPacket();
     data2[0] = 0x1c;
     data2[1] = 0x03;
     data2[2] = 0x0d;
@@ -1336,8 +1339,8 @@ TEST_F(MustangTest, setEffectSendsValue)
     settings.knob6 = 3;
     settings.put_post_amp = false;
 
-    std::array<std::uint8_t, packetSize> dummy{{0}};
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto dummy = createEmptyPacket();
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1409,8 +1412,8 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
     settings.fx_slot = 2;
     settings.effect_num = value(effects::EMPTY);
 
-    std::array<std::uint8_t, packetSize> dummy{{0}};
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto dummy = createEmptyPacket();
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1460,8 +1463,8 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     settings.knob6 = 6;
     settings.put_post_amp = true;
 
-    std::array<std::uint8_t, packetSize> dummy{{0}};
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto dummy = createEmptyPacket();
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1541,8 +1544,8 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     settings.knob6 = 7;
     settings.put_post_amp = false;
 
-    std::array<std::uint8_t, packetSize> dummy{{0}};
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto dummy = createEmptyPacket();
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1626,8 +1629,8 @@ TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
     settings.knob6 = 3;
     settings.put_post_amp = false;
 
-    std::array<std::uint8_t, packetSize> dummy{{0}};
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto dummy = createEmptyPacket();
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1696,7 +1699,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     constexpr int fxKnob{0x02};
     constexpr int postAmpOffset{4};
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1752,7 +1755,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     dataEffect1[19] = 0x01;
     dataEffect1[20] = 0x01;
 
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     cmdExecute[2] = 0x00;
@@ -1802,7 +1805,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1846,7 +1849,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     dataEffect0[19] = 0x02;
     dataEffect0[20] = 0x01;
 
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     cmdExecute[2] = 0x00;
@@ -1899,7 +1902,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1943,7 +1946,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
     dataEffect0[19] = 0x01;
     dataEffect0[20] = 0x01;
 
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
+    auto cmdExecute = createEmptyPacket();
     cmdExecute[0] = 0x1c;
     cmdExecute[1] = 0x03;
     cmdExecute[2] = 0x00;
@@ -1985,7 +1988,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
     constexpr int fxKnob{0x01};
     std::array<char, 24> name;
     name.fill('x');
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2025,7 +2028,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
-    std::array<std::uint8_t, packetSize> dummy{{0}};
+    auto dummy = createEmptyPacket();
     std::array<std::uint8_t, packetSize> dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2116,7 +2119,7 @@ TEST_F(MustangTest, saveOnAmp)
 {
     constexpr int slot{8};
     constexpr std::size_t slotPos{4};
-    std::array<std::uint8_t, packetSize> sendCmd{{0}};
+    auto sendCmd = createEmptyPacket();
     sendCmd[0] = 0x1c;
     sendCmd[1] = 0x01;
     sendCmd[2] = 0x03;
@@ -2138,8 +2141,7 @@ TEST_F(MustangTest, saveOnAmp)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    std::array<unsigned char, 64> memBank;
-    memBank.fill(0x00);
+    auto memBank = createEmptyPacket();
     memBank[0] = 0x1c;
     memBank[1] = 0x01;
     memBank[2] = 0x01;
