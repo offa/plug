@@ -36,6 +36,16 @@ namespace
         return std::equal(expected.cbegin(), expected.cend(), arg);
     }
 
+    MATCHER(IsSuccessful, "Successful (0)")
+    {
+        return ( arg == 0 );
+    }
+
+    MATCHER(IsFailure, "Failure (!= 0)")
+    {
+        return ( arg != 0 );
+    }
+
     constexpr std::size_t posDsp{2};
 
     // Effects
@@ -186,7 +196,7 @@ TEST_F(MustangTest, startInitializesUsb)
         .WillOnce(DoAll(SetArrayArgument<2>(dummyResponse.cbegin(), dummyResponse.cend()), SetArgPointee<4>(recvSize), Return(0)));
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 
     ignoreClose();
 }
@@ -212,7 +222,7 @@ TEST_F(MustangTest, startDeterminesAmpType)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 
     ignoreClose();
 }
@@ -238,7 +248,7 @@ TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 
     ignoreClose();
 }
@@ -252,7 +262,7 @@ TEST_F(MustangTest, startFailsIfDriverFails)
     expectClose();
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(usbError));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, startFailsIfClaimFails)
@@ -264,7 +274,7 @@ TEST_F(MustangTest, startFailsIfClaimFails)
     expectClose();
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(usbError));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
@@ -310,7 +320,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     char nameList[100][nameLength];
     std::array<char, nameLength> name;
     const auto result = m->start_amp(nameList, name.data(), nullptr, nullptr);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
     EXPECT_THAT(name.data(), StrEq("abc"));
 
     ignoreClose();
@@ -383,7 +393,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     char nameList[100][32];
     amp_settings settings;
     const auto result = m->start_amp(nameList, nullptr, &settings, nullptr);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
     EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_60S)));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
@@ -453,7 +463,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     char nameList[100][32];
     std::array<fx_pedal_settings, 4> settings;
     const auto result = m->start_amp(nameList, nullptr, nullptr, settings.data());
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(10));
     EXPECT_THAT(settings[0].knob2, Eq(20));
@@ -513,7 +523,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     char names[numberOfNames][nameLength];
 
     const auto result = m->start_amp(names, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
     EXPECT_THAT(names[0], StrEq("abc"));
     EXPECT_THAT(names[1], StrEq("def"));
     EXPECT_THAT(names[2], StrEq("ghi"));
@@ -577,7 +587,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize - 1), Return(0)));
 
     const auto result = m->load_memory_bank(slot, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
@@ -728,7 +738,7 @@ TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
     const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(usbError));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, setAmpSendsValues)
@@ -812,7 +822,7 @@ TEST_F(MustangTest, setAmpSendsValues)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
 
     const auto result = m->set_amplifier(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
@@ -897,7 +907,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
 
     const auto result = m->set_amplifier(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setAmpHandlesNoiseGate)
@@ -984,7 +994,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGate)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
 
     const auto result = m->set_amplifier(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
@@ -1073,7 +1083,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
 
     const auto result = m->set_amplifier(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setAmpHandlesSagValue)
@@ -1160,7 +1170,7 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
 
     const auto result = m->set_amplifier(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
@@ -1246,19 +1256,17 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
         .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
 
     const auto result = m->set_amplifier(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setAmpReturnsErrorOnFailure)
 {
-    constexpr int rtnFailure{18};
-
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
         .Times(6)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(rtnFailure)));
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
@@ -1282,7 +1290,7 @@ TEST_F(MustangTest, setAmpReturnsErrorOnFailure)
     settings.usb_gain = 4;
 
     const auto result = m->set_amplifier(settings);
-    EXPECT_THAT(result, Eq(rtnFailure));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, setEffectSendsValue)
@@ -1354,7 +1362,7 @@ TEST_F(MustangTest, setEffectSendsValue)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
     const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
@@ -1394,7 +1402,7 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
     const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setEffectHandlesEffectPosition)
@@ -1467,7 +1475,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
     const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
@@ -1543,7 +1551,7 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
     const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
@@ -1611,7 +1619,7 @@ TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
 
 
     const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, Eq(usbError));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, saveEffectsSendsValues)
@@ -1710,7 +1718,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
@@ -1790,7 +1798,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
@@ -1878,7 +1886,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
@@ -1918,7 +1926,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
@@ -1983,7 +1991,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
 
 TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
@@ -2009,7 +2017,7 @@ TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(usbError));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, saveOnAmp)
@@ -2044,5 +2052,5 @@ TEST_F(MustangTest, saveOnAmp)
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
     const auto result = m->save_on_amp(nameOversized.data(), slot);
-    EXPECT_THAT(result, Eq(0));
+    EXPECT_THAT(result, IsSuccessful());
 }
