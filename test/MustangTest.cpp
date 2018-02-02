@@ -225,6 +225,7 @@ TEST_F(MustangTest, startFailsIfNoDeviceFound)
 
 TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
 {
+    InSequence s;
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(1));
