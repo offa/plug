@@ -243,28 +243,26 @@ TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
 
 TEST_F(MustangTest, startFailsIfDriverFails)
 {
-    constexpr int errorCode{15};
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(1));
-    EXPECT_CALL(*usbmock, detach_kernel_driver(&handle, 0)).WillOnce(Return(errorCode));
+    EXPECT_CALL(*usbmock, detach_kernel_driver(&handle, 0)).WillOnce(Return(usbError));
     expectClose();
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(errorCode));
+    EXPECT_THAT(result, Eq(usbError));
 }
 
 TEST_F(MustangTest, startFailsIfClaimFails)
 {
-    constexpr int errorCode{9};
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(errorCode));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(usbError));
     expectClose();
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(errorCode));
+    EXPECT_THAT(result, Eq(usbError));
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
@@ -729,12 +727,11 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
 TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
 {
-    constexpr int errorCode{1};
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
     const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(errorCode));
+    EXPECT_THAT(result, Eq(usbError));
 }
 
 TEST_F(MustangTest, setAmpSendsValues)
@@ -1554,7 +1551,6 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
 {
-    constexpr int errorCode{10};
     fx_pedal_settings settings;
     settings.fx_slot = 3;
     settings.effect_num = value(effects::OVERDRIVE);
@@ -1612,13 +1608,13 @@ TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
         .Times(2)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
     const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, Eq(errorCode));
+    EXPECT_THAT(result, Eq(usbError));
 }
 
 TEST_F(MustangTest, saveEffectsSendsValues)
@@ -1805,13 +1801,12 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
 {
     constexpr int slot{5};
-    constexpr int errorCode{-1};
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(errorCode));
+    EXPECT_THAT(result, Eq(-1));
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
@@ -2002,7 +1997,6 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 {
-    constexpr int errorCode{9};
     constexpr int slot{5};
     std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
@@ -2018,14 +2012,14 @@ TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
         .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(errorCode)));
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .InSequence(s)
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(errorCode));
+    EXPECT_THAT(result, Eq(usbError));
 }
 
 TEST_F(MustangTest, saveOnAmp)
