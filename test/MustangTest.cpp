@@ -81,6 +81,7 @@ namespace
     // Save fields
     constexpr std::uint8_t posFxKnob{3};
     constexpr std::uint8_t posSaveField{4};
+    constexpr std::size_t posSlot{4};
 }
 
 
@@ -154,6 +155,7 @@ protected:
     static constexpr std::size_t nameLength{32};
     static constexpr int usbSuccess{LIBUSB_SUCCESS};
     static constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
+    static constexpr int slot{5};
 };
 
 TEST_F(MustangTest, startInitializesUsb)
@@ -560,13 +562,11 @@ TEST_F(MustangTest, stopAmpTwiceDoesNothing)
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 {
     constexpr int recvSize{1};
-    constexpr int slot{8};
-    constexpr std::size_t slotPos{4};
     auto sendCmd = createEmptyPacket();
     sendCmd[0] = 0x1c;
     sendCmd[1] = 0x01;
     sendCmd[2] = 0x01;
-    sendCmd[slotPos] = slot;
+    sendCmd[posSlot] = slot;
     sendCmd[6] = 0x01;
     auto dummy = createEmptyPacket();
 
@@ -583,7 +583,6 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
     constexpr int recvSize{1};
-    constexpr int slot{8};
     auto recvData = createEmptyPacket();
     recvData[16] = 'a';
     recvData[17] = 'b';
@@ -603,7 +602,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 {
     constexpr int recvSize{2};
-    constexpr int slot{8};
     auto dummy = createEmptyPacket();
     auto recvData = createEmptyPacket();
     recvData[ampPos] = 0x5e;
@@ -663,7 +661,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 {
     constexpr int recvSize{6};
-    constexpr int slot{8};
     auto dummy = createEmptyPacket();
     auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
     auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
@@ -1619,7 +1616,6 @@ TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
 
 TEST_F(MustangTest, saveEffectsSendsValues)
 {
-    constexpr int slot{5};
     std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
 
@@ -1719,7 +1715,6 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 {
-    constexpr int slot{5};
     std::array<fx_pedal_settings, 3> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true},
                                                fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}}};
@@ -1800,7 +1795,6 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 
 TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
 {
-    constexpr int slot{5};
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
@@ -1811,7 +1805,6 @@ TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 {
-    constexpr int slot{5};
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
@@ -1890,7 +1883,6 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 {
-    constexpr int slot{5};
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
@@ -1931,7 +1923,6 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 {
-    constexpr int slot{5};
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::TAPE_DELAY), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
@@ -1997,7 +1988,6 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 {
-    constexpr int slot{5};
     std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
 
@@ -2024,13 +2014,11 @@ TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 
 TEST_F(MustangTest, saveOnAmp)
 {
-    constexpr int slot{8};
-    constexpr std::size_t slotPos{4};
     auto sendCmd = createEmptyPacket();
     sendCmd[0] = 0x1c;
     sendCmd[1] = 0x01;
     sendCmd[2] = 0x03;
-    sendCmd[slotPos] = slot;
+    sendCmd[posSlot] = slot;
     sendCmd[6] = 0x01;
     sendCmd[7] = 0x01;
     std::array<char, 34> nameOversized;
@@ -2050,7 +2038,7 @@ TEST_F(MustangTest, saveOnAmp)
     memBank[0] = 0x1c;
     memBank[1] = 0x01;
     memBank[2] = 0x01;
-    memBank[slotPos] = slot;
+    memBank[posSlot] = slot;
     memBank[6] = 0x01;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
