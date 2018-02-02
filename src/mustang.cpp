@@ -697,10 +697,14 @@ namespace plug
         array[7] = 0x01;
 
         if (strlen(name) > 31)
+        {
             name[31] = 0x00;
+        }
 
         for (unsigned int i = 16, j = 0; name[j] != 0x00; i++, j++)
+        {
             array[i] = name[j];
+        }
 
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
