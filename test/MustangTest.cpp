@@ -241,26 +241,28 @@ TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
 
 TEST_F(MustangTest, startFailsIfDriverFails)
 {
+    constexpr int errorCode{15};
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(1));
-    EXPECT_CALL(*usbmock, detach_kernel_driver(&handle, 0)).WillOnce(Return(18));
+    EXPECT_CALL(*usbmock, detach_kernel_driver(&handle, 0)).WillOnce(Return(errorCode));
     expectClose();
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(18));
+    EXPECT_THAT(result, Eq(errorCode));
 }
 
 TEST_F(MustangTest, startFailsIfClaimFails)
 {
+    constexpr int errorCode{9};
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(19));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(errorCode));
     expectClose();
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(19));
+    EXPECT_THAT(result, Eq(errorCode));
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
@@ -281,8 +283,8 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     constexpr int recvSizeResponse{1};
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .Times(2)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
 
@@ -356,9 +358,9 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     Sequence s;
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(2)
         .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .InSequence(s)
         .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
@@ -420,17 +422,17 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     constexpr int recvSizeResponse{1};
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .Times(2)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
 
     Sequence s;
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(2)
         .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .InSequence(s)
         .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
