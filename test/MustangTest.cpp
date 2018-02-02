@@ -38,12 +38,12 @@ namespace
 
     MATCHER(IsSuccessful, "Successful (0)")
     {
-        return ( arg == 0 );
+        return (arg == 0);
     }
 
     MATCHER(IsFailure, "Failure (!= 0)")
     {
-        return ( arg != 0 );
+        return (arg != 0);
     }
 
     constexpr std::size_t packetSize{64};
