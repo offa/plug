@@ -552,7 +552,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     constexpr int recvSize{1};
     constexpr int slot{8};
     constexpr std::size_t slotPos{4};
-    auto sendCmd = createEmptyPacket();;
+    auto sendCmd = createEmptyPacket();
     sendCmd[0] = 0x1c;
     sendCmd[1] = 0x01;
     sendCmd[2] = 0x01;
