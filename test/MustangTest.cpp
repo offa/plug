@@ -489,11 +489,12 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     constexpr int recvSize{0};
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
+        .Times(2)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(recvData0.cbegin(), recvData0.cend()), SetArgPointee<4>(4), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(3), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(recvData1.cbegin(), recvData1.cend()), SetArgPointee<4>(2), Return(0)))
