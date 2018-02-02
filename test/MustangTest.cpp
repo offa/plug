@@ -156,11 +156,11 @@ protected:
 
 TEST_F(MustangTest, startInitializesUsb)
 {
-    Sequence s;
-    EXPECT_CALL(*usbmock, init(nullptr)).InSequence(s);
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).InSequence(s).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).InSequence(s).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).InSequence(s).WillOnce(Return(0));
+    InSequence s;
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
     constexpr int recvSize{0};
     auto initCmd1 = createEmptyPacket();
@@ -172,17 +172,13 @@ TEST_F(MustangTest, startInitializesUsb)
 
     // Init Step 1
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd1), packetSize, _, _))
-        .InSequence(s)
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
         .WillOnce(DoAll(SetArrayArgument<2>(dummyResponse.cbegin(), dummyResponse.cend()), SetArgPointee<4>(recvSize), Return(0)));
     // Init Step 2
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd2), packetSize, _, _))
-        .InSequence(s)
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
         .WillOnce(DoAll(SetArrayArgument<2>(dummyResponse.cbegin(), dummyResponse.cend()), SetArgPointee<4>(recvSize), Return(0)));
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
