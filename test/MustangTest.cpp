@@ -287,7 +287,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .Times(2)
         .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .InSequence(s)
         .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
