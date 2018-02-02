@@ -145,12 +145,12 @@ protected:
         return data;
     }
 
-    constexpr auto createEffectData(std::uint8_t slot, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
+    constexpr auto createEffectData(std::uint8_t slotValue, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
     {
         auto data = createEmptyPacket();
         data[posDsp] = 8;
         data[posEffect] = effect;
-        data[posFxSlot] = slot;
+        data[posFxSlot] = slotValue;
         data[posKnob1] = values[0];
         data[posKnob2] = values[1];
         data[posKnob3] = values[2];
@@ -204,9 +204,9 @@ TEST_F(MustangTest, startInitializesUsb)
 
 TEST_F(MustangTest, startReturnsErrorOnInitFailure)
 {
-    EXPECT_CALL(*usbmock, init(nullptr)).WillOnce(Return(17));
+    EXPECT_CALL(*usbmock, init(nullptr)).WillOnce(Return(usbError));
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(17));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, startDeterminesAmpType)
@@ -235,7 +235,7 @@ TEST_F(MustangTest, startFailsIfNoDeviceFound)
     EXPECT_CALL(*usbmock, exit(nullptr));
 
     const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, Eq(-100));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
@@ -516,7 +516,6 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     initCmd[1] = 0xc1;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
 
-    constexpr std::size_t nameLength{32};
     constexpr std::size_t numberOfNames{100};
     char names[numberOfNames][nameLength];
 
@@ -1796,7 +1795,7 @@ TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
 
     const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, Eq(-1));
+    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
