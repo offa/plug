@@ -1,6 +1,6 @@
 variables:
   DOCKER_IMG: "registry.gitlab.com/offa/plug/ci"
-  GTEST_COLOR: yes
+  GTEST_COLOR: "yes"
 
 stages:
   - build-docker-images
