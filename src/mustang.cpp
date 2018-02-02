@@ -1190,7 +1190,9 @@ namespace plug
             }
         }
         else
+        {
             return -200;
+        }
 
         file = fopen(filename, "rb");
         // send date when firmware was created
