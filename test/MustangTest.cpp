@@ -152,6 +152,8 @@ protected:
     libusb_device_handle handle;
     static constexpr std::size_t packetSize{64};
     static constexpr std::size_t nameLength{32};
+    static constexpr int usbSuccess{LIBUSB_SUCCESS};
+    static constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
 };
 
 TEST_F(MustangTest, startInitializesUsb)
@@ -493,8 +495,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
         .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(recvData0.cbegin(), recvData0.cend()), SetArgPointee<4>(4), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(3), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(recvData1.cbegin(), recvData1.cend()), SetArgPointee<4>(2), Return(0)))
@@ -529,7 +530,7 @@ TEST_F(MustangTest, stopAmpClosesConnection)
 {
     expectStart();
     InSequence s;
-    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(usbSuccess));
     EXPECT_CALL(*usbmock, attach_kernel_driver(&handle, 0));
     EXPECT_CALL(*usbmock, close(_));
     EXPECT_CALL(*usbmock, exit(nullptr));
@@ -540,7 +541,7 @@ TEST_F(MustangTest, stopAmpClosesConnectionIfNoDevice)
 {
     expectStart();
     InSequence s;
-    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_ERROR_NO_DEVICE));
+    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(usbError));
     EXPECT_CALL(*usbmock, close(_));
     EXPECT_CALL(*usbmock, exit(nullptr));
     m->stop_amp();
@@ -550,7 +551,7 @@ TEST_F(MustangTest, stopAmpTwiceDoesNothing)
 {
     expectStart();
     InSequence s;
-    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(usbSuccess));
     EXPECT_CALL(*usbmock, attach_kernel_driver(&handle, 0));
     EXPECT_CALL(*usbmock, close(_));
     EXPECT_CALL(*usbmock, exit(nullptr));
