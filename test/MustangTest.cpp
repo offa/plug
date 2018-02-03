@@ -145,18 +145,13 @@ protected:
         return data;
     }
 
-    constexpr auto createEffectData(std::uint8_t slotValue, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
+    auto createEffectData(std::uint8_t slotValue, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
     {
         auto data = createEmptyPacket();
         data[posDsp] = 8;
         data[posEffect] = effect;
         data[posFxSlot] = slotValue;
-        data[posKnob1] = values[0];
-        data[posKnob2] = values[1];
-        data[posKnob3] = values[2];
-        data[posKnob4] = values[3];
-        data[posKnob5] = values[4];
-        data[posKnob6] = values[5];
+        std::copy(values.cbegin(), values.cend(), std::next(data.begin(), posKnob1));
         return data;
     }
 
