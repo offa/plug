@@ -252,6 +252,7 @@ TEST_F(MustangTest, startDetachesKernelDriverIfNotActive)
 
 TEST_F(MustangTest, startFailsIfDriverFails)
 {
+    InSequence s;
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(usbError));
@@ -264,6 +265,7 @@ TEST_F(MustangTest, startFailsIfDriverFails)
 
 TEST_F(MustangTest, startFailsIfClaimFails)
 {
+    InSequence s;
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
