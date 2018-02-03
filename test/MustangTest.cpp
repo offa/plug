@@ -107,6 +107,14 @@ namespace
             return data;
         }
 
+        BinData createInitCmdPacket()
+        {
+            auto data = createEmptyPacket();
+            data[0] = 0xff;
+            data[1] = 0xc1;
+            return data;
+        }
+
     }
 
 }
@@ -172,7 +180,8 @@ protected:
     std::unique_ptr<Mustang> m;
     mock::UsbMock* usbmock;
     libusb_device_handle handle;
-    std::array<std::uint8_t, packetSize> dummy = helper::createEmptyPacket();
+    helper::BinData dummy = helper::createEmptyPacket();
+    helper::BinData initCmd = helper::createInitCmdPacket();
     static constexpr int usbSuccess{LIBUSB_SUCCESS};
     static constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
     static constexpr int slot{5};
@@ -299,9 +308,6 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
     auto recvData = helper::createEmptyPacket();
     assignNameData(recvData, "abc");
-    auto initCmd = helper::createEmptyPacket();
-    initCmd[0] = 0xff;
-    initCmd[1] = 0xc1;
     constexpr int recvSize{0};
     constexpr int recvSizeResponse{1};
 
@@ -365,9 +371,6 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     auto extendedData = helper::createEmptyPacket();
     extendedData[usbGainPos] = 0x44;
 
-    auto initCmd = helper::createEmptyPacket();
-    initCmd[0] = 0xff;
-    initCmd[1] = 0xc1;
     constexpr int recvSize{0};
     constexpr int recvSizeResponse{1};
 
@@ -436,9 +439,6 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
     auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
     auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
-    auto initCmd = helper::createEmptyPacket();
-    initCmd[0] = 0xff;
-    initCmd[1] = 0xc1;
     constexpr int recvSize{0};
     constexpr int recvSizeResponse{1};
 
@@ -515,9 +515,6 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
         .WillOnce(DoAll(SetArrayArgument<2>(recvData2.cbegin(), recvData2.cend()), SetArgPointee<4>(0), Return(0)));
 
     constexpr int recvSizeResponse{1};
-    auto initCmd = helper::createEmptyPacket();
-    initCmd[0] = 0xff;
-    initCmd[1] = 0xc1;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
 
     constexpr std::size_t numberOfNames{100};
