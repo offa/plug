@@ -155,6 +155,11 @@ protected:
         return data;
     }
 
+    void assignNameData(std::array<std::uint8_t, packetSize>& data, const std::string_view name)
+    {
+        constexpr std::size_t nameFieldOffset{16};
+        std::copy(name.cbegin(), name.cend(), std::next(data.begin(), nameFieldOffset));
+    }
 
     std::unique_ptr<Mustang> m;
     mock::UsbMock* usbmock;
@@ -285,9 +290,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
     auto recvData = createEmptyPacket();
-    recvData[16] = 'a';
-    recvData[17] = 'b';
-    recvData[18] = 'c';
+    assignNameData(recvData, "abc");
     auto initCmd = createEmptyPacket();
     initCmd[0] = 0xff;
     initCmd[1] = 0xc1;
@@ -478,17 +481,11 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 TEST_F(MustangTest, startRequestsAmpPresetList)
 {
     auto recvData0 = createEmptyPacket();
+    assignNameData(recvData0, "abc");
     auto recvData1 = createEmptyPacket();
+    assignNameData(recvData1, "def");
     auto recvData2 = createEmptyPacket();
-    recvData0[16] = 'a';
-    recvData0[17] = 'b';
-    recvData0[18] = 'c';
-    recvData1[16] = 'd';
-    recvData1[17] = 'e';
-    recvData1[18] = 'f';
-    recvData2[16] = 'g';
-    recvData2[17] = 'h';
-    recvData2[18] = 'i';
+    assignNameData(recvData2, "ghi");
 
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
@@ -589,9 +586,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
     constexpr int recvSize{1};
     auto recvData = createEmptyPacket();
-    recvData[16] = 'a';
-    recvData[17] = 'b';
-    recvData[18] = 'c';
+    assignNameData(recvData, "abc");
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
@@ -1614,7 +1609,6 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 {
     std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
-
     }};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
