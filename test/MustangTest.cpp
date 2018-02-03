@@ -19,14 +19,16 @@
  */
 
 #include "mustang.h"
-#include "helper/Matcher.h"
 #include "LibUsbMocks.h"
 #include "common.h"
+#include "helper/Matcher.h"
+#include "helper/PacketHelper.h"
 #include <array>
 #include <gmock/gmock.h>
 
 using namespace plug;
 using namespace test::matcher;
+using namespace test;
 using namespace testing;
 using mock::UsbMock;
 
@@ -81,43 +83,6 @@ namespace
     constexpr std::uint8_t posFxKnob{3};
     constexpr std::uint8_t posSaveField{4};
     constexpr std::size_t posSlot{4};
-
-    namespace helper
-    {
-        using BinData = std::array<std::uint8_t, packetSize>;
-
-        BinData createEmptyPacket()
-        {
-            BinData data{{0}};
-            data.fill(0x00);
-            return data;
-        }
-
-        BinData createInitCmdPacket()
-        {
-            auto data = createEmptyPacket();
-            data[0] = 0xff;
-            data[1] = 0xc1;
-            return data;
-        }
-
-        BinData createInitializedPacket(std::initializer_list<std::uint8_t> init)
-        {
-            auto data = createEmptyPacket();
-            std::copy(init.begin(), init.end(), data.begin());
-            return data;
-        }
-
-        BinData createEmptyNamedPacket(const std::string_view name)
-        {
-            constexpr std::size_t nameFieldOffset{16};
-            auto data = createEmptyPacket();
-            std::copy(name.cbegin(), name.cend(), std::next(data.begin(), nameFieldOffset));
-            return data;
-        }
-
-    }
-
 }
 
 
@@ -503,7 +468,8 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
         .WillOnce(DoAll(SetArrayArgument<2>(recvData2.cbegin(), recvData2.cend()), SetArgPointee<4>(0), Return(0)));
 
     constexpr int recvSizeResponse{1};
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _)).WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(recvSizeResponse), Return(0)));
 
     constexpr std::size_t numberOfNames{100};
     char names[numberOfNames][nameLength];
@@ -1557,8 +1523,7 @@ TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
 TEST_F(MustangTest, saveEffectsSendsValues)
 {
     std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
-                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
-    }};
+                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     constexpr int postAmpOffset{4};
