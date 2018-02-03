@@ -495,7 +495,8 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
         .Times(numOfCalls * 4)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    EXPECT_THAT(m->start_amp(nullptr, nullptr, nullptr, nullptr), IsSuccessful());
+    const auto result0 = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result0, IsSuccessful());
 
     const auto result1 = m->start_amp(nullptr, nullptr, nullptr, nullptr);
     EXPECT_THAT(result1, IsSuccessful());
