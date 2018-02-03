@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <array>
 #include <algorithm>
+#include <array>
 
 namespace test::helper
 {
@@ -57,6 +57,4 @@ namespace test::helper
         std::copy(name.cbegin(), name.cend(), std::next(data.begin(), nameFieldOffset));
         return data;
     }
-
 }
-

@@ -39,4 +39,3 @@ namespace test::matcher
         return (arg != 0);
     }
 }
-
