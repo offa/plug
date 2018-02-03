@@ -767,13 +767,8 @@ TEST_F(MustangTest, setAmpSendsValues)
     data[46] = 0x0b;
     data[50] = 0x0b;
     data[54] = 0x7c;
-    std::array<std::uint8_t, packetSize> cmdExecute{{0}};
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    std::array<std::uint8_t, packetSize> data2{{0}};
-    data2[0] = 0x1c;
-    data2[1] = 0x03;
-    data2[2] = 0x0d;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
     data2[usbGainPos] = settings.usb_gain;
