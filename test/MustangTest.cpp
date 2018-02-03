@@ -225,6 +225,7 @@ TEST_F(MustangTest, startDeterminesAmpType)
 
 TEST_F(MustangTest, startFailsIfNoDeviceFound)
 {
+    InSequence s;
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillRepeatedly(Return(nullptr));
     EXPECT_CALL(*usbmock, exit(nullptr));
