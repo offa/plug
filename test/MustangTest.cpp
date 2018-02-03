@@ -101,6 +101,13 @@ namespace
             return data;
         }
 
+        BinData createInitializedPacket(std::initializer_list<std::uint8_t> init)
+        {
+            auto data = createEmptyPacket();
+            std::copy(init.begin(), init.end(), data.begin());
+            return data;
+        }
+
     }
 
 }
@@ -182,11 +189,8 @@ TEST_F(MustangTest, startInitializesUsb)
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
     constexpr int recvSize{0};
-    auto initCmd1 = helper::createEmptyPacket();
-    initCmd1[1] = 0xc3;
-    auto initCmd2 = helper::createEmptyPacket();
-    initCmd2[0] = 0x1a;
-    initCmd2[1] = 0x03;
+    auto initCmd1 = helper::createInitializedPacket({0x00, 0xc3});
+    auto initCmd2 = helper::createInitializedPacket({0x1a, 0x03});
 
     // Init Step 1
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd1), packetSize, _, _))
@@ -556,10 +560,7 @@ TEST_F(MustangTest, stopAmpTwiceDoesNothing)
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 {
     constexpr int recvSize{1};
-    auto sendCmd = helper::createEmptyPacket();
-    sendCmd[0] = 0x1c;
-    sendCmd[1] = 0x01;
-    sendCmd[2] = 0x01;
+    auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x01});
     sendCmd[posSlot] = slot;
     sendCmd[6] = 0x01;
 
@@ -854,13 +855,8 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
     data[46] = 0x0c;
     data[50] = 0x0c;
     data[54] = 0x00;
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    auto data2 = helper::createEmptyPacket();
-    data2[0] = 0x1c;
-    data2[1] = 0x03;
-    data2[2] = 0x0d;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
     data2[usbGainPos] = settings.usb_gain;
@@ -941,13 +937,8 @@ TEST_F(MustangTest, setAmpHandlesNoiseGate)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    auto data2 = helper::createEmptyPacket();
-    data2[0] = 0x1c;
-    data2[1] = 0x03;
-    data2[2] = 0x0d;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
     data2[usbGainPos] = settings.usb_gain;
@@ -1029,13 +1020,8 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    auto data2 = helper::createEmptyPacket();
-    data2[0] = 0x1c;
-    data2[1] = 0x03;
-    data2[2] = 0x0d;
+    auto cmdExecute = helper::createInitializedPacket({0x01c, 0x03});
+    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
     data2[usbGainPos] = settings.usb_gain;
@@ -1117,13 +1103,8 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    auto data2 = helper::createEmptyPacket();
-    data2[0] = 0x1c;
-    data2[1] = 0x03;
-    data2[2] = 0x0d;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
     data2[usbGainPos] = settings.usb_gain;
@@ -1203,13 +1184,8 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     data[46] = 0x07;
     data[50] = 0x07;
     data[54] = 0x5e;
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    auto data2 = helper::createEmptyPacket();
-    data2[0] = 0x1c;
-    data2[1] = 0x03;
-    data2[2] = 0x0d;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
     data2[usbGainPos] = settings.usb_gain;
@@ -1285,9 +1261,7 @@ TEST_F(MustangTest, setEffectSendsValue)
     settings.knob6 = 3;
     settings.put_post_amp = false;
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1349,9 +1323,7 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
     settings.fx_slot = 2;
     settings.effect_num = value(effects::EMPTY);
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1395,9 +1367,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     settings.knob6 = 6;
     settings.put_post_amp = true;
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1467,9 +1437,7 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     settings.knob6 = 7;
     settings.put_post_amp = false;
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1542,9 +1510,7 @@ TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
     settings.knob6 = 3;
     settings.put_post_amp = false;
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1660,10 +1626,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     dataEffect1[19] = 0x01;
     dataEffect1[20] = 0x01;
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    cmdExecute[2] = 0x00;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
     cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
@@ -1744,10 +1707,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     dataEffect0[19] = 0x02;
     dataEffect0[20] = 0x01;
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    cmdExecute[2] = 0x00;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
     cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
@@ -1831,10 +1791,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
     dataEffect0[19] = 0x01;
     dataEffect0[20] = 0x01;
 
-    auto cmdExecute = helper::createEmptyPacket();
-    cmdExecute[0] = 0x1c;
-    cmdExecute[1] = 0x03;
-    cmdExecute[2] = 0x00;
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
     cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
@@ -1990,10 +1947,7 @@ TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
 
 TEST_F(MustangTest, saveOnAmp)
 {
-    auto sendCmd = helper::createEmptyPacket();
-    sendCmd[0] = 0x1c;
-    sendCmd[1] = 0x01;
-    sendCmd[2] = 0x03;
+    auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x03});
     sendCmd[posSlot] = slot;
     sendCmd[6] = 0x01;
     sendCmd[7] = 0x01;
@@ -2010,10 +1964,7 @@ TEST_F(MustangTest, saveOnAmp)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    auto memBank = helper::createEmptyPacket();
-    memBank[0] = 0x1c;
-    memBank[1] = 0x01;
-    memBank[2] = 0x01;
+    auto memBank = helper::createInitializedPacket({0x1c, 0x01, 0x01});
     memBank[posSlot] = slot;
     memBank[6] = 0x01;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
