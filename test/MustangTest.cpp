@@ -483,6 +483,26 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     ignoreClose();
 }
 
+TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+
+    constexpr std::size_t numOfCalls{2};
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, _, _, _, _, _))
+        .Times(numOfCalls * 4)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
+
+    EXPECT_THAT(m->start_amp(nullptr, nullptr, nullptr, nullptr), IsSuccessful());
+
+    const auto result1 = m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    EXPECT_THAT(result1, IsSuccessful());
+
+    ignoreClose();
+}
+
 TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
 {
     m->stop_amp();
