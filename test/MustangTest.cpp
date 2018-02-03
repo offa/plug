@@ -108,6 +108,14 @@ namespace
             return data;
         }
 
+        BinData createEmptyNamedPacket(const std::string_view name)
+        {
+            constexpr std::size_t nameFieldOffset{16};
+            auto data = createEmptyPacket();
+            std::copy(name.cbegin(), name.cend(), std::next(data.begin(), nameFieldOffset));
+            return data;
+        }
+
     }
 
 }
@@ -164,11 +172,6 @@ protected:
         return data;
     }
 
-    void assignNameData(std::array<std::uint8_t, packetSize>& data, const std::string_view name)
-    {
-        constexpr std::size_t nameFieldOffset{16};
-        std::copy(name.cbegin(), name.cend(), std::next(data.begin(), nameFieldOffset));
-    }
 
     std::unique_ptr<Mustang> m;
     mock::UsbMock* usbmock;
@@ -296,8 +299,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
-    auto recvData = helper::createEmptyPacket();
-    assignNameData(recvData, "abc");
+    auto recvData = helper::createEmptyNamedPacket("abc");
     constexpr int recvSize{0};
     constexpr int recvSizeResponse{1};
 
@@ -341,7 +343,6 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
     auto recvData = helper::createEmptyPacket();
-    recvData.fill(0x00);
     recvData[ampPos] = 0x61;
     recvData[volumePos] = 8;
     recvData[gainPos] = 4;
@@ -478,12 +479,9 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 TEST_F(MustangTest, startRequestsAmpPresetList)
 {
-    auto recvData0 = helper::createEmptyPacket();
-    assignNameData(recvData0, "abc");
-    auto recvData1 = helper::createEmptyPacket();
-    assignNameData(recvData1, "def");
-    auto recvData2 = helper::createEmptyPacket();
-    assignNameData(recvData2, "ghi");
+    auto recvData0 = helper::createEmptyNamedPacket("abc");
+    auto recvData1 = helper::createEmptyNamedPacket("def");
+    auto recvData2 = helper::createEmptyNamedPacket("ghi");
 
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
@@ -577,8 +575,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
     constexpr int recvSize{1};
-    auto recvData = helper::createEmptyPacket();
-    assignNameData(recvData, "abc");
+    auto recvData = helper::createEmptyNamedPacket("abc");
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
