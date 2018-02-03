@@ -19,36 +19,22 @@
  */
 
 #include "mustang.h"
+#include "helper/Matcher.h"
 #include "LibUsbMocks.h"
 #include "common.h"
 #include <array>
 #include <gmock/gmock.h>
 
 using namespace plug;
+using namespace test::matcher;
 using namespace testing;
 using mock::UsbMock;
 
 
 namespace
 {
-    MATCHER_P(BufferIs, expected, "")
-    {
-        return std::equal(expected.cbegin(), expected.cend(), arg);
-    }
-
-    MATCHER(IsSuccessful, "Successful (0)")
-    {
-        return (arg == 0);
-    }
-
-    MATCHER(IsFailure, "Failure (!= 0)")
-    {
-        return (arg != 0);
-    }
-
     constexpr std::size_t packetSize{64};
     constexpr std::size_t nameLength{32};
-
 
     // Effects
     constexpr std::size_t posEffect{16};
