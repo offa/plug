@@ -206,6 +206,7 @@ TEST_F(MustangTest, startReturnsErrorOnInitFailure)
 
 TEST_F(MustangTest, startDeterminesAmpType)
 {
+    InSequence s;
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II)).WillOnce(Return(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V)).WillOnce(Return(nullptr));
