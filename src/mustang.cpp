@@ -195,14 +195,12 @@ namespace plug
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
         // clear effect on previous DSP before setting a new one
-        int k = 0;
         for (int i = 0; i < 4; i++)
         {
             if (prev_array[i][FXSLOT] == value.fx_slot || prev_array[i][FXSLOT] == (value.fx_slot + 4))
             {
                 memcpy(array, prev_array[i], LENGTH);
                 prev_array[i][FXSLOT] = 0xff;
-                k++;
                 break;
             }
         }
@@ -1250,7 +1248,7 @@ namespace plug
 
             if (feof(file) != 0) // if reached end of the file
             {
-                break; // exit loop
+                break;           // exit loop
             }
         }
         fclose(file);
