@@ -60,8 +60,11 @@ namespace plug
         {
             // initialize libusb
             int ret = libusb_init(nullptr);
+
             if (ret != 0)
+            {
                 return ret;
+            }
 
             // get handle for the device
             if ((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, SMALL_AMPS_USB_PID)) == nullptr)
@@ -126,8 +129,12 @@ namespace plug
             int max_to_receive;
             i > 143 ? max_to_receive = 200 : max_to_receive = 48;
             if (list != nullptr)
+            {
                 for (i = 0, j = 0; i < max_to_receive; i += 2, j++)
+                {
                     memcpy(list[j], recieved_data[i] + 16, 32);
+                }
+            }
 
             if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
             {
@@ -151,7 +158,9 @@ namespace plug
             // release claimed interface
             int ret = libusb_release_interface(amp_hand, 0);
             if ((ret != 0) && (ret != LIBUSB_ERROR_NO_DEVICE))
+            {
                 goto clean_libusb;
+            }
 
             if (ret != LIBUSB_ERROR_NO_DEVICE)
             {
@@ -730,11 +739,15 @@ namespace plug
         {
             libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
             if (i < 7)
+            {
                 memcpy(data[i], array, LENGTH);
+            }
         }
 
         if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
+        {
             decode_data(data, name, amp_set, effects_set);
+        }
 
         return ret;
     }
@@ -746,7 +759,9 @@ namespace plug
             // NAME
             memset(name, 0x00, 32);
             for (int i = 0, j = 16; data[0][j] != 0x00; i++, j++)
+            {
                 name[i] = data[0][j];
+            }
         }
 
 
@@ -819,10 +834,13 @@ namespace plug
                 effects_set[j].knob5 = data[i][KNOB5];
                 effects_set[j].knob6 = data[i][KNOB6];
                 if (data[i][FXSLOT] > 0x03)
+                {
                     effects_set[j].put_post_amp = true;
+                }
                 else
+                {
                     effects_set[j].put_post_amp = false;
-
+                }
 
                 effects_set[j].effect_num = value(lookupEffectById(data[i][EFFECT]));
             }
@@ -978,7 +996,9 @@ namespace plug
                     array[EFFECT] = 0x22;
                     array[19] = 0x01;
                     if (array[KNOB4] > 0x01)
+                    {
                         array[KNOB4] = 0x01;
+                    }
                     break;
 
                 case effects::STEP_FILTER:
@@ -994,7 +1014,9 @@ namespace plug
                     array[19] = 0x01;
                     array[20] = 0x01;
                     if (array[KNOB5] > 0x01)
+                    {
                         array[KNOB5] = 0x01;
+                    }
                     break;
 
                 case effects::PITCH_SHIFTER:
@@ -1143,7 +1165,9 @@ namespace plug
             // initialize libusb
             ret = libusb_init(nullptr);
             if (ret != 0)
+            {
                 return ret;
+            }
 
             // get handle for the device
             amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_UPDATE_VID, SMALL_AMPS_USB_UPDATE_PID);
@@ -1225,7 +1249,9 @@ namespace plug
             usleep(10000);
 
             if (feof(file) != 0) // if reached end of the file
-                break;           // exit loop
+            {
+                break; // exit loop
+            }
         }
         fclose(file);
 
