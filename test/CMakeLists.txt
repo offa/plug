@@ -13,6 +13,7 @@ add_subdirectory(mocks)
 
 
 add_executable(MustangTest MustangTest.cpp
+                    UsbCommTest.cpp
                     )
 add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest PRIVATE

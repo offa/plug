@@ -15,7 +15,7 @@ add_executable(plug main.cpp
                     settings.cpp
                     )
 
-add_library(plug-mustang mustang.cpp)
+add_library(plug-mustang mustang.cpp UsbComm.cpp)
 
 target_link_libraries(plug
                         PRIVATE
