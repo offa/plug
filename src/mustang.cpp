@@ -1248,7 +1248,7 @@ namespace plug
 
             if (feof(file) != 0) // if reached end of the file
             {
-                break;           // exit loop
+                break; // exit loop
             }
         }
         fclose(file);
