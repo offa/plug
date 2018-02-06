@@ -23,9 +23,9 @@
 
 namespace plug
 {
-    void UsbComm::open()
+    void UsbComm::open(std::uint16_t vid, std::uint16_t pid)
     {
-        handle = libusb_open_device_with_vid_pid(nullptr, 0, 0);
+        handle = libusb_open_device_with_vid_pid(nullptr, vid, pid);
     }
 
     void UsbComm::close()
@@ -39,7 +39,6 @@ namespace plug
 
         libusb_close(handle);
         libusb_exit(nullptr);
-
     }
 
 }

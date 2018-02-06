@@ -52,7 +52,7 @@ protected:
 TEST_F(UsbCommTest, closeClosesConnection)
 {
     expectOpen();
-    comm->open();
+    comm->open(0, 0);
 
     InSequence s;
     EXPECT_CALL(*usbmock, release_interface(&handle, 0));
@@ -66,7 +66,7 @@ TEST_F(UsbCommTest, closeClosesConnection)
 TEST_F(UsbCommTest, closeDoesNotReattachDriverIfNoDevice)
 {
     expectOpen();
-    comm->open();
+    comm->open(0, 0);
 
     InSequence s;
     EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_ERROR_NO_DEVICE));

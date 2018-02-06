@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 struct libusb_device_handle;
 
 namespace plug
@@ -28,8 +30,9 @@ namespace plug
     {
     public:
 
-        void open();
+        void open(std::uint16_t vid, std::uint16_t pid);
         void close();
+
 
     private:
 
