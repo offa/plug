@@ -25,7 +25,26 @@ namespace plug
 {
     void UsbComm::open(std::uint16_t vid, std::uint16_t pid)
     {
+        libusb_init(nullptr);
         handle = libusb_open_device_with_vid_pid(nullptr, vid, pid);
+
+        if( handle == nullptr )
+        {
+            throw UsbException{"Failed to open usb device"};
+        }
+
+        if( libusb_kernel_driver_active(handle, 0) != LIBUSB_SUCCESS )
+        {
+            if ( libusb_detach_kernel_driver(handle, 0) != LIBUSB_SUCCESS )
+            {
+                throw UsbException{"Detaching kernel driver failed"};
+            }
+        }
+
+        if( libusb_claim_interface(handle, 0) != LIBUSB_SUCCESS )
+        {
+            throw UsbException{"Claiming interface failed"};
+        }
     }
 
     void UsbComm::close()

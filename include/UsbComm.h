@@ -21,11 +21,21 @@
 #pragma once
 
 #include <cstdint>
+#include <stdexcept>
 
 struct libusb_device_handle;
 
 namespace plug
 {
+    class UsbException : public std::runtime_error
+    {
+    public:
+        explicit UsbException(const std::string& msg) : std::runtime_error(msg)
+        {
+        }
+    };
+
+
     class UsbComm
     {
     public:
