@@ -23,6 +23,17 @@
 
 namespace plug
 {
+    namespace
+    {
+        void checked(int rtnValue, const std::string& msg)
+        {
+            if( rtnValue != LIBUSB_SUCCESS )
+            {
+                throw UsbException{msg};
+            }
+        }
+    }
+
     void UsbComm::open(std::uint16_t vid, std::uint16_t pid)
     {
         libusb_init(nullptr);
@@ -35,16 +46,10 @@ namespace plug
 
         if( libusb_kernel_driver_active(handle, 0) != LIBUSB_SUCCESS )
         {
-            if ( libusb_detach_kernel_driver(handle, 0) != LIBUSB_SUCCESS )
-            {
-                throw UsbException{"Detaching kernel driver failed"};
-            }
+            checked(libusb_detach_kernel_driver(handle, 0), "Detaching kernel driver failed");
         }
 
-        if( libusb_claim_interface(handle, 0) != LIBUSB_SUCCESS )
-        {
-            throw UsbException{"Claiming interface failed"};
-        }
+        checked(libusb_claim_interface(handle, 0), "Claiming interface failed");
     }
 
     void UsbComm::close()
