@@ -31,13 +31,11 @@ namespace plug
     class UsbComm
     {
     public:
-
         void open(std::uint16_t vid, std::uint16_t pid);
         void close();
 
 
     private:
-
         libusb_device_handle* handle;
     };
 }

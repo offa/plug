@@ -27,7 +27,7 @@ namespace plug
     {
         void checked(int rtnValue, const std::string& msg)
         {
-            if( rtnValue != LIBUSB_SUCCESS )
+            if (rtnValue != LIBUSB_SUCCESS)
             {
                 throw UsbException{msg};
             }
@@ -39,12 +39,12 @@ namespace plug
         libusb_init(nullptr);
         handle = libusb_open_device_with_vid_pid(nullptr, vid, pid);
 
-        if( handle == nullptr )
+        if (handle == nullptr)
         {
             throw UsbException{"Failed to open usb device"};
         }
 
-        if( libusb_kernel_driver_active(handle, 0) != LIBUSB_SUCCESS )
+        if (libusb_kernel_driver_active(handle, 0) != LIBUSB_SUCCESS)
         {
             checked(libusb_detach_kernel_driver(handle, 0), "Detaching kernel driver failed");
         }
@@ -64,5 +64,4 @@ namespace plug
         libusb_close(handle);
         libusb_exit(nullptr);
     }
-
 }
