@@ -44,12 +44,7 @@ namespace plug
             throw UsbException{"Failed to open usb device"};
         }
 
-        if (libusb_kernel_driver_active(handle, 0) != LIBUSB_SUCCESS)
-        {
-            checked(libusb_detach_kernel_driver(handle, 0), "Detaching kernel driver failed");
-        }
-
-        checked(libusb_claim_interface(handle, 0), "Claiming interface failed");
+        initInterface();
     }
 
     void UsbComm::close()
@@ -63,5 +58,15 @@ namespace plug
 
         libusb_close(handle);
         libusb_exit(nullptr);
+    }
+
+    void UsbComm::initInterface()
+    {
+        if (libusb_kernel_driver_active(handle, 0) != LIBUSB_SUCCESS)
+        {
+            checked(libusb_detach_kernel_driver(handle, 0), "Detaching kernel driver failed");
+        }
+
+        checked(libusb_claim_interface(handle, 0), "Claiming interface failed");
     }
 }

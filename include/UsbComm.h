@@ -36,6 +36,9 @@ namespace plug
 
 
     private:
+        void initInterface();
+
+
         libusb_device_handle* handle;
     };
 }

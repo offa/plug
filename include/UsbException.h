@@ -20,18 +20,18 @@
 
 #pragma once
 
-#include <string>
 #include <stdexcept>
+#include <string>
 
-namespace plug {
+namespace plug
+{
 
     class UsbException : public std::runtime_error
     {
     public:
-        explicit UsbException(const std::string& msg) : std::runtime_error(msg)
+        explicit UsbException(const std::string& msg)
+            : std::runtime_error(msg)
         {
         }
-
     };
-
 }
