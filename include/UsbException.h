@@ -20,24 +20,17 @@
 
 #pragma once
 
-#include "UsbException.h"
-#include <cstdint>
+#include <stdexcept>
 
-struct libusb_device_handle;
+namespace plug {
 
-namespace plug
-{
-
-    class UsbComm
+    class UsbException : public std::runtime_error
     {
     public:
+        explicit UsbException(const std::string& msg) : std::runtime_error(msg)
+        {
+        }
 
-        void open(std::uint16_t vid, std::uint16_t pid);
-        void close();
-
-
-    private:
-
-        libusb_device_handle* handle;
     };
+
 }
