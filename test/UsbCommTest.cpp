@@ -171,4 +171,3 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
     const auto buffer = comm->interruptReceive(endpoint, readSize);
     EXPECT_THAT(buffer, ContainerEq(data));
 }
-
