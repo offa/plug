@@ -21,19 +21,22 @@
 #pragma once
 
 #include "UsbException.h"
+#include <vector>
 #include <cstdint>
 
 struct libusb_device_handle;
 
 namespace plug
 {
-
     class UsbComm
     {
     public:
         void open(std::uint16_t vid, std::uint16_t pid);
         void close();
 
+
+        void interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data);
+        std::vector<std::uint8_t> interruptReceive(std::uint8_t endpoint, std::size_t recvSize);
 
     private:
         void initInterface();

@@ -20,11 +20,13 @@
 
 #include "UsbComm.h"
 #include "LibUsbMocks.h"
+#include "helper/Matcher.h"
 #include <gmock/gmock.h>
 
 using plug::UsbComm;
 using plug::UsbException;
 using namespace testing;
+using namespace test::matcher;
 
 class UsbCommTest : public testing::Test
 {
@@ -54,6 +56,7 @@ protected:
     static constexpr std::uint16_t vid{7};
     static constexpr std::uint16_t pid{9};
     static constexpr int failed{17};
+    static constexpr std::uint16_t timeout{500};
 };
 
 TEST_F(UsbCommTest, openOpensConnection)
@@ -136,3 +139,36 @@ TEST_F(UsbCommTest, closeDoesNotReattachDriverIfNoDevice)
 
     comm->close();
 }
+
+TEST_F(UsbCommTest, interruptWriteTransfersData)
+{
+    expectOpen();
+    comm->open(0, 0);
+
+    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    constexpr std::uint8_t endpoint{0x81};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+
+    comm->interruptWrite(endpoint, data);
+}
+
+TEST_F(UsbCommTest, interruptReadReceivesData)
+{
+    expectOpen();
+    comm->open(0, 0);
+
+    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    const std::size_t readSize = data.size();
+    constexpr std::uint8_t endpoint{0x01};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(0), Return(0)));
+
+    const auto buffer = comm->interruptReceive(endpoint, readSize);
+    EXPECT_THAT(buffer, ContainerEq(data));
+}
+
