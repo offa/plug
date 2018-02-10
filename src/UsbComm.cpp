@@ -62,17 +62,15 @@ namespace plug
 
     void UsbComm::interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data)
     {
-        constexpr std::uint32_t timeout{500};
         int actualTransfered{0};
-        libusb_interrupt_transfer(handle, endpoint, data.data(), data.size(), &actualTransfered, timeout);
+        libusb_interrupt_transfer(handle, endpoint, data.data(), data.size(), &actualTransfered, timeout.count());
     }
 
     std::vector<std::uint8_t> UsbComm::interruptReceive(std::uint8_t endpoint, std::size_t recvSize)
     {
-        constexpr std::uint32_t timeout{500};
         int actualTransfered{0};
         std::vector<std::uint8_t> buffer(recvSize);
-        libusb_interrupt_transfer(handle, endpoint, buffer.data(), buffer.size(), &actualTransfered, timeout);
+        libusb_interrupt_transfer(handle, endpoint, buffer.data(), buffer.size(), &actualTransfered, timeout.count());
 
         return buffer;
     }

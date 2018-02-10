@@ -22,6 +22,7 @@
 
 #include "UsbException.h"
 #include <vector>
+#include <chrono>
 #include <cstdint>
 
 struct libusb_device_handle;
@@ -43,5 +44,6 @@ namespace plug
 
 
         libusb_device_handle* handle;
+        static constexpr std::chrono::milliseconds timeout{500};
     };
 }
