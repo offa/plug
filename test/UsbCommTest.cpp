@@ -42,12 +42,13 @@ protected:
         mock::clearUsbMock();
     }
 
-    void expectOpen()
+    void setupHandle()
     {
         EXPECT_CALL(*usbmock, init(_));
         EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
         EXPECT_CALL(*usbmock, kernel_driver_active(_, _));
         EXPECT_CALL(*usbmock, claim_interface(_, _));
+        comm->open(0, 0);
     }
 
     std::unique_ptr<UsbComm> comm;
@@ -115,8 +116,7 @@ TEST_F(UsbCommTest, openThrowsIfClaimingInterfaceFailed)
 
 TEST_F(UsbCommTest, closeClosesConnection)
 {
-    expectOpen();
-    comm->open(0, 0);
+    setupHandle();
 
     InSequence s;
     EXPECT_CALL(*usbmock, release_interface(&handle, 0));
@@ -129,8 +129,7 @@ TEST_F(UsbCommTest, closeClosesConnection)
 
 TEST_F(UsbCommTest, closeDoesNotReattachDriverIfNoDevice)
 {
-    expectOpen();
-    comm->open(0, 0);
+    setupHandle();
 
     InSequence s;
     EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(LIBUSB_ERROR_NO_DEVICE));
@@ -142,8 +141,7 @@ TEST_F(UsbCommTest, closeDoesNotReattachDriverIfNoDevice)
 
 TEST_F(UsbCommTest, interruptWriteTransfersData)
 {
-    expectOpen();
-    comm->open(0, 0);
+    setupHandle();
 
     const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
     constexpr std::uint8_t endpoint{0x81};
@@ -157,8 +155,7 @@ TEST_F(UsbCommTest, interruptWriteTransfersData)
 
 TEST_F(UsbCommTest, interruptReadReceivesData)
 {
-    expectOpen();
-    comm->open(0, 0);
+    setupHandle();
 
     const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
     const std::size_t readSize = data.size();
@@ -174,13 +171,12 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
 
 TEST_F(UsbCommTest, interruptReadResizesBuffer)
 {
-    expectOpen();
-    comm->open(0, 0);
+    setupHandle();
 
     const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
     const std::size_t readSize = data.size();
     constexpr std::size_t actualSize = 4;
-    constexpr std::uint8_t endpoint{0x01};
+    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
@@ -189,4 +185,3 @@ TEST_F(UsbCommTest, interruptReadResizesBuffer)
     const auto buffer = comm->interruptReceive(endpoint, readSize);
     EXPECT_THAT(buffer, ElementsAre(0, 1, 2, 3));
 }
-
