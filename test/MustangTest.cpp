@@ -19,8 +19,8 @@
  */
 
 #include "mustang.h"
-#include "LibUsbMocks.h"
 #include "common.h"
+#include "mocks/LibUsbMocks.h"
 #include "helper/Matcher.h"
 #include "helper/PacketHelper.h"
 #include <array>

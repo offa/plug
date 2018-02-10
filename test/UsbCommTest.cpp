@@ -19,7 +19,7 @@
  */
 
 #include "UsbComm.h"
-#include "LibUsbMocks.h"
+#include "mocks/LibUsbMocks.h"
 #include "helper/Matcher.h"
 #include <gmock/gmock.h>
 
