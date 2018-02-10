@@ -71,6 +71,7 @@ namespace plug
         int actualTransfered{0};
         std::vector<std::uint8_t> buffer(recvSize);
         libusb_interrupt_transfer(handle, endpoint, buffer.data(), buffer.size(), &actualTransfered, timeout.count());
+        buffer.resize(actualTransfered);
 
         return buffer;
     }

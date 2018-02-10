@@ -166,8 +166,27 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(0), Return(0)));
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(0)));
 
     const auto buffer = comm->interruptReceive(endpoint, readSize);
     EXPECT_THAT(buffer, ContainerEq(data));
 }
+
+TEST_F(UsbCommTest, interruptReadResizesBuffer)
+{
+    expectOpen();
+    comm->open(0, 0);
+
+    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    const std::size_t readSize = data.size();
+    constexpr std::size_t actualSize = 4;
+    constexpr std::uint8_t endpoint{0x01};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), std::next(data.cbegin(), actualSize)), SetArgPointee<4>(actualSize), Return(0)));
+
+    const auto buffer = comm->interruptReceive(endpoint, readSize);
+    EXPECT_THAT(buffer, ElementsAre(0, 1, 2, 3));
+}
+
