@@ -19,12 +19,15 @@
  */
 
 #include "UsbComm.h"
+#include <chrono>
 #include <libusb-1.0/libusb.h>
 
 namespace plug
 {
     namespace
     {
+        constexpr std::chrono::milliseconds timeout{500};
+
         void checked(int rtnValue, const std::string& msg)
         {
             if (rtnValue != LIBUSB_SUCCESS)
