@@ -391,10 +391,10 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
-    auto recvData0 = createEffectData(0x04, 0x19, {{10, 20, 30, 40, 50, 60}});
-    auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
-    auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
-    auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
+    const auto recvData0 = createEffectData(0x04, 0x19, {{10, 20, 30, 40, 50, 60}});
+    const auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
+    const auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
+    const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
     constexpr int recvSize{0};
     constexpr int recvSizeResponse{1};
 
@@ -444,9 +444,9 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 TEST_F(MustangTest, startRequestsAmpPresetList)
 {
-    auto recvData0 = helper::createEmptyNamedPacket("abc");
-    auto recvData1 = helper::createEmptyNamedPacket("def");
-    auto recvData2 = helper::createEmptyNamedPacket("ghi");
+    const auto recvData0 = helper::createEmptyNamedPacket("abc");
+    const auto recvData1 = helper::createEmptyNamedPacket("def");
+    const auto recvData2 = helper::createEmptyNamedPacket("ghi");
 
     EXPECT_CALL(*usbmock, init(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
@@ -636,10 +636,10 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 {
     constexpr int recvSize{6};
-    auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
-    auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
-    auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
-    auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
+    const auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
+    const auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
+    const auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
+    const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
@@ -754,7 +754,7 @@ TEST_F(MustangTest, setAmpSendsValues)
     data[46] = 0x0b;
     data[50] = 0x0b;
     data[54] = 0x7c;
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -834,7 +834,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
     data[46] = 0x0c;
     data[50] = 0x0c;
     data[54] = 0x00;
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -916,7 +916,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGate)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -999,7 +999,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    auto cmdExecute = helper::createInitializedPacket({0x01c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x01c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -1082,7 +1082,7 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -1163,7 +1163,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     data[46] = 0x07;
     data[50] = 0x07;
     data[54] = 0x5e;
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -1240,7 +1240,7 @@ TEST_F(MustangTest, setEffectSendsValue)
     settings.knob6 = 3;
     settings.put_post_amp = false;
 
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1346,7 +1346,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     settings.knob6 = 6;
     settings.put_post_amp = true;
 
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1416,7 +1416,7 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     settings.knob6 = 7;
     settings.put_post_amp = false;
 
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1489,7 +1489,7 @@ TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
     settings.knob6 = 3;
     settings.put_post_amp = false;
 
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
