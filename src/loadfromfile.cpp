@@ -39,11 +39,17 @@ namespace plug
             if (m_xml->isStartElement())
             {
                 if (m_xml->name().toString() == "Amplifier")
+                {
                     parseAmp();
+                }
                 else if (m_xml->name().toString() == "FX")
+                {
                     parseFX();
+                }
                 else if (m_xml->name().toString() == "FUSE")
+                {
                     parseFUSE();
+                }
                 else if (m_xml->name().toString() == "UsbGain")
                 {
                     m_amp_settings->usb_gain = m_xml->readElementText().toInt();
@@ -195,21 +201,33 @@ namespace plug
             if (m_xml->isStartElement())
             {
                 if (m_xml->name() == "Stompbox")
+                {
                     x = 0;
+                }
                 else if (m_xml->name() == "Modulation")
+                {
                     x = 1;
+                }
                 else if (m_xml->name() == "Delay")
+                {
                     x = 2;
+                }
                 else if (m_xml->name() == "Reverb")
+                {
                     x = 3;
+                }
                 else if (m_xml->name() == "Module")
                 {
-                    int position = m_xml->attributes().value("POS").toString().toInt();
+                    const int position = m_xml->attributes().value("POS").toString().toInt();
 
                     if (position > 3)
+                    {
                         m_fx_settings[x].put_post_amp = true;
+                    }
                     else
+                    {
                         m_fx_settings[x].put_post_amp = false;
+                    }
 
                     fx_slots[position] = x + 1;
 
@@ -403,7 +421,7 @@ namespace plug
             m_xml->readNext();
         }
 
-        for (int i = 0, j = 0; i < 8; i++)
+        for (int i = 0, j = 0; i < 8; ++i)
         {
             if (fx_slots[i] != 0)
             {
@@ -419,7 +437,9 @@ namespace plug
         while (!m_xml->isEndElement())
         {
             if (m_xml->name() == "Info")
+            {
                 m_name->operator=(m_xml->attributes().value("name").toString());
+            }
             m_xml->readNext();
         }
     }

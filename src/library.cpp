@@ -48,7 +48,7 @@ namespace plug
         ui->spinBox->setValue(font.pointSize());
         ui->fontComboBox->setCurrentFont(font);
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 100; ++i)
         {
             if (names[i][0] == 0x00)
             {
@@ -108,7 +108,7 @@ namespace plug
         }
         ui->listWidget_2->clear();
         *files = directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
-        for (int i = 0; i < files->size(); i++)
+        for (int i = 0; i < files->size(); ++i)
         {
             ui->listWidget_2->addItem((*files)[i].completeBaseName());
         }

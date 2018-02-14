@@ -51,25 +51,32 @@ namespace plug
 
         dynamic_cast<MainWindow*>(parent())->load_from_amp(ui->comboBox->currentIndex());
         dynamic_cast<MainWindow*>(parent())->set_index(ui->comboBox->currentIndex());
+
         if (!settings.value("Settings/keepWindowsOpen").toBool())
+        {
             this->close();
+        }
     }
 
     void LoadFromAmp::load_names(char names[][32])
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 100; ++i)
         {
             if (names[i][0] == 0x00)
+            {
                 break;
+            }
             ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
         }
     }
 
     void LoadFromAmp::delete_items()
     {
-        int j = ui->comboBox->count();
-        for (int i = 0; i < j; i++)
+        const int j = ui->comboBox->count();
+        for (int i = 0; i < j; ++i)
+        {
             ui->comboBox->removeItem(0);
+        }
     }
 
     void LoadFromAmp::change_name(int slot, QString* name)
