@@ -28,21 +28,19 @@ namespace plug
 
     Effect::Effect(QWidget* parent, int number)
         : QMainWindow(parent),
-          ui(std::make_unique<Ui::Effect>())
+          ui(std::make_unique<Ui::Effect>()),
+          fx_slot(number),
+          effect_num(ui->comboBox->currentIndex()),
+          knob1(0),
+          knob2(0),
+          knob3(0),
+          knob4(0),
+          knob5(0),
+          knob6(0),
+          put_post_amp(false),
+          changed(false)
     {
         ui->setupUi(this);
-
-        // initialize variables
-        effect_num = ui->comboBox->currentIndex();
-        fx_slot = number;
-        put_post_amp = false;
-        knob1 = 0;
-        knob2 = 0;
-        knob3 = 0;
-        knob4 = 0;
-        knob5 = 0;
-        knob6 = 0;
-        changed = false;
 
         // load window size
         QSettings settings;

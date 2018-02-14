@@ -50,9 +50,18 @@ namespace plug
 
     private:
         const std::unique_ptr<Ui::Effect> ui;
-        unsigned char fx_slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6;
-        bool put_post_amp, changed;
-        QString temp1, temp2;
+        unsigned char fx_slot;
+        unsigned char effect_num;
+        unsigned char knob1;
+        unsigned char knob2;
+        unsigned char knob3;
+        unsigned char knob4;
+        unsigned char knob5;
+        unsigned char knob6;
+        bool put_post_amp;
+        bool changed;
+        QString temp1;
+        QString temp2;
 
     public slots:
         // functions to set variables
