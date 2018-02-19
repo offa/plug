@@ -21,7 +21,10 @@
 #include "IdLookup.h"
 #include <gmock/gmock.h>
 
-using namespace plug;
+using plug::amps;
+using plug::effects;
+using plug::lookupEffectById;
+using plug::lookupAmpById;
 
 class IdLookupTest : public testing::Test
 {
@@ -49,7 +52,6 @@ TEST_F(IdLookupTest, lookupAmpByIdThrowsOnInvalidId)
 {
     EXPECT_THROW(lookupAmpById(0x00), std::invalid_argument);
 }
-
 
 TEST_F(IdLookupTest, lookupEffectById)
 {
