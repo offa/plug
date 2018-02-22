@@ -28,7 +28,7 @@ namespace plug
     Mustang::Mustang()
         : amp_hand(nullptr)
     {
-        // "apply efect" command
+        // "apply effect" command
         memset(execute, 0x00, LENGTH);
         execute[0] = 0x1c;
         execute[1] = 0x03;

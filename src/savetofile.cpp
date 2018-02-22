@@ -408,7 +408,8 @@ namespace plug
 
     void SaveToFile::writeFX(fx_pedal_settings settings)
     {
-        int model = 0, position;
+        int model = 0;
+        int position;
 
         switch (static_cast<effects>(settings.effect_num))
         {

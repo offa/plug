@@ -81,9 +81,13 @@ namespace plug
         else
         {
             if (ui->checkBox_2->isChecked())
-                number++;
+            {
+                ++number;
+            }
             if (ui->checkBox_3->isChecked())
-                number++;
+            {
+                ++number;
+            }
         }
 
         dynamic_cast<MainWindow*>(parent())->save_effects(ui->comboBox->currentIndex(), ui->lineEdit->text().toLatin1().data(), number,
