@@ -272,10 +272,12 @@ namespace plug
     // send settings to the amplifier
     void Amplifier::send_amp()
     {
-        struct amp_settings settings;
+        amp_settings settings;
 
         if (!changed)
+        {
             return;
+        }
         changed = false;
 
         settings.amp_num = amp_num;
