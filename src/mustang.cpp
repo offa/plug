@@ -142,7 +142,6 @@ namespace plug
         if (amp_hand != nullptr)
         {
             comm->close();
-            amp_hand = nullptr;
         }
 
         return 0;
