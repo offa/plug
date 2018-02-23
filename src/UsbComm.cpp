@@ -49,10 +49,10 @@ namespace plug
 
         std::find_if(pids.begin(), pids.end(), [this, vid](const auto& pid) {
             handle = libusb_open_device_with_vid_pid(nullptr, vid, pid);
-            return handle != nullptr;
+            return (handle != nullptr);
         });
 
-        if( handle == nullptr )
+        if (handle == nullptr)
         {
             throw UsbException{"Failed to open usb device"};
         }

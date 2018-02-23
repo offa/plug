@@ -23,8 +23,8 @@
 
 using plug::amps;
 using plug::effects;
-using plug::lookupEffectById;
 using plug::lookupAmpById;
+using plug::lookupEffectById;
 
 class IdLookupTest : public testing::Test
 {
