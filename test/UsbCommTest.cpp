@@ -211,7 +211,7 @@ TEST_F(UsbCommTest, interruptWriteTransfersData)
     EXPECT_THAT(n, Eq(data.size()));
 }
 
-TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransmit)
+TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransfer)
 {
     setupHandle();
 
@@ -243,7 +243,7 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
     EXPECT_THAT(buffer, ContainerEq(data));
 }
 
-TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialReceive)
+TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialTransfer)
 {
     setupHandle();
 
