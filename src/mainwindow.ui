@@ -369,6 +369,9 @@
    </property>
   </action>
   <action name="action_Update_firmware">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Update firmware</string>
    </property>
