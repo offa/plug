@@ -68,9 +68,7 @@ namespace plug
         unsigned char recieved_data[296][LENGTH];
         memset(recieved_data, 0x00, 296 * LENGTH);
 
-        auto& amp_hand = comm->getHandle();
-
-        if (amp_hand == nullptr)
+        if (comm->isOpen() == false)
         {
             const std::initializer_list<std::uint16_t> pids{
                 SMALL_AMPS_USB_PID,
@@ -138,9 +136,7 @@ namespace plug
 
     int Mustang::stop_amp()
     {
-        auto& amp_hand = comm->getHandle();
-
-        if (amp_hand != nullptr)
+        if (comm->isOpen() == true)
         {
             comm->close();
         }

@@ -39,6 +39,7 @@ namespace plug
         bool isOpen() const;
 
         // For compatibility only - remove if clients have integrated the new api.
+        [[deprecated]]
         auto& getHandle()
         {
             return handle;
