@@ -205,9 +205,26 @@ TEST_F(UsbCommTest, interruptWriteTransfersData)
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+        .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
 
-    comm->interruptWrite(endpoint, data);
+    const auto n = comm->interruptWrite(endpoint, data);
+    EXPECT_THAT(n, Eq(data.size()));
+}
+
+TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransmit)
+{
+    setupHandle();
+
+    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    const std::vector<std::uint8_t> partial(data.cbegin(), std::next(data.cbegin(), 4));
+    constexpr std::uint8_t endpoint{0x81};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+        .WillOnce(DoAll(SetArgPointee<4>(partial.size()), Return(0)));
+
+    const auto n = comm->interruptWrite(endpoint, data);
+    EXPECT_THAT(n, Eq(partial.size()));
 }
 
 TEST_F(UsbCommTest, interruptReadReceivesData)
@@ -226,7 +243,7 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
     EXPECT_THAT(buffer, ContainerEq(data));
 }
 
-TEST_F(UsbCommTest, interruptReadResizesBuffer)
+TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialReceive)
 {
     setupHandle();
 

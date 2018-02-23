@@ -73,10 +73,11 @@ namespace plug
         libusb_exit(nullptr);
     }
 
-    void UsbComm::interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data)
+    std::int32_t UsbComm::interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data)
     {
         int actualTransfered{0};
         libusb_interrupt_transfer(handle, endpoint, data.data(), data.size(), &actualTransfered, timeout.count());
+        return std::int32_t{actualTransfered};
     }
 
     std::vector<std::uint8_t> UsbComm::interruptReceive(std::uint8_t endpoint, std::size_t recvSize)
