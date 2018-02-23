@@ -118,8 +118,9 @@ TEST_F(UsbCommTest, openFirstOpensFirstConnectionAvailable)
 {
     InSequence s;
     EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, 18)).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, 17)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, _))
+        .Times(2)
+        .WillRepeatedly(Return(nullptr));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, pid)).WillOnce(Return(&handle));
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0));
