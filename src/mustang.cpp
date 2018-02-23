@@ -719,7 +719,6 @@ namespace plug
 
     int Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        int ret, recieved;
         unsigned char array[LENGTH], data[7][LENGTH];
 
         memset(array, 0x00, LENGTH);
@@ -729,14 +728,16 @@ namespace plug
         array[SAVE_SLOT] = slot;
         array[6] = 0x01;
 
-        auto& amp_hand = comm->getHandle();
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+        auto recieved = comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+
         for (int i = 0; recieved != 0; i++)
         {
-            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+            const auto recvData = comm->interruptReceive(endpointRecv, LENGTH);
+            recieved = recvData.size();
+
             if (i < 7)
             {
-                memcpy(data[i], array, LENGTH);
+                memcpy(data[i], recvData.data(), LENGTH);
             }
         }
 
@@ -745,7 +746,7 @@ namespace plug
             decode_data(data, name, amp_set, effects_set);
         }
 
-        return ret;
+        return 0;
     }
 
     int Mustang::decode_data(unsigned char data[7][LENGTH], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
