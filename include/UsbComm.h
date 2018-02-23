@@ -49,6 +49,6 @@ namespace plug
         void initInterface();
 
 
-        libusb_device_handle* handle;
+        libusb_device_handle* handle{nullptr};
     };
 }
