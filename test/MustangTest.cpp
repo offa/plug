@@ -1153,7 +1153,6 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 
 TEST_F(MustangTest, DISABLED_setAmpReturnsErrorOnFailure)
 {
-    // TODO: Necessary to test?
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
         .Times(6)
@@ -1437,7 +1436,6 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, DISABLED_setEffectReturnsErrorOnFailure)
 {
-    // TODO: Necessary to test?
     fx_pedal_settings settings;
     settings.fx_slot = 3;
     settings.effect_num = value(effects::OVERDRIVE);
@@ -1859,7 +1857,6 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, DISABLED_saveEffectsReturnsErrorOnFailure)
 {
-    // TODO: Necessary to test?
     std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
 
