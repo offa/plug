@@ -728,12 +728,12 @@ namespace plug
         array[SAVE_SLOT] = slot;
         array[6] = 0x01;
 
-        auto recieved = comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        auto n = comm->interruptWrite(endpointSend, adapt(array, LENGTH));
 
-        for (int i = 0; recieved != 0; i++)
+        for (int i = 0; n != 0; i++)
         {
             const auto recvData = comm->interruptReceive(endpointRecv, LENGTH);
-            recieved = recvData.size();
+            n = recvData.size();
 
             if (i < 7)
             {
