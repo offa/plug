@@ -30,7 +30,7 @@ namespace plug
         : QMainWindow(parent),
           ui(std::make_unique<Ui::Effect>()),
           fx_slot(number),
-          effect_num(ui->comboBox->currentIndex()),
+          effect_num(0),
           knob1(0),
           knob2(0),
           knob3(0),
@@ -41,6 +41,7 @@ namespace plug
           changed(false)
     {
         ui->setupUi(this);
+        effect_num = ui->comboBox->currentIndex();
 
         // load window size
         QSettings settings;
