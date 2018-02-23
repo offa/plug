@@ -40,15 +40,7 @@ namespace plug
 
     void UsbComm::open(std::uint16_t vid, std::uint16_t pid)
     {
-        libusb_init(nullptr);
-        handle = libusb_open_device_with_vid_pid(nullptr, vid, pid);
-
-        if (handle == nullptr)
-        {
-            throw UsbException{"Failed to open usb device"};
-        }
-
-        initInterface();
+        openFirst(vid, {pid});
     }
 
     void UsbComm::openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids)
