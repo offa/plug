@@ -27,8 +27,8 @@ namespace plug
 {
     namespace
     {
-        constexpr std::uint8_t endpointSend{0x01};
-        constexpr std::uint8_t endpointRecv{0x81};
+        [[maybe_unused]] constexpr std::uint8_t endpointSend{0x01};
+        [[maybe_unused]] constexpr std::uint8_t endpointRecv{0x81};
     }
 
     Mustang::Mustang()
@@ -163,28 +163,10 @@ namespace plug
     {
         auto& amp_hand = comm->getHandle();
 
-        if (amp_hand != nullptr)
+        if( amp_hand != nullptr )
         {
-            // release claimed interface
-            int ret = libusb_release_interface(amp_hand, 0);
-            if ((ret != 0) && (ret != LIBUSB_ERROR_NO_DEVICE))
-            {
-                goto clean_libusb;
-            }
-
-            if (ret != LIBUSB_ERROR_NO_DEVICE)
-            {
-                // re-attach kernel driver
-                ret = libusb_attach_kernel_driver(amp_hand, 0);
-            }
-
-        clean_libusb:
-            // close opened interface
-            libusb_close(amp_hand);
+            comm->close();
             amp_hand = nullptr;
-
-            // stop using libusb
-            libusb_exit(nullptr);
         }
 
         return 0;
