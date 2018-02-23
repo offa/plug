@@ -114,6 +114,62 @@ TEST_F(UsbCommTest, openThrowsIfClaimingInterfaceFailed)
     EXPECT_THROW(comm->open(vid, pid), UsbException);
 }
 
+TEST_F(UsbCommTest, openFirstOpensFirstConnectionAvailable)
+{
+    InSequence s;
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, 18)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, 17)).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, pid)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0));
+
+    comm->openFirst(vid, {18, 17, pid, 3});
+}
+
+TEST_F(UsbCommTest, openFirstThrowsIfOpenFails)
+{
+    InSequence s;
+    EXPECT_CALL(*usbmock, init(_));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(nullptr));
+
+    EXPECT_THROW(comm->openFirst(vid, {pid}), UsbException);
+}
+
+TEST_F(UsbCommTest, openFirstDetachesDriverIfNotActive)
+{
+    InSequence s;
+    EXPECT_CALL(*usbmock, init(_));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(failed));
+    EXPECT_CALL(*usbmock, detach_kernel_driver(&handle, 0));
+    EXPECT_CALL(*usbmock, claim_interface(_, _));
+
+    comm->openFirst(vid, {pid});
+}
+
+TEST_F(UsbCommTest, openFirstThrowsIfDetachingDriverFailed)
+{
+    InSequence s;
+    EXPECT_CALL(*usbmock, init(_));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(failed));
+    EXPECT_CALL(*usbmock, detach_kernel_driver(_, _)).WillOnce(Return(failed));
+
+    EXPECT_THROW(comm->openFirst(vid, {pid}), UsbException);
+}
+
+TEST_F(UsbCommTest, openFirstThrowsIfClaimingInterfaceFailed)
+{
+    InSequence s;
+    EXPECT_CALL(*usbmock, init(_));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(_, _));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(failed));
+
+    EXPECT_THROW(comm->openFirst(vid, {pid}), UsbException);
+}
+
 TEST_F(UsbCommTest, closeClosesConnection)
 {
     setupHandle();

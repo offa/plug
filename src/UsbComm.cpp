@@ -19,6 +19,7 @@
  */
 
 #include "UsbComm.h"
+#include <algorithm>
 #include <chrono>
 #include <libusb-1.0/libusb.h>
 
@@ -43,6 +44,23 @@ namespace plug
         handle = libusb_open_device_with_vid_pid(nullptr, vid, pid);
 
         if (handle == nullptr)
+        {
+            throw UsbException{"Failed to open usb device"};
+        }
+
+        initInterface();
+    }
+
+    void UsbComm::openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids)
+    {
+        libusb_init(nullptr);
+
+        std::find_if(pids.begin(), pids.end(), [this, vid](const auto& pid) {
+            handle = libusb_open_device_with_vid_pid(nullptr, vid, pid);
+            return handle != nullptr;
+        });
+
+        if( handle == nullptr )
         {
             throw UsbException{"Failed to open usb device"};
         }
