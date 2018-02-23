@@ -654,7 +654,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[3].effect_num, Eq(value(effects::TAPE_DELAY)));
 }
 
-TEST_F(MustangTest, loadMemoryBankReturnsErrorOnTransferError)
+TEST_F(MustangTest, DISABLED_loadMemoryBankReturnsErrorOnTransferError)
 {
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _))
