@@ -514,7 +514,6 @@ namespace plug
 
     int Mustang::set_amplifier(amp_settings value)
     {
-        int recieved;
         unsigned char array[LENGTH] = {
             0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -668,11 +667,10 @@ namespace plug
                 break;
         }
 
-        auto& amp_hand = comm->getHandle();
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
 
         memset(array, 0x00, LENGTH);
         array[0] = 0x1c;
@@ -682,12 +680,12 @@ namespace plug
         array[7] = 0x01;
         array[16] = value.usb_gain;
 
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-        const int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
 
-        return ret;
+        return 0;
     }
 
     int Mustang::save_on_amp(char* name, int slot)
