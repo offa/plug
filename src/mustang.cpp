@@ -212,8 +212,8 @@ namespace plug
         comm->interruptReceive(endpointRecv, LENGTH);
         comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
-        int ret{0};
 
+        constexpr int ret{0};
         const auto effectType = static_cast<effects>(value.effect_num);
 
         if (effectType == effects::EMPTY)
