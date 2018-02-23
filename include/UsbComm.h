@@ -36,6 +36,11 @@ namespace plug
         void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids);
         void close();
 
+        // For compatibility only - remove if clients have integrated the new api.
+        auto getHandle() const
+        {
+            return handle;
+        }
 
         void interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data);
         std::vector<std::uint8_t> interruptReceive(std::uint8_t endpoint, std::size_t recvSize);
