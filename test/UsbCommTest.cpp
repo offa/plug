@@ -189,9 +189,6 @@ TEST_F(UsbCommTest, closeClosesConnection)
 
 TEST_F(UsbCommTest, closeDoesNothingIfNotOpenYet)
 {
-    InSequence s;
-    EXPECT_CALL(*usbmock, exit(nullptr));
-
     comm->close();
     EXPECT_THAT(comm->isOpen(), Eq(false));
 }

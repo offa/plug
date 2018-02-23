@@ -136,10 +136,7 @@ namespace plug
 
     int Mustang::stop_amp()
     {
-        if (comm->isOpen() == true)
-        {
-            comm->close();
-        }
+        comm->close();
 
         return 0;
     }

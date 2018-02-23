@@ -72,9 +72,9 @@ namespace plug
             }
 
             libusb_close(handle);
+            libusb_exit(nullptr);
             handle = nullptr;
         }
-        libusb_exit(nullptr);
     }
 
     bool UsbComm::isOpen() const
