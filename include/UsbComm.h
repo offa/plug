@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "UsbException.h"
 #include <vector>
 #include <initializer_list>
 #include <cstdint>

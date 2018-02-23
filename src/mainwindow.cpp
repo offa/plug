@@ -20,6 +20,7 @@
  */
 
 #include "mainwindow.h"
+#include "UsbException.h"
 #include "ui_defaulteffects.h"
 #include "ui_mainwindow.h"
 
@@ -263,15 +264,14 @@ namespace plug
 
     void MainWindow::stop_amp()
     {
-        int x;
-
         save->delete_items();
         load->delete_items();
         quickpres->delete_items();
 
-        x = amp_ops->stop_amp();
-        if (x == 0) // if request succeded
+        try
         {
+            amp_ops->stop_amp();
+
             // deactivate buttons
             amp->enable_set_button(false);
             effect1->enable_set_button(false);
@@ -290,8 +290,10 @@ namespace plug
 
             connected = false;
         }
-        else // if request failed
-            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(x), 5000);
+        catch(UsbException& ex)
+        {
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+        }
     }
 
     // pass the message to the amp

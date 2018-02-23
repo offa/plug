@@ -134,11 +134,9 @@ namespace plug
         return 0;
     }
 
-    int Mustang::stop_amp()
+    void Mustang::stop_amp()
     {
         comm->close();
-
-        return 0;
     }
 
     int Mustang::set_effect(fx_pedal_settings value)
