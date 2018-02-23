@@ -74,6 +74,11 @@ namespace plug
         libusb_exit(nullptr);
     }
 
+    bool UsbComm::isOpen() const
+    {
+        return ( handle != nullptr );
+    }
+
     std::int32_t UsbComm::interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data)
     {
         int actualTransfered{0};

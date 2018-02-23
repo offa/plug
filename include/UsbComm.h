@@ -36,6 +36,8 @@ namespace plug
         void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids);
         void close();
 
+        bool isOpen() const;
+
         // For compatibility only - remove if clients have integrated the new api.
         auto& getHandle()
         {

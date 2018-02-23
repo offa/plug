@@ -69,6 +69,7 @@ TEST_F(UsbCommTest, openOpensConnection)
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0));
 
     comm->open(vid, pid);
+    EXPECT_THAT(comm->isOpen(), Eq(true));
 }
 
 TEST_F(UsbCommTest, openThrowsIfOpenFails)
@@ -126,6 +127,7 @@ TEST_F(UsbCommTest, openFirstOpensFirstConnectionAvailable)
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0));
 
     comm->openFirst(vid, {18, 17, pid, 3});
+    EXPECT_THAT(comm->isOpen(), Eq(true));
 }
 
 TEST_F(UsbCommTest, openFirstThrowsIfOpenFails)
@@ -182,6 +184,7 @@ TEST_F(UsbCommTest, closeClosesConnection)
     EXPECT_CALL(*usbmock, exit(nullptr));
 
     comm->close();
+    EXPECT_THAT(comm->isOpen(), Eq(false));
 }
 
 TEST_F(UsbCommTest, closeDoesNotReattachDriverIfNoDevice)
