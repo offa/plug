@@ -102,12 +102,13 @@ namespace plug
             memset(array, 0x00, LENGTH);
             array[0] = 0xff;
             array[1] = 0xc1;
-            libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
+            recieved = comm->interruptWrite(endpointSend, adapt(array, LENGTH));
 
             for (i = 0; recieved != 0; i++)
             {
-                libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
-                memcpy(recieved_data[i], array, LENGTH);
+                const auto recvData = comm->interruptReceive(endpointRecv, LENGTH);
+                recieved = recvData.size();
+                memcpy(recieved_data[i], recvData.data(), recieved);
             }
 
             int max_to_receive;
