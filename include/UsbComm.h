@@ -37,7 +37,7 @@ namespace plug
         void close();
 
         // For compatibility only - remove if clients have integrated the new api.
-        auto getHandle() const
+        auto& getHandle()
         {
             return handle;
         }

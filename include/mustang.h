@@ -24,6 +24,7 @@
 
 #include "data_structs.h"
 #include "effects_enum.h"
+#include <memory>
 #include <cstdio>
 #include <cstring>
 #include <libusb-1.0/libusb.h>
@@ -31,6 +32,7 @@
 
 namespace plug
 {
+    class UsbComm;
 
 // amp's VID and PID
 #define USB_VID 0x1ed8
@@ -103,7 +105,7 @@ namespace plug
         int update(char*);
 
     private:
-        libusb_device_handle* amp_hand;      // handle for USB communication
+        std::unique_ptr<UsbComm> comm;
         unsigned char execute[LENGTH];       // "apply" command sent after each instruction
         unsigned char prev_array[4][LENGTH]; // array used to clear the effect
 

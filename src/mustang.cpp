@@ -20,13 +20,14 @@
  */
 
 #include "mustang.h"
+#include "UsbComm.h"
 #include "IdLookup.h"
 
 namespace plug
 {
 
     Mustang::Mustang()
-        : amp_hand(nullptr)
+        : comm(std::make_unique<UsbComm>())
     {
         // "apply effect" command
         memset(execute, 0x00, LENGTH);
@@ -55,6 +56,8 @@ namespace plug
         unsigned char array[LENGTH];
         unsigned char recieved_data[296][LENGTH];
         memset(recieved_data, 0x00, 296 * LENGTH);
+
+        auto& amp_hand = comm->getHandle();
 
         if (amp_hand == nullptr)
         {
@@ -153,6 +156,8 @@ namespace plug
 
     int Mustang::stop_amp()
     {
+        auto& amp_hand = comm->getHandle();
+
         if (amp_hand != nullptr)
         {
             // release claimed interface
@@ -211,6 +216,7 @@ namespace plug
         array[KNOB4] = 0x00;
         array[KNOB5] = 0x00;
         array[KNOB6] = 0x00;
+        auto& amp_hand = comm->getHandle();
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
         int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
@@ -669,6 +675,7 @@ namespace plug
                 break;
         }
 
+        auto& amp_hand = comm->getHandle();
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
@@ -713,6 +720,7 @@ namespace plug
             array[i] = name[j];
         }
 
+        auto& amp_hand = comm->getHandle();
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
         load_memory_bank(slot, nullptr, nullptr, nullptr);
@@ -732,6 +740,7 @@ namespace plug
         array[SAVE_SLOT] = slot;
         array[6] = 0x01;
 
+        auto& amp_hand = comm->getHandle();
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         for (int i = 0; recieved != 0; i++)
         {
@@ -902,6 +911,7 @@ namespace plug
         {
             array[j] = name[i];
         }
+        auto& amp_hand = comm->getHandle();
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
 
@@ -1154,6 +1164,11 @@ namespace plug
 
     int Mustang::update(char* filename)
     {
+        // Disabled until fully refactored
+#ifndef UPDATE_ENABLED
+        static_cast<void>(filename);
+        return 0;
+#else
         int ret, recieved;
         unsigned char array[LENGTH], number = 0;
         FILE* file;
@@ -1263,5 +1278,6 @@ namespace plug
         stop_amp();
 
         return 0;
+#endif /* UPDATE_ENABLED */
     }
 }
