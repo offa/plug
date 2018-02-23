@@ -72,59 +72,29 @@ namespace plug
 
         if (amp_hand == nullptr)
         {
-            // initialize libusb
-            int ret = libusb_init(nullptr);
+            const std::initializer_list<std::uint16_t> pids{
+                SMALL_AMPS_USB_PID,
+                BIG_AMPS_USB_PID,
+                SMALL_AMPS_V2_USB_PID,
+                BIG_AMPS_V2_USB_PID,
+                MINI_USB_PID,
+                FLOOR_USB_PID};
 
-            if (ret != 0)
-            {
-                return ret;
-            }
-
-            // get handle for the device
-            if ((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, SMALL_AMPS_USB_PID)) == nullptr)
-                if ((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, BIG_AMPS_USB_PID)) == nullptr)
-                    if ((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, SMALL_AMPS_V2_USB_PID)) == nullptr)
-                        if ((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, BIG_AMPS_V2_USB_PID)) == nullptr)
-                            if ((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, MINI_USB_PID)) == nullptr)
-                                if ((amp_hand = libusb_open_device_with_vid_pid(nullptr, USB_VID, FLOOR_USB_PID)) == nullptr)
-                                {
-                                    libusb_exit(nullptr);
-                                    return -100;
-                                }
-
-            // detach kernel driver
-            ret = libusb_kernel_driver_active(amp_hand, 0);
-            if (ret != 0)
-            {
-                ret = libusb_detach_kernel_driver(amp_hand, 0);
-                if (ret != 0)
-                {
-                    stop_amp();
-                    return ret;
-                }
-            }
-
-            // claim the device
-            ret = libusb_claim_interface(amp_hand, 0);
-            if (ret != 0)
-            {
-                stop_amp();
-                return ret;
-            }
+            comm->openFirst(USB_VID, pids);
         }
 
         // initialization which is needed if you want
         // to get any replies from the amp in the future
         memset(array, 0x00, LENGTH);
         array[1] = 0xc3;
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
 
         memset(array, 0x00, LENGTH);
         array[0] = 0x1a;
         array[1] = 0x03;
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
 
         if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {

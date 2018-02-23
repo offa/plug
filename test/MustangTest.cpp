@@ -20,6 +20,7 @@
 
 #include "mustang.h"
 #include "common.h"
+#include "UsbException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/Matcher.h"
 #include "helper/PacketHelper.h"
@@ -177,11 +178,17 @@ TEST_F(MustangTest, startInitializesUsb)
     ignoreClose();
 }
 
-TEST_F(MustangTest, startReturnsErrorOnInitFailure)
+TEST_F(MustangTest, startHandlesErrorOnInitFailure)
 {
-    EXPECT_CALL(*usbmock, init(nullptr)).WillOnce(Return(usbError));
-    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, IsFailure());
+    EXPECT_CALL(*usbmock, init(nullptr)).WillOnce(Return(usbSuccess));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _))
+        .WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(usbSuccess));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(usbError));
+
+    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::UsbException);
+
+    ignoreClose();
 }
 
 TEST_F(MustangTest, startDeterminesAmpType)
@@ -208,11 +215,11 @@ TEST_F(MustangTest, startFailsIfNoDeviceFound)
 {
     InSequence s;
     EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillRepeatedly(Return(nullptr));
-    EXPECT_CALL(*usbmock, exit(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, _, _))
+        .Times(AtLeast(1))
+        .WillRepeatedly(Return(nullptr));
 
-    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, IsFailure());
+    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::UsbException);
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
