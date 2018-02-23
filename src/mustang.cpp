@@ -690,7 +690,6 @@ namespace plug
 
     int Mustang::save_on_amp(char* name, int slot)
     {
-        int ret, recieved;
         unsigned char array[LENGTH];
 
         memset(array, 0x00, LENGTH);
@@ -711,12 +710,11 @@ namespace plug
             array[i] = name[j];
         }
 
-        auto& amp_hand = comm->getHandle();
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
         load_memory_bank(slot, nullptr, nullptr, nullptr);
 
-        return ret;
+        return 0;
     }
 
     int Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
