@@ -1434,8 +1434,9 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     EXPECT_THAT(result, IsSuccessful());
 }
 
-TEST_F(MustangTest, setEffectReturnsErrorOnFailure)
+TEST_F(MustangTest, DISABLED_setEffectReturnsErrorOnFailure)
 {
+    // TODO: Necessary to test?
     fx_pedal_settings settings;
     settings.fx_slot = 3;
     settings.effect_num = value(effects::OVERDRIVE);

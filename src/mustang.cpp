@@ -27,6 +27,11 @@ namespace plug
 {
     namespace
     {
+        auto adapt(const std::uint8_t* data, std::size_t size)
+        {
+            return std::vector<std::uint8_t>(data, std::next(data, size));
+        }
+
         [[maybe_unused]] constexpr std::uint8_t endpointSend{0x01};
         [[maybe_unused]] constexpr std::uint8_t endpointRecv{0x81};
     }
@@ -174,9 +179,8 @@ namespace plug
 
     int Mustang::set_effect(fx_pedal_settings value)
     {
-        int recieved;       // variables used when sending
         unsigned char slot; // where to put the effect
-        unsigned char temp[LENGTH], array[LENGTH] = {
+        unsigned char array[LENGTH] = {
                                         0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                         0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -203,11 +207,12 @@ namespace plug
         array[KNOB4] = 0x00;
         array[KNOB5] = 0x00;
         array[KNOB6] = 0x00;
-        auto& amp_hand = comm->getHandle();
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
-        int ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
+
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
+        int ret{0};
 
         const auto effectType = static_cast<effects>(value.effect_num);
 
@@ -495,10 +500,10 @@ namespace plug
         }
 
         // send packet to the amp
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
 
         // save current settings
         memcpy(prev_array[array[DSP] - 6], array, LENGTH);
