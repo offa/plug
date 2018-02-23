@@ -25,6 +25,11 @@
 
 namespace plug
 {
+    namespace
+    {
+        constexpr std::uint8_t endpointSend{0x01};
+        constexpr std::uint8_t endpointRecv{0x81};
+    }
 
     Mustang::Mustang()
         : comm(std::make_unique<UsbComm>())
