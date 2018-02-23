@@ -38,13 +38,6 @@ namespace plug
 
         bool isOpen() const;
 
-        // For compatibility only - remove if clients have integrated the new api.
-        [[deprecated]]
-        auto& getHandle()
-        {
-            return handle;
-        }
-
         std::int32_t interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data);
         std::vector<std::uint8_t> interruptReceive(std::uint8_t endpoint, std::size_t recvSize);
 
