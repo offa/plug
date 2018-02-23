@@ -32,8 +32,8 @@ namespace plug
             return std::vector<std::uint8_t>(data, std::next(data, size));
         }
 
-        [[maybe_unused]] constexpr std::uint8_t endpointSend{0x01};
-        [[maybe_unused]] constexpr std::uint8_t endpointRecv{0x81};
+        constexpr std::uint8_t endpointSend{0x01};
+        constexpr std::uint8_t endpointRecv{0x81};
     }
 
     Mustang::Mustang()
