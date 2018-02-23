@@ -63,7 +63,7 @@ namespace plug
 
     void UsbComm::close()
     {
-        if( handle != nullptr )
+        if (handle != nullptr)
         {
             const auto result = libusb_release_interface(handle, 0);
 
@@ -80,7 +80,7 @@ namespace plug
 
     bool UsbComm::isOpen() const
     {
-        return ( handle != nullptr );
+        return (handle != nullptr);
     }
 
     std::int32_t UsbComm::interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data)

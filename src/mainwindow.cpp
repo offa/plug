@@ -290,7 +290,7 @@ namespace plug
 
             connected = false;
         }
-        catch(UsbException& ex)
+        catch (UsbException& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
         }

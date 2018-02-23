@@ -94,7 +94,7 @@ namespace plug
         Mustang();
         ~Mustang();
         int start_amp(char list[][32] = nullptr, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr); // initialize communication
-        void stop_amp();                                                                                                                            // terminate communication
+        void stop_amp();                                                                                                                           // terminate communication
         int set_effect(fx_pedal_settings);
         int set_amplifier(amp_settings);
         int save_on_amp(char*, int);
@@ -110,4 +110,3 @@ namespace plug
         int decode_data(unsigned char[7][LENGTH], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
     };
 }
-
