@@ -737,7 +737,7 @@ namespace plug
 
             if (i < 7)
             {
-                memcpy(data[i], recvData.data(), LENGTH);
+                memcpy(data[i], recvData.data(), n);
             }
         }
 
