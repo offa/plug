@@ -850,9 +850,8 @@ namespace plug
 
     int Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_pedal_settings effects[2])
     {
-        int ret, recieved;
         unsigned char fxknob, repeat;
-        unsigned char temp[LENGTH], array[LENGTH] = {
+        unsigned char array[LENGTH] = {
                                         0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -903,9 +902,9 @@ namespace plug
         {
             array[j] = name[i];
         }
-        auto& amp_hand = comm->getHandle();
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
+
+        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
 
         array[1] = 0x03;
         array[6] = 0x00;
@@ -1142,16 +1141,16 @@ namespace plug
                     break;
             }
             // send packet
-            ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-            libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
+            comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+            comm->interruptReceive(endpointRecv, LENGTH);
         }
 
         execute[FXKNOB] = fxknob;
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, execute, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, temp, LENGTH, &recieved, TMOUT);
+        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptReceive(endpointRecv, LENGTH);
         execute[FXKNOB] = 0x00;
 
-        return ret;
+        return 0;
     }
 
     int Mustang::update(char* filename)

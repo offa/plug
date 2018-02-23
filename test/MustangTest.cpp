@@ -1856,8 +1856,9 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
     EXPECT_THAT(result, IsSuccessful());
 }
 
-TEST_F(MustangTest, saveEffectsReturnsErrorOnFailure)
+TEST_F(MustangTest, DISABLED_saveEffectsReturnsErrorOnFailure)
 {
+    // TODO: Necessary to test?
     std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}
 
