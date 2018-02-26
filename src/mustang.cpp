@@ -33,6 +33,16 @@ namespace plug
             return std::vector<std::uint8_t>(data, std::next(data, size));
         }
 
+
+        constexpr std::initializer_list<std::uint16_t> pids{
+            SMALL_AMPS_USB_PID,
+            BIG_AMPS_USB_PID,
+            SMALL_AMPS_V2_USB_PID,
+            BIG_AMPS_V2_USB_PID,
+            MINI_USB_PID,
+            FLOOR_USB_PID};
+
+
         constexpr std::uint8_t endpointSend{0x01};
         constexpr std::uint8_t endpointRecv{0x81};
     }
@@ -70,14 +80,6 @@ namespace plug
 
         if (comm->isOpen() == false)
         {
-            const std::initializer_list<std::uint16_t> pids{
-                SMALL_AMPS_USB_PID,
-                BIG_AMPS_USB_PID,
-                SMALL_AMPS_V2_USB_PID,
-                BIG_AMPS_V2_USB_PID,
-                MINI_USB_PID,
-                FLOOR_USB_PID};
-
             comm->openFirst(USB_VID, pids);
         }
 
