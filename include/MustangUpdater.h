@@ -23,5 +23,5 @@
 
 namespace plug
 {
-    int update(const char* filename);
+    int updateFirmware(const char* filename);
 }

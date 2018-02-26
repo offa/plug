@@ -702,7 +702,7 @@ namespace plug
         ui->centralWidget->setDisabled(true);
         ui->menuBar->setDisabled(true);
         this->repaint();
-        ret = plug::update(filename.toLatin1().constData()); // magic part
+        ret = updateFirmware(filename.toLatin1().constData()); // magic part
         ui->centralWidget->setDisabled(false);
         ui->menuBar->setDisabled(false);
         ui->statusBar->showMessage("", 1);

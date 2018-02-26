@@ -48,7 +48,7 @@ namespace plug
     }
 
 
-    int update(const char* filename)
+    int updateFirmware(const char* filename)
     {
         int ret, recieved;
         unsigned char array[LENGTH], number = 0;
