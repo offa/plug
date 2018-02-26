@@ -17,10 +17,13 @@ add_executable(plug main.cpp
 
 add_library(plug-mustang mustang.cpp UsbComm.cpp)
 
+add_library(plug-updater MustangUpdater.cpp)
+
 target_link_libraries(plug
                         PRIVATE
                             plug-version
                             plug-mustang
+                            plug-updater
                             build-libs
                             Qt5::Core
                             Qt5::Widgets
