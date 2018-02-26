@@ -100,8 +100,7 @@ namespace plug
         int save_on_amp(char*, int);
         int load_memory_bank(int, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         int save_effects(int, char*, int, fx_pedal_settings*);
-        [[deprecated]]
-        int update(char*);
+        [[deprecated]] int update(char*);
 
     private:
         std::unique_ptr<UsbComm> comm;

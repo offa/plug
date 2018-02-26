@@ -27,20 +27,23 @@
 namespace plug
 {
 
-    void stop_amp(libusb_device_handle* handle)
+    namespace
     {
-        if (handle != nullptr)
+        void closeUsb(libusb_device_handle* handle)
         {
-            const int ret = libusb_release_interface(handle, 0);
-
-            if (ret != LIBUSB_ERROR_NO_DEVICE)
+            if (handle != nullptr)
             {
-                libusb_attach_kernel_driver(handle, 0);
-            }
+                const int ret = libusb_release_interface(handle, 0);
 
-            libusb_close(handle);
-            handle = nullptr;
-            libusb_exit(nullptr);
+                if (ret != LIBUSB_ERROR_NO_DEVICE)
+                {
+                    libusb_attach_kernel_driver(handle, 0);
+                }
+
+                libusb_close(handle);
+                handle = nullptr;
+                libusb_exit(nullptr);
+            }
         }
     }
 
@@ -93,7 +96,7 @@ namespace plug
             ret = libusb_detach_kernel_driver(amp_hand, 0);
             if (ret != 0)
             {
-                stop_amp(amp_hand);
+                closeUsb(amp_hand);
                 return ret;
             }
         }
@@ -102,7 +105,7 @@ namespace plug
         ret = libusb_claim_interface(amp_hand, 0);
         if (ret != 0)
         {
-            stop_amp(amp_hand);
+            closeUsb(amp_hand);
             return ret;
         }
 
@@ -146,7 +149,7 @@ namespace plug
         libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
         libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
 
-        stop_amp(amp_hand);
+        closeUsb(amp_hand);
 
         return 0;
     }
