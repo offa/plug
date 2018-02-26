@@ -22,6 +22,9 @@
 #include "mustang.h"
 #include "UsbComm.h"
 #include "IdLookup.h"
+#include <cstdio>
+#include <cstring>
+#include <unistd.h>
 
 namespace plug
 {

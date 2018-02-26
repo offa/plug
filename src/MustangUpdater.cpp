@@ -22,6 +22,8 @@
 #include "MustangUpdater.h"
 #include "mustang.h"
 #include <cstdio>
+#include <cstring>
+#include <unistd.h>
 #include <libusb-1.0/libusb.h>
 
 namespace plug

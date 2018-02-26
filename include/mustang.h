@@ -24,9 +24,6 @@
 #include "data_structs.h"
 #include "effects_enum.h"
 #include <memory>
-#include <cstdio>
-#include <cstring>
-#include <unistd.h>
 
 namespace plug
 {
