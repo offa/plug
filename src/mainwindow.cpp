@@ -21,6 +21,7 @@
 
 #include "mainwindow.h"
 #include "UsbException.h"
+#include "MustangUpdater.h"
 #include "ui_defaulteffects.h"
 #include "ui_mainwindow.h"
 
@@ -701,7 +702,7 @@ namespace plug
         ui->centralWidget->setDisabled(true);
         ui->menuBar->setDisabled(true);
         this->repaint();
-        ret = amp_ops->update(filename.toLatin1().data()); // magic part
+        ret = plug::update(filename.toLatin1().constData()); // magic part
         ui->centralWidget->setDisabled(false);
         ui->menuBar->setDisabled(false);
         ui->statusBar->showMessage("", 1);
