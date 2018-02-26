@@ -19,7 +19,6 @@
  */
 
 #include "LibUsbMocks.h"
-#include "common.h"
 #include <stdexcept>
 
 namespace mock
@@ -51,8 +50,8 @@ namespace mock
 
 
 extern "C" {
+
 using mock::usbmock;
-using plug::unused;
 
 
 int libusb_init(libusb_context** ctx)

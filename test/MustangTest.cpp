@@ -19,7 +19,6 @@
  */
 
 #include "mustang.h"
-#include "common.h"
 #include "UsbException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/Matcher.h"
