@@ -36,6 +36,20 @@ namespace plug
             return std::vector<std::uint8_t>(data, std::next(data, size));
         }
 
+        constexpr bool hasExtraKnob(effects e)
+        {
+            switch(e)
+            {
+                case effects::MONO_ECHO_FILTER:
+                case effects::STEREO_ECHO_FILTER:
+                case effects::TAPE_DELAY:
+                case effects::STEREO_TAPE_DELAY:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
 
         constexpr std::initializer_list<std::uint16_t> pids{
             SMALL_AMPS_USB_PID,
@@ -204,11 +218,8 @@ namespace plug
         array[KNOB3] = value.knob3;
         array[KNOB4] = value.knob4;
         array[KNOB5] = value.knob5;
-        // some effects have more knobs
-        if (effectType == effects::MONO_ECHO_FILTER ||
-            effectType == effects::STEREO_ECHO_FILTER ||
-            effectType == effects::TAPE_DELAY ||
-            effectType == effects::STEREO_TAPE_DELAY)
+
+        if( hasExtraKnob(effectType) == true )
         {
             array[KNOB6] = value.knob6;
         }
