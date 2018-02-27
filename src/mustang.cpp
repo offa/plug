@@ -665,7 +665,7 @@ namespace plug
         return 0;
     }
 
-    int Mustang::save_on_amp(char* name, int slot)
+    int Mustang::save_on_amp(char* name, std::uint8_t slot)
     {
         unsigned char array[LENGTH];
 

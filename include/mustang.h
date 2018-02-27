@@ -40,7 +40,7 @@ namespace plug
         void stop_amp();                                                                                                                           // terminate communication
         int set_effect(fx_pedal_settings);
         int set_amplifier(amp_settings);
-        int save_on_amp(char*, int);
+        int save_on_amp(char*, std::uint8_t slot);
         int load_memory_bank(int, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         int save_effects(int, char*, int, fx_pedal_settings*);
 
