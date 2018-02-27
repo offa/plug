@@ -899,10 +899,7 @@ namespace plug
             array[KNOB4] = effects[i].knob4;
             array[KNOB5] = effects[i].knob5;
             // some effects have more knobs
-            if (effects[i].effect_num == value(effects::MONO_ECHO_FILTER) ||
-                effects[i].effect_num == value(effects::STEREO_ECHO_FILTER) ||
-                effects[i].effect_num == value(effects::TAPE_DELAY) ||
-                effects[i].effect_num == value(effects::STEREO_TAPE_DELAY))
+            if( hasExtraKnob(static_cast<plug::effects>(effects[i].effect_num)) == true )
             {
                 array[KNOB6] = effects[i].knob6;
             }
