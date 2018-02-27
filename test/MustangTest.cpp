@@ -1912,8 +1912,7 @@ TEST_F(MustangTest, saveOnAmp)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    const auto result = m->save_on_amp(name, slot);
-    EXPECT_THAT(result, IsSuccessful());
+    m->save_on_amp(name, slot);
 }
 
 TEST_F(MustangTest, saveOnAmpFillsShortName)
@@ -1939,8 +1938,7 @@ TEST_F(MustangTest, saveOnAmpFillsShortName)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    const auto result = m->save_on_amp(name, slot);
-    EXPECT_THAT(result, IsSuccessful());
+    m->save_on_amp(name, slot);
 }
 
 TEST_F(MustangTest, saveOnAmpLimitsOversizedName)
@@ -1968,7 +1966,5 @@ TEST_F(MustangTest, saveOnAmpLimitsOversizedName)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    const auto result = m->save_on_amp(nameOversized.data(), slot);
-    EXPECT_THAT(result, IsSuccessful());
+    m->save_on_amp(nameOversized.data(), slot);
 }
-

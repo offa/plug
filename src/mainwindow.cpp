@@ -349,12 +349,12 @@ namespace plug
 
     int MainWindow::save_on_amp(char* name, int slot)
     {
-        int ret;
-
-        if (!connected)
+        if (connected == false)
+        {
             return -1;
+        }
 
-        ret = amp_ops->save_on_amp(name, slot);
+        amp_ops->save_on_amp(name, slot);
 
         if (name[0] == 0x00)
         {
@@ -370,7 +370,7 @@ namespace plug
         current_name = name;
         memcpy(names[slot], name, 32);
 
-        return ret;
+        return 0;
     }
 
     int MainWindow::load_from_amp(int slot)

@@ -39,7 +39,7 @@ namespace plug
 
         constexpr bool hasExtraKnob(effects e)
         {
-            switch(e)
+            switch (e)
             {
                 case effects::MONO_ECHO_FILTER:
                 case effects::STEREO_ECHO_FILTER:
@@ -63,6 +63,8 @@ namespace plug
 
         constexpr std::uint8_t endpointSend{0x01};
         constexpr std::uint8_t endpointRecv{0x81};
+
+        constexpr std::size_t nameLength{31};
     }
 
     Mustang::Mustang()
@@ -220,7 +222,7 @@ namespace plug
         array[KNOB4] = value.knob4;
         array[KNOB5] = value.knob5;
 
-        if( hasExtraKnob(effectType) == true )
+        if (hasExtraKnob(effectType) == true)
         {
             array[KNOB6] = value.knob6;
         }
@@ -666,7 +668,7 @@ namespace plug
         return 0;
     }
 
-    int Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
+    void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
         std::array<std::uint8_t, LENGTH> data;
         data.fill(0x00);
@@ -677,7 +679,6 @@ namespace plug
         data[6] = 0x01;
         data[7] = 0x01;
 
-        constexpr std::size_t nameLength{31};
         std::string sizedName{name};
         sizedName.resize(nameLength, '\0');
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
@@ -685,8 +686,6 @@ namespace plug
         comm->interruptWrite(endpointSend, adapt(data.data(), LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
         load_memory_bank(slot, nullptr, nullptr, nullptr);
-
-        return 0;
     }
 
     int Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
