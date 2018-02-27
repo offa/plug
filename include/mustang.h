@@ -24,6 +24,7 @@
 #include "data_structs.h"
 #include "effects_enum.h"
 #include "MustangConstants.h"
+#include <string_view>
 #include <memory>
 
 namespace plug
