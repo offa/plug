@@ -22,6 +22,7 @@
 #include "mustang.h"
 #include "UsbComm.h"
 #include "IdLookup.h"
+#include <array>
 #include <cstdio>
 #include <cstring>
 #include <unistd.h>
@@ -667,22 +668,21 @@ namespace plug
 
     int Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
-        unsigned char array[LENGTH];
-
-        memset(array, 0x00, LENGTH);
-        array[0] = 0x1c;
-        array[1] = 0x01;
-        array[2] = 0x03;
-        array[SAVE_SLOT] = slot;
-        array[6] = 0x01;
-        array[7] = 0x01;
+        std::array<std::uint8_t, LENGTH> data;
+        data.fill(0x00);
+        data[0] = 0x1c;
+        data[1] = 0x01;
+        data[2] = 0x03;
+        data[SAVE_SLOT] = slot;
+        data[6] = 0x01;
+        data[7] = 0x01;
 
         constexpr std::size_t nameLength{31};
         std::string sizedName{name};
         sizedName.resize(nameLength, '\0');
-        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(array, 16));
+        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
 
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, adapt(data.data(), LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
         load_memory_bank(slot, nullptr, nullptr, nullptr);
 
