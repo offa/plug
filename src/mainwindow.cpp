@@ -175,14 +175,13 @@ namespace plug
         char name[32];
 
         ui->statusBar->showMessage(tr("Connecting..."));
-        this->repaint();                                                  // this should not be needed!
+        this->repaint(); // this should not be needed!
 
         try
         {
             amp_ops->start_amp(names, name, &amplifier_set, effects_set); // request initialization of communication
-
         }
-        catch(const UsbException& ex)
+        catch (const UsbException& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
@@ -207,7 +206,9 @@ namespace plug
 
         amp->load(amplifier_set);
         if (settings.value("Settings/popupChangedWindows").toBool())
+        {
             amp->show();
+        }
         for (int i = 0; i < 4; i++)
         {
             switch (effects_set[i].fx_slot)

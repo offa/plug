@@ -899,7 +899,7 @@ namespace plug
             array[KNOB4] = effects[i].knob4;
             array[KNOB5] = effects[i].knob5;
             // some effects have more knobs
-            if( hasExtraKnob(static_cast<plug::effects>(effects[i].effect_num)) == true )
+            if (hasExtraKnob(static_cast<plug::effects>(effects[i].effect_num)) == true)
             {
                 array[KNOB6] = effects[i].knob6;
             }
