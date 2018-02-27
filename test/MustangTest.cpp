@@ -1891,6 +1891,33 @@ TEST_F(MustangTest, DISABLED_saveEffectsReturnsErrorOnFailure)
 
 TEST_F(MustangTest, saveOnAmp)
 {
+    constexpr std::size_t length{30};
+    auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x03});
+    sendCmd[posSlot] = slot;
+    sendCmd[6] = 0x01;
+    sendCmd[7] = 0x01;
+
+    const std::string name(length, 'x');
+    std::copy(name.cbegin(), name.cend(), std::next(sendCmd.begin(), 16));
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+
+    auto memBank = helper::createInitializedPacket({0x1c, 0x01, 0x01});
+    memBank[posSlot] = slot;
+    memBank[6] = 0x01;
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+
+    const auto result = m->save_on_amp(name, slot);
+    EXPECT_THAT(result, IsSuccessful());
+}
+
+TEST_F(MustangTest, saveOnAmpLimitsOversizedName)
+{
     auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x03});
     sendCmd[posSlot] = slot;
     sendCmd[6] = 0x01;
@@ -1917,3 +1944,4 @@ TEST_F(MustangTest, saveOnAmp)
     const auto result = m->save_on_amp(nameOversized.data(), slot);
     EXPECT_THAT(result, IsSuccessful());
 }
+
