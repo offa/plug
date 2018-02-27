@@ -665,7 +665,7 @@ namespace plug
         return 0;
     }
 
-    int Mustang::save_on_amp(char* name, std::uint8_t slot)
+    int Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
         unsigned char array[LENGTH];
 
@@ -677,15 +677,10 @@ namespace plug
         array[6] = 0x01;
         array[7] = 0x01;
 
-        if (strlen(name) > 31)
-        {
-            name[31] = 0x00;
-        }
-
-        for (unsigned int i = 16, j = 0; name[j] != 0x00; i++, j++)
-        {
-            array[i] = name[j];
-        }
+        constexpr std::size_t nameLength{31};
+        std::string sizedName{name};
+        sizedName.resize(nameLength, '\0');
+        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(array, 16));
 
         comm->interruptWrite(endpointSend, adapt(array, LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
