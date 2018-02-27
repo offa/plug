@@ -23,67 +23,13 @@
 
 #include "data_structs.h"
 #include "effects_enum.h"
+#include "MustangConstants.h"
 #include <memory>
 
 namespace plug
 {
     class UsbComm;
 
-// amp's VID and PID
-#define USB_VID 0x1ed8
-#define SMALL_AMPS_USB_PID 0x0004    //Mustang I and II
-#define BIG_AMPS_USB_PID 0x0005      //Mustang III, IV and V
-#define MINI_USB_PID 0x0010          //Mustang Mini
-#define FLOOR_USB_PID 0x0012         //Mustang Floor
-#define SMALL_AMPS_V2_USB_PID 0x0014 //Mustang II (and I?) V2
-#define BIG_AMPS_V2_USB_PID 0x0016   //Mustang III+ V2
-
-// amp's VID and PID while in update mode
-#define USB_UPDATE_VID 0x1ed8
-#define SMALL_AMPS_USB_UPDATE_PID 0x0006    //Mustang I and II
-#define BIG_AMPS_USB_UPDATE_PID 0x0007      //Mustang III, IV, V
-#define MINI_USB_UPDATE_PID 0x0011          //Mustang Mini
-#define FLOOR_USB_UPDATE_PID 0x0013         //Mustang Floor
-#define SMALL_AMPS_V2_USB_UPDATE_PID 0x0015 //Mustang I & II V2
-#define BIG_AMPS_V2_USB_UPDATE_PID 0x0017   //Mustang III+ V2
-
-// for USB communication
-#define TMOUT 500
-#define LENGTH 64
-//#define NANO_SEC_SLEEP 10000000
-
-// effect array fields
-#define DSP 2
-#define EFFECT 16
-#define FXSLOT 18
-#define KNOB1 32
-#define KNOB2 33
-#define KNOB3 34
-#define KNOB4 35
-#define KNOB5 36
-#define KNOB6 37
-
-// amp array fields
-#define AMPLIFIER 16
-#define VOLUME 32
-#define GAIN 33
-#define TREBLE 36
-#define MIDDLE 37
-#define BASS 38
-#define CABINET 49
-#define NOISE_GATE 47
-#define THRESHOLD 48
-#define MASTER_VOL 35
-#define GAIN2 34
-#define PRESENCE 39
-#define DEPTH 41
-#define BIAS 42
-#define SAG 51
-#define BRIGHTNESS 52
-
-// save fields
-#define SAVE_SLOT 4
-#define FXKNOB 3
 
     class Mustang
     {
