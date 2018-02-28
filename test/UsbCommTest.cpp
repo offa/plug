@@ -206,11 +206,26 @@ TEST_F(UsbCommTest, closeDoesNotReattachDriverIfNoDevice)
     comm->close();
 }
 
-TEST_F(UsbCommTest, interruptWriteTransfersData)
+TEST_F(UsbCommTest, interruptWriteTransfersDataVector)
 {
     setupHandle();
 
-    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    const std::vector<std::uint8_t> data{0, 1, 2, 3, 4, 5, 6};
+    constexpr std::uint8_t endpoint{0x81};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+        .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
+
+    const auto n = comm->interruptWrite(endpoint, data);
+    EXPECT_THAT(n, Eq(data.size()));
+}
+
+TEST_F(UsbCommTest, interruptWriteTransfersDataArray)
+{
+    setupHandle();
+
+    const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
     constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
