@@ -83,13 +83,6 @@ namespace plug
         return (handle != nullptr);
     }
 
-    std::int32_t UsbComm::interruptWrite(std::uint8_t endpoint, std::vector<std::uint8_t> data)
-    {
-        int actualTransfered{0};
-        libusb_interrupt_transfer(handle, endpoint, data.data(), data.size(), &actualTransfered, timeout.count());
-        return std::int32_t{actualTransfered};
-    }
-
     std::vector<std::uint8_t> UsbComm::interruptReceive(std::uint8_t endpoint, std::size_t recvSize)
     {
         int actualTransfered{0};
@@ -98,6 +91,13 @@ namespace plug
         buffer.resize(actualTransfered);
 
         return buffer;
+    }
+
+    std::int32_t UsbComm::interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size)
+    {
+        int actualTransfered{0};
+        libusb_interrupt_transfer(handle, endpoint, data, size, &actualTransfered, timeout.count());
+        return std::int32_t{actualTransfered};
     }
 
     void UsbComm::initInterface()
