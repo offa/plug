@@ -22,6 +22,8 @@
 #include "UsbException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/Matcher.h"
+#include <vector>
+#include <array>
 #include <gmock/gmock.h>
 
 using plug::UsbComm;
