@@ -37,7 +37,7 @@ namespace plug
 
         bool isOpen() const;
 
-        template<class Container>
+        template <class Container>
         std::int32_t interruptWrite(std::uint8_t endpoint, Container c)
         {
             return interruptWriteImpl(endpoint, c.data(), c.size());
@@ -46,7 +46,6 @@ namespace plug
         std::vector<std::uint8_t> interruptReceive(std::uint8_t endpoint, std::size_t recvSize);
 
     private:
-
         std::int32_t interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size);
 
         void initInterface();
