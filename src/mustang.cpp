@@ -31,13 +31,6 @@ namespace plug
 {
     namespace
     {
-        // Compatibility function
-        [[deprecated]]
-        auto adapt(const std::uint8_t* data, std::size_t size)
-        {
-            return std::vector<std::uint8_t>(data, std::next(data, size));
-        }
-
         constexpr bool hasExtraKnob(effects e)
         {
             switch (e)
@@ -95,7 +88,7 @@ namespace plug
     int Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         int recieved;
-        unsigned char array[LENGTH];
+        std::array<std::uint8_t, LENGTH> array;
         unsigned char recieved_data[296][LENGTH];
         memset(recieved_data, 0x00, 296 * LENGTH);
 
@@ -106,24 +99,24 @@ namespace plug
 
         // initialization which is needed if you want
         // to get any replies from the amp in the future
-        memset(array, 0x00, LENGTH);
+        array.fill(0x00);
         array[1] = 0xc3;
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);
 
-        memset(array, 0x00, LENGTH);
+        array.fill(0x00);
         array[0] = 0x1a;
         array[1] = 0x03;
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);
 
         if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
             int i = 0, j = 0;
-            memset(array, 0x00, LENGTH);
+            array.fill(0x00);
             array[0] = 0xff;
             array[1] = 0xc1;
-            recieved = comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+            recieved = comm->interruptWrite(endpointSend, array);
 
             for (i = 0; recieved != 0; i++)
             {
@@ -165,7 +158,7 @@ namespace plug
     int Mustang::set_effect(fx_pedal_settings value)
     {
         unsigned char slot; // where to put the effect
-        unsigned char array[LENGTH] = {
+        std::array<std::uint8_t, LENGTH> array{{
             0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -173,14 +166,14 @@ namespace plug
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
         // clear effect on previous DSP before setting a new one
         for (int i = 0; i < 4; i++)
         {
             if (prev_array[i][FXSLOT] == value.fx_slot || prev_array[i][FXSLOT] == (value.fx_slot + 4))
             {
-                memcpy(array, prev_array[i], LENGTH);
+                memcpy(&array[0], prev_array[i], LENGTH);
                 prev_array[i][FXSLOT] = 0xff;
                 break;
             }
@@ -193,7 +186,7 @@ namespace plug
         array[KNOB5] = 0x00;
         array[KNOB6] = 0x00;
 
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);
         comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
@@ -482,20 +475,20 @@ namespace plug
         }
 
         // send packet to the amp
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);
         comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
 
         // save current settings
-        memcpy(prev_array[array[DSP] - 6], array, LENGTH);
+        memcpy(prev_array[array[DSP] - 6], array.data(), LENGTH);
 
         return ret;
     }
 
     int Mustang::set_amplifier(amp_settings value)
     {
-        unsigned char array[LENGTH] = {
+        std::array<std::uint8_t, LENGTH> array{{
             0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -503,7 +496,7 @@ namespace plug
             0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
             0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
             0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
         array[DSP] = 0x05;
         array[GAIN] = value.gain;
@@ -648,12 +641,12 @@ namespace plug
                 break;
         }
 
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);
         comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
 
-        memset(array, 0x00, LENGTH);
+        array.fill(0x00);
         array[0] = 0x1c;
         array[1] = 0x03;
         array[2] = 0x0d;
@@ -661,7 +654,7 @@ namespace plug
         array[7] = 0x01;
         array[16] = value.usb_gain;
 
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);
         comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
@@ -684,23 +677,24 @@ namespace plug
         sizedName.resize(nameLength, '\0');
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
 
-        comm->interruptWrite(endpointSend, adapt(data.data(), LENGTH));
+        comm->interruptWrite(endpointSend, data);
         comm->interruptReceive(endpointRecv, LENGTH);
         load_memory_bank(slot, nullptr, nullptr, nullptr);
     }
 
     int Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        unsigned char array[LENGTH], data[7][LENGTH];
+        std::array<std::uint8_t, LENGTH> array;
+        unsigned char data[7][LENGTH];
 
-        memset(array, 0x00, LENGTH);
+        array.fill(0x00);
         array[0] = 0x1c;
         array[1] = 0x01;
         array[2] = 0x01;
         array[SAVE_SLOT] = slot;
         array[6] = 0x01;
 
-        auto n = comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        auto n = comm->interruptWrite(endpointSend, array);
 
         for (int i = 0; n != 0; i++)
         {
