@@ -32,6 +32,7 @@ namespace plug
     namespace
     {
         // Compatibility function
+        [[deprecated]]
         auto adapt(const std::uint8_t* data, std::size_t size)
         {
             return std::vector<std::uint8_t>(data, std::next(data, size));
