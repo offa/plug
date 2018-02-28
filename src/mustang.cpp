@@ -72,7 +72,7 @@ namespace plug
         : comm(std::make_unique<UsbComm>())
     {
         // "apply effect" command
-        memset(execute, 0x00, LENGTH);
+        execute.fill(0x00);
         execute[0] = 0x1c;
         execute[1] = 0x03;
 
@@ -195,7 +195,7 @@ namespace plug
 
         comm->interruptWrite(endpointSend, adapt(array, LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
-        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
 
         constexpr int ret{0};
@@ -484,7 +484,7 @@ namespace plug
         // send packet to the amp
         comm->interruptWrite(endpointSend, adapt(array, LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
-        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
 
         // save current settings
@@ -650,7 +650,7 @@ namespace plug
 
         comm->interruptWrite(endpointSend, adapt(array, LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
-        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
 
         memset(array, 0x00, LENGTH);
@@ -663,7 +663,7 @@ namespace plug
 
         comm->interruptWrite(endpointSend, adapt(array, LENGTH));
         comm->interruptReceive(endpointRecv, LENGTH);
-        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
 
         return 0;
@@ -821,15 +821,14 @@ namespace plug
     int Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_pedal_settings effects[2])
     {
         unsigned char fxknob, repeat;
-        unsigned char array[LENGTH] = {
-            0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+        std::array<std::uint8_t, LENGTH> array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
         execute[2] = 0x00; // why this must be here?
 
         if (number_of_effects > 2)
@@ -873,12 +872,12 @@ namespace plug
             array[j] = name[i];
         }
 
-        comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+        comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);
 
         array[1] = 0x03;
         array[6] = 0x00;
-        memset(array + 16, 0x00, LENGTH - 16);
+        memset(std::next(array.data(), 16), 0x00, LENGTH - 16);
         for (int i = 0; i < repeat; i++)
         {
             array[19] = 0x00;
@@ -1108,12 +1107,12 @@ namespace plug
                     break;
             }
             // send packet
-            comm->interruptWrite(endpointSend, adapt(array, LENGTH));
+            comm->interruptWrite(endpointSend, array);
             comm->interruptReceive(endpointRecv, LENGTH);
         }
 
         execute[FXKNOB] = fxknob;
-        comm->interruptWrite(endpointSend, adapt(execute, LENGTH));
+        comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
         execute[FXKNOB] = 0x00;
 

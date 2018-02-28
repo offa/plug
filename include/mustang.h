@@ -25,7 +25,9 @@
 #include "effects_enum.h"
 #include "MustangConstants.h"
 #include <string_view>
+#include <array>
 #include <memory>
+#include <cstdint>
 
 namespace plug
 {
@@ -47,7 +49,7 @@ namespace plug
 
     private:
         std::unique_ptr<UsbComm> comm;
-        unsigned char execute[LENGTH];       // "apply" command sent after each instruction
+        std::array<std::uint8_t, LENGTH> execute;       // "apply" command sent after each instruction
         unsigned char prev_array[4][LENGTH]; // array used to clear the effect
 
         int decode_data(unsigned char[7][LENGTH], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
