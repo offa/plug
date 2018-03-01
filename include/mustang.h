@@ -41,7 +41,7 @@ namespace plug
         ~Mustang();
         int start_amp(char list[][32] = nullptr, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         void stop_amp();
-        int set_effect(fx_pedal_settings);
+        void set_effect(fx_pedal_settings value);
         void set_amplifier(amp_settings value);
         void save_on_amp(std::string_view name, std::uint8_t slot);
         int load_memory_bank(int, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);

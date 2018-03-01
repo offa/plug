@@ -307,7 +307,10 @@ namespace plug
             return 0;
 
         if (!settings.value("Settings/oneSetToSetThemAll").toBool())
-            return amp_ops->set_effect(pedal);
+        {
+            amp_ops->set_effect(pedal);
+            return 0;
+        }
         amp->send_amp();
         return 0;
     }

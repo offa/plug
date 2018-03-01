@@ -1219,8 +1219,7 @@ TEST_F(MustangTest, setEffectSendsValue)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-    const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, IsSuccessful());
+    m->set_effect(settings);
 }
 
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
@@ -1256,8 +1255,7 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-    const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, IsSuccessful());
+    m->set_effect(settings);
 }
 
 TEST_F(MustangTest, setEffectHandlesEffectPosition)
@@ -1326,8 +1324,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-    const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, IsSuccessful());
+    m->set_effect(settings);
 }
 
 TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
@@ -1399,73 +1396,7 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-    const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, IsSuccessful());
-}
-
-TEST_F(MustangTest, DISABLED_setEffectReturnsErrorOnFailure)
-{
-    fx_pedal_settings settings;
-    settings.fx_slot = 3;
-    settings.effect_num = value(effects::OVERDRIVE);
-    settings.knob1 = 8;
-    settings.knob2 = 7;
-    settings.knob3 = 6;
-    settings.knob4 = 5;
-    settings.knob5 = 4;
-    settings.knob6 = 3;
-    settings.put_post_amp = false;
-
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
-    std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                   0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
-                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    clearCmd[posEffect] = 0x00;
-    clearCmd[posKnob1] = 0x00;
-    clearCmd[posKnob2] = 0x00;
-    clearCmd[posKnob3] = 0x00;
-    clearCmd[posKnob4] = 0x00;
-    clearCmd[posKnob5] = 0x00;
-    clearCmd[posKnob6] = 0x00;
-
-    InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
-        .Times(4)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
-
-    std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                               0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
-                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    data[posFxSlot] = settings.fx_slot;
-    data[posKnob1] = settings.knob1;
-    data[posKnob2] = settings.knob2;
-    data[posKnob3] = settings.knob3;
-    data[posKnob4] = settings.knob4;
-    data[posKnob5] = settings.knob5;
-    data[posDsp] = 0x06;
-    data[posEffect] = 0x3c;
-
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
-        .Times(2)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
-
-    const auto result = m->set_effect(settings);
-    EXPECT_THAT(result, IsFailure());
+    m->set_effect(settings);
 }
 
 TEST_F(MustangTest, saveEffectsSendsValues)

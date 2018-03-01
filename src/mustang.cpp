@@ -155,7 +155,7 @@ namespace plug
         comm->close();
     }
 
-    int Mustang::set_effect(fx_pedal_settings value)
+    void Mustang::set_effect(fx_pedal_settings value)
     {
         unsigned char slot; // where to put the effect
         std::array<std::uint8_t, LENGTH> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -190,12 +190,11 @@ namespace plug
         comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
 
-        constexpr int ret{0};
         const auto effectType = static_cast<effects>(value.effect_num);
 
         if (effectType == effects::EMPTY)
         {
-            return ret;
+            return;
         }
 
         if (value.put_post_amp) // put effect in a slot after amplifier
@@ -481,8 +480,6 @@ namespace plug
 
         // save current settings
         memcpy(prev_array[array[DSP] - 6], array.data(), LENGTH);
-
-        return ret;
     }
 
     void Mustang::set_amplifier(amp_settings value)
