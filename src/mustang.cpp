@@ -675,7 +675,7 @@ namespace plug
         load_memory_bank(slot, nullptr, nullptr, nullptr);
     }
 
-    int Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    void Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         std::array<std::uint8_t, LENGTH> array;
         unsigned char data[7][LENGTH];
@@ -704,8 +704,6 @@ namespace plug
         {
             decode_data(data, name, amp_set, effects_set);
         }
-
-        return 0;
     }
 
     int Mustang::decode_data(unsigned char data[7][LENGTH], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)

@@ -517,8 +517,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
-    const auto result = m->load_memory_bank(slot, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, IsSuccessful());
+    m->load_memory_bank(slot, nullptr, nullptr, nullptr);
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
@@ -661,15 +660,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[3].knob6, Eq(6));
     EXPECT_THAT(settings[3].put_post_amp, Eq(true));
     EXPECT_THAT(settings[3].effect_num, Eq(value(effects::TAPE_DELAY)));
-}
-
-TEST_F(MustangTest, DISABLED_loadMemoryBankReturnsErrorOnTransferError)
-{
-    InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
-    const auto result = m->load_memory_bank(0, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, IsFailure());
 }
 
 TEST_F(MustangTest, setAmpSendsValues)
