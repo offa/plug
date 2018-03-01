@@ -121,7 +121,7 @@ namespace plug
             {
                 const auto recvData = comm->interruptReceive(endpointRecv, LENGTH);
                 recieved = recvData.size();
-                memcpy(recieved_data[i], recvData.data(), recieved);
+                std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
             }
 
             int max_to_receive;
