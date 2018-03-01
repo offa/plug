@@ -39,8 +39,8 @@ namespace plug
     public:
         Mustang();
         ~Mustang();
-        int start_amp(char list[][32] = nullptr, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr); // initialize communication
-        void stop_amp();                                                                                                                           // terminate communication
+        int start_amp(char list[][32] = nullptr, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
+        void stop_amp();
         int set_effect(fx_pedal_settings);
         int set_amplifier(amp_settings);
         void save_on_amp(std::string_view name, std::uint8_t slot);
