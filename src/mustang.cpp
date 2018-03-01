@@ -851,7 +851,6 @@ namespace plug
         }
 
         array[FXKNOB] = fxknob;
-
         array[SAVE_SLOT] = slot;
 
         // set and send the name
@@ -869,7 +868,8 @@ namespace plug
 
         array[1] = 0x03;
         array[6] = 0x00;
-        memset(std::next(array.data(), 16), 0x00, LENGTH - 16);
+        std::fill(std::next(array.begin(), 16), std::prev(array.end(), 16), 0x00);
+
         for (int i = 0; i < repeat; i++)
         {
             array[19] = 0x00;
