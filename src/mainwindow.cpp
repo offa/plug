@@ -345,7 +345,8 @@ namespace plug
             }
         }
 
-        return amp_ops->set_amplifier(amp_settings);
+        amp_ops->set_amplifier(amp_settings);
+        return 0;
     }
 
     int MainWindow::save_on_amp(char* name, int slot)

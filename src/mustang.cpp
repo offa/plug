@@ -485,7 +485,7 @@ namespace plug
         return ret;
     }
 
-    int Mustang::set_amplifier(amp_settings value)
+    void Mustang::set_amplifier(amp_settings value)
     {
         std::array<std::uint8_t, LENGTH> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -656,8 +656,6 @@ namespace plug
         comm->interruptReceive(endpointRecv, LENGTH);
         comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
-
-        return 0;
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
