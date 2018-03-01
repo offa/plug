@@ -43,7 +43,6 @@ namespace plug
                 }
 
                 libusb_close(handle);
-                handle = nullptr;
                 libusb_exit(nullptr);
             }
         }
