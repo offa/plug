@@ -87,7 +87,6 @@ namespace plug
 
     int Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        int recieved;
         std::array<std::uint8_t, LENGTH> array;
         unsigned char recieved_data[296][LENGTH];
         memset(recieved_data, 0x00, 296 * LENGTH);
@@ -116,7 +115,7 @@ namespace plug
             array.fill(0x00);
             array[0] = 0xff;
             array[1] = 0xc1;
-            recieved = comm->interruptWrite(endpointSend, array);
+            auto recieved = comm->interruptWrite(endpointSend, array);
 
             for (i = 0; recieved != 0; i++)
             {
