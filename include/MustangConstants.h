@@ -47,7 +47,6 @@ namespace plug
     // for USB communication
     constexpr std::size_t TMOUT{500};
     constexpr std::size_t LENGTH{64};
-    //#define NANO_SEC_SLEEP 10000000
 
     // effect array fields
     constexpr std::size_t DSP{2};
