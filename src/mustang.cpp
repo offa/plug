@@ -803,7 +803,7 @@ namespace plug
         return 0;
     }
 
-    int Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_pedal_settings effects[2])
+    void Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_pedal_settings effects[2])
     {
         unsigned char fxknob, repeat;
         std::array<std::uint8_t, LENGTH> array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -829,7 +829,7 @@ namespace plug
         {
             if (effects[i].effect_num < value(effects::SINE_CHORUS))
             {
-                return -1;
+                throw std::invalid_argument{"Invalid effect"};
             }
         }
 
@@ -1100,7 +1100,5 @@ namespace plug
         comm->interruptWrite(endpointSend, execute);
         comm->interruptReceive(endpointRecv, LENGTH);
         execute[FXKNOB] = 0x00;
-
-        return 0;
     }
 }

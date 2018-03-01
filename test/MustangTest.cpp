@@ -1478,8 +1478,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, IsSuccessful());
+    m->save_effects(slot, name.data(), numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
@@ -1554,18 +1553,16 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, IsSuccessful());
+    m->save_effects(slot, name.data(), numOfEffects, settings.data());
 }
 
-TEST_F(MustangTest, saveEffectsReturnsErrorOnInvalidEffect)
+TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 {
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
 
-    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, IsFailure());
+    EXPECT_THROW(m->save_effects(slot, name.data(), numOfEffects, settings.data()), std::invalid_argument);
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
@@ -1638,8 +1635,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, IsSuccessful());
+    m->save_effects(slot, name.data(), numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
@@ -1677,8 +1673,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
 
-    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, IsSuccessful());
+    m->save_effects(slot, name.data(), numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
@@ -1741,32 +1736,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
 
-    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, IsSuccessful());
-}
-
-TEST_F(MustangTest, DISABLED_saveEffectsReturnsErrorOnFailure)
-{
-    std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
-                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}}};
-    constexpr int numOfEffects = settings.size();
-    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
-
-    Sequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
-        .Times(6)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(usbError)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-
-
-    const auto result = m->save_effects(slot, name.data(), numOfEffects, settings.data());
-    EXPECT_THAT(result, IsFailure());
+    m->save_effects(slot, name.data(), numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveOnAmp)
