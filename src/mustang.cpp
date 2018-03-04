@@ -882,14 +882,16 @@ namespace plug
             array[KNOB3] = effects[i].knob3;
             array[KNOB4] = effects[i].knob4;
             array[KNOB5] = effects[i].knob5;
+
+            const auto effect = static_cast<plug::effects>(effects[i].effect_num);
             // some effects have more knobs
-            if (hasExtraKnob(static_cast<plug::effects>(effects[i].effect_num)) == true)
+            if (hasExtraKnob(effect) == true)
             {
                 array[KNOB6] = effects[i].knob6;
             }
 
             // fill the form with missing data
-            switch (static_cast<plug::effects>(effects[i].effect_num))
+            switch (effect)
             {
                 case effects::SINE_CHORUS:
                     array[DSP] = 0x07;
