@@ -153,7 +153,6 @@ namespace plug
 
     void Mustang::set_effect(fx_pedal_settings value)
     {
-        unsigned char slot; // where to put the effect
         std::array<std::uint8_t, LENGTH> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                 0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -192,6 +191,8 @@ namespace plug
         {
             return;
         }
+
+        std::uint8_t slot; // where to put the effect
 
         if (value.put_post_amp) // put effect in a slot after amplifier
         {
@@ -693,7 +694,6 @@ namespace plug
 
             if (i < 7)
             {
-
                 std::copy(recvData.cbegin(), recvData.cend(), data[i]);
             }
         }
