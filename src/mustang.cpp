@@ -745,7 +745,7 @@ namespace plug
         if (effects_set != nullptr)
         {
             // EFFECTS
-            for (int i = 2; i < 6; i++)
+            for (int i = 2; i < 6; ++i)
             {
                 int j = 0;
 
