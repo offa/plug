@@ -57,7 +57,6 @@ namespace plug
 
         constexpr std::uint8_t endpointSend{0x01};
         constexpr std::uint8_t endpointRecv{0x81};
-
     }
 
     Mustang::Mustang()
@@ -69,7 +68,7 @@ namespace plug
         execute[1] = 0x03;
 
         memset(prev_array, 0x00, LENGTH * 4);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; ++i)
         {
             prev_array[i][0] = 0x1c;
             prev_array[i][1] = 0x03;
@@ -123,7 +122,7 @@ namespace plug
                 std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
             }
 
-            const int max_to_receive = (i > 143 ? 200 : 48 );
+            const int max_to_receive = (i > 143 ? 200 : 48);
             if (list != nullptr)
             {
                 for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
