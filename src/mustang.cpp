@@ -123,11 +123,10 @@ namespace plug
                 std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
             }
 
-            int max_to_receive;
-            i > 143 ? max_to_receive = 200 : max_to_receive = 48;
+            const int max_to_receive = (i > 143 ? 200 : 48 );
             if (list != nullptr)
             {
-                for (i = 0, j = 0; i < max_to_receive; i += 2, j++)
+                for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
                 {
                     memcpy(list[j], recieved_data[i] + 16, 32);
                 }
@@ -137,7 +136,7 @@ namespace plug
             {
                 unsigned char data[7][LENGTH];
 
-                for (j = 0; j < 7; i++, j++)
+                for (j = 0; j < 7; ++i, ++j)
                 {
                     memcpy(data[j], recieved_data[i], LENGTH);
                 }
@@ -166,7 +165,7 @@ namespace plug
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
         // clear effect on previous DSP before setting a new one
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; ++i)
         {
             if (prev_array[i][FXSLOT] == value.fx_slot || prev_array[i][FXSLOT] == (value.fx_slot + 4))
             {
