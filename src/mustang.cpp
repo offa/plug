@@ -824,7 +824,7 @@ namespace plug
             repeat = number_of_effects;
         }
 
-        for (int i = 0; i < repeat; i++)
+        for (int i = 0; i < repeat; ++i)
         {
             if (effects[i].effect_num < value(effects::SINE_CHORUS))
             {
@@ -850,7 +850,7 @@ namespace plug
         {
             name[23] = 0x00;
         }
-        for (int i = 0, j = 16; name[i] != 0x00; i++, j++)
+        for (int i = 0, j = 16; name[i] != 0x00; ++i, ++j)
         {
             array[j] = name[i];
         }
@@ -862,7 +862,7 @@ namespace plug
         array[6] = 0x00;
         std::fill(std::next(array.begin(), 16), std::prev(array.end(), 16), 0x00);
 
-        for (int i = 0; i < repeat; i++)
+        for (int i = 0; i < repeat; ++i)
         {
             array[19] = 0x00;
             array[20] = 0x08;
