@@ -688,14 +688,15 @@ namespace plug
 
         auto n = comm->interruptWrite(endpointSend, array);
 
-        for (int i = 0; n != 0; i++)
+        for (int i = 0; n != 0; ++i)
         {
             const auto recvData = comm->interruptReceive(endpointRecv, LENGTH);
             n = recvData.size();
 
             if (i < 7)
             {
-                memcpy(data[i], recvData.data(), n);
+
+                std::copy(recvData.cbegin(), recvData.cend(), data[i]);
             }
         }
 
@@ -711,7 +712,7 @@ namespace plug
         {
             // NAME
             memset(name, 0x00, 32);
-            for (int i = 0, j = 16; data[0][j] != 0x00; i++, j++)
+            for (int i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
             {
                 name[i] = data[0][j];
             }
