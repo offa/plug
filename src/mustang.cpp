@@ -58,7 +58,6 @@ namespace plug
         constexpr std::uint8_t endpointSend{0x01};
         constexpr std::uint8_t endpointRecv{0x81};
 
-        constexpr std::size_t nameLength{31};
     }
 
     Mustang::Mustang()
@@ -665,6 +664,7 @@ namespace plug
         data[6] = 0x01;
         data[7] = 0x01;
 
+        constexpr std::size_t nameLength{31};
         std::string sizedName{name};
         sizedName.resize(nameLength, '\0');
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
@@ -802,7 +802,7 @@ namespace plug
         return 0;
     }
 
-    void Mustang::save_effects(int slot, char name[24], int number_of_effects, fx_pedal_settings effects[2])
+    void Mustang::save_effects(int slot, std::string_view name, int number_of_effects, fx_pedal_settings effects[2])
     {
         unsigned char fxknob, repeat;
         std::array<std::uint8_t, LENGTH> array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -846,14 +846,10 @@ namespace plug
         array[SAVE_SLOT] = slot;
 
         // set and send the name
-        if (name[23] != 0x00)
-        {
-            name[23] = 0x00;
-        }
-        for (int i = 0, j = 16; name[i] != 0x00; ++i, ++j)
-        {
-            array[j] = name[i];
-        }
+        constexpr std::size_t nameLength{22};
+        std::string sizedName{name};
+        sizedName.resize(nameLength, '\0');
+        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(array.begin(), 16));
 
         comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, LENGTH);

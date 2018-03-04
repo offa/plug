@@ -1643,8 +1643,10 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
+    constexpr std::size_t nameSize{22};
     std::array<char, 24> name;
     name.fill('x');
+    *std::prev(name.end()) = '\0';
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1655,8 +1657,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
     dataName[posFxKnob] = fxKnob;
     dataName[posSaveField] = slot;
-    std::copy(name.cbegin(), name.cend(), std::next(dataName.begin(), 16));
-    dataName[16 + name.size() - 1] = '\0';
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameSize), std::next(dataName.begin(), 16));
 
 
     Sequence s;
