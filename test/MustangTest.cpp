@@ -614,24 +614,9 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
 TEST_F(MustangTest, setAmpSendsValues)
 {
-    amp_settings settings;
-    settings.amp_num = value(amps::BRITISH_70S);
-    settings.gain = 8;
-    settings.volume = 9;
-    settings.treble = 1;
-    settings.middle = 2;
-    settings.bass = 3;
-    settings.cabinet = value(cabinets::cab4x12G);
-    settings.noise_gate = 3;
-    settings.master_vol = 5;
-    settings.gain2 = 3;
-    settings.presence = 2;
-    settings.threshold = 1;
-    settings.depth = 4;
-    settings.bias = 1;
-    settings.sag = 5;
-    settings.brightness = true;
-    settings.usb_gain = 4;
+    const amp_settings settings{value(amps::BRITISH_70S), 8, 9, 1, 2, 3,
+                                value(cabinets::cab4x12G), 3, 5, 3, 2, 1,
+                                4, 1, 5, true, 4};
 
     std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -693,24 +678,8 @@ TEST_F(MustangTest, setAmpSendsValues)
 TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
 {
     constexpr int invalidCabinet{0x0d};
-    amp_settings settings;
-    settings.amp_num = value(amps::FENDER_57_CHAMP);
-    settings.gain = 8;
-    settings.volume = 9;
-    settings.treble = 1;
-    settings.middle = 2;
-    settings.bass = 3;
-    settings.cabinet = invalidCabinet;
-    settings.noise_gate = 3;
-    settings.master_vol = 5;
-    settings.gain2 = 3;
-    settings.presence = 2;
-    settings.threshold = 1;
-    settings.depth = 4;
-    settings.bias = 1;
-    settings.sag = 5;
-    settings.brightness = true;
-    settings.usb_gain = 4;
+    const amp_settings settings{value(amps::FENDER_57_CHAMP), 8, 9, 1, 2, 3, invalidCabinet,
+                                3, 5, 3, 2, 1, 4, 1, 5, true, 4};
 
     std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -772,24 +741,9 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
 TEST_F(MustangTest, setAmpHandlesNoiseGate)
 {
     constexpr int limitValue{0x05};
-    amp_settings settings;
-    settings.amp_num = value(amps::FENDER_SUPER_SONIC);
-    settings.gain = 8;
-    settings.volume = 9;
-    settings.treble = 1;
-    settings.middle = 2;
-    settings.bass = 3;
-    settings.cabinet = value(cabinets::cab57DLX);
-    settings.noise_gate = limitValue;
-    settings.master_vol = 5;
-    settings.gain2 = 3;
-    settings.presence = 2;
-    settings.threshold = 7;
-    settings.depth = 4;
-    settings.bias = 1;
-    settings.sag = 5;
-    settings.brightness = true;
-    settings.usb_gain = 4;
+    const amp_settings settings{value(amps::FENDER_SUPER_SONIC), 8, 9, 1, 2, 3,
+                                value(cabinets::cab57DLX), limitValue, 5, 3, 2,
+                                7, 4, 1, 5, true, 4};
 
     std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -854,24 +808,9 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
 {
     constexpr int limitValue{0x05};
     constexpr int outOfRange{0x10};
-    amp_settings settings;
-    settings.amp_num = value(amps::FENDER_SUPER_SONIC);
-    settings.gain = 8;
-    settings.volume = 9;
-    settings.treble = 1;
-    settings.middle = 2;
-    settings.bass = 3;
-    settings.cabinet = value(cabinets::cab57DLX);
-    settings.noise_gate = limitValue;
-    settings.master_vol = 5;
-    settings.gain2 = 3;
-    settings.presence = 2;
-    settings.threshold = outOfRange;
-    settings.depth = 4;
-    settings.bias = 1;
-    settings.sag = 5;
-    settings.brightness = true;
-    settings.usb_gain = 4;
+    const amp_settings settings{value(amps::FENDER_SUPER_SONIC), 8, 9, 1, 2, 3,
+                                value(cabinets::cab57DLX), limitValue, 5, 3, 2,
+                                outOfRange, 4, 1, 5, true, 4};
 
     std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -936,24 +875,9 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
 TEST_F(MustangTest, setAmpHandlesSagValue)
 {
     constexpr int valueInRange{0x00};
-    amp_settings settings;
-    settings.amp_num = value(amps::FENDER_SUPER_SONIC);
-    settings.gain = 8;
-    settings.volume = 9;
-    settings.treble = 1;
-    settings.middle = 2;
-    settings.bass = 3;
-    settings.cabinet = value(cabinets::cab57DLX);
-    settings.noise_gate = 5;
-    settings.master_vol = 5;
-    settings.gain2 = 3;
-    settings.presence = 2;
-    settings.threshold = 7;
-    settings.depth = 4;
-    settings.bias = 1;
-    settings.sag = valueInRange;
-    settings.brightness = true;
-    settings.usb_gain = 4;
+    const amp_settings settings{value(amps::FENDER_SUPER_SONIC), 8, 9, 1, 2, 3,
+                                value(cabinets::cab57DLX), 5, 5,
+                                3, 2, 7, 4, 1, valueInRange, true, 4};
 
     std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1018,24 +942,9 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 {
     constexpr int outOfRange{0x06};
     constexpr int expectedValue{0x00};
-    amp_settings settings;
-    settings.amp_num = value(amps::BRITISH_60S);
-    settings.gain = 8;
-    settings.volume = 9;
-    settings.treble = 1;
-    settings.middle = 2;
-    settings.bass = 3;
-    settings.cabinet = value(cabinets::cab57DLX);
-    settings.noise_gate = outOfRange;
-    settings.master_vol = 5;
-    settings.gain2 = 3;
-    settings.presence = 2;
-    settings.threshold = 7;
-    settings.depth = 4;
-    settings.bias = 1;
-    settings.sag = 5;
-    settings.brightness = true;
-    settings.usb_gain = 4;
+    const amp_settings settings{value(amps::BRITISH_60S), 8, 9, 1, 2, 3,
+                                value(cabinets::cab57DLX), outOfRange, 5,
+                                3, 2, 7, 4, 1, 5, true, 4};
 
     std::array<std::uint8_t, packetSize> data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1096,17 +1005,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 
 TEST_F(MustangTest, setEffectSendsValue)
 {
-    fx_pedal_settings settings;
-    settings.fx_slot = 3;
-    settings.effect_num = value(effects::OVERDRIVE);
-    settings.knob1 = 8;
-    settings.knob2 = 7;
-    settings.knob3 = 6;
-    settings.knob4 = 5;
-    settings.knob5 = 4;
-    settings.knob6 = 3;
-    settings.put_post_amp = false;
-
+    const fx_pedal_settings settings{3, value(effects::OVERDRIVE), 8, 7, 6, 5, 4, 3, false};
     const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1164,11 +1063,8 @@ TEST_F(MustangTest, setEffectSendsValue)
 
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 {
-    fx_pedal_settings settings;
-    settings.fx_slot = 2;
-    settings.effect_num = value(effects::EMPTY);
-
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
+    const fx_pedal_settings settings{2, value(effects::EMPTY), 0, 0, 0, 0, 0, 0, false};
+    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1200,17 +1096,7 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 
 TEST_F(MustangTest, setEffectHandlesEffectPosition)
 {
-    fx_pedal_settings settings;
-    settings.fx_slot = 2;
-    settings.effect_num = value(effects::OVERDRIVE);
-    settings.knob1 = 1;
-    settings.knob2 = 2;
-    settings.knob3 = 3;
-    settings.knob4 = 4;
-    settings.knob5 = 5;
-    settings.knob6 = 6;
-    settings.put_post_amp = true;
-
+    const fx_pedal_settings settings{2, value(effects::OVERDRIVE), 1, 2, 3, 4, 5, 6, true};
     const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
