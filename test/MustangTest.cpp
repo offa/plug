@@ -1346,7 +1346,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     constexpr int postAmpOffset{4};
-    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+    const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1428,7 +1428,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
@@ -1438,7 +1438,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
                                                fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
-    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+    const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1503,16 +1503,16 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 {
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
-    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+    const std::string name = "abcd";
 
-    EXPECT_THROW(m->save_effects(slot, name.data(), numOfEffects, settings.data()), std::invalid_argument);
+    EXPECT_THROW(m->save_effects(slot, name, numOfEffects, settings.data()), std::invalid_argument);
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
@@ -1520,7 +1520,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
-    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+    const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1585,7 +1585,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
@@ -1594,9 +1594,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
     constexpr std::size_t nameSize{22};
-    std::array<char, 24> name;
-    name.fill('x');
-    *std::prev(name.end()) = '\0';
+    const std::string name('x', 24);
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1624,7 +1622,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
 
-    m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
@@ -1632,7 +1630,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::TAPE_DELAY), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
-    std::array<char, 24> name{{'a', 'b', 'c', 'd', '\0'}};
+    const std::string name{'a', 'b', 'c', 'd'};
     std::array<std::uint8_t, packetSize> dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1687,7 +1685,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
 
-    m->save_effects(slot, name.data(), numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings.data());
 }
 
 TEST_F(MustangTest, saveOnAmp)
@@ -1748,12 +1746,11 @@ TEST_F(MustangTest, saveOnAmpLimitsOversizedName)
     sendCmd[posSlot] = slot;
     sendCmd[6] = 0x01;
     sendCmd[7] = 0x01;
-    std::array<char, 34> nameOversized;
-    nameOversized.fill('a');
-    std::copy_n(nameOversized.cbegin(), 31, std::next(sendCmd.begin(), 16));
+    std::string nameOversized('a', 34);
     nameOversized[31] = char{0x0f};
     nameOversized[32] = 'b';
     nameOversized[33] = '\0';
+    std::copy_n(nameOversized.cbegin(), 31, std::next(sendCmd.begin(), 16));
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
@@ -1767,5 +1764,5 @@ TEST_F(MustangTest, saveOnAmpLimitsOversizedName)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    m->save_on_amp(nameOversized.data(), slot);
+    m->save_on_amp(nameOversized, slot);
 }
