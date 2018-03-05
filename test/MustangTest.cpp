@@ -1155,17 +1155,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
 
 TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 {
-    fx_pedal_settings settings;
-    settings.fx_slot = 3;
-    settings.effect_num = value(effects::STEREO_TAPE_DELAY);
-    settings.knob1 = 1;
-    settings.knob2 = 1;
-    settings.knob3 = 1;
-    settings.knob4 = 1;
-    settings.knob5 = 1;
-    settings.knob6 = 7;
-    settings.put_post_amp = false;
-
+    const fx_pedal_settings settings{3, value(effects::STEREO_TAPE_DELAY), 1, 1, 1, 1, 1, 7, false};
     const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     std::array<std::uint8_t, packetSize> clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1516,7 +1506,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
     std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::TAPE_DELAY), 0, 1, 2, 3, 4, 5, false}}};
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
-    const std::string name{'a', 'b', 'c', 'd'};
+    const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
