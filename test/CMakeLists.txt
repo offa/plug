@@ -12,15 +12,23 @@ add_subdirectory(mocks)
 
 
 
-add_executable(MustangTest MustangTest.cpp
-                    UsbCommTest.cpp
-                    )
+add_executable(MustangTest MustangTest.cpp)
 add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest PRIVATE
                         plug-mustang
                         TestLibs
                         LibUsbMocks
                         )
+
+
+add_executable(CommunicationTest UsbCommTest.cpp)
+add_test(CommunicationTest CommunicationTest)
+target_link_libraries(CommunicationTest PRIVATE
+                        plug-mustang
+                        TestLibs
+                        LibUsbMocks
+                        )
+
 
 add_executable(IdLookupTest IdLookupTest.cpp)
 add_test(IdLookupTest IdLookupTest)
@@ -30,6 +38,7 @@ target_link_libraries(IdLookupTest PRIVATE
 
 
 add_custom_target(unittest MustangTest
+                        COMMAND CommunicationTest
                         COMMAND IdLookupTest
 
                         COMMENT "Running unittests\n\n"
