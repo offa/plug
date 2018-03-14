@@ -23,7 +23,6 @@ target_link_libraries(plug-ui
                             Qt5::Widgets
                             Qt5::Gui
                             Qt5::Core
-                            Qt5::Network
                         )
 
 
