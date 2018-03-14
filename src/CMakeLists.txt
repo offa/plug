@@ -1,6 +1,10 @@
 
-add_executable(plug main.cpp
-                    amp_advanced.cpp
+add_executable(plug main.cpp)
+
+add_library(plug-mustang mustang.cpp UsbComm.cpp)
+add_library(plug-updater MustangUpdater.cpp)
+
+add_library(plug-ui amp_advanced.cpp
                     amplifier.cpp
                     defaulteffects.cpp
                     effect.cpp
@@ -14,21 +18,22 @@ add_executable(plug main.cpp
                     savetofile.cpp
                     settings.cpp
                     )
+target_link_libraries(plug-ui
+                        PUBLIC
+                            Qt5::Widgets
+                            Qt5::Gui
+                            Qt5::Core
+                            Qt5::Network
+                        )
 
-add_library(plug-mustang mustang.cpp UsbComm.cpp)
-
-add_library(plug-updater MustangUpdater.cpp)
 
 target_link_libraries(plug
                         PRIVATE
                             plug-version
+                            plug-ui
                             plug-mustang
                             plug-updater
                             build-libs
-                            Qt5::Core
-                            Qt5::Widgets
-                            Qt5::Gui
-                            Qt5::Network
                             libusb-1.0::libusb-1.0
                         )
 
