@@ -1858,7 +1858,7 @@ namespace plug
     // send settings to the amplifier
     void Effect::send_fx()
     {
-        fx_pedal_settings pedal;
+        fx_pedal_settings pedal{};
 
         if (!get_changed())
             return;

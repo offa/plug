@@ -546,7 +546,7 @@ namespace plug
             return;
         }
 
-        amp_settings amplifier_set;
+        amp_settings amplifier_set{};
         fx_pedal_settings effects_set[4];
         QString name;
         auto loader = std::make_unique<LoadFromFile>(file.get(), &name, &amplifier_set, effects_set);
