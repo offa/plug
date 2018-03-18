@@ -338,7 +338,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
     char nameList[100][32];
-    std::array<fx_pedal_settings, 4> settings;
+    std::array<fx_pedal_settings, 4> settings{};
     const auto result = m->start_amp(nameList, nullptr, nullptr, settings.data());
     EXPECT_THAT(result, IsSuccessful());
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
