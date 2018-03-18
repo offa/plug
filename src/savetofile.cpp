@@ -69,7 +69,7 @@ namespace plug
         dynamic_cast<MainWindow*>(parent())->change_title(ui->lineEdit_2->text());
 
         xml = std::make_unique<QXmlStreamWriter>(file.get());
-        amp_settings amplifier_settings;
+        amp_settings amplifier_settings{};
         fx_pedal_settings fx_settings[4];
         dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings);
 
