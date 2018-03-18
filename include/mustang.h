@@ -38,7 +38,9 @@ namespace plug
     {
     public:
         Mustang();
+        Mustang(Mustang&&) = default;
         ~Mustang();
+
         int start_amp(char list[][32] = nullptr, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         void stop_amp();
         void set_effect(fx_pedal_settings value);
@@ -46,6 +48,10 @@ namespace plug
         void save_on_amp(std::string_view name, std::uint8_t slot);
         void load_memory_bank(int, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         void save_effects(int, std::string_view name, int, fx_pedal_settings*);
+
+
+        Mustang& operator=(Mustang&&) = default;
+
 
     private:
         std::unique_ptr<UsbComm> comm;
