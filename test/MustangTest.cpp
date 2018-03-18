@@ -1470,7 +1470,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
     constexpr int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
     constexpr std::size_t nameSize{22};
-    const std::string name('x', 24);
+    const std::string name(24, 'x');
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1622,7 +1622,7 @@ TEST_F(MustangTest, saveOnAmpLimitsOversizedName)
     sendCmd[posSlot] = slot;
     sendCmd[6] = 0x01;
     sendCmd[7] = 0x01;
-    std::string nameOversized('a', 34);
+    std::string nameOversized(34, 'a');
     nameOversized[31] = char{0x0f};
     nameOversized[32] = 'b';
     nameOversized[33] = '\0';
