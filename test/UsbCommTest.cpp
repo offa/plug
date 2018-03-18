@@ -242,7 +242,7 @@ TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransfer)
 {
     setupHandle();
 
-    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    const std::vector<std::uint8_t> data{0, 1, 2, 3, 4, 5, 6};
     const std::vector<std::uint8_t> partial(data.cbegin(), std::next(data.cbegin(), 4));
     constexpr std::uint8_t endpoint{0x81};
 
@@ -258,7 +258,7 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
 {
     setupHandle();
 
-    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    const std::vector<std::uint8_t> data{0, 1, 2, 3, 4, 5, 6};
     const std::size_t readSize = data.size();
     constexpr std::uint8_t endpoint{0x01};
 
@@ -274,9 +274,9 @@ TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialTransfer)
 {
     setupHandle();
 
-    const std::vector<std::uint8_t> data{{0, 1, 2, 3, 4, 5, 6}};
+    const std::vector<std::uint8_t> data{0, 1, 2, 3, 4, 5, 6};
     const std::size_t readSize = data.size();
-    constexpr std::size_t actualSize = 4;
+    constexpr std::size_t actualSize{4};
     constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
