@@ -28,14 +28,14 @@ namespace test::helper
     using BinData = std::array<std::uint8_t, 64>;
 
 
-    BinData createEmptyPacket()
+    inline BinData createEmptyPacket()
     {
         BinData data{{0}};
         data.fill(0x00);
         return data;
     }
 
-    BinData createInitCmdPacket()
+    inline BinData createInitCmdPacket()
     {
         auto data = createEmptyPacket();
         data[0] = 0xff;
@@ -43,14 +43,14 @@ namespace test::helper
         return data;
     }
 
-    BinData createInitializedPacket(std::initializer_list<std::uint8_t> init)
+    inline BinData createInitializedPacket(std::initializer_list<std::uint8_t> init)
     {
         auto data = createEmptyPacket();
         std::copy(init.begin(), init.end(), data.begin());
         return data;
     }
 
-    BinData createEmptyNamedPacket(const std::string_view name)
+    inline BinData createEmptyNamedPacket(const std::string_view name)
     {
         constexpr std::size_t nameFieldOffset{16};
         auto data = createEmptyPacket();
