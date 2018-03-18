@@ -39,7 +39,11 @@ namespace plug
 
     public:
         explicit SaveEffects(QWidget* parent = nullptr);
+        SaveEffects(const SaveEffects&) = delete;
         ~SaveEffects() override;
+
+        SaveEffects& operator=(const SaveEffects&) = delete;
+
 
     private:
         const std::unique_ptr<Ui::Save_effects> ui;

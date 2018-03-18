@@ -61,7 +61,10 @@ namespace plug
 
     public:
         explicit MainWindow(QWidget* parent = nullptr);
+        MainWindow(const MainWindow&) = delete;
         ~MainWindow() override;
+
+        MainWindow& operator=(const MainWindow&) = delete;
 
     public slots:
         void start_amp(); // initialize the communication

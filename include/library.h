@@ -42,7 +42,11 @@ namespace plug
 
     public:
         explicit Library(char names[100][32], QWidget* parent = nullptr);
+        Library(const Library&) = delete;
         ~Library() override;
+
+        Library& operator=(const Library&) = delete;
+
 
     private:
         const std::unique_ptr<Ui::Library> ui;

@@ -39,9 +39,13 @@ namespace plug
 
     public:
         explicit SaveOnAmp(QWidget* parent = nullptr);
+        SaveOnAmp(const SaveOnAmp&) = delete;
         ~SaveOnAmp() override;
+
         void load_names(char names[][32]);
         void delete_items();
+
+        SaveOnAmp& operator=(const SaveOnAmp&) = delete;
 
     public slots:
         void change_index(int, const QString&);

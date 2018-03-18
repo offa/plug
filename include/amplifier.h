@@ -43,7 +43,10 @@ namespace plug
 
     public:
         explicit Amplifier(QWidget* parent = nullptr);
+        Amplifier(const Amplifier&) = delete;
         ~Amplifier() override;
+
+        Amplifier& operator=(const Amplifier&) = delete;
 
     private:
         const std::unique_ptr<Ui::Amplifier> ui;

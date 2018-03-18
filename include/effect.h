@@ -43,10 +43,13 @@ namespace plug
 
     public:
         explicit Effect(QWidget* parent = nullptr, int number = 0);
+        Effect(const Effect&) = delete;
         ~Effect() override;
 
         void set_changed(bool);
         bool get_changed();
+
+        Effect& operator=(const Effect&) = delete;
 
     private:
         const std::unique_ptr<Ui::Effect> ui;

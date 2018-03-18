@@ -39,10 +39,14 @@ namespace plug
 
     public:
         explicit LoadFromAmp(QWidget* parent = nullptr);
+        LoadFromAmp(const LoadFromAmp&) = delete;
         ~LoadFromAmp() override;
+
         void load_names(char names[][32]);
         void delete_items();
         void change_name(int, QString*);
+
+        LoadFromAmp& operator=(const LoadFromAmp&) = delete;
 
     private:
         const std::unique_ptr<Ui::LoadFromAmp> ui;

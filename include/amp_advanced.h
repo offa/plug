@@ -40,7 +40,10 @@ namespace plug
 
     public:
         explicit Amp_Advanced(QWidget* parent = nullptr);
+        Amp_Advanced(const Amp_Advanced&) = delete;
         ~Amp_Advanced() override;
+
+        Amp_Advanced& operator=(const Amp_Advanced&) = delete;
 
     public slots:
         void change_cabinet(int);
