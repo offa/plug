@@ -285,5 +285,5 @@ TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialTransfer)
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), std::next(data.cbegin(), actualSize)), SetArgPointee<4>(actualSize), Return(0)));
 
     const auto buffer = comm->interruptReceive(endpoint, readSize);
-    EXPECT_THAT(buffer, Eq(expected));
+    EXPECT_THAT(buffer, ContainerEq(expected));
 }
