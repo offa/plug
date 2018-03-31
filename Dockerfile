@@ -13,7 +13,6 @@ RUN apt-get install -y --no-install-recommends pkg-config qt5-default libusb-1.0
         fi && \
         git clone  https://github.com/google/googletest.git && \
         cd googletest && \
-        git checkout cafa9e52285d743d1394900fa95662950f712a72 && \
         mkdir build && cd build && \
         cmake .. && \
         make && make install && \
