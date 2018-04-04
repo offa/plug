@@ -8,6 +8,7 @@ AllowShortLoopsOnASingleLine: 'false'
 AlwaysBreakTemplateDeclarations: 'true'
 BreakBeforeBraces: Allman
 ColumnLimit: '0'
+FixNamespaceComments: 'false'
 IndentCaseLabels: 'true'
 IndentWidth: '4'
 Language: Cpp
