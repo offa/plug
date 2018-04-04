@@ -65,9 +65,7 @@ namespace plug
     {
         if (handle != nullptr)
         {
-            const auto result = libusb_release_interface(handle, 0);
-
-            if (result != LIBUSB_ERROR_NO_DEVICE)
+            if (libusb_release_interface(handle, 0) != LIBUSB_ERROR_NO_DEVICE)
             {
                 libusb_attach_kernel_driver(handle, 0);
             }
