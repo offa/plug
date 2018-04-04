@@ -73,5 +73,4 @@ namespace test::constants
     constexpr std::uint8_t posFxKnob{3};
     constexpr std::uint8_t posSaveField{4};
     constexpr std::size_t posSlot{4};
-
 }

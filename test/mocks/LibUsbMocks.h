@@ -46,10 +46,11 @@ namespace mock
 }
 
 
-extern "C" {
-
-struct libusb_device_handle
+extern "C"
 {
-    char dummy;
-};
+
+    struct libusb_device_handle
+    {
+        char dummy;
+    };
 }
