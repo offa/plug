@@ -13,7 +13,7 @@ env:
 
 matrix:
     include:
-    - env: COMPILER=gcc-7 ANALYSE="-asan -ubsan"
+    - env: COMPILER=gcc-7 ANALYSE="-asan" # No UBSan, see #104
     - env: COMPILER=clang-6 ANALYSE="-asan -ubsan"
     - env: COMPILER=clang-5 ANALYSE="-asan -ubsan"
     - env: COMPILER=gcc-7 ANALYSE="-cov"
