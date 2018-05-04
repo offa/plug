@@ -11,6 +11,12 @@ stages:
 # -----------------------------------------
 # --- CI Builds
 # -----------------------------------------
+gcc-8:
+  image: ${DOCKER_IMG}/gcc-8:latest
+  stage: build
+  script:
+    - script/ci_build.sh -asan -ubsan
+
 gcc-7:
   image: ${DOCKER_IMG}/gcc-7:latest
   stage: build
@@ -49,6 +55,7 @@ analyze:
   before_script:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   only:
+    - 105-add-a-gcc8-ci-build
     - schedules
     - web
     - /^docker-.*$/
