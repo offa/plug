@@ -36,7 +36,7 @@ clang-5:
     - script/ci_build.sh -asan -ubsan
 
 analyze:
-  image: ${DOCKER_IMG}/gcc-8:latest
+  image: ${DOCKER_IMG}/gcc-7:latest
   stage: build
   script:
     - script/ci_build.sh -cov
