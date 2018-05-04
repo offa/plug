@@ -36,7 +36,7 @@ clang-5:
     - script/ci_build.sh -asan -ubsan
 
 analyze:
-  image: ${DOCKER_IMG}/gcc-7:latest
+  image: ${DOCKER_IMG}/gcc-8:latest
   stage: build
   script:
     - script/ci_build.sh -cov
@@ -55,7 +55,6 @@ analyze:
   before_script:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   only:
-    - 105-add-a-gcc8-ci-build
     - schedules
     - web
     - /^docker-.*$/
