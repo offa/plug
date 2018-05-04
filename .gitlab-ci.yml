@@ -60,6 +60,10 @@ analyze:
     - web
     - /^docker-.*$/
 
+build-ci-gcc-8:
+  <<: *build_ci_definition
+  script:
+    - script/image_build.sh gcc-8
 
 build-ci-gcc-7:
   <<: *build_ci_definition
