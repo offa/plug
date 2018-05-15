@@ -21,7 +21,7 @@ gcc-7:
   image: ${DOCKER_IMG}/gcc-7:latest
   stage: build
   script:
-    - script/ci_build.sh -asan # No UBSan, see #104
+    - script/ci_build.sh -asan -ubsan
 
 clang-6:
   image: ${DOCKER_IMG}/clang-6:latest
