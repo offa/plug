@@ -21,8 +21,6 @@ gcc-7:
   image: ${DOCKER_IMG}/gcc-7:latest
   stage: build
   script:
-    - ${CC} --version
-    - ${CXX} --version
     - script/ci_build.sh -asan -ubsan
 
 clang-6:
