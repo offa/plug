@@ -58,6 +58,7 @@ coverage:
     - schedules
     - web
     - /^docker-.*$/
+    - issue106-lcov_gcc8_fix
 
 build-ci-gcc-8:
   <<: *build_ci_definition
