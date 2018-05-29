@@ -57,10 +57,10 @@ protected:
     std::unique_ptr<UsbComm> comm;
     mock::UsbMock* usbmock;
     libusb_device_handle handle;
-    static constexpr std::uint16_t vid{7};
-    static constexpr std::uint16_t pid{9};
-    static constexpr int failed{17};
-    static constexpr std::uint16_t timeout{500};
+    static inline constexpr std::uint16_t vid{7};
+    static inline constexpr std::uint16_t pid{9};
+    static inline constexpr int failed{17};
+    static inline constexpr std::uint16_t timeout{500};
 };
 
 TEST_F(UsbCommTest, openOpensConnection)

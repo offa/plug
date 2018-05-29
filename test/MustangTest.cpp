@@ -92,9 +92,9 @@ protected:
     libusb_device_handle handle;
     const helper::BinData dummy = helper::createEmptyPacket();
     const helper::BinData initCmd = helper::createInitCmdPacket();
-    static constexpr int usbSuccess{LIBUSB_SUCCESS};
-    static constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
-    static constexpr int slot{5};
+    static inline constexpr int usbSuccess{LIBUSB_SUCCESS};
+    static inline constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
+    static inline constexpr int slot{5};
 };
 
 TEST_F(MustangTest, startInitializesUsb)
