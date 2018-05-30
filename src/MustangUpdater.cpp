@@ -56,7 +56,7 @@ namespace plug
     int updateFirmware(const char* filename)
     {
         int ret, recieved;
-        unsigned char array[LENGTH], number = 0;
+        unsigned char array[packetSize], number = 0;
         FILE* file;
 
         // initialize libusb
@@ -117,27 +117,27 @@ namespace plug
         file = fopen(filename, "rb");
         // send date when firmware was created
         fseek(file, 0x1a, SEEK_SET);
-        memset(array, 0x00, LENGTH);
+        memset(array, 0x00, packetSize);
         array[0] = 0x02;
         array[1] = 0x03;
         array[2] = 0x01;
         array[3] = 0x06;
         fread(array + 4, 1, 11, file);
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, timeout.count());
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, timeout.count());
+        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
         usleep(10000);
 
         // send firmware
         fseek(file, 0x110, SEEK_SET);
         for (;;)
         {
-            memset(array, 0x00, LENGTH);
+            memset(array, 0x00, packetSize);
             array[0] = array[1] = 0x03;
             array[2] = number;
             number++;
-            array[3] = fread(array + 4, 1, LENGTH - 8, file);
-            ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, timeout.count());
-            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, timeout.count());
+            array[3] = fread(array + 4, 1, packetSize - 8, file);
+            ret = libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
+            libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
             usleep(10000);
 
             if (feof(file) != 0) // if reached end of the file
@@ -148,11 +148,11 @@ namespace plug
         fclose(file);
 
         // send "finished" packet
-        memset(array, 0x00, LENGTH);
+        memset(array, 0x00, packetSize);
         array[0] = 0x04;
         array[1] = 0x03;
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, timeout.count());
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
 
         closeUsb(amp_hand);
 

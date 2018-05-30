@@ -25,7 +25,6 @@
 
 namespace test::constants
 {
-    inline constexpr std::size_t packetSize{64};
     inline constexpr std::size_t nameLength{32};
 
     // Effects

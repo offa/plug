@@ -67,7 +67,7 @@ namespace plug
         execute[0] = 0x1c;
         execute[1] = 0x03;
 
-        memset(prev_array, 0x00, LENGTH * 4);
+        memset(prev_array, 0x00, packetSize * 4);
         for (int i = 0; i < 4; ++i)
         {
             prev_array[i][0] = 0x1c;
@@ -85,9 +85,9 @@ namespace plug
 
     int Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        std::array<std::uint8_t, LENGTH> array;
-        unsigned char recieved_data[296][LENGTH];
-        memset(recieved_data, 0x00, 296 * LENGTH);
+        std::array<std::uint8_t, packetSize> array;
+        unsigned char recieved_data[296][packetSize];
+        memset(recieved_data, 0x00, 296 * packetSize);
 
         if (comm->isOpen() == false)
         {
@@ -99,13 +99,13 @@ namespace plug
         array.fill(0x00);
         array[1] = 0xc3;
         comm->interruptWrite(endpointSend, array);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
 
         array.fill(0x00);
         array[0] = 0x1a;
         array[1] = 0x03;
         comm->interruptWrite(endpointSend, array);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
 
         if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
@@ -117,7 +117,7 @@ namespace plug
 
             for (i = 0; recieved != 0; i++)
             {
-                const auto recvData = comm->interruptReceive(endpointRecv, LENGTH);
+                const auto recvData = comm->interruptReceive(endpointRecv, packetSize);
                 recieved = recvData.size();
                 std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
             }
@@ -133,11 +133,11 @@ namespace plug
 
             if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
             {
-                unsigned char data[7][LENGTH];
+                unsigned char data[7][packetSize];
 
                 for (j = 0; j < 7; ++i, ++j)
                 {
-                    memcpy(data[j], recieved_data[i], LENGTH);
+                    memcpy(data[j], recieved_data[i], packetSize);
                 }
                 decode_data(data, name, amp_set, effects_set);
             }
@@ -153,7 +153,7 @@ namespace plug
 
     void Mustang::set_effect(fx_pedal_settings value)
     {
-        std::array<std::uint8_t, LENGTH> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+        std::array<std::uint8_t, packetSize> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                 0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -167,7 +167,7 @@ namespace plug
         {
             if (prev_array[i][FXSLOT] == value.fx_slot || prev_array[i][FXSLOT] == (value.fx_slot + 4))
             {
-                memcpy(&array[0], prev_array[i], LENGTH);
+                memcpy(&array[0], prev_array[i], packetSize);
                 prev_array[i][FXSLOT] = 0xff;
                 break;
             }
@@ -181,9 +181,9 @@ namespace plug
         array[KNOB6] = 0x00;
 
         comm->interruptWrite(endpointSend, array);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, execute);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
 
         const auto effectType = static_cast<effects>(value.effect_num);
 
@@ -471,17 +471,17 @@ namespace plug
 
         // send packet to the amp
         comm->interruptWrite(endpointSend, array);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, execute);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
 
         // save current settings
-        memcpy(prev_array[array[DSP] - 6], array.data(), LENGTH);
+        memcpy(prev_array[array[DSP] - 6], array.data(), packetSize);
     }
 
     void Mustang::set_amplifier(amp_settings value)
     {
-        std::array<std::uint8_t, LENGTH> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+        std::array<std::uint8_t, packetSize> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -634,9 +634,9 @@ namespace plug
         }
 
         comm->interruptWrite(endpointSend, array);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, execute);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
 
         array.fill(0x00);
         array[0] = 0x1c;
@@ -647,14 +647,14 @@ namespace plug
         array[16] = value.usb_gain;
 
         comm->interruptWrite(endpointSend, array);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, execute);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
-        std::array<std::uint8_t, LENGTH> data;
+        std::array<std::uint8_t, packetSize> data;
         data.fill(0x00);
         data[0] = 0x1c;
         data[1] = 0x01;
@@ -669,14 +669,14 @@ namespace plug
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
 
         comm->interruptWrite(endpointSend, data);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
         load_memory_bank(slot, nullptr, nullptr, nullptr);
     }
 
     void Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        std::array<std::uint8_t, LENGTH> array;
-        unsigned char data[7][LENGTH];
+        std::array<std::uint8_t, packetSize> array;
+        unsigned char data[7][packetSize];
 
         array.fill(0x00);
         array[0] = 0x1c;
@@ -689,7 +689,7 @@ namespace plug
 
         for (int i = 0; n != 0; ++i)
         {
-            const auto recvData = comm->interruptReceive(endpointRecv, LENGTH);
+            const auto recvData = comm->interruptReceive(endpointRecv, packetSize);
             n = recvData.size();
 
             if (i < 7)
@@ -704,7 +704,7 @@ namespace plug
         }
     }
 
-    int Mustang::decode_data(unsigned char data[7][LENGTH], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    int Mustang::decode_data(unsigned char data[7][packetSize], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         if (name != nullptr)
         {
@@ -804,7 +804,7 @@ namespace plug
     void Mustang::save_effects(int slot, std::string_view name, int number_of_effects, fx_pedal_settings effects[2])
     {
         unsigned char fxknob, repeat;
-        std::array<std::uint8_t, LENGTH> array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+        std::array<std::uint8_t, packetSize> array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -851,7 +851,7 @@ namespace plug
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(array.begin(), 16));
 
         comm->interruptWrite(endpointSend, array);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
 
         array[1] = 0x03;
         array[6] = 0x00;
@@ -1089,12 +1089,12 @@ namespace plug
             }
             // send packet
             comm->interruptWrite(endpointSend, array);
-            comm->interruptReceive(endpointRecv, LENGTH);
+            comm->interruptReceive(endpointRecv, packetSize);
         }
 
         execute[FXKNOB] = fxknob;
         comm->interruptWrite(endpointSend, execute);
-        comm->interruptReceive(endpointRecv, LENGTH);
+        comm->interruptReceive(endpointRecv, packetSize);
         execute[FXKNOB] = 0x00;
     }
 }
