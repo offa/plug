@@ -21,6 +21,7 @@
 
 #include "MustangUpdater.h"
 #include "mustang.h"
+#include <chrono>
 #include <cstdio>
 #include <cstring>
 #include <unistd.h>
@@ -46,6 +47,9 @@ namespace plug
                 libusb_exit(nullptr);
             }
         }
+
+
+        inline constexpr std::chrono::milliseconds timeout{500};
     }
 
 
@@ -119,8 +123,8 @@ namespace plug
         array[2] = 0x01;
         array[3] = 0x06;
         fread(array + 4, 1, 11, file);
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, timeout.count());
         usleep(10000);
 
         // send firmware
@@ -132,8 +136,8 @@ namespace plug
             array[2] = number;
             number++;
             array[3] = fread(array + 4, 1, LENGTH - 8, file);
-            ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+            ret = libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, timeout.count());
+            libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, timeout.count());
             usleep(10000);
 
             if (feof(file) != 0) // if reached end of the file
@@ -147,8 +151,8 @@ namespace plug
         memset(array, 0x00, LENGTH);
         array[0] = 0x04;
         array[1] = 0x03;
-        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, TMOUT);
-        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, TMOUT);
+        libusb_interrupt_transfer(amp_hand, 0x01, array, LENGTH, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x81, array, LENGTH, &recieved, timeout.count());
 
         closeUsb(amp_hand);
 
