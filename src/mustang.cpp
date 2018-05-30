@@ -55,8 +55,8 @@ namespace plug
             FLOOR_USB_PID};
 
 
-        constexpr std::uint8_t endpointSend{0x01};
-        constexpr std::uint8_t endpointRecv{0x81};
+        inline constexpr std::uint8_t endpointSend{0x01};
+        inline constexpr std::uint8_t endpointRecv{0x81};
     }
 
     Mustang::Mustang()
