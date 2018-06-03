@@ -89,7 +89,7 @@ protected:
 
     std::unique_ptr<Mustang> m;
     mock::UsbMock* usbmock;
-    libusb_device_handle handle;
+    libusb_device_handle handle{};
     const helper::BinData dummy = helper::createEmptyPacket();
     const helper::BinData initCmd = helper::createInitCmdPacket();
     static inline constexpr int usbSuccess{LIBUSB_SUCCESS};

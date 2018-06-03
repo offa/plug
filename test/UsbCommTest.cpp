@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "UsbComm.h"
 #include "UsbException.h"
 #include "mocks/LibUsbMocks.h"
@@ -56,7 +55,7 @@ protected:
 
     std::unique_ptr<UsbComm> comm;
     mock::UsbMock* usbmock;
-    libusb_device_handle handle;
+    libusb_device_handle handle{};
     static inline constexpr std::uint16_t vid{7};
     static inline constexpr std::uint16_t pid{9};
     static inline constexpr int failed{17};
