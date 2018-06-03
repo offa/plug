@@ -31,6 +31,8 @@ namespace plug
     class UsbComm
     {
     public:
+        UsbComm();
+
         void open(std::uint16_t vid, std::uint16_t pid);
         void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids);
         void close();
@@ -51,6 +53,6 @@ namespace plug
         void initInterface();
 
 
-        libusb_device_handle* handle{nullptr};
+        libusb_device_handle* handle;
     };
 }
