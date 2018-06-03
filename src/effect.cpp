@@ -140,7 +140,9 @@ namespace plug
 
         ui->comboBox->setCurrentIndex(value);
         if (value != 0)
+        {
             dynamic_cast<MainWindow*>(parent())->empty_other(value, this);
+        }
 
         // activate proper knobs and set their max values
         switch (static_cast<effects>(value))
@@ -1861,7 +1863,9 @@ namespace plug
         fx_pedal_settings pedal{};
 
         if (!get_changed())
+        {
             return;
+        }
         set_changed(false);
 
         pedal.effect_num = effect_num;

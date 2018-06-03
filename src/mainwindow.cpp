@@ -733,7 +733,7 @@ namespace plug
 
     void MainWindow::empty_other(int value, Effect* caller)
     {
-        fx_pedal_settings settings;
+        fx_pedal_settings settings{};
         int fx_family = check_fx_family(value);
 
         if (caller != effect1)
