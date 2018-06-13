@@ -120,8 +120,7 @@ TEST_F(MustangTest, startInitializesUsb)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)));
 
-    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, IsSuccessful());
+    m->start_amp(nullptr, nullptr, nullptr, nullptr);
 
     ignoreClose();
 }
@@ -153,8 +152,7 @@ TEST_F(MustangTest, startDeterminesAmpType)
     EXPECT_CALL(*usbmock, claim_interface(_, 0));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
 
-    const auto result = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, IsSuccessful());
+    m->start_amp(nullptr, nullptr, nullptr, nullptr);
 
     ignoreClose();
 }
@@ -206,8 +204,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
     char nameList[100][nameLength];
     std::array<char, nameLength> name;
-    const auto result = m->start_amp(nameList, name.data(), nullptr, nullptr);
-    EXPECT_THAT(result, IsSuccessful());
+    m->start_amp(nameList, name.data(), nullptr, nullptr);
     EXPECT_THAT(name.data(), StrEq("abc"));
 
     ignoreClose();
@@ -273,8 +270,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
 
     char nameList[100][32];
     amp_settings settings;
-    const auto result = m->start_amp(nameList, nullptr, &settings, nullptr);
-    EXPECT_THAT(result, IsSuccessful());
+    m->start_amp(nameList, nullptr, &settings, nullptr);
     EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_60S)));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
@@ -339,8 +335,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
     char nameList[100][32];
     std::array<fx_pedal_settings, 4> settings{};
-    const auto result = m->start_amp(nameList, nullptr, nullptr, settings.data());
-    EXPECT_THAT(result, IsSuccessful());
+    m->start_amp(nameList, nullptr, nullptr, settings.data());
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(10));
     EXPECT_THAT(settings[0].knob2, Eq(20));
@@ -386,8 +381,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     constexpr std::size_t numberOfNames{100};
     char names[numberOfNames][nameLength];
 
-    const auto result = m->start_amp(names, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result, IsSuccessful());
+    m->start_amp(names, nullptr, nullptr, nullptr);
     EXPECT_THAT(names[0], StrEq("abc"));
     EXPECT_THAT(names[1], StrEq("def"));
     EXPECT_THAT(names[2], StrEq("ghi"));
@@ -407,11 +401,8 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
         .Times(numOfCalls * 4)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    const auto result0 = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result0, IsSuccessful());
-
-    const auto result1 = m->start_amp(nullptr, nullptr, nullptr, nullptr);
-    EXPECT_THAT(result1, IsSuccessful());
+    m->start_amp(nullptr, nullptr, nullptr, nullptr);
+    m->start_amp(nullptr, nullptr, nullptr, nullptr);
 
     ignoreClose();
 }

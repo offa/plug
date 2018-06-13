@@ -82,7 +82,7 @@ namespace plug
         this->stop_amp();
     }
 
-    int Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    void Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         std::array<std::uint8_t, packetSize> array;
         unsigned char recieved_data[296][packetSize];
@@ -141,8 +141,6 @@ namespace plug
                 decode_data(data, name, amp_set, effects_set);
             }
         }
-
-        return 0;
     }
 
     void Mustang::stop_amp()
