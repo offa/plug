@@ -63,9 +63,9 @@ namespace plug
         : comm(std::make_unique<UsbComm>())
     {
         // "apply effect" command
-        execute.fill(0x00);
-        execute[0] = 0x1c;
-        execute[1] = 0x03;
+        applyCommand.fill(0x00);
+        applyCommand[0] = 0x1c;
+        applyCommand[1] = 0x03;
 
         memset(prev_array, 0x00, packetSize * 4);
         for (int i = 0; i < 4; ++i)
@@ -182,7 +182,7 @@ namespace plug
 
         comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, packetSize);
-        comm->interruptWrite(endpointSend, execute);
+        comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
 
         const auto effectType = static_cast<effects>(value.effect_num);
@@ -472,7 +472,7 @@ namespace plug
         // send packet to the amp
         comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, packetSize);
-        comm->interruptWrite(endpointSend, execute);
+        comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
 
         // save current settings
@@ -635,7 +635,7 @@ namespace plug
 
         comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, packetSize);
-        comm->interruptWrite(endpointSend, execute);
+        comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
 
         array.fill(0x00);
@@ -648,7 +648,7 @@ namespace plug
 
         comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, packetSize);
-        comm->interruptWrite(endpointSend, execute);
+        comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
     }
 
@@ -812,7 +812,7 @@ namespace plug
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-        execute[2] = 0x00; // why this must be here?
+        applyCommand[2] = 0x00; // why this must be here?
 
         if (number_of_effects > 2)
         {
@@ -1092,9 +1092,9 @@ namespace plug
             comm->interruptReceive(endpointRecv, packetSize);
         }
 
-        execute[FXKNOB] = fxknob;
-        comm->interruptWrite(endpointSend, execute);
+        applyCommand[FXKNOB] = fxknob;
+        comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
-        execute[FXKNOB] = 0x00;
+        applyCommand[FXKNOB] = 0x00;
     }
 }
