@@ -62,7 +62,6 @@ namespace plug
     Mustang::Mustang()
         : comm(std::make_unique<UsbComm>())
     {
-        // "apply effect" command
         applyCommand.fill(0x00);
         applyCommand[0] = 0x1c;
         applyCommand[1] = 0x03;
