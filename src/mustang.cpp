@@ -701,7 +701,7 @@ namespace plug
         }
     }
 
-    int Mustang::decode_data(unsigned char data[7][packetSize], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    void Mustang::decode_data(unsigned char data[7][packetSize], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         if (name != nullptr)
         {
@@ -794,8 +794,6 @@ namespace plug
                 effects_set[j].effect_num = value(lookupEffectById(data[i][EFFECT]));
             }
         }
-
-        return 0;
     }
 
     void Mustang::save_effects(int slot, std::string_view name, int number_of_effects, fx_pedal_settings effects[2])

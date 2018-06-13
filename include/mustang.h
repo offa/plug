@@ -58,6 +58,6 @@ namespace plug
         std::array<std::uint8_t, packetSize> applyCommand;
         unsigned char prev_array[4][packetSize];      // array used to clear the effect
 
-        int decode_data(unsigned char[7][packetSize], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
+        void decode_data(unsigned char[7][packetSize], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
     };
 }
