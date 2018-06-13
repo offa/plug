@@ -54,7 +54,7 @@ namespace plug
 
 
     private:
-        std::unique_ptr<UsbComm> comm;
+        const std::unique_ptr<UsbComm> comm;
         std::array<std::uint8_t, packetSize> applyCommand;
         unsigned char prev_array[4][packetSize];      // array used to clear the effect
 
