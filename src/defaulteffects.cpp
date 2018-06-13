@@ -1082,7 +1082,7 @@ namespace plug
 
     void DefaultEffects::get_settings()
     {
-        std::array<fx_pedal_settings, 4> settings_data;
+        std::array<fx_pedal_settings, 4> settings_data{};
         dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data.data());
 
         const auto index = ui->comboBox_2->currentIndex();
