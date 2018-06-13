@@ -27,16 +27,7 @@ int main()
     std::cout << " === Plug v" << plug::version() << " - Integrationtest ===\n\n";
 
     plug::Mustang m;
-
-    if (m.start_amp(nullptr, nullptr, nullptr, nullptr) == 0)
-    {
-        std::cout << " * Connection OK\n";
-    }
-    else
-    {
-        std::cout << " * Connection FAILED\n";
-        return 1;
-    }
+    m.start_amp(nullptr, nullptr, nullptr, nullptr);
 
     return 0;
 }
