@@ -187,16 +187,7 @@ namespace plug
             return;
         }
 
-        std::uint8_t slot; // where to put the effect
-
-        if (value.put_post_amp) // put effect in a slot after amplifier
-        {
-            slot = value.fx_slot + 4;
-        }
-        else
-        {
-            slot = value.fx_slot;
-        }
+        const std::uint8_t slot = (value.put_post_amp ? (value.fx_slot + 4) : value.fx_slot); // where to put the effect
 
         // fill the form with data
         array[FXSLOT] = slot;
