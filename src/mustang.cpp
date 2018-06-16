@@ -771,15 +771,8 @@ namespace plug
                 effects_set[j].knob4 = data[i][KNOB4];
                 effects_set[j].knob5 = data[i][KNOB5];
                 effects_set[j].knob6 = data[i][KNOB6];
-                if (data[i][FXSLOT] > 0x03)
-                {
-                    effects_set[j].put_post_amp = true;
-                }
-                else
-                {
-                    effects_set[j].put_post_amp = false;
-                }
 
+                effects_set[j].put_post_amp = (data[i][FXSLOT] > 0x03);
                 effects_set[j].effect_num = value(lookupEffectById(data[i][EFFECT]));
             }
         }
