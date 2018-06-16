@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#pragma once
 
 #include <QDialog>
 #include <QSettings>
@@ -53,4 +52,3 @@ namespace plug
     };
 }
 
-#endif // SETTINGS_H

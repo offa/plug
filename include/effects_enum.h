@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EFFECTS_ENUM_H
-#define EFFECTS_ENUM_H
+#pragma once
 
 namespace plug
 {
@@ -125,4 +124,3 @@ namespace plug
     }
 }
 
-#endif // EFFECTS_ENUM_H

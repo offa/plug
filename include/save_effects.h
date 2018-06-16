@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SAVE_EFFECTS_H
-#define SAVE_EFFECTS_H
+#pragma once
 
 #include <QDialog>
 #include <memory>
@@ -54,4 +53,3 @@ namespace plug
     };
 }
 
-#endif // SAVE_EFFECTS_H

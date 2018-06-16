@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AMPLIFIER_H
-#define AMPLIFIER_H
+#pragma once
 
 #include "amp_advanced.h"
 #include "data_structs.h"
@@ -88,4 +87,3 @@ namespace plug
     };
 }
 
-#endif // AMPLIFIER_H

@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEFAULTEFFECTS_H
-#define DEFAULTEFFECTS_H
+#pragma once
 
 #include "data_structs.h"
 #include <QDialog>
@@ -51,4 +50,3 @@ namespace plug
     };
 }
 
-#endif // DEFAULTEFFECTS_H

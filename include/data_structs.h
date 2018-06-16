@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATA_STRUCTS_H
-#define DATA_STRUCTS_H
+#pragma once
 
 namespace plug
 {
@@ -60,4 +59,3 @@ namespace plug
     };
 }
 
-#endif // DATA_STRUCTS_H

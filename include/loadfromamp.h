@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LOADFROMAMP_H
-#define LOADFROMAMP_H
+#pragma once
 
 #include <QMainWindow>
 #include <memory>
@@ -56,4 +55,3 @@ namespace plug
     };
 }
 
-#endif // LOADFROMAMP_H

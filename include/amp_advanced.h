@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AMP_ADVANCED_H
-#define AMP_ADVANCED_H
+#pragma once
 
 #include <QDialog>
 #include <QSettings>
@@ -66,4 +65,3 @@ namespace plug
     };
 }
 
-#endif // AMP_ADVANCED_H

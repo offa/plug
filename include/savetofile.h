@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SAVETOFILE_H
-#define SAVETOFILE_H
+#pragma once
 
 #include "data_structs.h"
 #include <QDialog>
@@ -63,4 +62,3 @@ namespace plug
     };
 }
 
-#endif // SAVETOFILE_H

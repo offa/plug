@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SAVEONAMP_H
-#define SAVEONAMP_H
+#pragma once
 
 #include <QMainWindow>
 #include <memory>
@@ -58,4 +57,3 @@ namespace plug
     };
 }
 
-#endif // SAVEONAMP_H

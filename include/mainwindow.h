@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include "amplifier.h"
 #include "data_structs.h"
@@ -135,4 +134,3 @@ namespace plug
     };
 }
 
-#endif // MAINWINDOW_H

@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EFFECT_H
-#define EFFECT_H
+#pragma once
 
 #include "data_structs.h"
 #include "effects_enum.h"
@@ -90,4 +89,3 @@ namespace plug
     };
 }
 
-#endif // EFFECT_H

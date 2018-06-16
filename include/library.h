@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBRARY_H
-#define LIBRARY_H
+#pragma once
 
 #include <QDialog>
 #include <QDir>
@@ -66,4 +65,3 @@ namespace plug
     };
 }
 
-#endif // LIBRARY_H

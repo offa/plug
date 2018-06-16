@@ -19,8 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QUICKPRESETS_H
-#define QUICKPRESETS_H
+#pragma once
 
 #include <QDialog>
 #include <QSettings>
@@ -65,4 +64,3 @@ namespace plug
     };
 }
 
-#endif // QUICKPRESETS_H
