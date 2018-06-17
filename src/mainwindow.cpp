@@ -488,7 +488,7 @@ namespace plug
 
     void MainWindow::save_effects(int slot, char* name, int fx_num, bool mod, bool dly, bool rev)
     {
-        std::vector<fx_pedal_settings> effects(2);
+        std::vector<fx_pedal_settings> effects(fx_num);
 
         if (fx_num == 1)
         {
