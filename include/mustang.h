@@ -48,7 +48,7 @@ namespace plug
         void set_amplifier(amp_settings value);
         void save_on_amp(std::string_view name, std::uint8_t slot);
         void load_memory_bank(int, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
-        void save_effects(int slot, std::string_view name, int, const std::vector<fx_pedal_settings>& effects);
+        void save_effects(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
 
 
         Mustang& operator=(Mustang&&) = default;

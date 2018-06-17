@@ -516,7 +516,7 @@ namespace plug
             set_effect(effects[1]);
         }
 
-        amp_ops->save_effects(slot, name, fx_num, effects);
+        amp_ops->save_effects(slot, name, effects);
     }
 
     void MainWindow::loadfile(QString filename)

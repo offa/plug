@@ -795,7 +795,7 @@ namespace plug
         }
     }
 
-    void Mustang::save_effects(int slot, std::string_view name, int number_of_effects, const std::vector<fx_pedal_settings>& effects)
+    void Mustang::save_effects(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         unsigned char fxknob;
         std::size_t repeat{0};
@@ -809,13 +809,13 @@ namespace plug
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
         applyCommand[2] = 0x00; // why this must be here?
 
-        if (number_of_effects > 2)
+        if (effects.size() > 2)
         {
             repeat = 1;
         }
         else
         {
-            repeat = number_of_effects;
+            repeat = effects.size();
         }
 
         for (std::size_t i = 0; i < repeat; ++i)
