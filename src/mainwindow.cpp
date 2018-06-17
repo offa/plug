@@ -132,7 +132,9 @@ namespace plug
 
         // connect the functions if needed
         if (settings.value("Settings/connectOnStartup").toBool())
+        {
             connect(this, SIGNAL(started()), this, SLOT(start_amp()));
+        }
 
         this->show();
         this->repaint();
