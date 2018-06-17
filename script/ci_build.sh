@@ -31,7 +31,7 @@ then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
-mkdir build && cd build
+mkdir -p build && cd build
 cmake ${BUILD_ARGS} ..
 make
 make unittest
