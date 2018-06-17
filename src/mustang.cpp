@@ -43,25 +43,27 @@ namespace plug
             return name;
         }
 
-        void decodeAmpFromData(const unsigned char data_[7][64], amp_settings* const& amp_set_out)
+        amp_settings decodeAmpFromData(const unsigned char data[7][64])
         {
-            amp_set_out->amp_num = value(lookupAmpById(data_[1][AMPLIFIER]));
-            amp_set_out->gain = data_[1][GAIN];
-            amp_set_out->volume = data_[1][VOLUME];
-            amp_set_out->treble = data_[1][TREBLE];
-            amp_set_out->middle = data_[1][MIDDLE];
-            amp_set_out->bass = data_[1][BASS];
-            amp_set_out->cabinet = data_[1][CABINET];
-            amp_set_out->noise_gate = data_[1][NOISE_GATE];
-            amp_set_out->master_vol = data_[1][MASTER_VOL];
-            amp_set_out->gain2 = data_[1][GAIN2];
-            amp_set_out->presence = data_[1][PRESENCE];
-            amp_set_out->threshold = data_[1][THRESHOLD];
-            amp_set_out->depth = data_[1][DEPTH];
-            amp_set_out->bias = data_[1][BIAS];
-            amp_set_out->sag = data_[1][SAG];
-            amp_set_out->brightness = data_[1][BRIGHTNESS] != 0u;
-            amp_set_out->usb_gain = data_[6][16];
+            amp_settings settings{};
+            settings.amp_num = value(lookupAmpById(data[1][AMPLIFIER]));
+            settings.gain = data[1][GAIN];
+            settings.volume = data[1][VOLUME];
+            settings.treble = data[1][TREBLE];
+            settings.middle = data[1][MIDDLE];
+            settings.bass = data[1][BASS];
+            settings.cabinet = data[1][CABINET];
+            settings.noise_gate = data[1][NOISE_GATE];
+            settings.master_vol = data[1][MASTER_VOL];
+            settings.gain2 = data[1][GAIN2];
+            settings.presence = data[1][PRESENCE];
+            settings.threshold = data[1][THRESHOLD];
+            settings.depth = data[1][DEPTH];
+            settings.bias = data[1][BIAS];
+            settings.sag = data[1][SAG];
+            settings.brightness = data[1][BRIGHTNESS] != 0u;
+            settings.usb_gain = data[6][16];
+            return settings;
         }
 
         void decodeEffectsFromData(unsigned char prev_array_[4][packetSize], const unsigned char data_[7][64], fx_pedal_settings* const& effects_set_out)
@@ -784,7 +786,7 @@ namespace plug
 
         if (amp_set != nullptr)
         {
-            decodeAmpFromData(data, amp_set);
+            *amp_set = decodeAmpFromData(data);
         }
 
         if (effects_set != nullptr)
