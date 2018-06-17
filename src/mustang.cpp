@@ -38,6 +38,26 @@ namespace plug
             }
         }
 
+        void decodeAmpFromData(const unsigned char data_[7][64], amp_settings* const& amp_set_out)
+        {
+            amp_set_out->amp_num = value(lookupAmpById(data_[1][AMPLIFIER]));
+            amp_set_out->gain = data_[1][GAIN];
+            amp_set_out->volume = data_[1][VOLUME];
+            amp_set_out->treble = data_[1][TREBLE];
+            amp_set_out->middle = data_[1][MIDDLE];
+            amp_set_out->bass = data_[1][BASS];
+            amp_set_out->cabinet = data_[1][CABINET];
+            amp_set_out->noise_gate = data_[1][NOISE_GATE];
+            amp_set_out->master_vol = data_[1][MASTER_VOL];
+            amp_set_out->gain2 = data_[1][GAIN2];
+            amp_set_out->presence = data_[1][PRESENCE];
+            amp_set_out->threshold = data_[1][THRESHOLD];
+            amp_set_out->depth = data_[1][DEPTH];
+            amp_set_out->bias = data_[1][BIAS];
+            amp_set_out->sag = data_[1][SAG];
+            amp_set_out->brightness = data_[1][BRIGHTNESS] != 0u;
+            amp_set_out->usb_gain = data_[6][16];
+        }
 
         constexpr bool hasExtraKnob(effects e)
         {
@@ -710,25 +730,7 @@ namespace plug
 
         if (amp_set != nullptr)
         {
-            // AMPLIFIER
-            amp_set->amp_num = value(lookupAmpById(data[1][AMPLIFIER]));
-
-            amp_set->gain = data[1][GAIN];
-            amp_set->volume = data[1][VOLUME];
-            amp_set->treble = data[1][TREBLE];
-            amp_set->middle = data[1][MIDDLE];
-            amp_set->bass = data[1][BASS];
-            amp_set->cabinet = data[1][CABINET];
-            amp_set->noise_gate = data[1][NOISE_GATE];
-            amp_set->master_vol = data[1][MASTER_VOL];
-            amp_set->gain2 = data[1][GAIN2];
-            amp_set->presence = data[1][PRESENCE];
-            amp_set->threshold = data[1][THRESHOLD];
-            amp_set->depth = data[1][DEPTH];
-            amp_set->bias = data[1][BIAS];
-            amp_set->sag = data[1][SAG];
-            amp_set->brightness = data[1][BRIGHTNESS] != 0u;
-            amp_set->usb_gain = data[6][16];
+            decodeAmpFromData(data, amp_set);
         }
 
 
