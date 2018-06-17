@@ -1209,7 +1209,7 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 TEST_F(MustangTest, saveEffectsSendsValues)
 {
     std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
-                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}};
+                                            fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}};
     constexpr int fxKnob{0x02};
     constexpr int postAmpOffset{4};
     const std::string name = "abcd";
@@ -1300,8 +1300,8 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 {
     std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
-                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true},
-                                               fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}};
+                                            fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true},
+                                            fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}};
     constexpr int fxKnob{0x02};
     const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
