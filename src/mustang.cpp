@@ -59,6 +59,55 @@ namespace plug
             amp_set_out->usb_gain = data_[6][16];
         }
 
+        void decodeEffectsFromData(unsigned char prev_array_[4][packetSize], const unsigned char data_[7][64], fx_pedal_settings* const& effects_set_out)
+        {
+            for (int i = 2; i < 6; ++i)
+            {
+                int j = 0;
+
+                prev_array_[data_[i][DSP] - 6][0] = 0x1c;
+                prev_array_[data_[i][DSP] - 6][1] = 0x03;
+                prev_array_[data_[i][DSP] - 6][FXSLOT] = data_[i][FXSLOT];
+                prev_array_[data_[i][DSP] - 6][DSP] = data_[i][DSP];
+                prev_array_[data_[i][DSP] - 6][19] = data_[i][19];
+                prev_array_[data_[i][DSP] - 6][20] = data_[i][20];
+
+                switch (data_[i][FXSLOT])
+                {
+                    case 0x00:
+                    case 0x04:
+                        j = 0;
+                        break;
+
+                    case 0x01:
+                    case 0x05:
+                        j = 1;
+                        break;
+
+                    case 0x02:
+                    case 0x06:
+                        j = 2;
+                        break;
+
+                    case 0x03:
+                    case 0x07:
+                        j = 3;
+                        break;
+                }
+
+                effects_set_out[j].fx_slot = j;
+                effects_set_out[j].knob1 = data_[i][KNOB1];
+                effects_set_out[j].knob2 = data_[i][KNOB2];
+                effects_set_out[j].knob3 = data_[i][KNOB3];
+                effects_set_out[j].knob4 = data_[i][KNOB4];
+                effects_set_out[j].knob5 = data_[i][KNOB5];
+                effects_set_out[j].knob6 = data_[i][KNOB6];
+                effects_set_out[j].put_post_amp = (data_[i][FXSLOT] > 0x03);
+                effects_set_out[j].effect_num = value(lookupEffectById(data_[i][EFFECT]));
+            }
+        }
+
+
         constexpr bool hasExtraKnob(effects e)
         {
             switch (e)
@@ -727,61 +776,14 @@ namespace plug
             decodeNameFromData(data, name);
         }
 
-
         if (amp_set != nullptr)
         {
             decodeAmpFromData(data, amp_set);
         }
 
-
         if (effects_set != nullptr)
         {
-            // EFFECTS
-            for (int i = 2; i < 6; ++i)
-            {
-                int j = 0;
-
-                prev_array[data[i][DSP] - 6][0] = 0x1c;
-                prev_array[data[i][DSP] - 6][1] = 0x03;
-                prev_array[data[i][DSP] - 6][FXSLOT] = data[i][FXSLOT];
-                prev_array[data[i][DSP] - 6][DSP] = data[i][DSP];
-                prev_array[data[i][DSP] - 6][19] = data[i][19];
-                prev_array[data[i][DSP] - 6][20] = data[i][20];
-
-                switch (data[i][FXSLOT])
-                {
-                    case 0x00:
-                    case 0x04:
-                        j = 0;
-                        break;
-
-                    case 0x01:
-                    case 0x05:
-                        j = 1;
-                        break;
-
-                    case 0x02:
-                    case 0x06:
-                        j = 2;
-                        break;
-
-                    case 0x03:
-                    case 0x07:
-                        j = 3;
-                        break;
-                }
-
-                effects_set[j].fx_slot = j;
-                effects_set[j].knob1 = data[i][KNOB1];
-                effects_set[j].knob2 = data[i][KNOB2];
-                effects_set[j].knob3 = data[i][KNOB3];
-                effects_set[j].knob4 = data[i][KNOB4];
-                effects_set[j].knob5 = data[i][KNOB5];
-                effects_set[j].knob6 = data[i][KNOB6];
-
-                effects_set[j].put_post_amp = (data[i][FXSLOT] > 0x03);
-                effects_set[j].effect_num = value(lookupEffectById(data[i][EFFECT]));
-            }
+            decodeEffectsFromData(prev_array, data, effects_set);
         }
     }
 
