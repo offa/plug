@@ -797,7 +797,8 @@ namespace plug
 
     void Mustang::save_effects(int slot, std::string_view name, int number_of_effects, const std::vector<fx_pedal_settings>& effects)
     {
-        unsigned char fxknob, repeat;
+        unsigned char fxknob;
+        std::size_t repeat{0};
         std::array<std::uint8_t, packetSize> array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -817,7 +818,7 @@ namespace plug
             repeat = number_of_effects;
         }
 
-        for (int i = 0; i < repeat; ++i)
+        for (std::size_t i = 0; i < repeat; ++i)
         {
             if (effects[i].effect_num < value(effects::SINE_CHORUS))
             {
@@ -851,7 +852,7 @@ namespace plug
         array[6] = 0x00;
         std::fill(std::next(array.begin(), 16), std::prev(array.end(), 16), 0x00);
 
-        for (int i = 0; i < repeat; ++i)
+        for (std::size_t i = 0; i < repeat; ++i)
         {
             array[19] = 0x00;
             array[20] = 0x08;
