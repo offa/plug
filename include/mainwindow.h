@@ -28,7 +28,6 @@
 #include "library.h"
 #include "loadfromamp.h"
 #include "loadfromfile.h"
-#include "mustang.h"
 #include "quickpresets.h"
 #include "save_effects.h"
 #include "saveonamp.h"
@@ -53,6 +52,8 @@ namespace Ui
 
 namespace plug
 {
+    class Mustang;
+
 
     class MainWindow : public QMainWindow
     {

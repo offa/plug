@@ -20,6 +20,7 @@
  */
 
 #include "mainwindow.h"
+#include "mustang.h"
 #include "UsbException.h"
 #include "MustangUpdater.h"
 #include "ui_defaulteffects.h"
