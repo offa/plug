@@ -29,6 +29,16 @@ namespace plug
 {
     namespace
     {
+        void decodeNameFromData(const unsigned char data_[7][64], char* const& nameOut)
+        {
+            memset(nameOut, 0x00, 32);
+            for (int i = 0, j = 16; data_[0][j] != 0x00; ++i, ++j)
+            {
+                nameOut[i] = data_[0][j];
+            }
+        }
+
+
         constexpr bool hasExtraKnob(effects e)
         {
             switch (e)
@@ -694,12 +704,7 @@ namespace plug
     {
         if (name != nullptr)
         {
-            // NAME
-            memset(name, 0x00, 32);
-            for (int i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
-            {
-                name[i] = data[0][j];
-            }
+            decodeNameFromData(data, name);
         }
 
 
