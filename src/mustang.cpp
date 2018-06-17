@@ -29,13 +29,18 @@ namespace plug
 {
     namespace
     {
-        void decodeNameFromData(const unsigned char data_[7][64], char* const& nameOut)
+        std::string decodeNameFromData(const unsigned char date[7][64])
         {
-            memset(nameOut, 0x00, 32);
-            for (int i = 0, j = 16; data_[0][j] != 0x00; ++i, ++j)
+            constexpr std::size_t nameLength{32};
+            std::string name(nameLength, '\0');
+
+            for (int i = 0, j = 16; date[0][j] != 0x00; ++i, ++j)
             {
-                nameOut[i] = data_[0][j];
+                name[i] = date[0][j];
             }
+
+            name.resize(nameLength);
+            return name;
         }
 
         void decodeAmpFromData(const unsigned char data_[7][64], amp_settings* const& amp_set_out)
@@ -773,7 +778,8 @@ namespace plug
     {
         if (name != nullptr)
         {
-            decodeNameFromData(data, name);
+            const std::string nameDecoded = decodeNameFromData(data);
+            std::copy(nameDecoded.cbegin(), nameDecoded.cend(), name);
         }
 
         if (amp_set != nullptr)
