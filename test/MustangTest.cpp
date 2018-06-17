@@ -1208,9 +1208,9 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, saveEffectsSendsValues)
 {
-    std::array<fx_pedal_settings, 2> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
-                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}}};
-    constexpr int numOfEffects = settings.size();
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
+                                               fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}};
+    const int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     constexpr int postAmpOffset{4};
     const std::string name = "abcd";
@@ -1295,15 +1295,15 @@ TEST_F(MustangTest, saveEffectsSendsValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    m->save_effects(slot, name, numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings);
 }
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 {
-    std::array<fx_pedal_settings, 3> settings{{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
                                                fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true},
-                                               fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}}};
-    constexpr int numOfEffects = settings.size();
+                                               fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}};
+    const int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1370,22 +1370,22 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    m->save_effects(slot, name, numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings);
 }
 
 TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 {
-    std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}}};
-    constexpr int numOfEffects = settings.size();
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}};
+    const int numOfEffects = settings.size();
     const std::string name = "abcd";
 
-    EXPECT_THROW(m->save_effects(slot, name, numOfEffects, settings.data()), std::invalid_argument);
+    EXPECT_THROW(m->save_effects(slot, name, numOfEffects, settings), std::invalid_argument);
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 {
-    std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
-    constexpr int numOfEffects = settings.size();
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}};
+    const int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
     const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1452,13 +1452,13 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
 
-    m->save_effects(slot, name, numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings);
 }
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 {
-    std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}}};
-    constexpr int numOfEffects = settings.size();
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}};
+    const int numOfEffects = settings.size();
     constexpr int fxKnob{0x01};
     constexpr std::size_t nameSize{22};
     const std::string name(24, 'x');
@@ -1489,13 +1489,13 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
 
-    m->save_effects(slot, name, numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings);
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 {
-    std::array<fx_pedal_settings, 1> settings{{fx_pedal_settings{1, value(effects::TAPE_DELAY), 0, 1, 2, 3, 4, 5, false}}};
-    constexpr int numOfEffects = settings.size();
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::TAPE_DELAY), 0, 1, 2, 3, 4, 5, false}};
+    const int numOfEffects = settings.size();
     constexpr int fxKnob{0x02};
     const std::string name = "abcd";
     std::array<std::uint8_t, packetSize> dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1552,7 +1552,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
 
-    m->save_effects(slot, name, numOfEffects, settings.data());
+    m->save_effects(slot, name, numOfEffects, settings);
 }
 
 TEST_F(MustangTest, saveOnAmp)
