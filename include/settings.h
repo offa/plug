@@ -51,4 +51,3 @@ namespace plug
         const std::unique_ptr<Ui::Settings> ui;
     };
 }
-

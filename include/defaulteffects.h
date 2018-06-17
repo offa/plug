@@ -49,4 +49,3 @@ namespace plug
         void save_default_effects();
     };
 }
-

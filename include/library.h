@@ -64,4 +64,3 @@ namespace plug
         void directory_changed(QString);
     };
 }
-

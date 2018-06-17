@@ -56,4 +56,3 @@ namespace plug
         void save();
     };
 }
-

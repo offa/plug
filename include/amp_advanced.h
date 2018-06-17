@@ -64,4 +64,3 @@ namespace plug
         const std::unique_ptr<Ui::Amp_Advanced> ui;
     };
 }
-

@@ -63,4 +63,3 @@ namespace plug
         const std::unique_ptr<Ui::QuickPresets> ui;
     };
 }
-

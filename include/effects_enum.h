@@ -123,4 +123,3 @@ namespace plug
         return static_cast<unsigned char>(c);
     }
 }
-

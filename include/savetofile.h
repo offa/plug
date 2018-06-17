@@ -61,4 +61,3 @@ namespace plug
         void writeUSBGain(int);
     };
 }
-

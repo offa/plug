@@ -88,4 +88,3 @@ namespace plug
         void showAndActivate();
     };
 }
-

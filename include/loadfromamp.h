@@ -54,4 +54,3 @@ namespace plug
         void load();
     };
 }
-

@@ -58,4 +58,3 @@ namespace plug
         bool put_post_amp;
     };
 }
-

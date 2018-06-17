@@ -86,4 +86,3 @@ namespace plug
         void showAndActivate();
     };
 }
-
