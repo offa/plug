@@ -722,13 +722,13 @@ namespace plug
 
     void Mustang::set_amplifier(amp_settings value)
     {
-        auto settingsPacket = serializeAmpSettings(value);
+        const auto settingsPacket = serializeAmpSettings(value);
         comm->interruptWrite(endpointSend, settingsPacket);
         comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
 
-        auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
+        const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
         comm->interruptWrite(endpointSend, settingsGainPacket);
         comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, applyCommand);
