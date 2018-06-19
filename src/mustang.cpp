@@ -272,15 +272,15 @@ namespace plug
 
         std::array<std::uint8_t, packetSize> serializeAmpSettingsUsbGain(const amp_settings& value)
         {
-            std::array<std::uint8_t, packetSize> array;
-            array.fill(0x00);
-            array[0] = 0x1c;
-            array[1] = 0x03;
-            array[2] = 0x0d;
-            array[6] = 0x01;
-            array[7] = 0x01;
-            array[16] = value.usb_gain;
-            return array;
+            std::array<std::uint8_t, packetSize> packet{{0}};
+            packet.fill(0x00);
+            packet[0] = 0x1c;
+            packet[1] = 0x03;
+            packet[2] = 0x0d;
+            packet[6] = 0x01;
+            packet[7] = 0x01;
+            packet[16] = value.usb_gain;
+            return packet;
         }
 
 
