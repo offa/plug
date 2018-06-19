@@ -114,6 +114,162 @@ namespace plug
             }
         }
 
+        std::array<std::uint8_t, packetSize> serializeAmpSettings(const amp_settings& value)
+        {
+            std::array<std::uint8_t, packetSize> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                                                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                                                        0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
+                                                        0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
+                                                        0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
+                                                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+
+            array[DSP] = 0x05;
+            array[GAIN] = value.gain;
+            array[VOLUME] = value.volume;
+            array[TREBLE] = value.treble;
+            array[MIDDLE] = value.middle;
+            array[BASS] = value.bass;
+
+            if (value.cabinet > 0x0c)
+            {
+                array[CABINET] = 0x00;
+            }
+            else
+            {
+                array[CABINET] = value.cabinet;
+            }
+
+            if (value.noise_gate > 0x05)
+            {
+                array[NOISE_GATE] = 0x00;
+            }
+            else
+            {
+                array[NOISE_GATE] = value.noise_gate;
+            }
+
+            array[MASTER_VOL] = value.master_vol;
+            array[GAIN2] = value.gain2;
+            array[PRESENCE] = value.presence;
+
+            if (value.noise_gate == 0x05)
+            {
+                if (value.threshold > 0x09)
+                {
+                    array[THRESHOLD] = 0x00;
+                }
+                else
+                {
+                    array[THRESHOLD] = value.threshold;
+                }
+
+                array[DEPTH] = value.depth;
+            }
+            array[BIAS] = value.bias;
+
+            if (value.sag > 0x02)
+            {
+                array[SAG] = 0x01;
+            }
+            else
+            {
+                array[SAG] = value.sag;
+            }
+
+            array[BRIGHTNESS] = value.brightness ? 1 : 0;
+
+            switch (static_cast<amps>(value.amp_num))
+            {
+                case amps::FENDER_57_DELUXE:
+                    array[AMPLIFIER] = 0x67;
+                    array[44] = array[45] = array[46] = 0x01;
+                    array[50] = 0x01;
+                    array[54] = 0x53;
+                    break;
+
+                case amps::FENDER_59_BASSMAN:
+                    array[AMPLIFIER] = 0x64;
+                    array[44] = array[45] = array[46] = 0x02;
+                    array[50] = 0x02;
+                    array[54] = 0x67;
+                    break;
+
+                case amps::FENDER_57_CHAMP:
+                    array[AMPLIFIER] = 0x7c;
+                    array[44] = array[45] = array[46] = 0x0c;
+                    array[50] = 0x0c;
+                    array[54] = 0x00;
+                    break;
+
+                case amps::FENDER_65_DELUXE_REVERB:
+                    array[AMPLIFIER] = 0x53;
+                    array[40] = array[43] = 0x00;
+                    array[44] = array[45] = array[46] = 0x03;
+                    array[50] = 0x03;
+                    array[54] = 0x6a;
+                    break;
+
+                case amps::FENDER_65_PRINCETON:
+                    array[AMPLIFIER] = 0x6a;
+                    array[44] = array[45] = array[46] = 0x04;
+                    array[50] = 0x04;
+                    array[54] = 0x61;
+                    break;
+
+                case amps::FENDER_65_TWIN_REVERB:
+                    array[AMPLIFIER] = 0x75;
+                    array[44] = array[45] = array[46] = 0x05;
+                    array[50] = 0x05;
+                    array[54] = 0x72;
+                    break;
+
+                case amps::FENDER_SUPER_SONIC:
+                    array[AMPLIFIER] = 0x72;
+                    array[44] = array[45] = array[46] = 0x06;
+                    array[50] = 0x06;
+                    array[54] = 0x79;
+                    break;
+
+                case amps::BRITISH_60S:
+                    array[AMPLIFIER] = 0x61;
+                    array[44] = array[45] = array[46] = 0x07;
+                    array[50] = 0x07;
+                    array[54] = 0x5e;
+                    break;
+
+                case amps::BRITISH_70S:
+                    array[AMPLIFIER] = 0x79;
+                    array[44] = array[45] = array[46] = 0x0b;
+                    array[50] = 0x0b;
+                    array[54] = 0x7c;
+                    break;
+
+                case amps::BRITISH_80S:
+                    array[AMPLIFIER] = 0x5e;
+                    array[44] = array[45] = array[46] = 0x09;
+                    array[50] = 0x09;
+                    array[54] = 0x5d;
+                    break;
+
+                case amps::AMERICAN_90S:
+                    array[AMPLIFIER] = 0x5d;
+                    array[44] = array[45] = array[46] = 0x0a;
+                    array[50] = 0x0a;
+                    array[54] = 0x6d;
+                    break;
+
+                case amps::METAL_2000:
+                    array[AMPLIFIER] = 0x6d;
+                    array[44] = array[45] = array[46] = 0x08;
+                    array[50] = 0x08;
+                    array[54] = 0x75;
+                    break;
+            }
+            return array;
+        }
+
 
         constexpr bool hasExtraKnob(effects e)
         {
@@ -553,163 +709,13 @@ namespace plug
 
     void Mustang::set_amplifier(amp_settings value)
     {
-        std::array<std::uint8_t, packetSize> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                                    0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
-                                                    0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
-                                                    0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-                                                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-
-        array[DSP] = 0x05;
-        array[GAIN] = value.gain;
-        array[VOLUME] = value.volume;
-        array[TREBLE] = value.treble;
-        array[MIDDLE] = value.middle;
-        array[BASS] = value.bass;
-
-        if (value.cabinet > 0x0c)
-        {
-            array[CABINET] = 0x00;
-        }
-        else
-        {
-            array[CABINET] = value.cabinet;
-        }
-
-        if (value.noise_gate > 0x05)
-        {
-            array[NOISE_GATE] = 0x00;
-        }
-        else
-        {
-            array[NOISE_GATE] = value.noise_gate;
-        }
-
-        array[MASTER_VOL] = value.master_vol;
-        array[GAIN2] = value.gain2;
-        array[PRESENCE] = value.presence;
-
-        if (value.noise_gate == 0x05)
-        {
-            if (value.threshold > 0x09)
-            {
-                array[THRESHOLD] = 0x00;
-            }
-            else
-            {
-                array[THRESHOLD] = value.threshold;
-            }
-
-            array[DEPTH] = value.depth;
-        }
-        array[BIAS] = value.bias;
-
-        if (value.sag > 0x02)
-        {
-            array[SAG] = 0x01;
-        }
-        else
-        {
-            array[SAG] = value.sag;
-        }
-
-        array[BRIGHTNESS] = value.brightness ? 1 : 0;
-
-        switch (static_cast<amps>(value.amp_num))
-        {
-            case amps::FENDER_57_DELUXE:
-                array[AMPLIFIER] = 0x67;
-                array[44] = array[45] = array[46] = 0x01;
-                array[50] = 0x01;
-                array[54] = 0x53;
-                break;
-
-            case amps::FENDER_59_BASSMAN:
-                array[AMPLIFIER] = 0x64;
-                array[44] = array[45] = array[46] = 0x02;
-                array[50] = 0x02;
-                array[54] = 0x67;
-                break;
-
-            case amps::FENDER_57_CHAMP:
-                array[AMPLIFIER] = 0x7c;
-                array[44] = array[45] = array[46] = 0x0c;
-                array[50] = 0x0c;
-                array[54] = 0x00;
-                break;
-
-            case amps::FENDER_65_DELUXE_REVERB:
-                array[AMPLIFIER] = 0x53;
-                array[40] = array[43] = 0x00;
-                array[44] = array[45] = array[46] = 0x03;
-                array[50] = 0x03;
-                array[54] = 0x6a;
-                break;
-
-            case amps::FENDER_65_PRINCETON:
-                array[AMPLIFIER] = 0x6a;
-                array[44] = array[45] = array[46] = 0x04;
-                array[50] = 0x04;
-                array[54] = 0x61;
-                break;
-
-            case amps::FENDER_65_TWIN_REVERB:
-                array[AMPLIFIER] = 0x75;
-                array[44] = array[45] = array[46] = 0x05;
-                array[50] = 0x05;
-                array[54] = 0x72;
-                break;
-
-            case amps::FENDER_SUPER_SONIC:
-                array[AMPLIFIER] = 0x72;
-                array[44] = array[45] = array[46] = 0x06;
-                array[50] = 0x06;
-                array[54] = 0x79;
-                break;
-
-            case amps::BRITISH_60S:
-                array[AMPLIFIER] = 0x61;
-                array[44] = array[45] = array[46] = 0x07;
-                array[50] = 0x07;
-                array[54] = 0x5e;
-                break;
-
-            case amps::BRITISH_70S:
-                array[AMPLIFIER] = 0x79;
-                array[44] = array[45] = array[46] = 0x0b;
-                array[50] = 0x0b;
-                array[54] = 0x7c;
-                break;
-
-            case amps::BRITISH_80S:
-                array[AMPLIFIER] = 0x5e;
-                array[44] = array[45] = array[46] = 0x09;
-                array[50] = 0x09;
-                array[54] = 0x5d;
-                break;
-
-            case amps::AMERICAN_90S:
-                array[AMPLIFIER] = 0x5d;
-                array[44] = array[45] = array[46] = 0x0a;
-                array[50] = 0x0a;
-                array[54] = 0x6d;
-                break;
-
-            case amps::METAL_2000:
-                array[AMPLIFIER] = 0x6d;
-                array[44] = array[45] = array[46] = 0x08;
-                array[50] = 0x08;
-                array[54] = 0x75;
-                break;
-        }
-
-        comm->interruptWrite(endpointSend, array);
+        auto settingsPacket = serializeAmpSettings(value);
+        comm->interruptWrite(endpointSend, settingsPacket);
         comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
 
+        std::array<std::uint8_t, packetSize> array;
         array.fill(0x00);
         array[0] = 0x1c;
         array[1] = 0x03;
