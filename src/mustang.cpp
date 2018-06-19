@@ -270,6 +270,19 @@ namespace plug
             return array;
         }
 
+        std::array<std::uint8_t, packetSize> serializeAmpSettingsUsbGain(const amp_settings& value)
+        {
+            std::array<std::uint8_t, packetSize> array;
+            array.fill(0x00);
+            array[0] = 0x1c;
+            array[1] = 0x03;
+            array[2] = 0x0d;
+            array[6] = 0x01;
+            array[7] = 0x01;
+            array[16] = value.usb_gain;
+            return array;
+        }
+
 
         constexpr bool hasExtraKnob(effects e)
         {
@@ -715,16 +728,8 @@ namespace plug
         comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
 
-        std::array<std::uint8_t, packetSize> array;
-        array.fill(0x00);
-        array[0] = 0x1c;
-        array[1] = 0x03;
-        array[2] = 0x0d;
-        array[6] = 0x01;
-        array[7] = 0x01;
-        array[16] = value.usb_gain;
-
-        comm->interruptWrite(endpointSend, array);
+        auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
+        comm->interruptWrite(endpointSend, settingsGainPacket);
         comm->interruptReceive(endpointRecv, packetSize);
         comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
