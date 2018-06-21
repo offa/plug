@@ -822,7 +822,8 @@ namespace plug
             unsigned char recieved_data[296][packetSize];
             memset(recieved_data, 0x00, 296 * packetSize);
 
-            int i = 0, j = 0;
+            int i = 0;
+            int j = 0;
             std::array<std::uint8_t, packetSize> array{0};
             array.fill(0x00);
             array[0] = 0xff;
