@@ -84,8 +84,6 @@ namespace plug
     void Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         std::array<std::uint8_t, packetSize> array;
-        unsigned char recieved_data[296][packetSize];
-        memset(recieved_data, 0x00, 296 * packetSize);
 
         if (comm->isOpen() == false)
         {
@@ -105,41 +103,7 @@ namespace plug
         comm->interruptWrite(endpointSend, array);
         comm->interruptReceive(endpointRecv, packetSize);
 
-        if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
-        {
-            int i = 0, j = 0;
-            array.fill(0x00);
-            array[0] = 0xff;
-            array[1] = 0xc1;
-            auto recieved = comm->interruptWrite(endpointSend, array);
-
-            for (i = 0; recieved != 0; i++)
-            {
-                const auto recvData = comm->interruptReceive(endpointRecv, packetSize);
-                recieved = recvData.size();
-                std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
-            }
-
-            const int max_to_receive = (i > 143 ? 200 : 48);
-            if (list != nullptr)
-            {
-                for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
-                {
-                    memcpy(list[j], recieved_data[i] + 16, 32);
-                }
-            }
-
-            if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
-            {
-                unsigned char data[7][packetSize];
-
-                for (j = 0; j < 7; ++i, ++j)
-                {
-                    memcpy(data[j], recieved_data[i], packetSize);
-                }
-                decode_data(data, name, amp_set, effects_set);
-            }
-        }
+        loadInitialData(list, name, amp_set, effects_set);
     }
 
     void Mustang::stop_amp()
@@ -848,5 +812,49 @@ namespace plug
         comm->interruptWrite(endpointSend, applyCommand);
         comm->interruptReceive(endpointRecv, packetSize);
         applyCommand[FXKNOB] = 0x00;
+    }
+
+    void Mustang::loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    {
+
+        if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
+        {
+            unsigned char recieved_data[296][packetSize];
+            memset(recieved_data, 0x00, 296 * packetSize);
+
+            int i = 0, j = 0;
+            std::array<std::uint8_t, packetSize> array{0};
+            array.fill(0x00);
+            array[0] = 0xff;
+            array[1] = 0xc1;
+            auto recieved = comm->interruptWrite(endpointSend, array);
+
+            for (i = 0; recieved != 0; i++)
+            {
+                const auto recvData = comm->interruptReceive(endpointRecv, packetSize);
+                recieved = recvData.size();
+                std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
+            }
+
+            const int max_to_receive = (i > 143 ? 200 : 48);
+            if (list != nullptr)
+            {
+                for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
+                {
+                    memcpy(list[j], recieved_data[i] + 16, 32);
+                }
+            }
+
+            if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
+            {
+                unsigned char data[7][packetSize];
+
+                for (j = 0; j < 7; ++i, ++j)
+                {
+                    memcpy(data[j], recieved_data[i], packetSize);
+                }
+                decode_data(data, name, amp_set, effects_set);
+            }
+        }
     }
 }

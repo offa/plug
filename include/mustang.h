@@ -60,5 +60,6 @@ namespace plug
         unsigned char prev_array[4][packetSize]; // array used to clear the effect
 
         void decode_data(unsigned char[7][packetSize], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
+        void loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set);
     };
 }
