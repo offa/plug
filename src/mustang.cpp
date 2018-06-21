@@ -816,14 +816,13 @@ namespace plug
 
     void Mustang::loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-
         if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
             unsigned char recieved_data[296][packetSize];
             memset(recieved_data, 0x00, 296 * packetSize);
 
-            int i = 0;
-            int j = 0;
+            std::size_t i{0};
+            std::size_t j{0};
             std::array<std::uint8_t, packetSize> array{0};
             array.fill(0x00);
             array[0] = 0xff;
@@ -837,7 +836,7 @@ namespace plug
                 std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
             }
 
-            const int max_to_receive = (i > 143 ? 200 : 48);
+            const std::size_t max_to_receive = (i > 143 ? 200 : 48);
             if (list != nullptr)
             {
                 for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
