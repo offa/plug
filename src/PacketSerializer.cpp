@@ -25,14 +25,14 @@
 
 namespace plug
 {
-    std::string decodeNameFromData(const unsigned char date[7][64])
+    std::string decodeNameFromData(const unsigned char data[7][64])
     {
         constexpr std::size_t nameLength{32};
         std::string name(nameLength, '\0');
 
-        for (int i = 0, j = 16; date[0][j] != 0x00; ++i, ++j)
+        for (int i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
         {
-            name[i] = date[0][j];
+            name[i] = data[0][j];
         }
 
         name.resize(nameLength);
