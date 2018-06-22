@@ -204,7 +204,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(0), Return(0)));
 
     char nameList[100][nameLength];
-    std::array<char, nameLength> name;
+    std::array<char, nameLength> name{};
     m->start_amp(nameList, name.data(), nullptr, nullptr);
     EXPECT_THAT(name.data(), StrEq("abc"));
 
@@ -476,7 +476,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(0), Return(0)));
 
-    std::array<char, packetSize> name{{0}};
+    std::array<char, packetSize> name{};
     m->load_memory_bank(slot, name.data(), nullptr, nullptr);
     EXPECT_THAT(name.data(), StrEq("abc"));
 }
@@ -560,7 +560,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
         .WillOnce(DoAll(SetArrayArgument<2>(recvData3.cbegin(), recvData3.cend()), SetArgPointee<4>(recvSize), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
-    std::array<fx_pedal_settings, 4> settings;
+    std::array<fx_pedal_settings, 4> settings{};
     m->load_memory_bank(slot, nullptr, nullptr, settings.data());
 
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
