@@ -26,7 +26,7 @@ int main()
 {
     std::cout << " === Plug v" << plug::version() << " - Integrationtest ===\n\n";
 
-    plug::Mustang m;
+    plug::com::Mustang m{};
     m.start_amp(nullptr, nullptr, nullptr, nullptr);
 
     return 0;

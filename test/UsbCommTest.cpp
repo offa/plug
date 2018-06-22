@@ -26,8 +26,8 @@
 #include <array>
 #include <gmock/gmock.h>
 
-using plug::UsbComm;
-using plug::UsbException;
+using plug::com::UsbComm;
+using plug::com::UsbException;
 using namespace testing;
 using namespace test::matcher;
 

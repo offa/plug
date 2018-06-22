@@ -21,7 +21,7 @@
 
 #pragma once
 
-namespace plug
+namespace plug::com
 {
     int updateFirmware(const char* filename);
 }

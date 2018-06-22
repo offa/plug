@@ -20,6 +20,7 @@
  */
 
 #include "MustangUpdater.h"
+#include "MustangConstants.h"
 #include "mustang.h"
 #include <chrono>
 #include <cstdio>
@@ -27,7 +28,7 @@
 #include <unistd.h>
 #include <libusb-1.0/libusb.h>
 
-namespace plug
+namespace plug::com
 {
 
     namespace

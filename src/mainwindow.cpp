@@ -32,7 +32,7 @@ namespace plug
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
           ui(std::make_unique<Ui::MainWindow>()),
-          amp_ops(std::make_unique<Mustang>())
+          amp_ops(std::make_unique<com::Mustang>())
     {
         ui->setupUi(this);
 
@@ -184,7 +184,7 @@ namespace plug
         {
             amp_ops->start_amp(names, name, &amplifier_set, effects_set); // request initialization of communication
         }
-        catch (const UsbException& ex)
+        catch (const com::UsbException& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
@@ -295,7 +295,7 @@ namespace plug
 
             connected = false;
         }
-        catch (UsbException& ex)
+        catch (com::UsbException& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
         }
@@ -710,7 +710,7 @@ namespace plug
         ui->centralWidget->setDisabled(true);
         ui->menuBar->setDisabled(true);
         this->repaint();
-        ret = updateFirmware(filename.toLatin1().constData()); // magic part
+        ret = com::updateFirmware(filename.toLatin1().constData()); // magic part
         ui->centralWidget->setDisabled(false);
         ui->menuBar->setDisabled(false);
         ui->statusBar->showMessage("", 1);

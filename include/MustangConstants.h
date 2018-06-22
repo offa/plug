@@ -24,7 +24,7 @@
 #include <cstdint>
 #include <cstddef>
 
-namespace plug
+namespace plug::com
 {
     // amp's VID and PID
     inline constexpr std::uint16_t USB_VID{0x1ed8};

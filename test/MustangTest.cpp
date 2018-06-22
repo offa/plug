@@ -28,6 +28,7 @@
 #include <gmock/gmock.h>
 
 using namespace plug;
+using namespace plug::com;
 using namespace test;
 using namespace test::matcher;
 using namespace test::constants;
@@ -40,7 +41,7 @@ class MustangTest : public testing::Test
 protected:
     void SetUp() override
     {
-        m = std::make_unique<Mustang>();
+        m = std::make_unique<com::Mustang>();
         usbmock = mock::resetUsbMock();
     }
 
@@ -87,7 +88,7 @@ protected:
     }
 
 
-    std::unique_ptr<Mustang> m;
+    std::unique_ptr<com::Mustang> m;
     mock::UsbMock* usbmock;
     libusb_device_handle handle{};
     const helper::BinData dummy = helper::createEmptyPacket();
@@ -133,7 +134,7 @@ TEST_F(MustangTest, startHandlesErrorOnInitFailure)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(usbSuccess));
     EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(usbError));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::UsbException);
+    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::com::UsbException);
 
     ignoreClose();
 }
@@ -165,7 +166,7 @@ TEST_F(MustangTest, startFailsIfNoDeviceFound)
         .Times(AtLeast(1))
         .WillRepeatedly(Return(nullptr));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::UsbException);
+    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::com::UsbException);
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)

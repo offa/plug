@@ -23,7 +23,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace plug
+namespace plug::com
 {
 
     class UsbException : public std::runtime_error

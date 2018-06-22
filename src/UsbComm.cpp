@@ -24,7 +24,7 @@
 #include <chrono>
 #include <libusb-1.0/libusb.h>
 
-namespace plug
+namespace plug::com
 {
     namespace
     {

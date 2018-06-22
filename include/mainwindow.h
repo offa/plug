@@ -49,11 +49,14 @@ namespace Ui
 {
     class MainWindow;
 }
+namespace plug::com
+{
+    class Mustang;
+}
+
 
 namespace plug
 {
-    class Mustang;
-
 
     class MainWindow : public QMainWindow
     {
@@ -90,7 +93,7 @@ namespace plug
         QString current_name;
         char names[100][32];
         bool manual_check, connected;
-        const std::unique_ptr<Mustang> amp_ops;
+        const std::unique_ptr<com::Mustang> amp_ops;
         Amplifier* amp;
         Effect* effect1;
         Effect* effect2;

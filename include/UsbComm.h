@@ -26,7 +26,7 @@
 
 struct libusb_device_handle;
 
-namespace plug
+namespace plug::com
 {
     class UsbComm
     {

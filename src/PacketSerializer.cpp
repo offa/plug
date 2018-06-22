@@ -23,7 +23,7 @@
 #include "IdLookup.h"
 #include "effects_enum.h"
 
-namespace plug
+namespace plug::com
 {
     std::string decodeNameFromData(const unsigned char data[7][64])
     {

@@ -26,7 +26,7 @@
 #include <array>
 #include <cstring>
 
-namespace plug
+namespace plug::com
 {
     namespace
     {

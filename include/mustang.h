@@ -30,7 +30,7 @@
 #include <memory>
 #include <cstdint>
 
-namespace plug
+namespace plug::com
 {
     class UsbComm;
 

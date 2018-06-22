@@ -27,7 +27,7 @@
 #include <array>
 #include <cstdint>
 
-namespace plug
+namespace plug::com
 {
     std::string decodeNameFromData(const unsigned char data[7][64]);
     amp_settings decodeAmpFromData(const unsigned char data[7][64]);
