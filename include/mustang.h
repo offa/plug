@@ -63,5 +63,6 @@ namespace plug
         void loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set);
 
         std::size_t send(const std::array<std::uint8_t, packetSize>& packet);
+        std::vector<std::uint8_t> receive();
     };
 }

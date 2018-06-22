@@ -95,13 +95,13 @@ namespace plug
         array.fill(0x00);
         array[1] = 0xc3;
         send(array);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
 
         array.fill(0x00);
         array[0] = 0x1a;
         array[1] = 0x03;
         send(array);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
 
         loadInitialData(list, name, amp_set, effects_set);
     }
@@ -141,9 +141,9 @@ namespace plug
         array[KNOB6] = 0x00;
 
         send(array);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
         send(applyCommand);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
 
         const auto effectType = static_cast<effects>(value.effect_num);
 
@@ -422,9 +422,9 @@ namespace plug
 
         // send packet to the amp
         send(array);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
         send(applyCommand);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
 
         // save current settings
         memcpy(prev_array[array[DSP] - 6], array.data(), packetSize);
@@ -434,22 +434,22 @@ namespace plug
     {
         const auto settingsPacket = serializeAmpSettings(value);
         send(settingsPacket);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
         send(applyCommand);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
         send(settingsGainPacket);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
         send(applyCommand);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
         const auto data = serializeName(slot, name);
         send(data);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
         load_memory_bank(slot, nullptr, nullptr, nullptr);
     }
 
@@ -469,7 +469,7 @@ namespace plug
 
         for (int i = 0; n != 0; ++i)
         {
-            const auto recvData = comm->interruptReceive(endpointRecv, packetSize);
+            const auto recvData = receive();
             n = recvData.size();
 
             if (i < 7)
@@ -554,7 +554,7 @@ namespace plug
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(array.begin(), 16));
 
         send(array);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
 
         array[1] = 0x03;
         array[6] = 0x00;
@@ -792,12 +792,12 @@ namespace plug
             }
             // send packet
             send(array);
-            comm->interruptReceive(endpointRecv, packetSize);
+            receive();
         }
 
         applyCommand[FXKNOB] = fxknob;
         send(applyCommand);
-        comm->interruptReceive(endpointRecv, packetSize);
+        receive();
         applyCommand[FXKNOB] = 0x00;
     }
 
@@ -818,7 +818,7 @@ namespace plug
 
             for (i = 0; recieved != 0; i++)
             {
-                const auto recvData = comm->interruptReceive(endpointRecv, packetSize);
+                const auto recvData = receive();
                 recieved = recvData.size();
                 std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
             }
@@ -849,4 +849,10 @@ namespace plug
     {
         return comm->interruptWrite(endpointSend, packet);
     }
+
+    std::vector<std::uint8_t> Mustang::receive()
+    {
+        return comm->interruptReceive(endpointRecv, packetSize);
+    }
+
 }
