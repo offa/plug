@@ -809,7 +809,7 @@ namespace plug::com
 
             std::size_t i{0};
             std::size_t j{0};
-            Packet array{0};
+            Packet array{};
             array.fill(0x00);
             array[0] = 0xff;
             array[1] = 0xc1;
