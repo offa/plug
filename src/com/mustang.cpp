@@ -23,7 +23,6 @@
 #include "com/UsbComm.h"
 #include "com/IdLookup.h"
 #include "com/PacketSerializer.h"
-#include <array>
 #include <cstring>
 
 namespace plug::com
@@ -83,7 +82,7 @@ namespace plug::com
 
     void Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        std::array<std::uint8_t, packetSize> array;
+        Packet array;
 
         if (comm->isOpen() == false)
         {
@@ -113,7 +112,7 @@ namespace plug::com
 
     void Mustang::set_effect(fx_pedal_settings value)
     {
-        std::array<std::uint8_t, packetSize> array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+        Packet array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                     0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -455,7 +454,7 @@ namespace plug::com
 
     void Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        std::array<std::uint8_t, packetSize> array;
+        Packet array;
         unsigned char data[7][packetSize];
 
         array.fill(0x00);
@@ -507,7 +506,7 @@ namespace plug::com
     {
         unsigned char fxknob;
         std::size_t repeat{0};
-        std::array<std::uint8_t, packetSize> array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+        Packet array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -810,7 +809,7 @@ namespace plug::com
 
             std::size_t i{0};
             std::size_t j{0};
-            std::array<std::uint8_t, packetSize> array{{0}};
+            Packet array{{0}};
             array.fill(0x00);
             array[0] = 0xff;
             array[1] = 0xc1;
@@ -845,7 +844,7 @@ namespace plug::com
         }
     }
 
-    std::size_t Mustang::sendPacket(const std::array<std::uint8_t, packetSize>& packet)
+    std::size_t Mustang::sendPacket(const Packet& packet)
     {
         return comm->interruptWrite(endpointSend, packet);
     }

@@ -26,7 +26,6 @@
 #include "com/Packet.h"
 #include "com/MustangConstants.h"
 #include <string_view>
-#include <array>
 #include <vector>
 #include <memory>
 #include <cstdint>
@@ -63,7 +62,7 @@ namespace plug::com
         void decode_data(unsigned char[7][packetSize], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         void loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set);
 
-        std::size_t sendPacket(const std::array<std::uint8_t, packetSize>& packet);
+        std::size_t sendPacket(const Packet& packet);
         std::vector<std::uint8_t> receivePacket();
     };
 }
