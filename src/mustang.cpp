@@ -45,7 +45,7 @@ namespace plug
         }
 
 
-        constexpr std::initializer_list<std::uint16_t> pids{
+        inline constexpr std::initializer_list<std::uint16_t> pids{
             SMALL_AMPS_USB_PID,
             BIG_AMPS_USB_PID,
             SMALL_AMPS_V2_USB_PID,
