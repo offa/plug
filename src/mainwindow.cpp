@@ -710,7 +710,7 @@ namespace plug
         ui->centralWidget->setDisabled(true);
         ui->menuBar->setDisabled(true);
         this->repaint();
-        ret = com::updateFirmware(filename.toLatin1().constData()); // magic part
+        ret = com::updateFirmware(filename.toLatin1().constData());
         ui->centralWidget->setDisabled(false);
         ui->menuBar->setDisabled(false);
         ui->statusBar->showMessage("", 1);
