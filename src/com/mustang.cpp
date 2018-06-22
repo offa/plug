@@ -19,10 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mustang.h"
-#include "UsbComm.h"
-#include "IdLookup.h"
-#include "PacketSerializer.h"
+#include "com/mustang.h"
+#include "com/UsbComm.h"
+#include "com/IdLookup.h"
+#include "com/PacketSerializer.h"
 #include <array>
 #include <cstring>
 

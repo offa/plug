@@ -1,8 +1,6 @@
+add_subdirectory(com)
 
 add_executable(plug main.cpp)
-
-add_library(plug-mustang mustang.cpp UsbComm.cpp PacketSerializer.cpp)
-add_library(plug-updater MustangUpdater.cpp)
 
 add_library(plug-ui amp_advanced.cpp
                     amplifier.cpp

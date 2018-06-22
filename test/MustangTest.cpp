@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mustang.h"
-#include "UsbException.h"
+#include "com/mustang.h"
+#include "com/UsbException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/PacketConstants.h"
 #include "helper/Matcher.h"

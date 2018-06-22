@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mustang.h"
+#include "com/mustang.h"
 #include "version.h"
 #include <iostream>
 

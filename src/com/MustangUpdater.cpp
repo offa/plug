@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MustangUpdater.h"
-#include "MustangConstants.h"
-#include "mustang.h"
+#include "com/MustangUpdater.h"
+#include "com/MustangConstants.h"
+#include "com/mustang.h"
 #include <chrono>
 #include <cstdio>
 #include <cstring>

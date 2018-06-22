@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "UsbComm.h"
-#include "UsbException.h"
+#include "com/UsbComm.h"
+#include "com/UsbException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/Matcher.h"
 #include <vector>

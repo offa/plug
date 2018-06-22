@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "IdLookup.h"
+#include "com/IdLookup.h"
 #include <gmock/gmock.h>
 
 using plug::amps;

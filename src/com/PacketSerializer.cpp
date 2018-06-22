@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PacketSerializer.h"
-#include "IdLookup.h"
+#include "com/PacketSerializer.h"
+#include "com/IdLookup.h"
 #include "effects_enum.h"
 
 namespace plug::com
