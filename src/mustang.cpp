@@ -94,14 +94,14 @@ namespace plug
         // to get any replies from the amp in the future
         array.fill(0x00);
         array[1] = 0xc3;
-        send(array);
-        receive();
+        sendPacket(array);
+        receivePacket();
 
         array.fill(0x00);
         array[0] = 0x1a;
         array[1] = 0x03;
-        send(array);
-        receive();
+        sendPacket(array);
+        receivePacket();
 
         loadInitialData(list, name, amp_set, effects_set);
     }
@@ -140,10 +140,10 @@ namespace plug
         array[KNOB5] = 0x00;
         array[KNOB6] = 0x00;
 
-        send(array);
-        receive();
-        send(applyCommand);
-        receive();
+        sendPacket(array);
+        receivePacket();
+        sendPacket(applyCommand);
+        receivePacket();
 
         const auto effectType = static_cast<effects>(value.effect_num);
 
@@ -421,10 +421,10 @@ namespace plug
         }
 
         // send packet to the amp
-        send(array);
-        receive();
-        send(applyCommand);
-        receive();
+        sendPacket(array);
+        receivePacket();
+        sendPacket(applyCommand);
+        receivePacket();
 
         // save current settings
         memcpy(prev_array[array[DSP] - 6], array.data(), packetSize);
@@ -433,23 +433,23 @@ namespace plug
     void Mustang::set_amplifier(amp_settings value)
     {
         const auto settingsPacket = serializeAmpSettings(value);
-        send(settingsPacket);
-        receive();
-        send(applyCommand);
-        receive();
+        sendPacket(settingsPacket);
+        receivePacket();
+        sendPacket(applyCommand);
+        receivePacket();
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
-        send(settingsGainPacket);
-        receive();
-        send(applyCommand);
-        receive();
+        sendPacket(settingsGainPacket);
+        receivePacket();
+        sendPacket(applyCommand);
+        receivePacket();
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
         const auto data = serializeName(slot, name);
-        send(data);
-        receive();
+        sendPacket(data);
+        receivePacket();
         load_memory_bank(slot, nullptr, nullptr, nullptr);
     }
 
@@ -465,11 +465,11 @@ namespace plug
         array[SAVE_SLOT] = slot;
         array[6] = 0x01;
 
-        auto n = send(array);
+        auto n = sendPacket(array);
 
         for (int i = 0; n != 0; ++i)
         {
-            const auto recvData = receive();
+            const auto recvData = receivePacket();
             n = recvData.size();
 
             if (i < 7)
@@ -553,8 +553,8 @@ namespace plug
         sizedName.resize(nameLength, '\0');
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(array.begin(), 16));
 
-        send(array);
-        receive();
+        sendPacket(array);
+        receivePacket();
 
         array[1] = 0x03;
         array[6] = 0x00;
@@ -791,13 +791,13 @@ namespace plug
                     break;
             }
             // send packet
-            send(array);
-            receive();
+            sendPacket(array);
+            receivePacket();
         }
 
         applyCommand[FXKNOB] = fxknob;
-        send(applyCommand);
-        receive();
+        sendPacket(applyCommand);
+        receivePacket();
         applyCommand[FXKNOB] = 0x00;
     }
 
@@ -814,11 +814,11 @@ namespace plug
             array.fill(0x00);
             array[0] = 0xff;
             array[1] = 0xc1;
-            auto recieved = send(array);
+            auto recieved = sendPacket(array);
 
             for (i = 0; recieved != 0; i++)
             {
-                const auto recvData = receive();
+                const auto recvData = receivePacket();
                 recieved = recvData.size();
                 std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
             }
@@ -845,12 +845,12 @@ namespace plug
         }
     }
 
-    std::size_t Mustang::send(const std::array<std::uint8_t, packetSize>& packet)
+    std::size_t Mustang::sendPacket(const std::array<std::uint8_t, packetSize>& packet)
     {
         return comm->interruptWrite(endpointSend, packet);
     }
 
-    std::vector<std::uint8_t> Mustang::receive()
+    std::vector<std::uint8_t> Mustang::receivePacket()
     {
         return comm->interruptReceive(endpointRecv, packetSize);
     }
