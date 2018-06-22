@@ -691,9 +691,6 @@ namespace plug
 
     void MainWindow::update_firmware()
     {
-        //    if(QMessageBox::warning(this, "Danger!", "This function may destroy your amplifier!<br><u><b>You are using it at you own risk!</b></u>", QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Cancel)
-        //        return;
-
         QString filename;
         int ret = 0;
 
