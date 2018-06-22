@@ -91,8 +91,8 @@ protected:
     std::unique_ptr<com::Mustang> m;
     mock::UsbMock* usbmock;
     libusb_device_handle handle{};
-    const helper::BinData dummy = helper::createEmptyPacket();
-    const helper::BinData initCmd = helper::createInitCmdPacket();
+    const Packet dummy = helper::createEmptyPacket();
+    const Packet initCmd = helper::createInitCmdPacket();
     static inline constexpr int usbSuccess{LIBUSB_SUCCESS};
     static inline constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
     static inline constexpr int slot{5};

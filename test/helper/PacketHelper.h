@@ -20,22 +20,20 @@
 
 #pragma once
 
+#include "com/Packet.h"
 #include <algorithm>
 #include <array>
 
 namespace test::helper
 {
-    using BinData = std::array<std::uint8_t, 64>;
-
-
-    inline BinData createEmptyPacket()
+    inline plug::com::Packet createEmptyPacket()
     {
-        BinData data{{0}};
+        plug::com::Packet data{{0}};
         data.fill(0x00);
         return data;
     }
 
-    inline BinData createInitCmdPacket()
+    inline plug::com::Packet createInitCmdPacket()
     {
         auto data = createEmptyPacket();
         data[0] = 0xff;
@@ -43,14 +41,14 @@ namespace test::helper
         return data;
     }
 
-    inline BinData createInitializedPacket(std::initializer_list<std::uint8_t> init)
+    inline plug::com::Packet createInitializedPacket(std::initializer_list<std::uint8_t> init)
     {
         auto data = createEmptyPacket();
         std::copy(init.begin(), init.end(), data.begin());
         return data;
     }
 
-    inline BinData createEmptyNamedPacket(const std::string_view name)
+    inline plug::com::Packet createEmptyNamedPacket(const std::string_view name)
     {
         constexpr std::size_t nameFieldOffset{16};
         auto data = createEmptyPacket();
