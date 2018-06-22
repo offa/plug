@@ -295,6 +295,5 @@ namespace plug::com
         sizedName.resize(nameLength, '\0');
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
         return data;
-}
-
+    }
 }

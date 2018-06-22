@@ -854,5 +854,4 @@ namespace plug::com
     {
         return comm->interruptReceive(endpointRecv, packetSize);
     }
-
 }
