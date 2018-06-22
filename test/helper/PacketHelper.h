@@ -22,7 +22,6 @@
 
 #include "com/Packet.h"
 #include <algorithm>
-#include <array>
 
 namespace test::helper
 {

@@ -25,7 +25,6 @@
 #include "com/MustangConstants.h"
 #include "com/Packet.h"
 #include <string>
-#include <array>
 #include <cstdint>
 
 namespace plug::com
@@ -34,7 +33,7 @@ namespace plug::com
     amp_settings decodeAmpFromData(const unsigned char data[7][64]);
     void decodeEffectsFromData(unsigned char prev_array[4][packetSize], const unsigned char data[7][64], fx_pedal_settings* const& effects_set_out);
 
-    std::array<std::uint8_t, packetSize> serializeAmpSettings(const amp_settings& value);
-    std::array<std::uint8_t, packetSize> serializeAmpSettingsUsbGain(const amp_settings& value);
-    std::array<std::uint8_t, packetSize> serializeName(std::uint8_t slot, std::string_view name);
+    Packet serializeAmpSettings(const amp_settings& value);
+    Packet serializeAmpSettingsUsbGain(const amp_settings& value);
+    Packet serializeName(std::uint8_t slot, std::string_view name);
 }
