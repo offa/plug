@@ -82,7 +82,7 @@ namespace plug::com
 
     void Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        Packet array;
+        Packet array{};
 
         if (comm->isOpen() == false)
         {
@@ -454,7 +454,7 @@ namespace plug::com
 
     void Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        Packet array;
+        Packet array{};
         unsigned char data[7][packetSize];
 
         array.fill(0x00);
@@ -809,7 +809,7 @@ namespace plug::com
 
             std::size_t i{0};
             std::size_t j{0};
-            Packet array{{0}};
+            Packet array{0};
             array.fill(0x00);
             array[0] = 0xff;
             array[1] = 0xc1;
