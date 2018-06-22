@@ -3,7 +3,6 @@
  *        Linux replacement for Fender FUSE software
  *
  * Copyright (C) 2017-2018  offa
- * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,20 +20,12 @@
 
 #pragma once
 
-#include "data_structs.h"
-#include "com/MustangConstants.h"
-#include "com/Packet.h"
-#include <string>
 #include <array>
-#include <cstdint>
 
 namespace plug::com
 {
-    std::string decodeNameFromData(const unsigned char data[7][64]);
-    amp_settings decodeAmpFromData(const unsigned char data[7][64]);
-    void decodeEffectsFromData(unsigned char prev_array[4][packetSize], const unsigned char data[7][64], fx_pedal_settings* const& effects_set_out);
+    inline constexpr std::size_t packetSize{64};
 
-    std::array<std::uint8_t, packetSize> serializeAmpSettings(const amp_settings& value);
-    std::array<std::uint8_t, packetSize> serializeAmpSettingsUsbGain(const amp_settings& value);
-    std::array<std::uint8_t, packetSize> serializeName(std::uint8_t slot, std::string_view name);
+
+    using Packet = std::array<std::uint8_t, packetSize>;
 }

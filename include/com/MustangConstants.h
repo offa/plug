@@ -44,9 +44,6 @@ namespace plug::com
     inline constexpr std::uint16_t SMALL_AMPS_V2_USB_UPDATE_PID{0x0015}; //Mustang I & II V2
     inline constexpr std::uint16_t BIG_AMPS_V2_USB_UPDATE_PID{0x0017};   //Mustang III+ V2
 
-    // for USB communication
-    inline constexpr std::size_t packetSize{64};
-
     // effect array fields
     inline constexpr std::size_t DSP{2};
     inline constexpr std::size_t EFFECT{16};
