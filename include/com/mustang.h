@@ -56,7 +56,7 @@ namespace plug::com
 
     private:
         const std::unique_ptr<UsbComm> comm;
-        std::array<std::uint8_t, packetSize> applyCommand;
+        Packet applyCommand;
         unsigned char prev_array[4][packetSize]; // array used to clear the effect
 
         void decode_data(unsigned char[7][packetSize], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
