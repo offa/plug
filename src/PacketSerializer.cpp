@@ -278,4 +278,23 @@ namespace plug
         packet[16] = value.usb_gain;
         return packet;
     }
+
+    std::array<std::uint8_t, packetSize> serializeName(std::uint8_t slot, std::string_view name)
+    {
+        std::array<std::uint8_t, packetSize> data;
+        data.fill(0x00);
+        data[0] = 0x1c;
+        data[1] = 0x01;
+        data[2] = 0x03;
+        data[SAVE_SLOT] = slot;
+        data[6] = 0x01;
+        data[7] = 0x01;
+
+        constexpr std::size_t nameLength{31};
+        std::string sizedName{name};
+        sizedName.resize(nameLength, '\0');
+        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
+        return data;
+}
+
 }

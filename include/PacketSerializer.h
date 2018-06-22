@@ -35,4 +35,6 @@ namespace plug
 
     std::array<std::uint8_t, packetSize> serializeAmpSettings(const amp_settings& value);
     std::array<std::uint8_t, packetSize> serializeAmpSettingsUsbGain(const amp_settings& value);
+    std::array<std::uint8_t, packetSize> serializeName(std::uint8_t slot, std::string_view name);
+
 }
