@@ -21,40 +21,42 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace plug
 {
 
     struct amp_settings
     {
-        unsigned char amp_num;
-        unsigned char gain;
-        unsigned char volume;
-        unsigned char treble;
-        unsigned char middle;
-        unsigned char bass;
-        unsigned char cabinet;
-        unsigned char noise_gate;
-        unsigned char master_vol;
-        unsigned char gain2;
-        unsigned char presence;
-        unsigned char threshold;
-        unsigned char depth;
-        unsigned char bias;
-        unsigned char sag;
+        std::uint8_t amp_num;
+        std::uint8_t gain;
+        std::uint8_t volume;
+        std::uint8_t treble;
+        std::uint8_t middle;
+        std::uint8_t bass;
+        std::uint8_t cabinet;
+        std::uint8_t noise_gate;
+        std::uint8_t master_vol;
+        std::uint8_t gain2;
+        std::uint8_t presence;
+        std::uint8_t threshold;
+        std::uint8_t depth;
+        std::uint8_t bias;
+        std::uint8_t sag;
         bool brightness;
-        unsigned char usb_gain;
+        std::uint8_t usb_gain;
     };
 
     struct fx_pedal_settings
     {
-        unsigned char fx_slot;
-        unsigned char effect_num;
-        unsigned char knob1;
-        unsigned char knob2;
-        unsigned char knob3;
-        unsigned char knob4;
-        unsigned char knob5;
-        unsigned char knob6;
+        std::uint8_t fx_slot;
+        std::uint8_t effect_num;
+        std::uint8_t knob1;
+        std::uint8_t knob2;
+        std::uint8_t knob3;
+        std::uint8_t knob4;
+        std::uint8_t knob5;
+        std::uint8_t knob6;
         bool put_post_amp;
     };
 }
