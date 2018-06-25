@@ -19,7 +19,7 @@
  */
 
 #include "com/UsbComm.h"
-#include "com/UsbException.h"
+#include "com/CommunicationException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/Matcher.h"
 #include <vector>
@@ -27,7 +27,7 @@
 #include <gmock/gmock.h>
 
 using plug::com::UsbComm;
-using plug::com::UsbException;
+using plug::com::CommunicationException;
 using namespace testing;
 using namespace test::matcher;
 
@@ -81,7 +81,7 @@ TEST_F(UsbCommTest, openThrowsIfOpenFails)
     EXPECT_CALL(*usbmock, init(_));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(nullptr));
 
-    EXPECT_THROW(comm->open(vid, pid), UsbException);
+    EXPECT_THROW(comm->open(vid, pid), CommunicationException);
 }
 
 TEST_F(UsbCommTest, openDetachesDriverIfNotActive)
@@ -104,7 +104,7 @@ TEST_F(UsbCommTest, openThrowsIfDetachingDriverFailed)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(failed));
     EXPECT_CALL(*usbmock, detach_kernel_driver(_, _)).WillOnce(Return(failed));
 
-    EXPECT_THROW(comm->open(vid, pid), UsbException);
+    EXPECT_THROW(comm->open(vid, pid), CommunicationException);
 }
 
 TEST_F(UsbCommTest, openThrowsIfClaimingInterfaceFailed)
@@ -115,7 +115,7 @@ TEST_F(UsbCommTest, openThrowsIfClaimingInterfaceFailed)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _));
     EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(failed));
 
-    EXPECT_THROW(comm->open(vid, pid), UsbException);
+    EXPECT_THROW(comm->open(vid, pid), CommunicationException);
 }
 
 TEST_F(UsbCommTest, openFirstOpensFirstConnectionAvailable)
@@ -139,7 +139,7 @@ TEST_F(UsbCommTest, openFirstThrowsIfOpenFails)
     EXPECT_CALL(*usbmock, init(_));
     EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(nullptr));
 
-    EXPECT_THROW(comm->openFirst(vid, {pid}), UsbException);
+    EXPECT_THROW(comm->openFirst(vid, {pid}), CommunicationException);
 }
 
 TEST_F(UsbCommTest, openFirstDetachesDriverIfNotActive)
@@ -162,7 +162,7 @@ TEST_F(UsbCommTest, openFirstThrowsIfDetachingDriverFailed)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(failed));
     EXPECT_CALL(*usbmock, detach_kernel_driver(_, _)).WillOnce(Return(failed));
 
-    EXPECT_THROW(comm->openFirst(vid, {pid}), UsbException);
+    EXPECT_THROW(comm->openFirst(vid, {pid}), CommunicationException);
 }
 
 TEST_F(UsbCommTest, openFirstThrowsIfClaimingInterfaceFailed)
@@ -173,7 +173,7 @@ TEST_F(UsbCommTest, openFirstThrowsIfClaimingInterfaceFailed)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _));
     EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(failed));
 
-    EXPECT_THROW(comm->openFirst(vid, {pid}), UsbException);
+    EXPECT_THROW(comm->openFirst(vid, {pid}), CommunicationException);
 }
 
 TEST_F(UsbCommTest, closeClosesConnection)

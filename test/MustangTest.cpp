@@ -19,7 +19,7 @@
  */
 
 #include "com/mustang.h"
-#include "com/UsbException.h"
+#include "com/CommunicationException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/PacketConstants.h"
 #include "helper/Matcher.h"
@@ -134,7 +134,7 @@ TEST_F(MustangTest, startHandlesErrorOnInitFailure)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(usbSuccess));
     EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(usbError));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::com::UsbException);
+    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::com::CommunicationException);
 
     ignoreClose();
 }
@@ -166,7 +166,7 @@ TEST_F(MustangTest, startFailsIfNoDeviceFound)
         .Times(AtLeast(1))
         .WillRepeatedly(Return(nullptr));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::com::UsbException);
+    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr, nullptr), plug::com::CommunicationException);
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)

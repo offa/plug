@@ -26,10 +26,10 @@
 namespace plug::com
 {
 
-    class UsbException : public std::runtime_error
+    class CommunicationException : public std::runtime_error
     {
     public:
-        explicit UsbException(const std::string& msg)
+        explicit CommunicationException(const std::string& msg)
             : std::runtime_error(msg)
         {
         }

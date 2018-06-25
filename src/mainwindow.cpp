@@ -21,7 +21,7 @@
 
 #include "mainwindow.h"
 #include "com/mustang.h"
-#include "com/UsbException.h"
+#include "com/CommunicationException.h"
 #include "com/MustangUpdater.h"
 #include "ui_defaulteffects.h"
 #include "ui_mainwindow.h"
@@ -184,7 +184,7 @@ namespace plug
         {
             amp_ops->start_amp(names, name, &amplifier_set, effects_set); // request initialization of communication
         }
-        catch (const com::UsbException& ex)
+        catch (const com::CommunicationException& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
@@ -295,7 +295,7 @@ namespace plug
 
             connected = false;
         }
-        catch (com::UsbException& ex)
+        catch (com::CommunicationException& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
         }

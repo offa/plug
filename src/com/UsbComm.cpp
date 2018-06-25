@@ -19,7 +19,7 @@
  */
 
 #include "com/UsbComm.h"
-#include "com/UsbException.h"
+#include "com/CommunicationException.h"
 #include <algorithm>
 #include <chrono>
 #include <libusb-1.0/libusb.h>
@@ -34,7 +34,7 @@ namespace plug::com
         {
             if (rtnValue != LIBUSB_SUCCESS)
             {
-                throw UsbException{msg};
+                throw CommunicationException{msg};
             }
         }
     }
@@ -60,7 +60,7 @@ namespace plug::com
 
         if (handle == nullptr)
         {
-            throw UsbException{"Failed to open usb device"};
+            throw CommunicationException{"Failed to open usb device"};
         }
 
         initInterface();
