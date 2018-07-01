@@ -48,7 +48,7 @@ namespace plug
         ui->spinBox->setValue(font.pointSize());
         ui->fontComboBox->setCurrentFont(font);
 
-        for (int i = 0; i < 100; ++i)
+        for (std::size_t i = 0; i < 100; ++i)
         {
             if (names[i][0] == 0x00)
             {
