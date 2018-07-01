@@ -79,8 +79,8 @@ namespace plug
         // send settings to the amplifier
         void send_amp();
 
-        void load(struct amp_settings);
-        void get_settings(struct amp_settings*);
+        void load(amp_settings);
+        void get_settings(amp_settings*);
         void enable_set_button(bool);
 
         void showAndActivate();

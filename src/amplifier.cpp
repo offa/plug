@@ -301,7 +301,7 @@ namespace plug
         dynamic_cast<MainWindow*>(parent())->set_amplifier(settings);
     }
 
-    void Amplifier::load(struct amp_settings settings)
+    void Amplifier::load(amp_settings settings)
     {
         changed = true;
 
@@ -326,7 +326,7 @@ namespace plug
         advanced->set_usb_gain(settings.usb_gain);
     }
 
-    void Amplifier::get_settings(struct amp_settings* settings)
+    void Amplifier::get_settings(amp_settings* settings)
     {
         settings->amp_num = amp_num;
         settings->gain = gain;
