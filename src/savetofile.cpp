@@ -411,8 +411,7 @@ namespace plug
 
     void SaveToFile::writeFX(fx_pedal_settings settings)
     {
-        int model = 0;
-        int position;
+        int model{0};
 
         switch (static_cast<effects>(settings.effect_num))
         {
@@ -569,7 +568,7 @@ namespace plug
                 break;
         }
 
-        position = settings.put_post_amp ? (settings.fx_slot + 4) : (settings.fx_slot);
+        int position = settings.put_post_amp ? (settings.fx_slot + 4) : (settings.fx_slot);
 
         xml->writeStartElement("Module");
         xml->writeAttribute("ID", QString("%1").arg(model));
