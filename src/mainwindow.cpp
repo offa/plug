@@ -307,7 +307,9 @@ namespace plug
         QSettings settings;
 
         if (!connected)
+        {
             return 0;
+        }
 
         if (!settings.value("Settings/oneSetToSetThemAll").toBool())
         {
@@ -323,7 +325,9 @@ namespace plug
         QSettings settings;
 
         if (!connected)
+        {
             return 0;
+        }
 
         if (settings.value("Settings/oneSetToSetThemAll").toBool())
         {
@@ -389,7 +393,9 @@ namespace plug
         char name[32];
 
         if (!connected)
+        {
             return -1;
+        }
 
         amp_ops->load_memory_bank(slot, name, &amplifier_set, effects_set);
 
@@ -408,7 +414,10 @@ namespace plug
 
         amp->load(amplifier_set);
         if (settings.value("Settings/popupChangedWindows").toBool())
+        {
             amp->show();
+        }
+
         for (int i = 0; i < 4; i++)
         {
             switch (effects_set[i].fx_slot)
@@ -441,8 +450,12 @@ namespace plug
                 case 0x07:
                     effect4->load(effects_set[i]);
                     if (effects_set[i].effect_num != 0u)
+                    {
                         if (settings.value("Settings/popupChangedWindows").toBool())
+                        {
                             effect4->show();
+                        }
+                    }
                     break;
             }
         }
@@ -475,7 +488,9 @@ namespace plug
             QMessageBox::information(this, "Update", "<b>Update available!</b><br/><br/>Check homepage for new version.");
         }
         else if (manual_check)
+        {
             ui->statusBar->showMessage(tr("You are using the newest version"), 5000);
+        }
     }
 
     void MainWindow::change_name(int slot, QString* name)
@@ -527,10 +542,14 @@ namespace plug
         QSettings settings;
 
         if (filename.isEmpty())
+        {
             filename = QFileDialog::getOpenFileName(this, tr("Open..."), settings.value("LoadFile/lastDirectory", QDir::homePath()).toString(), tr("FUSE files (*.fuse *.xml)"));
+        }
 
         if (filename.isEmpty())
+        {
             return;
+        }
 
         settings.setValue("LoadFile/lastDirectory", QFileInfo(filename).absolutePath());
         auto file = std::make_unique<QFile>(filename, this);
@@ -560,9 +579,13 @@ namespace plug
 
         amp->load(amplifier_set);
         if (connected)
+        {
             amp->send_amp();
+        }
         if (settings.value("Settings/popupChangedWindows").toBool())
+        {
             amp->show();
+        }
 
         for (int i = 0; i < 4; i++)
         {
