@@ -95,7 +95,10 @@ namespace plug
 
     void SaveToFile::writeAmp(amp_settings settings)
     {
-        int model = 0, something = 0, something2 = 0, something3 = 128;
+        int model{0};
+        int something{0};
+        int something2{0};
+        int something3{128};
 
         switch (static_cast<amps>(settings.amp_num))
         {
