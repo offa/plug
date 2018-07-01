@@ -61,7 +61,7 @@ namespace plug
 
     void SaveOnAmp::load_names(char names[][32])
     {
-        for (int i = 0; i < 100; i++)
+        for (std::size_t i = 0; i < 100; ++i)
         {
             if (names[i][0] == 0x00)
             {
@@ -73,8 +73,7 @@ namespace plug
 
     void SaveOnAmp::delete_items()
     {
-        int j = ui->comboBox->count();
-        for (int i = 0; i < j; i++)
+        for (int i = 0; i < ui->comboBox->count(); ++i)
         {
             ui->comboBox->removeItem(0);
         }
