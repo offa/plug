@@ -270,7 +270,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
     char nameList[100][32];
-    amp_settings settings;
+    amp_settings settings{};
     m->start_amp(nameList, nullptr, &settings, nullptr);
     EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_60S)));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));

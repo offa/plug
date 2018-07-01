@@ -327,7 +327,7 @@ namespace plug
 
         if (settings.value("Settings/oneSetToSetThemAll").toBool())
         {
-            fx_pedal_settings pedal;
+            fx_pedal_settings pedal{};
 
             if (effect1->get_changed())
             {
