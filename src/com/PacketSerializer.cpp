@@ -62,18 +62,11 @@ namespace plug::com
         return settings;
     }
 
-    void decodeEffectsFromData(unsigned char prev_data[4][packetSize], const unsigned char data[7][64], fx_pedal_settings* const& effects_set_out)
+    void decodeEffectsFromData(const unsigned char data[7][64], fx_pedal_settings* const& effects_set_out)
     {
         for (int i = 2; i < 6; ++i)
         {
             int j = 0;
-
-            prev_data[data[i][DSP] - 6][0] = 0x1c;
-            prev_data[data[i][DSP] - 6][1] = 0x03;
-            prev_data[data[i][DSP] - 6][FXSLOT] = data[i][FXSLOT];
-            prev_data[data[i][DSP] - 6][DSP] = data[i][DSP];
-            prev_data[data[i][DSP] - 6][19] = data[i][19];
-            prev_data[data[i][DSP] - 6][20] = data[i][20];
 
             switch (data[i][FXSLOT])
             {

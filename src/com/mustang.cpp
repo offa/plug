@@ -48,16 +48,6 @@ namespace plug::com
         applyCommand.fill(0x00);
         applyCommand[0] = 0x1c;
         applyCommand[1] = 0x03;
-
-        memset(prev_array, 0x00, packetSize * 4);
-        for (int i = 0; i < 4; ++i)
-        {
-            prev_array[i][0] = 0x1c;
-            prev_array[i][1] = 0x03;
-            prev_array[i][6] = prev_array[i][7] = prev_array[i][21] = 0x01;
-            prev_array[i][20] = 0x08;
-            prev_array[i][FXSLOT] = 0xff;
-        }
     }
 
     Mustang::~Mustang()
@@ -171,7 +161,7 @@ namespace plug::com
 
         if (effects_set != nullptr)
         {
-            decodeEffectsFromData(prev_array, data, effects_set);
+            decodeEffectsFromData(data, effects_set);
         }
     }
 
