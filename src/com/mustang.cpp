@@ -72,18 +72,7 @@ namespace plug::com
             comm->openFirst(USB_VID, pids);
         }
 
-        // initialization which is needed if you want
-        // to get any replies from the amp in the future
-        Packet initPacket1{};
-        initPacket1[1] = 0xc3;
-        sendPacket(initPacket1);
-        receivePacket();
-
-        Packet initPacket2{};
-        initPacket2[0] = 0x1a;
-        initPacket2[1] = 0x03;
-        sendPacket(initPacket2);
-        receivePacket();
+        initializeAmp();
 
         loadInitialData(list, name, amp_set, effects_set);
     }
@@ -526,6 +515,22 @@ namespace plug::com
                 decode_data(data, name, amp_set, effects_set);
             }
         }
+    }
+
+    void Mustang::initializeAmp()
+    {
+        // initialization which is needed if you want
+        // to get any replies from the amp in the future
+        Packet initPacket1{};
+        initPacket1[1] = 0xc3;
+        sendPacket(initPacket1);
+        receivePacket();
+
+        Packet initPacket2{};
+        initPacket2[0] = 0x1a;
+        initPacket2[1] = 0x03;
+        sendPacket(initPacket2);
+        receivePacket();
     }
 
     std::size_t Mustang::sendPacket(const Packet& packet)

@@ -62,6 +62,7 @@ namespace plug::com
         void decode_data(unsigned char[7][packetSize], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         void loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set);
 
+        void initializeAmp();
         std::size_t sendPacket(const Packet& packet);
         std::vector<std::uint8_t> receivePacket();
     };
