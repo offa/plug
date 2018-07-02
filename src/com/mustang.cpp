@@ -67,8 +67,6 @@ namespace plug::com
 
     void Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        Packet array{};
-
         if (comm->isOpen() == false)
         {
             comm->openFirst(USB_VID, pids);
@@ -76,15 +74,15 @@ namespace plug::com
 
         // initialization which is needed if you want
         // to get any replies from the amp in the future
-        array.fill(0x00);
-        array[1] = 0xc3;
-        sendPacket(array);
+        Packet initPacket1{};
+        initPacket1[1] = 0xc3;
+        sendPacket(initPacket1);
         receivePacket();
 
-        array.fill(0x00);
-        array[0] = 0x1a;
-        array[1] = 0x03;
-        sendPacket(array);
+        Packet initPacket2{};
+        initPacket2[0] = 0x1a;
+        initPacket2[1] = 0x03;
+        sendPacket(initPacket2);
         receivePacket();
 
         loadInitialData(list, name, amp_set, effects_set);
