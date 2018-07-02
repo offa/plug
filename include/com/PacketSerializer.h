@@ -22,6 +22,7 @@
 #pragma once
 
 #include "data_structs.h"
+#include "effects_enum.h"
 #include "com/MustangConstants.h"
 #include "com/Packet.h"
 #include <string>
@@ -36,4 +37,20 @@ namespace plug::com
     Packet serializeAmpSettings(const amp_settings& value);
     Packet serializeAmpSettingsUsbGain(const amp_settings& value);
     Packet serializeName(std::uint8_t slot, std::string_view name);
+    Packet serializeEffectSettings(const fx_pedal_settings& value);
+
+
+    constexpr bool hasExtraKnob(effects e)
+    {
+        switch (e)
+        {
+            case effects::MONO_ECHO_FILTER:
+            case effects::STEREO_ECHO_FILTER:
+            case effects::TAPE_DELAY:
+            case effects::STEREO_TAPE_DELAY:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
