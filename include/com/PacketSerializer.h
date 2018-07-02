@@ -38,6 +38,7 @@ namespace plug::com
     Packet serializeAmpSettingsUsbGain(const amp_settings& value);
     Packet serializeName(std::uint8_t slot, std::string_view name);
     Packet serializeEffectSettings(const fx_pedal_settings& value);
+    Packet serializeClearEffectSettings();
 
 
     constexpr bool hasExtraKnob(effects e)

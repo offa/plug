@@ -97,41 +97,14 @@ namespace plug::com
 
     void Mustang::set_effect(fx_pedal_settings value)
     {
-        Packet array{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-
         // clear effect on previous DSP before setting a new one
-        for (int i = 0; i < 4; ++i)
-        {
-            if (prev_array[i][FXSLOT] == value.fx_slot || prev_array[i][FXSLOT] == (value.fx_slot + 4))
-            {
-                memcpy(&array[0], prev_array[i], packetSize);
-                prev_array[i][FXSLOT] = 0xff;
-                break;
-            }
-        }
-        array[EFFECT] = 0x00;
-        array[KNOB1] = 0x00;
-        array[KNOB2] = 0x00;
-        array[KNOB3] = 0x00;
-        array[KNOB4] = 0x00;
-        array[KNOB5] = 0x00;
-        array[KNOB6] = 0x00;
-
-        sendPacket(array);
+        const auto clearEffectPacket = serializeClearEffectSettings();
+        sendPacket(clearEffectPacket);
         receivePacket();
         sendPacket(applyCommand);
         receivePacket();
 
-        const auto effectType = static_cast<effects>(value.effect_num);
-
-        if (effectType == effects::EMPTY)
+        if (static_cast<effects>(value.effect_num) == effects::EMPTY)
         {
             return;
         }
@@ -142,9 +115,6 @@ namespace plug::com
         receivePacket();
         sendPacket(applyCommand);
         receivePacket();
-
-        // save current settings
-        memcpy(prev_array[settingsPacket[DSP] - 6], settingsPacket.data(), packetSize);
     }
 
     void Mustang::set_amplifier(amp_settings value)
