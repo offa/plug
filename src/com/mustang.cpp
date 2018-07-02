@@ -97,7 +97,6 @@ namespace plug::com
 
     void Mustang::set_effect(fx_pedal_settings value)
     {
-        // clear effect on previous DSP before setting a new one
         const auto clearEffectPacket = serializeClearEffectSettings();
         sendPacket(clearEffectPacket);
         receivePacket();
@@ -109,7 +108,6 @@ namespace plug::com
             return;
         }
 
-        // send packet to the amp
         const auto settingsPacket = serializeEffectSettings(value);
         sendPacket(settingsPacket);
         receivePacket();
