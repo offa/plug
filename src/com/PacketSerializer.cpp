@@ -61,9 +61,7 @@ namespace plug::com
                 repeat = 1; //just to be sure
             }
 
-            const std::uint8_t fxknob = getFxKnob(effects[0]);
-
-            array[FXKNOB] = fxknob;
+            array[FXKNOB] = getFxKnob(effects[0]);
             array[SAVE_SLOT] = slot;
             array[1] = 0x03;
             array[6] = 0x00;
@@ -71,7 +69,6 @@ namespace plug::com
 
             return array;
         }
-
 
         Packet serializeSaveEffectBody(Packet array, const std::vector<fx_pedal_settings>& effects, std::size_t i)
         {
@@ -885,7 +882,6 @@ namespace plug::com
         applyCommand[0] = 0x1c;
         applyCommand[1] = 0x03;
 
-        std::uint8_t fxknob;
         std::size_t repeat{0};
         Packet array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -916,15 +912,10 @@ namespace plug::com
 
         if (effects[0].effect_num >= value(effects::SINE_CHORUS) && effects[0].effect_num <= value(effects::PITCH_SHIFTER))
         {
-            fxknob = 0x01;
             repeat = 1; //just to be sure
         }
-        else
-        {
-            fxknob = 0x02;
-        }
 
-        array[FXKNOB] = fxknob;
+        array[FXKNOB] = getFxKnob(effects[0]);
         array[SAVE_SLOT] = slot;
 
         // set and send the name
