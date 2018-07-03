@@ -167,7 +167,7 @@ namespace plug::com
 
     void Mustang::save_effects(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
-        unsigned char fxknob;
+        std::uint8_t fxknob;
         std::size_t repeat{0};
         Packet array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
