@@ -27,26 +27,33 @@ namespace plug::com
 {
     namespace
     {
+        std::size_t getSaveEffectsRepeats(const std::vector<fx_pedal_settings>& effects)
+        {
+            const auto size = effects.size();
+
+            if (size > 2)
+            {
+                return 1;
+            }
+            if (effects[0].effect_num >= value(effects::SINE_CHORUS) && effects[0].effect_num <= value(effects::PITCH_SHIFTER))
+            {
+                return 1;
+            }
+            return size;
+        }
+
         Packet serializeSaveEffectHeader(int slot, const std::vector<fx_pedal_settings>& effects)
         {
-            std::size_t repeat{0};
             Packet packet{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-            if (effects.size() > 2)
-            {
-                repeat = 1;
-            }
-            else
-            {
-                repeat = effects.size();
-            }
+            std::size_t repeat = getSaveEffectsRepeats(effects);
 
             for (std::size_t i = 0; i < repeat; ++i)
             {
@@ -54,11 +61,6 @@ namespace plug::com
                 {
                     throw std::invalid_argument{"Invalid effect"};
                 }
-            }
-
-            if (effects[0].effect_num >= value(effects::SINE_CHORUS) && effects[0].effect_num <= value(effects::PITCH_SHIFTER))
-            {
-                repeat = 1; //just to be sure
             }
 
             packet[FXKNOB] = getFxKnob(effects[0]);
@@ -876,24 +878,16 @@ namespace plug::com
 
     Packet serializeSaveEffectName(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
-        std::size_t repeat{0};
         Packet packet{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-        if (effects.size() > 2)
-        {
-            repeat = 1;
-        }
-        else
-        {
-            repeat = effects.size();
-        }
+        std::size_t repeat = getSaveEffectsRepeats(effects);
 
         for (std::size_t i = 0; i < repeat; ++i)
         {
@@ -901,11 +895,6 @@ namespace plug::com
             {
                 throw std::invalid_argument{"Invalid effect"};
             }
-        }
-
-        if (effects[0].effect_num >= value(effects::SINE_CHORUS) && effects[0].effect_num <= value(effects::PITCH_SHIFTER))
-        {
-            repeat = 1; //just to be sure
         }
 
         packet[FXKNOB] = getFxKnob(effects[0]);
@@ -922,19 +911,11 @@ namespace plug::com
 
     std::vector<Packet> serializeSaveEffectPacket(int slot, const std::vector<fx_pedal_settings>& effects)
     {
-        std::vector<Packet> packets;
-
-        std::size_t repeat{0};
-        if (effects.size() > 2)
-        {
-            repeat = 1;
-        }
-        else
-        {
-            repeat = effects.size();
-        }
+        const std::size_t repeat = getSaveEffectsRepeats(effects);
 
         const auto packet = serializeSaveEffectHeader(slot, effects);
+        std::vector<Packet> packets;
+
         for (std::size_t i = 0; i < repeat; ++i)
         {
             const auto settingsPacket = serializeSaveEffectBody(packet, effects, i);
