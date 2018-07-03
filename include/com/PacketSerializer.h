@@ -26,6 +26,7 @@
 #include "com/MustangConstants.h"
 #include "com/Packet.h"
 #include <string>
+#include <vector>
 #include <cstdint>
 
 namespace plug::com
@@ -39,7 +40,8 @@ namespace plug::com
     Packet serializeName(std::uint8_t slot, std::string_view name);
     Packet serializeEffectSettings(const fx_pedal_settings& value);
     Packet serializeClearEffectSettings();
-
+    Packet serializeSaveEffectName(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
+    std::vector<Packet> serializeSaveEffectPacket(int slot, const std::vector<fx_pedal_settings>& effects);
 
     constexpr bool hasExtraKnob(effects e)
     {
@@ -53,5 +55,14 @@ namespace plug::com
             default:
                 return false;
         }
+    }
+
+    constexpr std::uint8_t getFxKnob(const fx_pedal_settings& effect)
+    {
+        if (effect.effect_num >= value(effects::SINE_CHORUS) && effect.effect_num <= value(effects::PITCH_SHIFTER))
+        {
+            return 0x01;
+        }
+        return 0x02;
     }
 }

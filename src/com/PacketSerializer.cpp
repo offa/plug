@@ -25,6 +25,290 @@
 
 namespace plug::com
 {
+    namespace
+    {
+        Packet serializeSaveEffectHeader(int slot, const std::vector<fx_pedal_settings>& effects)
+        {
+            std::size_t repeat{0};
+            Packet array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+
+            if (effects.size() > 2)
+            {
+                repeat = 1;
+            }
+            else
+            {
+                repeat = effects.size();
+            }
+
+            for (std::size_t i = 0; i < repeat; ++i)
+            {
+                if (effects[i].effect_num < value(effects::SINE_CHORUS))
+                {
+                    throw std::invalid_argument{"Invalid effect"};
+                }
+            }
+
+            if (effects[0].effect_num >= value(effects::SINE_CHORUS) && effects[0].effect_num <= value(effects::PITCH_SHIFTER))
+            {
+                repeat = 1; //just to be sure
+            }
+
+            const std::uint8_t fxknob = getFxKnob(effects[0]);
+
+            array[FXKNOB] = fxknob;
+            array[SAVE_SLOT] = slot;
+            array[1] = 0x03;
+            array[6] = 0x00;
+            std::fill(std::next(array.begin(), 16), std::prev(array.end(), 16), 0x00);
+
+            return array;
+        }
+
+
+        Packet serializeSaveEffectBody(Packet array, const std::vector<fx_pedal_settings>& effects, std::size_t i)
+        {
+
+            array[19] = 0x00;
+            array[20] = 0x08;
+            array[21] = 0x01;
+            array[KNOB6] = 0x00;
+
+            if (effects[i].put_post_amp)
+            {
+                array[FXSLOT] = effects[i].fx_slot + 4;
+            }
+            else
+            {
+                array[FXSLOT] = effects[i].fx_slot;
+            }
+            array[KNOB1] = effects[i].knob1;
+            array[KNOB2] = effects[i].knob2;
+            array[KNOB3] = effects[i].knob3;
+            array[KNOB4] = effects[i].knob4;
+            array[KNOB5] = effects[i].knob5;
+
+            const auto effect = static_cast<plug::effects>(effects[i].effect_num);
+            // some effects have more knobs
+            if (hasExtraKnob(effect) == true)
+            {
+                array[KNOB6] = effects[i].knob6;
+            }
+
+            // fill the form with missing data
+            switch (effect)
+            {
+                case effects::SINE_CHORUS:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x12;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::TRIANGLE_CHORUS:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x13;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::SINE_FLANGER:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x18;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::TRIANGLE_FLANGER:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x19;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::VIBRATONE:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x2d;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::VINTAGE_TREMOLO:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x40;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::SINE_TREMOLO:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x41;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::RING_MODULATOR:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x22;
+                    array[19] = 0x01;
+                    if (array[KNOB4] > 0x01)
+                    {
+                        array[KNOB4] = 0x01;
+                    }
+                    break;
+
+                case effects::STEP_FILTER:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x29;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::PHASER:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x4f;
+                    array[19] = 0x01;
+                    array[20] = 0x01;
+                    if (array[KNOB5] > 0x01)
+                    {
+                        array[KNOB5] = 0x01;
+                    }
+                    break;
+
+                case effects::PITCH_SHIFTER:
+                    array[DSP] = 0x07;
+                    array[EFFECT] = 0x1f;
+                    array[19] = 0x01;
+                    break;
+
+                case effects::MONO_DELAY:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x16;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::MONO_ECHO_FILTER:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x43;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::STEREO_ECHO_FILTER:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x48;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::MULTITAP_DELAY:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x44;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::PING_PONG_DELAY:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x45;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::DUCKING_DELAY:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x15;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::REVERSE_DELAY:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x46;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::TAPE_DELAY:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x2b;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::STEREO_TAPE_DELAY:
+                    array[DSP] = 0x08;
+                    array[EFFECT] = 0x2a;
+                    array[19] = 0x02;
+                    array[20] = 0x01;
+                    break;
+
+                case effects::SMALL_HALL_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x24;
+                    break;
+
+                case effects::LARGE_HALL_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x3a;
+                    break;
+
+                case effects::SMALL_ROOM_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x26;
+                    break;
+
+                case effects::LARGE_ROOM_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x3b;
+                    break;
+
+                case effects::SMALL_PLATE_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x4e;
+                    break;
+
+                case effects::LARGE_PLATE_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x4b;
+                    break;
+
+                case effects::AMBIENT_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x4c;
+                    break;
+
+                case effects::ARENA_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x4d;
+                    break;
+
+                case effects::FENDER_63_SPRING_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x21;
+                    break;
+
+                case effects::FENDER_65_SPRING_REVERB:
+                    array[DSP] = 0x09;
+                    array[EFFECT] = 0x0b;
+                    break;
+
+                default:
+                    break;
+            }
+            return array;
+        }
+    }
+
+
     std::string decodeNameFromData(const unsigned char data[7][64])
     {
         constexpr std::size_t nameLength{32};
@@ -592,5 +876,88 @@ namespace plug::com
         data[KNOB5] = 0x00;
         data[KNOB6] = 0x00;
         return data;
+    }
+
+    Packet serializeSaveEffectName(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
+    {
+        Packet applyCommand{};
+        applyCommand.fill(0x00);
+        applyCommand[0] = 0x1c;
+        applyCommand[1] = 0x03;
+
+        std::uint8_t fxknob;
+        std::size_t repeat{0};
+        Packet array{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+        applyCommand[2] = 0x00; // why this must be here?
+
+        if (effects.size() > 2)
+        {
+            repeat = 1;
+        }
+        else
+        {
+            repeat = effects.size();
+        }
+
+        for (std::size_t i = 0; i < repeat; ++i)
+        {
+            if (effects[i].effect_num < value(effects::SINE_CHORUS))
+            {
+                throw std::invalid_argument{"Invalid effect"};
+            }
+        }
+
+        if (effects[0].effect_num >= value(effects::SINE_CHORUS) && effects[0].effect_num <= value(effects::PITCH_SHIFTER))
+        {
+            fxknob = 0x01;
+            repeat = 1; //just to be sure
+        }
+        else
+        {
+            fxknob = 0x02;
+        }
+
+        array[FXKNOB] = fxknob;
+        array[SAVE_SLOT] = slot;
+
+        // set and send the name
+        constexpr std::size_t nameLength{22};
+        std::string sizedName{name};
+        sizedName.resize(nameLength, '\0');
+        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(array.begin(), 16));
+
+
+        return array;
+    }
+
+    std::vector<Packet> serializeSaveEffectPacket(int slot, const std::vector<fx_pedal_settings>& effects)
+    {
+        std::vector<Packet> packets;
+
+        std::size_t repeat{0};
+        if (effects.size() > 2)
+        {
+            repeat = 1;
+        }
+        else
+        {
+            repeat = effects.size();
+        }
+
+        const auto array = serializeSaveEffectHeader(slot, effects);
+        for (std::size_t i = 0; i < repeat; ++i)
+        {
+            const auto settingsPacket = serializeSaveEffectBody(array, effects, i);
+            packets.push_back(settingsPacket);
+        }
+
+        return packets;
     }
 }
