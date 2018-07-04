@@ -887,7 +887,7 @@ namespace plug::com
                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-        std::size_t repeat = getSaveEffectsRepeats(effects);
+        const std::size_t repeat = getSaveEffectsRepeats(effects);
 
         for (std::size_t i = 0; i < repeat; ++i)
         {
