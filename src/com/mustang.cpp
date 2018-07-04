@@ -115,7 +115,7 @@ namespace plug::com
         load_memory_bank(slot, nullptr, nullptr, nullptr);
     }
 
-    void Mustang::load_memory_bank(int slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    void Mustang::load_memory_bank(std::uint8_t slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         Packet array{};
         unsigned char data[7][packetSize];
@@ -165,7 +165,7 @@ namespace plug::com
         }
     }
 
-    void Mustang::save_effects(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
+    void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         const auto saveNamePacket = serializeSaveEffectName(slot, name, effects);
         sendPacket(saveNamePacket);
