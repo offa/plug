@@ -42,7 +42,7 @@ namespace plug::com
             return size;
         }
 
-        Packet serializeSaveEffectHeader(int slot, const std::vector<fx_pedal_settings>& effects)
+        Packet serializeSaveEffectHeader(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects)
         {
             Packet packet{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -876,7 +876,7 @@ namespace plug::com
         return data;
     }
 
-    Packet serializeSaveEffectName(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
+    Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         Packet packet{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -909,7 +909,7 @@ namespace plug::com
         return packet;
     }
 
-    std::vector<Packet> serializeSaveEffectPacket(int slot, const std::vector<fx_pedal_settings>& effects)
+    std::vector<Packet> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects)
     {
         const std::size_t repeat = getSaveEffectsRepeats(effects);
 

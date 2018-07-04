@@ -40,8 +40,8 @@ namespace plug::com
     Packet serializeName(std::uint8_t slot, std::string_view name);
     Packet serializeEffectSettings(const fx_pedal_settings& value);
     Packet serializeClearEffectSettings();
-    Packet serializeSaveEffectName(int slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
-    std::vector<Packet> serializeSaveEffectPacket(int slot, const std::vector<fx_pedal_settings>& effects);
+    Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
+    std::vector<Packet> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects);
 
     constexpr bool hasExtraKnob(effects e)
     {
