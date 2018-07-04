@@ -64,6 +64,7 @@ namespace plug::com
         std::size_t sendPacket(const Packet& packet);
         std::vector<std::uint8_t> receivePacket();
 
+        void sendCommand(const Packet& packet);
         void sendApplyCommand();
     };
 }

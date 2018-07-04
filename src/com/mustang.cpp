@@ -72,8 +72,7 @@ namespace plug::com
     void Mustang::set_effect(fx_pedal_settings value)
     {
         const auto clearEffectPacket = serializeClearEffectSettings();
-        sendPacket(clearEffectPacket);
-        receivePacket();
+        sendCommand(clearEffectPacket);
         sendApplyCommand();
 
         if (static_cast<effects>(value.effect_num) == effects::EMPTY)
@@ -82,29 +81,25 @@ namespace plug::com
         }
 
         const auto settingsPacket = serializeEffectSettings(value);
-        sendPacket(settingsPacket);
-        receivePacket();
+        sendCommand(settingsPacket);
         sendApplyCommand();
     }
 
     void Mustang::set_amplifier(amp_settings value)
     {
         const auto settingsPacket = serializeAmpSettings(value);
-        sendPacket(settingsPacket);
-        receivePacket();
+        sendCommand(settingsPacket);
         sendApplyCommand();
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
-        sendPacket(settingsGainPacket);
-        receivePacket();
+        sendCommand(settingsGainPacket);
         sendApplyCommand();
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
         const auto data = serializeName(slot, name);
-        sendPacket(data);
-        receivePacket();
+        sendCommand(data);
         load_memory_bank(slot, nullptr, nullptr, nullptr);
     }
 
@@ -161,15 +156,13 @@ namespace plug::com
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         const auto saveNamePacket = serializeSaveEffectName(slot, name, effects);
-        sendPacket(saveNamePacket);
-        receivePacket();
+        sendCommand(saveNamePacket);
 
         const auto packets = serializeSaveEffectPacket(slot, effects);
 
         for (const auto& packet : packets)
         {
-            sendPacket(packet);
-            receivePacket();
+            sendCommand(packet);
         }
 
         Packet applyPacket{};
@@ -177,8 +170,7 @@ namespace plug::com
         applyPacket[1] = 0x03;
         applyPacket[FXKNOB] = getFxKnob(effects[0]);
 
-        sendPacket(applyPacket);
-        receivePacket();
+        sendCommand(applyPacket);
     }
 
     void Mustang::loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
@@ -231,14 +223,12 @@ namespace plug::com
         // to get any replies from the amp in the future
         Packet initPacket1{};
         initPacket1[1] = 0xc3;
-        sendPacket(initPacket1);
-        receivePacket();
+        sendCommand(initPacket1);
 
         Packet initPacket2{};
         initPacket2[0] = 0x1a;
         initPacket2[1] = 0x03;
-        sendPacket(initPacket2);
-        receivePacket();
+        sendCommand(initPacket2);
     }
 
     std::size_t Mustang::sendPacket(const Packet& packet)
@@ -251,13 +241,17 @@ namespace plug::com
         return comm->interruptReceive(endpointRecv, packetSize);
     }
 
+    void Mustang::sendCommand(const Packet& packet)
+    {
+        sendPacket(packet);
+        receivePacket();
+    }
+
     void Mustang::sendApplyCommand()
     {
         Packet apply{};
         apply[0] = 0x1c;
         apply[1] = 0x03;
-
-        sendPacket(apply);
-        receivePacket();
+        sendCommand(apply);
     }
 }
