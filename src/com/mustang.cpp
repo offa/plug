@@ -105,17 +105,16 @@ namespace plug::com
 
     void Mustang::load_memory_bank(std::uint8_t slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        Packet array{};
         unsigned char data[7][packetSize];
 
-        array.fill(0x00);
-        array[0] = 0x1c;
-        array[1] = 0x01;
-        array[2] = 0x01;
-        array[SAVE_SLOT] = slot;
-        array[6] = 0x01;
+        Packet loadCommand{};
+        loadCommand[0] = 0x1c;
+        loadCommand[1] = 0x01;
+        loadCommand[2] = 0x01;
+        loadCommand[SAVE_SLOT] = slot;
+        loadCommand[6] = 0x01;
 
-        auto n = sendPacket(array);
+        auto n = sendPacket(loadCommand);
 
         for (int i = 0; n != 0; ++i)
         {
@@ -182,11 +181,10 @@ namespace plug::com
 
             std::size_t i{0};
             std::size_t j{0};
-            Packet array{};
-            array.fill(0x00);
-            array[0] = 0xff;
-            array[1] = 0xc1;
-            auto recieved = sendPacket(array);
+            Packet loadCommand{};
+            loadCommand[0] = 0xff;
+            loadCommand[1] = 0xc1;
+            auto recieved = sendPacket(loadCommand);
 
             for (i = 0; recieved != 0; i++)
             {
