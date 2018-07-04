@@ -40,14 +40,6 @@ namespace plug::com
 
         inline constexpr std::uint8_t endpointSend{0x01};
         inline constexpr std::uint8_t endpointRecv{0x81};
-
-        inline constexpr Packet applyCommand = []()
-        {
-            Packet p{};
-            p[0] = 0x1c;
-            p[1] = 0x03;
-            return p;
-        }();
     }
 
     Mustang::Mustang()
@@ -82,8 +74,7 @@ namespace plug::com
         const auto clearEffectPacket = serializeClearEffectSettings();
         sendPacket(clearEffectPacket);
         receivePacket();
-        sendPacket(applyCommand);
-        receivePacket();
+        sendApplyCommand();
 
         if (static_cast<effects>(value.effect_num) == effects::EMPTY)
         {
@@ -93,8 +84,7 @@ namespace plug::com
         const auto settingsPacket = serializeEffectSettings(value);
         sendPacket(settingsPacket);
         receivePacket();
-        sendPacket(applyCommand);
-        receivePacket();
+        sendApplyCommand();
     }
 
     void Mustang::set_amplifier(amp_settings value)
@@ -102,14 +92,12 @@ namespace plug::com
         const auto settingsPacket = serializeAmpSettings(value);
         sendPacket(settingsPacket);
         receivePacket();
-        sendPacket(applyCommand);
-        receivePacket();
+        sendApplyCommand();
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
         sendPacket(settingsGainPacket);
         receivePacket();
-        sendPacket(applyCommand);
-        receivePacket();
+        sendApplyCommand();
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
@@ -261,5 +249,15 @@ namespace plug::com
     std::vector<std::uint8_t> Mustang::receivePacket()
     {
         return comm->interruptReceive(endpointRecv, packetSize);
+    }
+
+    void Mustang::sendApplyCommand()
+    {
+        Packet apply{};
+        apply[0] = 0x1c;
+        apply[1] = 0x03;
+
+        sendPacket(apply);
+        receivePacket();
     }
 }
