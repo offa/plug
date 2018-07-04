@@ -40,14 +40,19 @@ namespace plug::com
 
         inline constexpr std::uint8_t endpointSend{0x01};
         inline constexpr std::uint8_t endpointRecv{0x81};
+
+        inline constexpr Packet applyCommand = []()
+        {
+            Packet p{};
+            p[0] = 0x1c;
+            p[1] = 0x03;
+            return p;
+        }();
     }
 
     Mustang::Mustang()
         : comm(std::make_unique<UsbComm>())
     {
-        applyCommand.fill(0x00);
-        applyCommand[0] = 0x1c;
-        applyCommand[1] = 0x03;
     }
 
     Mustang::~Mustang()
