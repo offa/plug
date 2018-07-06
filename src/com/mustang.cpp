@@ -107,13 +107,7 @@ namespace plug::com
     {
         unsigned char data[7][packetSize];
 
-        Packet loadCommand{};
-        loadCommand[0] = 0x1c;
-        loadCommand[1] = 0x01;
-        loadCommand[2] = 0x01;
-        loadCommand[SAVE_SLOT] = slot;
-        loadCommand[6] = 0x01;
-
+        const auto loadCommand = serializeLoadSlotCommand(slot);
         auto n = sendPacket(loadCommand);
 
         for (int i = 0; n != 0; ++i)
@@ -164,12 +158,10 @@ namespace plug::com
             sendCommand(packet);
         }
 
-        Packet applyPacket{};
-        applyPacket[0] = 0x1c;
-        applyPacket[1] = 0x03;
-        applyPacket[FXKNOB] = getFxKnob(effects[0]);
+        Packet applyCommand = serializeApplyCommand();
+        applyCommand[FXKNOB] = getFxKnob(effects[0]);
 
-        sendCommand(applyPacket);
+        sendCommand(applyCommand);
     }
 
     void Mustang::loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
@@ -181,9 +173,8 @@ namespace plug::com
 
             std::size_t i{0};
             std::size_t j{0};
-            Packet loadCommand{};
-            loadCommand[0] = 0xff;
-            loadCommand[1] = 0xc1;
+
+            const auto loadCommand = serializeLoadCommand();
             auto recieved = sendPacket(loadCommand);
 
             for (i = 0; recieved != 0; i++)
@@ -247,9 +238,6 @@ namespace plug::com
 
     void Mustang::sendApplyCommand()
     {
-        Packet apply{};
-        apply[0] = 0x1c;
-        apply[1] = 0x03;
-        sendCommand(apply);
+        sendCommand(serializeApplyCommand());
     }
 }

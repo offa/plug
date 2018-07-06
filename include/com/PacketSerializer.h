@@ -43,6 +43,11 @@ namespace plug::com
     Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
     std::vector<Packet> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects);
 
+    Packet serializeLoadSlotCommand(std::uint8_t slot);
+    Packet serializeLoadCommand();
+    Packet serializeApplyCommand();
+
+
     constexpr bool hasExtraKnob(effects e)
     {
         switch (e)

@@ -924,4 +924,32 @@ namespace plug::com
 
         return packets;
     }
+
+    Packet serializeLoadSlotCommand(std::uint8_t slot)
+    {
+        Packet loadCommand{};
+        loadCommand[0] = 0x1c;
+        loadCommand[1] = 0x01;
+        loadCommand[2] = 0x01;
+        loadCommand[SAVE_SLOT] = slot;
+        loadCommand[6] = 0x01;
+        return loadCommand;
+    }
+
+    Packet serializeLoadCommand()
+    {
+        Packet loadCommand{};
+        loadCommand[0] = 0xff;
+        loadCommand[1] = 0xc1;
+        return loadCommand;
+    }
+
+    Packet serializeApplyCommand()
+    {
+        Packet applyCommand{};
+        applyCommand[0] = 0x1c;
+        applyCommand[1] = 0x03;
+        return applyCommand;
+    }
+
 }
