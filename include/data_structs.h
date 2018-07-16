@@ -26,6 +26,12 @@
 namespace plug
 {
 
+    enum class Position
+    {
+        input,
+        effectsLoop
+    };
+
     struct amp_settings
     {
         std::uint8_t amp_num;
@@ -57,6 +63,6 @@ namespace plug
         std::uint8_t knob4;
         std::uint8_t knob5;
         std::uint8_t knob6;
-        bool put_post_amp;
+        Position position;
     };
 }

@@ -37,7 +37,7 @@ namespace plug
           knob4(0),
           knob5(0),
           knob6(0),
-          put_post_amp(false),
+          position(Position::input),
           changed(false)
     {
         ui->setupUi(this);
@@ -92,7 +92,7 @@ namespace plug
     // functions setting variables
     void Effect::set_post_amp(bool value)
     {
-        put_post_amp = value;
+        position = ( value == true ? Position::effectsLoop : Position::input );
         set_changed(true);
     }
 
@@ -1870,7 +1870,7 @@ namespace plug
 
         pedal.effect_num = effect_num;
         pedal.fx_slot = fx_slot;
-        pedal.put_post_amp = put_post_amp;
+        pedal.position = position;
         pedal.knob1 = knob1;
         pedal.knob2 = knob2;
         pedal.knob3 = knob3;
@@ -1892,14 +1892,14 @@ namespace plug
         ui->dial_4->setValue(settings.knob4);
         ui->dial_5->setValue(settings.knob5);
         ui->dial_6->setValue(settings.knob6);
-        ui->checkBox->setChecked(settings.put_post_amp);
+        ui->checkBox->setChecked(settings.position == Position::effectsLoop);
     }
 
     void Effect::get_settings(fx_pedal_settings& pedal)
     {
         pedal.effect_num = effect_num;
         pedal.fx_slot = fx_slot;
-        pedal.put_post_amp = put_post_amp;
+        pedal.position = position;
         pedal.knob1 = knob1;
         pedal.knob2 = knob2;
         pedal.knob3 = knob3;

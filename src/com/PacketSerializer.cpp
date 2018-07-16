@@ -79,7 +79,7 @@ namespace plug::com
             packet[21] = 0x01;
             packet[KNOB6] = 0x00;
 
-            if (effects[i].put_post_amp)
+            if (effects[i].position == Position::effectsLoop)
             {
                 packet[FXSLOT] = effects[i].fx_slot + 4;
             }
@@ -380,7 +380,7 @@ namespace plug::com
             effects_set_out[j].knob4 = data[i][KNOB4];
             effects_set_out[j].knob5 = data[i][KNOB5];
             effects_set_out[j].knob6 = data[i][KNOB6];
-            effects_set_out[j].put_post_amp = (data[i][FXSLOT] > 0x03);
+            effects_set_out[j].position = (data[i][FXSLOT] > 0x03 ? Position::effectsLoop : Position::input);
             effects_set_out[j].effect_num = value(lookupEffectById(data[i][EFFECT]));
         }
     }
@@ -584,7 +584,7 @@ namespace plug::com
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
         const auto effectType = static_cast<effects>(value.effect_num);
-        const std::uint8_t slot = (value.put_post_amp ? (value.fx_slot + 4) : value.fx_slot); // where to put the effect
+        const std::uint8_t slot = (value.position == Position::effectsLoop ? (value.fx_slot + 4) : value.fx_slot); // where to put the effect
 
         // fill the form with data
         data[FXSLOT] = slot;

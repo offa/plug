@@ -1093,7 +1093,7 @@ namespace plug
         ui->dial_4->setValue(settings_data[index].knob4);
         ui->dial_5->setValue(settings_data[index].knob5);
         ui->dial_6->setValue(settings_data[index].knob6);
-        ui->checkBox->setChecked(settings_data[index].put_post_amp);
+        ui->checkBox->setChecked(settings_data[index].position == Position::effectsLoop);
     }
 
     void DefaultEffects::save_default_effects()

@@ -344,7 +344,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     EXPECT_THAT(settings[0].knob4, Eq(40));
     EXPECT_THAT(settings[0].knob5, Eq(50));
     EXPECT_THAT(settings[0].knob6, Eq(60));
-    EXPECT_THAT(settings[0].put_post_amp, Eq(true));
+    EXPECT_THAT(settings[0].position, Eq(Position::effectsLoop));
     EXPECT_THAT(settings[0].effect_num, Eq(value(effects::TRIANGLE_FLANGER)));
 
     ignoreClose();
@@ -570,7 +570,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[0].knob4, Eq(44));
     EXPECT_THAT(settings[0].knob5, Eq(55));
     EXPECT_THAT(settings[0].knob6, Eq(66));
-    EXPECT_THAT(settings[0].put_post_amp, Eq(true));
+    EXPECT_THAT(settings[0].position, Eq(Position::effectsLoop));
     EXPECT_THAT(settings[0].effect_num, Eq(value(effects::PHASER)));
 
     EXPECT_THAT(settings[1].fx_slot, Eq(1));
@@ -580,7 +580,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[1].knob4, Eq(1));
     EXPECT_THAT(settings[1].knob5, Eq(1));
     EXPECT_THAT(settings[1].knob6, Eq(1));
-    EXPECT_THAT(settings[1].put_post_amp, Eq(false));
+    EXPECT_THAT(settings[1].position, Eq(Position::input));
     EXPECT_THAT(settings[1].effect_num, Eq(value(effects::TRIANGLE_CHORUS)));
 
     EXPECT_THAT(settings[2].fx_slot, Eq(2));
@@ -590,7 +590,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[2].knob4, Eq(0));
     EXPECT_THAT(settings[2].knob5, Eq(0));
     EXPECT_THAT(settings[2].knob6, Eq(0));
-    EXPECT_THAT(settings[2].put_post_amp, Eq(false));
+    EXPECT_THAT(settings[2].position, Eq(Position::input));
     EXPECT_THAT(settings[2].effect_num, Eq(value(effects::EMPTY)));
 
     EXPECT_THAT(settings[3].fx_slot, Eq(3));
@@ -600,7 +600,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[3].knob4, Eq(4));
     EXPECT_THAT(settings[3].knob5, Eq(5));
     EXPECT_THAT(settings[3].knob6, Eq(6));
-    EXPECT_THAT(settings[3].put_post_amp, Eq(true));
+    EXPECT_THAT(settings[3].position, Eq(Position::effectsLoop));
     EXPECT_THAT(settings[3].effect_num, Eq(value(effects::TAPE_DELAY)));
 }
 
@@ -997,7 +997,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 
 TEST_F(MustangTest, setEffectSendsValue)
 {
-    const fx_pedal_settings settings{3, value(effects::OVERDRIVE), 8, 7, 6, 5, 4, 3, false};
+    const fx_pedal_settings settings{3, value(effects::OVERDRIVE), 8, 7, 6, 5, 4, 3, Position::input};
     const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1055,7 +1055,7 @@ TEST_F(MustangTest, setEffectSendsValue)
 
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 {
-    const fx_pedal_settings settings{2, value(effects::EMPTY), 0, 0, 0, 0, 0, 0, false};
+    const fx_pedal_settings settings{2, value(effects::EMPTY), 0, 0, 0, 0, 0, 0, Position::input};
     const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1088,7 +1088,7 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 
 TEST_F(MustangTest, setEffectHandlesEffectPosition)
 {
-    const fx_pedal_settings settings{2, value(effects::OVERDRIVE), 1, 2, 3, 4, 5, 6, true};
+    const fx_pedal_settings settings{2, value(effects::OVERDRIVE), 1, 2, 3, 4, 5, 6, Position::effectsLoop};
     const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1147,7 +1147,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
 
 TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 {
-    const fx_pedal_settings settings{3, value(effects::STEREO_TAPE_DELAY), 1, 1, 1, 1, 1, 7, false};
+    const fx_pedal_settings settings{3, value(effects::STEREO_TAPE_DELAY), 1, 1, 1, 1, 1, 7, Position::input};
     const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1209,8 +1209,8 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, saveEffectsSendsValues)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
-                                            fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true}};
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, Position::input},
+                                            fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, Position::effectsLoop}};
     constexpr int fxKnob{0x02};
     constexpr int postAmpOffset{4};
     const std::string name = "abcd";
@@ -1300,9 +1300,9 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, false},
-                                            fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, true},
-                                            fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, true}};
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::MONO_DELAY), 0, 1, 2, 3, 4, 5, Position::input},
+                                            fx_pedal_settings{2, value(effects::SINE_FLANGER), 6, 7, 8, 0, 0, 0, Position::effectsLoop},
+                                            fx_pedal_settings{3, value(effects::SINE_FLANGER), 1, 2, 2, 1, 0, 4, Position::effectsLoop}};
     constexpr int fxKnob{0x02};
     const std::string name = "abcd";
     Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1374,7 +1374,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 
 TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, false}};
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::COMPRESSOR), 0, 1, 2, 3, 4, 5, Position::input}};
     const std::string name = "abcd";
 
     EXPECT_THROW(m->save_effects(slot, name, settings), std::invalid_argument);
@@ -1382,7 +1382,7 @@ TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}};
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, Position::input}};
     constexpr int fxKnob{0x01};
     const std::string name = "abcd";
     Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -1454,7 +1454,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, false}};
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::SINE_CHORUS), 0, 1, 2, 3, 4, 5, Position::input}};
     constexpr int fxKnob{0x01};
     constexpr std::size_t nameSize{22};
     const std::string name(24, 'x');
@@ -1490,7 +1490,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::TAPE_DELAY), 0, 1, 2, 3, 4, 5, false}};
+    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, value(effects::TAPE_DELAY), 0, 1, 2, 3, 4, 5, Position::input}};
     constexpr int fxKnob{0x02};
     const std::string name = "abcd";
     Packet dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,

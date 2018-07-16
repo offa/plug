@@ -222,11 +222,11 @@ namespace plug
 
                     if (position > 3)
                     {
-                        m_fx_settings[x].put_post_amp = true;
+                        m_fx_settings[x].position = Position::effectsLoop;
                     }
                     else
                     {
-                        m_fx_settings[x].put_post_amp = false;
+                        m_fx_settings[x].position = Position::input;
                     }
 
                     fx_slots[position] = x + 1;

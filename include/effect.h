@@ -60,7 +60,7 @@ namespace plug
         unsigned char knob4;
         unsigned char knob5;
         unsigned char knob6;
-        bool put_post_amp;
+        Position position;
         bool changed;
         QString temp1;
         QString temp2;
