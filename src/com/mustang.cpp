@@ -23,6 +23,7 @@
 #include "com/UsbComm.h"
 #include "com/IdLookup.h"
 #include "com/PacketSerializer.h"
+#include <algorithm>
 #include <cstring>
 
 namespace plug::com
@@ -152,11 +153,7 @@ namespace plug::com
         sendCommand(saveNamePacket);
 
         const auto packets = serializeSaveEffectPacket(slot, effects);
-
-        for (const auto& packet : packets)
-        {
-            sendCommand(packet);
-        }
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(p); });
 
         Packet applyCommand = serializeApplyCommand();
         applyCommand[FXKNOB] = getFxKnob(effects[0]);
