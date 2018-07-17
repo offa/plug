@@ -961,7 +961,7 @@ namespace plug::com
         packet2[0] = 0x1a;
         packet2[1] = 0x03;
 
-        return {packet1, packet2};
+        return {{packet1, packet2}};
     }
 
 }
