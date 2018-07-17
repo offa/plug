@@ -205,16 +205,8 @@ namespace plug::com
 
     void Mustang::initializeAmp()
     {
-        // initialization which is needed if you want
-        // to get any replies from the amp in the future
-        Packet initPacket1{};
-        initPacket1[1] = 0xc3;
-        sendCommand(initPacket1);
-
-        Packet initPacket2{};
-        initPacket2[0] = 0x1a;
-        initPacket2[1] = 0x03;
-        sendCommand(initPacket2);
+        const auto packets = serializeInitCommand();
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(p); });
     }
 
     std::size_t Mustang::sendPacket(const Packet& packet)

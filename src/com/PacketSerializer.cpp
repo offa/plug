@@ -952,4 +952,16 @@ namespace plug::com
         return applyCommand;
     }
 
+    std::array<Packet, 2> serializeInitCommand()
+    {
+        Packet packet1{};
+        packet1[1] = 0xc3;
+
+        Packet packet2{};
+        packet2[0] = 0x1a;
+        packet2[1] = 0x03;
+
+        return {packet1, packet2};
+    }
+
 }

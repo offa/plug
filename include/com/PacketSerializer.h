@@ -47,6 +47,8 @@ namespace plug::com
     Packet serializeLoadCommand();
     Packet serializeApplyCommand();
 
+    std::array<Packet, 2> serializeInitCommand();
+
 
     constexpr bool hasExtraKnob(effects e)
     {
