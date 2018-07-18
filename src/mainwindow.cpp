@@ -491,6 +491,10 @@ namespace plug
         {
             ui->statusBar->showMessage(tr("You are using the newest version"), 5000);
         }
+        else
+        {
+            // Empty
+        }
     }
 
     void MainWindow::change_name(int slot, QString* name)
@@ -524,6 +528,10 @@ namespace plug
             {
                 effect4->get_settings(effects[0]);
                 set_effect(effects[0]);
+            }
+            else
+            {
+                // Empty
             }
         }
         else
@@ -633,7 +641,9 @@ namespace plug
     void MainWindow::get_settings(amp_settings* amplifier_settings, fx_pedal_settings fx_settings[4])
     {
         if (amplifier_settings != nullptr)
+        {
             amp->get_settings(amplifier_settings);
+        }
         if (fx_settings != nullptr)
         {
             effect1->get_settings(fx_settings[0]);
@@ -669,26 +679,34 @@ namespace plug
     void MainWindow::show_fx2()
     {
         if (!effect2->isVisible())
+        {
             effect2->show();
+        }
         effect2->activateWindow();
     }
     void MainWindow::show_fx3()
     {
         if (!effect3->isVisible())
+        {
             effect3->show();
+        }
         effect3->activateWindow();
     }
     void MainWindow::show_fx4()
     {
         if (!effect4->isVisible())
+        {
             effect4->show();
+        }
         effect4->activateWindow();
     }
 
     void MainWindow::show_amp()
     {
         if (!amp->isVisible())
+        {
             amp->show();
+        }
         amp->activateWindow();
     }
 
@@ -721,10 +739,14 @@ namespace plug
 
         filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("Mustang firmware (*.upd)"));
         if (filename.isEmpty())
+        {
             return;
+        }
 
         if (connected)
+        {
             this->stop_amp();
+        }
 
         ui->statusBar->showMessage("Updating firmware. Please wait...");
         ui->centralWidget->setDisabled(true);
