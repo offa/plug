@@ -272,7 +272,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     char nameList[100][32];
     amp_settings settings{};
     m->start_amp(nameList, nullptr, &settings, nullptr);
-    EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_60S)));
+    EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_60S));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
     EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
@@ -521,7 +521,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 
     amp_settings settings{};
     m->load_memory_bank(slot, nullptr, &settings, nullptr);
-    EXPECT_THAT(settings.amp_num, Eq(value(amps::BRITISH_80S)));
+    EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_80S));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
     EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
@@ -606,7 +606,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
 TEST_F(MustangTest, setAmpSendsValues)
 {
-    const amp_settings settings{value(amps::BRITISH_70S), 8, 9, 1, 2, 3,
+    const amp_settings settings{amps::BRITISH_70S, 8, 9, 1, 2, 3,
                                 value(cabinets::cab4x12G), 3, 5, 3, 2, 1,
                                 4, 1, 5, true, 4};
 
@@ -670,7 +670,7 @@ TEST_F(MustangTest, setAmpSendsValues)
 TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
 {
     constexpr int invalidCabinet{0x0d};
-    const amp_settings settings{value(amps::FENDER_57_CHAMP), 8, 9, 1, 2, 3, invalidCabinet,
+    const amp_settings settings{amps::FENDER_57_CHAMP, 8, 9, 1, 2, 3, invalidCabinet,
                                 3, 5, 3, 2, 1, 4, 1, 5, true, 4};
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -733,7 +733,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
 TEST_F(MustangTest, setAmpHandlesNoiseGate)
 {
     constexpr int limitValue{0x05};
-    const amp_settings settings{value(amps::FENDER_SUPER_SONIC), 8, 9, 1, 2, 3,
+    const amp_settings settings{amps::FENDER_SUPER_SONIC, 8, 9, 1, 2, 3,
                                 value(cabinets::cab57DLX), limitValue, 5, 3, 2,
                                 7, 4, 1, 5, true, 4};
 
@@ -800,7 +800,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
 {
     constexpr int limitValue{0x05};
     constexpr int outOfRange{0x10};
-    const amp_settings settings{value(amps::FENDER_SUPER_SONIC), 8, 9, 1, 2, 3,
+    const amp_settings settings{amps::FENDER_SUPER_SONIC, 8, 9, 1, 2, 3,
                                 value(cabinets::cab57DLX), limitValue, 5, 3, 2,
                                 outOfRange, 4, 1, 5, true, 4};
 
@@ -867,7 +867,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
 TEST_F(MustangTest, setAmpHandlesSagValue)
 {
     constexpr int valueInRange{0x00};
-    const amp_settings settings{value(amps::FENDER_SUPER_SONIC), 8, 9, 1, 2, 3,
+    const amp_settings settings{amps::FENDER_SUPER_SONIC, 8, 9, 1, 2, 3,
                                 value(cabinets::cab57DLX), 5, 5,
                                 3, 2, 7, 4, 1, valueInRange, true, 4};
 
@@ -934,7 +934,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 {
     constexpr int outOfRange{0x06};
     constexpr int expectedValue{0x00};
-    const amp_settings settings{value(amps::BRITISH_60S), 8, 9, 1, 2, 3,
+    const amp_settings settings{amps::BRITISH_60S, 8, 9, 1, 2, 3,
                                 value(cabinets::cab57DLX), outOfRange, 5,
                                 3, 2, 7, 4, 1, 5, true, 4};
 

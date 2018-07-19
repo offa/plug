@@ -324,7 +324,7 @@ namespace plug::com
     amp_settings decodeAmpFromData(const unsigned char data[7][64])
     {
         amp_settings settings{};
-        settings.amp_num = value(lookupAmpById(data[1][AMPLIFIER]));
+        settings.amp_num = lookupAmpById(data[1][AMPLIFIER]);
         settings.gain = data[1][GAIN];
         settings.volume = data[1][VOLUME];
         settings.treble = data[1][TREBLE];

@@ -22,6 +22,7 @@
 #pragma once
 
 #include <cstdint>
+#include "effects_enum.h"
 
 namespace plug
 {
@@ -34,7 +35,7 @@ namespace plug
 
     struct amp_settings
     {
-        std::uint8_t amp_num;
+        amps amp_num;
         std::uint8_t gain;
         std::uint8_t volume;
         std::uint8_t treble;

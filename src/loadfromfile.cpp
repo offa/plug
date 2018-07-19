@@ -71,51 +71,51 @@ namespace plug
                     switch (m_xml->attributes().value("ID").toString().toInt())
                     {
                         case 0x67:
-                            m_amp_settings->amp_num = value(amps::FENDER_57_DELUXE);
+                            m_amp_settings->amp_num = amps::FENDER_57_DELUXE;
                             break;
 
                         case 0x64:
-                            m_amp_settings->amp_num = value(amps::FENDER_59_BASSMAN);
+                            m_amp_settings->amp_num = amps::FENDER_59_BASSMAN;
                             break;
 
                         case 0x7c:
-                            m_amp_settings->amp_num = value(amps::FENDER_57_CHAMP);
+                            m_amp_settings->amp_num = amps::FENDER_57_CHAMP;
                             break;
 
                         case 0x53:
-                            m_amp_settings->amp_num = value(amps::FENDER_65_DELUXE_REVERB);
+                            m_amp_settings->amp_num = amps::FENDER_65_DELUXE_REVERB;
                             break;
 
                         case 0x6a:
-                            m_amp_settings->amp_num = value(amps::FENDER_65_PRINCETON);
+                            m_amp_settings->amp_num = amps::FENDER_65_PRINCETON;
                             break;
 
                         case 0x75:
-                            m_amp_settings->amp_num = value(amps::FENDER_65_TWIN_REVERB);
+                            m_amp_settings->amp_num = amps::FENDER_65_TWIN_REVERB;
                             break;
 
                         case 0x72:
-                            m_amp_settings->amp_num = value(amps::FENDER_SUPER_SONIC);
+                            m_amp_settings->amp_num = amps::FENDER_SUPER_SONIC;
                             break;
 
                         case 0x61:
-                            m_amp_settings->amp_num = value(amps::BRITISH_60S);
+                            m_amp_settings->amp_num = amps::BRITISH_60S;
                             break;
 
                         case 0x79:
-                            m_amp_settings->amp_num = value(amps::BRITISH_70S);
+                            m_amp_settings->amp_num = amps::BRITISH_70S;
                             break;
 
                         case 0x5e:
-                            m_amp_settings->amp_num = value(amps::BRITISH_80S);
+                            m_amp_settings->amp_num = amps::BRITISH_80S;
                             break;
 
                         case 0x5d:
-                            m_amp_settings->amp_num = value(amps::AMERICAN_90S);
+                            m_amp_settings->amp_num = amps::AMERICAN_90S;
                             break;
 
                         case 0x6d:
-                            m_amp_settings->amp_num = value(amps::METAL_2000);
+                            m_amp_settings->amp_num = amps::METAL_2000;
                             break;
                     }
                 }

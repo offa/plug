@@ -30,7 +30,7 @@ namespace plug
         : QMainWindow(parent),
           ui(std::make_unique<Ui::Amplifier>()),
           advanced(std::make_unique<Amp_Advanced>(this)),
-          amp_num(0),
+          amp_num(amps::FENDER_57_DELUXE),
           gain(0),
           volume(0),
           treble(0),
@@ -174,7 +174,7 @@ namespace plug
 
     void Amplifier::choose_amp(int ampValue)
     {
-        amp_num = ampValue;
+        amp_num = static_cast<amps>(ampValue);
         changed = true;
 
         // set properties
@@ -305,7 +305,7 @@ namespace plug
     {
         changed = true;
 
-        ui->comboBox->setCurrentIndex(settings.amp_num);
+        ui->comboBox->setCurrentIndex(value(settings.amp_num));
         ui->dial->setValue(settings.gain);
         ui->dial_2->setValue(settings.volume);
         ui->dial_3->setValue(settings.treble);
