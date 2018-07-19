@@ -35,7 +35,6 @@ using namespace test::constants;
 using namespace testing;
 using mock::UsbMock;
 
-
 class MustangTest : public testing::Test
 {
 protected:
@@ -278,7 +277,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
     EXPECT_THAT(settings.middle, Eq(recvData[middlePos]));
     EXPECT_THAT(settings.bass, Eq(recvData[bassPos]));
-    EXPECT_THAT(settings.cabinet, Eq(recvData[cabinetPos]));
+    EXPECT_THAT(settings.cabinet, Eq(cabinets::cabBSSMN));
     EXPECT_THAT(settings.noise_gate, Eq(recvData[noiseGatePos]));
     EXPECT_THAT(settings.threshold, Eq(recvData[thresholdPos]));
     EXPECT_THAT(settings.master_vol, Eq(recvData[masterVolPos]));
@@ -527,7 +526,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
     EXPECT_THAT(settings.middle, Eq(recvData[middlePos]));
     EXPECT_THAT(settings.bass, Eq(recvData[bassPos]));
-    EXPECT_THAT(settings.cabinet, Eq(recvData[cabinetPos]));
+    EXPECT_THAT(settings.cabinet, Eq(cabinets::cab4x12M));
     EXPECT_THAT(settings.noise_gate, Eq(recvData[noiseGatePos]));
     EXPECT_THAT(settings.threshold, Eq(recvData[thresholdPos]));
     EXPECT_THAT(settings.master_vol, Eq(recvData[masterVolPos]));
@@ -607,7 +606,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 TEST_F(MustangTest, setAmpSendsValues)
 {
     const amp_settings settings{amps::BRITISH_70S, 8, 9, 1, 2, 3,
-                                value(cabinets::cab4x12G), 3, 5, 3, 2, 1,
+                                cabinets::cab4x12G, 3, 5, 3, 2, 1,
                                 4, 1, 5, true, 4};
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -624,7 +623,7 @@ TEST_F(MustangTest, setAmpSendsValues)
     data[treblePos] = settings.treble;
     data[middlePos] = settings.middle;
     data[bassPos] = settings.bass;
-    data[cabinetPos] = settings.cabinet;
+    data[cabinetPos] = value(settings.cabinet);
     data[noiseGatePos] = settings.noise_gate;
     data[masterVolPos] = settings.master_vol;
     data[gain2Pos] = settings.gain2;
@@ -670,7 +669,7 @@ TEST_F(MustangTest, setAmpSendsValues)
 TEST_F(MustangTest, setAmpHandlesOutOfRangeCabinet)
 {
     constexpr int invalidCabinet{0x0d};
-    const amp_settings settings{amps::FENDER_57_CHAMP, 8, 9, 1, 2, 3, invalidCabinet,
+    const amp_settings settings{amps::FENDER_57_CHAMP, 8, 9, 1, 2, 3, static_cast<cabinets>(invalidCabinet),
                                 3, 5, 3, 2, 1, 4, 1, 5, true, 4};
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -734,7 +733,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGate)
 {
     constexpr int limitValue{0x05};
     const amp_settings settings{amps::FENDER_SUPER_SONIC, 8, 9, 1, 2, 3,
-                                value(cabinets::cab57DLX), limitValue, 5, 3, 2,
+                                cabinets::cab57DLX, limitValue, 5, 3, 2,
                                 7, 4, 1, 5, true, 4};
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -751,7 +750,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGate)
     data[treblePos] = settings.treble;
     data[middlePos] = settings.middle;
     data[bassPos] = settings.bass;
-    data[cabinetPos] = settings.cabinet;
+    data[cabinetPos] = value(settings.cabinet);
     data[noiseGatePos] = settings.noise_gate;
     data[thresholdPos] = settings.threshold;
     data[depthPos] = settings.depth;
@@ -801,7 +800,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     constexpr int limitValue{0x05};
     constexpr int outOfRange{0x10};
     const amp_settings settings{amps::FENDER_SUPER_SONIC, 8, 9, 1, 2, 3,
-                                value(cabinets::cab57DLX), limitValue, 5, 3, 2,
+                                cabinets::cab57DLX, limitValue, 5, 3, 2,
                                 outOfRange, 4, 1, 5, true, 4};
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -818,7 +817,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     data[treblePos] = settings.treble;
     data[middlePos] = settings.middle;
     data[bassPos] = settings.bass;
-    data[cabinetPos] = settings.cabinet;
+    data[cabinetPos] = value(settings.cabinet);
     data[noiseGatePos] = settings.noise_gate;
     data[thresholdPos] = 0x00;
     data[depthPos] = settings.depth;
@@ -868,7 +867,7 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
 {
     constexpr int valueInRange{0x00};
     const amp_settings settings{amps::FENDER_SUPER_SONIC, 8, 9, 1, 2, 3,
-                                value(cabinets::cab57DLX), 5, 5,
+                                cabinets::cab57DLX, 5, 5,
                                 3, 2, 7, 4, 1, valueInRange, true, 4};
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -885,7 +884,7 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     data[treblePos] = settings.treble;
     data[middlePos] = settings.middle;
     data[bassPos] = settings.bass;
-    data[cabinetPos] = settings.cabinet;
+    data[cabinetPos] = value(settings.cabinet);
     data[noiseGatePos] = settings.noise_gate;
     data[thresholdPos] = settings.threshold;
     data[depthPos] = settings.depth;
@@ -935,7 +934,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     constexpr int outOfRange{0x06};
     constexpr int expectedValue{0x00};
     const amp_settings settings{amps::BRITISH_60S, 8, 9, 1, 2, 3,
-                                value(cabinets::cab57DLX), outOfRange, 5,
+                                cabinets::cab57DLX, outOfRange, 5,
                                 3, 2, 7, 4, 1, 5, true, 4};
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
@@ -952,7 +951,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     data[treblePos] = settings.treble;
     data[middlePos] = settings.middle;
     data[bassPos] = settings.bass;
-    data[cabinetPos] = settings.cabinet;
+    data[cabinetPos] = value(settings.cabinet);
     data[noiseGatePos] = expectedValue;
     data[masterVolPos] = settings.master_vol;
     data[gain2Pos] = settings.gain2;

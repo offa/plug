@@ -41,7 +41,7 @@ namespace plug
         std::uint8_t treble;
         std::uint8_t middle;
         std::uint8_t bass;
-        std::uint8_t cabinet;
+        cabinets cabinet;
         std::uint8_t noise_gate;
         std::uint8_t master_vol;
         std::uint8_t gain2;

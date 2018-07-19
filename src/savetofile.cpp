@@ -269,7 +269,7 @@ namespace plug
 
         xml->writeStartElement("Param");
         xml->writeAttribute("ControlIndex", "17");
-        xml->writeCharacters(QString("%1").arg(settings.cabinet));
+        xml->writeCharacters(QString("%1").arg(value(settings.cabinet)));
         xml->writeEndElement();
 
         xml->writeStartElement("Param");

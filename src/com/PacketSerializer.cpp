@@ -330,7 +330,7 @@ namespace plug::com
         settings.treble = data[1][TREBLE];
         settings.middle = data[1][MIDDLE];
         settings.bass = data[1][BASS];
-        settings.cabinet = data[1][CABINET];
+        settings.cabinet = static_cast<cabinets>(data[1][CABINET]);
         settings.noise_gate = data[1][NOISE_GATE];
         settings.master_vol = data[1][MASTER_VOL];
         settings.gain2 = data[1][GAIN2];
@@ -403,13 +403,13 @@ namespace plug::com
         packet[MIDDLE] = value.middle;
         packet[BASS] = value.bass;
 
-        if (value.cabinet > 0x0c)
+        if (plug::value(value.cabinet) > 0x0c) // XXX:INFO This can be removed later as scoped enums are used here
         {
             packet[CABINET] = 0x00;
         }
         else
         {
-            packet[CABINET] = value.cabinet;
+            packet[CABINET] = plug::value(value.cabinet);
         }
 
         if (value.noise_gate > 0x05)

@@ -52,7 +52,8 @@ namespace plug
         std::unique_ptr<Amp_Advanced> advanced;
         amps amp_num;
         unsigned char gain, volume, treble, middle, bass;
-        unsigned char cabinet, noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag, usb_gain;
+        cabinets cabinet;
+        unsigned char noise_gate, presence, gain2, master_vol, threshold, depth, bias, sag, usb_gain;
         bool changed, brightness;
 
     public slots:

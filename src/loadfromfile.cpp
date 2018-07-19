@@ -174,7 +174,7 @@ namespace plug
                             break;
                         case 17:
                             i = m_xml->readElementText().toInt();
-                            m_amp_settings->cabinet = i;
+                            m_amp_settings->cabinet = static_cast<cabinets>(i);
                             break;
                         case 19:
                             i = m_xml->readElementText().toInt();

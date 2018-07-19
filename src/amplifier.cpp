@@ -36,7 +36,7 @@ namespace plug
           treble(0),
           middle(0),
           bass(0),
-          cabinet(0),
+          cabinet(cabinets::OFF),
           noise_gate(0),
           presence(128),
           gain2(128),
@@ -108,7 +108,7 @@ namespace plug
 
     void Amplifier::set_cabinet(int value)
     {
-        cabinet = value;
+        cabinet = static_cast<cabinets>(value);
         changed = true;
     }
 
@@ -312,7 +312,7 @@ namespace plug
         ui->dial_4->setValue(settings.middle);
         ui->dial_5->setValue(settings.bass);
 
-        advanced->change_cabinet(settings.cabinet);
+        advanced->change_cabinet(value(settings.cabinet));
         advanced->change_noise_gate(settings.noise_gate);
 
         advanced->set_master_vol(settings.master_vol);
