@@ -120,7 +120,7 @@ namespace plug
         void show_amp();
         void show_library();
         void show_default_effects();
-        int check_fx_family(int);
+        int check_fx_family(effects value) const;
         void load_presets0();
         void load_presets1();
         void load_presets2();

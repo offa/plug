@@ -219,7 +219,7 @@ namespace plug
                 case 0x00:
                 case 0x04:
                     effect1->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect1->show();
                     break;
@@ -227,7 +227,7 @@ namespace plug
                 case 0x01:
                 case 0x05:
                     effect2->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect2->show();
                     break;
@@ -235,7 +235,7 @@ namespace plug
                 case 0x02:
                 case 0x06:
                     effect3->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect3->show();
                     break;
@@ -243,7 +243,7 @@ namespace plug
                 case 0x03:
                 case 0x07:
                     effect4->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect4->show();
                     break;
@@ -425,7 +425,7 @@ namespace plug
                 case 0x00:
                 case 0x04:
                     effect1->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect1->show();
                     break;
@@ -433,7 +433,7 @@ namespace plug
                 case 0x01:
                 case 0x05:
                     effect2->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect2->show();
                     break;
@@ -441,7 +441,7 @@ namespace plug
                 case 0x02:
                 case 0x06:
                     effect3->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect3->show();
                     break;
@@ -449,7 +449,7 @@ namespace plug
                 case 0x03:
                 case 0x07:
                     effect4->load(effects_set[i]);
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                     {
                         if (settings.value("Settings/popupChangedWindows").toBool())
                         {
@@ -603,7 +603,7 @@ namespace plug
                     effect1->load(effects_set[i]);
                     if (connected)
                         effect1->send_fx();
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect1->show();
                     break;
@@ -612,7 +612,7 @@ namespace plug
                     effect2->load(effects_set[i]);
                     if (connected)
                         effect2->send_fx();
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect2->show();
                     break;
@@ -621,7 +621,7 @@ namespace plug
                     effect3->load(effects_set[i]);
                     if (connected)
                         effect3->send_fx();
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect3->show();
                     break;
@@ -630,7 +630,7 @@ namespace plug
                     effect4->load(effects_set[i]);
                     if (connected)
                         effect4->send_fx();
-                    if (effects_set[i].effect_num != 0u)
+                    if (effects_set[i].effect_num != effects::EMPTY)
                         if (settings.value("Settings/popupChangedWindows").toBool())
                             effect4->show();
                     break;
@@ -778,8 +778,8 @@ namespace plug
 
     void MainWindow::empty_other(int value, Effect* caller)
     {
+        int fx_family = check_fx_family(static_cast<effects>(value));
         fx_pedal_settings settings{};
-        int fx_family = check_fx_family(value);
 
         if (caller != effect1)
         {
@@ -822,17 +822,17 @@ namespace plug
         }
     }
 
-    int MainWindow::check_fx_family(int value)
+    int MainWindow::check_fx_family(effects value) const
     {
-        if (value == 0)
+        if (value == effects::EMPTY)
             return 0;
-        if (value >= 1 && value <= 7)
+        if ((value >= effects::OVERDRIVE) && (value <= effects::COMPRESSOR))
             return 1;
-        if (value >= 8 && value <= 18)
+        if ((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER))
             return 2;
-        if (value >= 19 && value <= 27)
+        if ((value >= effects::MONO_DELAY) && (value <= effects::STEREO_TAPE_DELAY))
             return 3;
-        if (value >= 28 && value <= 37)
+        if ((value >= effects::SMALL_HALL_REVERB) && (value <= effects::FENDER_65_SPRING_REVERB))
             return 4;
 
         return 0;

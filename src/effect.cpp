@@ -30,7 +30,7 @@ namespace plug
         : QMainWindow(parent),
           ui(std::make_unique<Ui::Effect>()),
           fx_slot(number),
-          effect_num(0),
+          effect_num(effects::EMPTY),
           knob1(0),
           knob2(0),
           knob3(0),
@@ -41,7 +41,7 @@ namespace plug
           changed(false)
     {
         ui->setupUi(this);
-        effect_num = ui->comboBox->currentIndex();
+        effect_num = static_cast<effects>(ui->comboBox->currentIndex());
 
         // load window size
         QSettings settings;
@@ -135,7 +135,7 @@ namespace plug
     void Effect::choose_fx(int value)
     {
         QSettings settings;
-        effect_num = value;
+        effect_num = static_cast<effects>(value);
         set_changed(true);
 
         ui->comboBox->setCurrentIndex(value);
@@ -1885,7 +1885,7 @@ namespace plug
     {
         set_changed(true);
 
-        ui->comboBox->setCurrentIndex(settings.effect_num);
+        ui->comboBox->setCurrentIndex(value(settings.effect_num));
         ui->dial->setValue(settings.knob1);
         ui->dial_2->setValue(settings.knob2);
         ui->dial_3->setValue(settings.knob3);
@@ -1935,7 +1935,7 @@ namespace plug
             ui->label_5->setDisabled(true);
             ui->label_6->setDisabled(true);
             ui->label_7->setDisabled(true);
-            effect_num = 0;
+            effect_num = effects::EMPTY;
             temp1 = windowTitle();
             temp2 = accessibleName();
             setWindowTitle(QString(tr("FX%1: OFF")).arg(fx_slot + 1));
@@ -1956,8 +1956,9 @@ namespace plug
             ui->label_7->setDisabled(false);
             ui->dial->setDisabled(false);
             ui->spinBox->setDisabled(false);
-            effect_num = ui->comboBox->currentIndex();
+
             const auto effectType = static_cast<effects>(effect_num);
+            effect_num = effectType;
 
             if (effectType != effects::SIMPLE_COMP)
             {

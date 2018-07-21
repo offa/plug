@@ -66,7 +66,7 @@ namespace plug::com
 
     constexpr std::uint8_t getFxKnob(const fx_pedal_settings& effect)
     {
-        if (effect.effect_num >= value(effects::SINE_CHORUS) && effect.effect_num <= value(effects::PITCH_SHIFTER))
+        if ((effect.effect_num >= effects::SINE_CHORUS) && (effect.effect_num <= effects::PITCH_SHIFTER))
         {
             return 0x01;
         }

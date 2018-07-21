@@ -57,7 +57,7 @@ namespace plug
     struct fx_pedal_settings
     {
         std::uint8_t fx_slot;
-        std::uint8_t effect_num;
+        effects effect_num;
         std::uint8_t knob1;
         std::uint8_t knob2;
         std::uint8_t knob3;

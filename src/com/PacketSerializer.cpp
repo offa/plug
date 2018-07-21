@@ -35,7 +35,7 @@ namespace plug::com
             {
                 return 1;
             }
-            if (effects[0].effect_num >= value(effects::SINE_CHORUS) && effects[0].effect_num <= value(effects::PITCH_SHIFTER))
+            if ((effects[0].effect_num >= effects::SINE_CHORUS) && (effects[0].effect_num <= effects::PITCH_SHIFTER))
             {
                 return 1;
             }
@@ -57,7 +57,7 @@ namespace plug::com
 
             for (std::size_t i = 0; i < repeat; ++i)
             {
-                if (effects[i].effect_num < value(effects::SINE_CHORUS))
+                if (effects[i].effect_num < effects::SINE_CHORUS)
                 {
                     throw std::invalid_argument{"Invalid effect"};
                 }
@@ -381,7 +381,7 @@ namespace plug::com
             effects_set_out[j].knob5 = data[i][KNOB5];
             effects_set_out[j].knob6 = data[i][KNOB6];
             effects_set_out[j].position = (data[i][FXSLOT] > 0x03 ? Position::effectsLoop : Position::input);
-            effects_set_out[j].effect_num = value(lookupEffectById(data[i][EFFECT]));
+            effects_set_out[j].effect_num = lookupEffectById(data[i][EFFECT]);
         }
     }
 
@@ -891,7 +891,7 @@ namespace plug::com
 
         for (std::size_t i = 0; i < repeat; ++i)
         {
-            if (effects[i].effect_num < value(effects::SINE_CHORUS))
+            if (effects[i].effect_num < effects::SINE_CHORUS)
             {
                 throw std::invalid_argument{"Invalid effect"};
             }

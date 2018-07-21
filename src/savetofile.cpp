@@ -303,29 +303,25 @@ namespace plug
 
     void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
     {
-        fx_pedal_settings empty{0, 0, 0, 0, 0, 0, 0, 0, Position::input};
-
-        empty.effect_num = 0;
-        empty.fx_slot = 0;
-        empty.position = Position::input;
+        fx_pedal_settings empty{0, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
 
         xml->writeStartElement("FX");
 
         xml->writeStartElement("Stompbox");
         xml->writeAttribute("ID", "1");
-        if ((settings[0].effect_num > value(effects::EMPTY)) && (settings[0].effect_num <= value(effects::COMPRESSOR)))
+        if ((settings[0].effect_num > effects::EMPTY) && (settings[0].effect_num <= effects::COMPRESSOR))
         {
             writeFX(settings[0]);
         }
-        else if ((settings[1].effect_num > value(effects::EMPTY)) && (settings[1].effect_num <= value(effects::COMPRESSOR)))
+        else if ((settings[1].effect_num > effects::EMPTY) && (settings[1].effect_num <= effects::COMPRESSOR))
         {
             writeFX(settings[1]);
         }
-        else if ((settings[2].effect_num > value(effects::EMPTY)) && (settings[2].effect_num <= value(effects::COMPRESSOR)))
+        else if ((settings[2].effect_num > effects::EMPTY) && (settings[2].effect_num <= effects::COMPRESSOR))
         {
             writeFX(settings[2]);
         }
-        else if ((settings[3].effect_num > value(effects::EMPTY)) && (settings[3].effect_num <= value(effects::COMPRESSOR)))
+        else if ((settings[3].effect_num > effects::EMPTY) && (settings[3].effect_num <= effects::COMPRESSOR))
         {
             writeFX(settings[3]);
         }
@@ -337,19 +333,19 @@ namespace plug
 
         xml->writeStartElement("Modulation");
         xml->writeAttribute("ID", "2");
-        if ((settings[0].effect_num >= value(effects::SINE_CHORUS)) && (settings[0].effect_num <= value(effects::PITCH_SHIFTER)))
+        if ((settings[0].effect_num >= effects::SINE_CHORUS) && (settings[0].effect_num <= effects::PITCH_SHIFTER))
         {
             writeFX(settings[0]);
         }
-        else if ((settings[1].effect_num >= value(effects::SINE_CHORUS)) && (settings[1].effect_num <= value(effects::PITCH_SHIFTER)))
+        else if ((settings[1].effect_num >= effects::SINE_CHORUS) && (settings[1].effect_num <= effects::PITCH_SHIFTER))
         {
             writeFX(settings[1]);
         }
-        else if ((settings[2].effect_num >= value(effects::SINE_CHORUS)) && (settings[2].effect_num <= value(effects::PITCH_SHIFTER)))
+        else if ((settings[2].effect_num >= effects::SINE_CHORUS) && (settings[2].effect_num <= effects::PITCH_SHIFTER))
         {
             writeFX(settings[2]);
         }
-        else if ((settings[3].effect_num >= value(effects::SINE_CHORUS)) && (settings[3].effect_num <= value(effects::PITCH_SHIFTER)))
+        else if ((settings[3].effect_num >= effects::SINE_CHORUS) && (settings[3].effect_num <= effects::PITCH_SHIFTER))
         {
             writeFX(settings[3]);
         }
@@ -361,19 +357,19 @@ namespace plug
 
         xml->writeStartElement("Delay");
         xml->writeAttribute("ID", "3");
-        if ((settings[0].effect_num >= value(effects::MONO_DELAY)) && (settings[0].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        if ((settings[0].effect_num >= effects::MONO_DELAY) && (settings[0].effect_num <= effects::STEREO_TAPE_DELAY))
         {
             writeFX(settings[0]);
         }
-        else if ((settings[1].effect_num >= value(effects::MONO_DELAY)) && (settings[1].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        else if ((settings[1].effect_num >= effects::MONO_DELAY) && (settings[1].effect_num <= effects::STEREO_TAPE_DELAY))
         {
             writeFX(settings[1]);
         }
-        else if ((settings[2].effect_num >= value(effects::MONO_DELAY)) && (settings[2].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        else if ((settings[2].effect_num >= effects::MONO_DELAY) && (settings[2].effect_num <= effects::STEREO_TAPE_DELAY))
         {
             writeFX(settings[2]);
         }
-        else if ((settings[3].effect_num >= value(effects::MONO_DELAY)) && (settings[3].effect_num <= value(effects::STEREO_TAPE_DELAY)))
+        else if ((settings[3].effect_num >= effects::MONO_DELAY) && (settings[3].effect_num <= effects::STEREO_TAPE_DELAY))
         {
             writeFX(settings[3]);
         }
@@ -385,19 +381,19 @@ namespace plug
 
         xml->writeStartElement("Reverb");
         xml->writeAttribute("ID", "4");
-        if ((settings[0].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[0].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        if ((settings[0].effect_num >= effects::SMALL_HALL_REVERB) && (settings[0].effect_num <= effects::FENDER_65_SPRING_REVERB))
         {
             writeFX(settings[0]);
         }
-        else if ((settings[1].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[1].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        else if ((settings[1].effect_num >= effects::SMALL_HALL_REVERB) && (settings[1].effect_num <= effects::FENDER_65_SPRING_REVERB))
         {
             writeFX(settings[1]);
         }
-        else if ((settings[2].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[2].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        else if ((settings[2].effect_num >= effects::SMALL_HALL_REVERB) && (settings[2].effect_num <= effects::FENDER_65_SPRING_REVERB))
         {
             writeFX(settings[2]);
         }
-        else if ((settings[3].effect_num >= value(effects::SMALL_HALL_REVERB)) && (settings[3].effect_num <= value(effects::FENDER_65_SPRING_REVERB)))
+        else if ((settings[3].effect_num >= effects::SMALL_HALL_REVERB) && (settings[3].effect_num <= effects::FENDER_65_SPRING_REVERB))
         {
             writeFX(settings[3]);
         }
@@ -588,7 +584,7 @@ namespace plug
         xml->writeCharacters(QString("%1").arg((settings.knob1 << 8) | settings.knob1));
         xml->writeEndElement();
 
-        if (settings.effect_num == value(effects::SIMPLE_COMP))
+        if (settings.effect_num == effects::SIMPLE_COMP)
         {
             xml->writeEndElement(); // end Module
             return;
@@ -614,10 +610,10 @@ namespace plug
         xml->writeCharacters(QString("%1").arg((settings.knob5 << 8) | settings.knob5));
         xml->writeEndElement();
 
-        if (settings.effect_num != value(effects::MONO_ECHO_FILTER) &&
-            settings.effect_num != value(effects::STEREO_ECHO_FILTER) &&
-            settings.effect_num != value(effects::TAPE_DELAY) &&
-            settings.effect_num != value(effects::STEREO_TAPE_DELAY))
+        if ((settings.effect_num != effects::MONO_ECHO_FILTER) &&
+            (settings.effect_num != effects::STEREO_ECHO_FILTER) &&
+            (settings.effect_num != effects::TAPE_DELAY) &&
+            (settings.effect_num != effects::STEREO_TAPE_DELAY))
         {
             xml->writeEndElement(); // end Module
             return;

@@ -53,7 +53,7 @@ namespace plug
     private:
         const std::unique_ptr<Ui::Effect> ui;
         unsigned char fx_slot;
-        unsigned char effect_num;
+        effects effect_num;
         unsigned char knob1;
         unsigned char knob2;
         unsigned char knob3;

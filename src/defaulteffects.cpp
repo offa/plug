@@ -1086,7 +1086,7 @@ namespace plug
         dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data.data());
 
         const auto index = ui->comboBox_2->currentIndex();
-        ui->comboBox->setCurrentIndex(settings_data[index].effect_num);
+        ui->comboBox->setCurrentIndex(value(settings_data[index].effect_num));
         ui->dial->setValue(settings_data[index].knob1);
         ui->dial_2->setValue(settings_data[index].knob2);
         ui->dial_3->setValue(settings_data[index].knob3);
