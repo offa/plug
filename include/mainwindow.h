@@ -72,7 +72,7 @@ namespace plug
     public slots:
         void start_amp(); // initialize the communication
         void stop_amp();  // terminate communication
-        int set_effect(fx_pedal_settings);
+        void set_effect(fx_pedal_settings);
         int set_amplifier(amp_settings);
         int save_on_amp(char*, int);
         int load_from_amp(int);

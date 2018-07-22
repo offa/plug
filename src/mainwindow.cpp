@@ -302,22 +302,22 @@ namespace plug
     }
 
     // pass the message to the amp
-    int MainWindow::set_effect(fx_pedal_settings pedal)
+    void MainWindow::set_effect(fx_pedal_settings pedal)
     {
-        QSettings settings;
-
         if (!connected)
         {
-            return 0;
+            return;
         }
+
+        QSettings settings;
 
         if (!settings.value("Settings/oneSetToSetThemAll").toBool())
         {
             amp_ops->set_effect(pedal);
-            return 0;
+            return;
         }
         amp->send_amp();
-        return 0;
+        return;
     }
 
     int MainWindow::set_amplifier(amp_settings amp_settings)
