@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "com/mustang.h"
+#include "com/Mustang.h"
 #include "com/CommunicationException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/PacketConstants.h"
