@@ -320,14 +320,15 @@ namespace plug
         return;
     }
 
-    int MainWindow::set_amplifier(amp_settings amp_settings)
+    void MainWindow::set_amplifier(amp_settings amp_settings)
     {
-        QSettings settings;
 
         if (!connected)
         {
-            return 0;
+            return;
         }
+
+        QSettings settings;
 
         if (settings.value("Settings/oneSetToSetThemAll").toBool())
         {
@@ -356,14 +357,13 @@ namespace plug
         }
 
         amp_ops->set_amplifier(amp_settings);
-        return 0;
     }
 
-    int MainWindow::save_on_amp(char* name, int slot)
+    void MainWindow::save_on_amp(char* name, int slot)
     {
         if (connected == false)
         {
-            return -1;
+            return;
         }
 
         amp_ops->save_on_amp(name, slot);
@@ -381,21 +381,19 @@ namespace plug
 
         current_name = name;
         memcpy(names[slot], name, 32);
-
-        return 0;
     }
 
-    int MainWindow::load_from_amp(int slot)
+    void MainWindow::load_from_amp(int slot)
     {
+        if (!connected)
+        {
+            return;
+        }
+
         QSettings settings;
         amp_settings amplifier_set;
         fx_pedal_settings effects_set[4];
         char name[32];
-
-        if (!connected)
-        {
-            return -1;
-        }
 
         amp_ops->load_memory_bank(slot, name, &amplifier_set, effects_set);
 
@@ -459,8 +457,6 @@ namespace plug
                     break;
             }
         }
-
-        return 0;
     }
 
     // activate buttons

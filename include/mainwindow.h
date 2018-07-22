@@ -73,9 +73,9 @@ namespace plug
         void start_amp(); // initialize the communication
         void stop_amp();  // terminate communication
         void set_effect(fx_pedal_settings);
-        int set_amplifier(amp_settings);
-        int save_on_amp(char*, int);
-        int load_from_amp(int);
+        void set_amplifier(amp_settings);
+        void save_on_amp(char*, int);
+        void load_from_amp(int);
         void enable_buttons();
         void change_name(int, QString*);
         void save_effects(int, char*, int, bool, bool, bool);
