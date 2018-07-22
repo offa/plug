@@ -76,7 +76,7 @@ namespace plug::com
         sendCommand(clearEffectPacket);
         sendApplyCommand();
 
-        if (static_cast<effects>(value.effect_num) == effects::EMPTY)
+        if (value.effect_num == effects::EMPTY)
         {
             return;
         }
