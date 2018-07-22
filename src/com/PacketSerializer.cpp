@@ -93,7 +93,7 @@ namespace plug::com
             packet[KNOB4] = effects[i].knob4;
             packet[KNOB5] = effects[i].knob5;
 
-            const auto effect = static_cast<plug::effects>(effects[i].effect_num);
+            const auto effect = effects[i].effect_num;
             // some effects have more knobs
             if (hasExtraKnob(effect) == true)
             {
@@ -451,7 +451,7 @@ namespace plug::com
 
         packet[BRIGHTNESS] = value.brightness ? 1 : 0;
 
-        switch (static_cast<amps>(value.amp_num))
+        switch (value.amp_num)
         {
             case amps::FENDER_57_DELUXE:
                 packet[AMPLIFIER] = 0x67;
