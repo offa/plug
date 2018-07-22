@@ -76,14 +76,12 @@ namespace plug::com
         sendCommand(clearEffectPacket);
         sendApplyCommand();
 
-        if (value.effect_num == effects::EMPTY)
+        if (value.effect_num != effects::EMPTY)
         {
-            return;
+            const auto settingsPacket = serializeEffectSettings(value);
+            sendCommand(settingsPacket);
+            sendApplyCommand();
         }
-
-        const auto settingsPacket = serializeEffectSettings(value);
-        sendCommand(settingsPacket);
-        sendApplyCommand();
     }
 
     void Mustang::set_amplifier(amp_settings value)
