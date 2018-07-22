@@ -1957,10 +1957,7 @@ namespace plug
             ui->dial->setDisabled(false);
             ui->spinBox->setDisabled(false);
 
-            const auto effectType = static_cast<effects>(effect_num);
-            effect_num = effectType;
-
-            if (effectType != effects::SIMPLE_COMP)
+            if (effect_num != effects::SIMPLE_COMP)
             {
                 ui->dial_2->setDisabled(false);
                 ui->dial_3->setDisabled(false);
@@ -1970,7 +1967,7 @@ namespace plug
                 ui->spinBox_3->setDisabled(false);
                 ui->spinBox_4->setDisabled(false);
                 ui->spinBox_5->setDisabled(false);
-                if (effectType == effects::MONO_ECHO_FILTER || effectType == effects::STEREO_ECHO_FILTER || effectType == effects::TAPE_DELAY || effectType == effects::STEREO_TAPE_DELAY)
+                if (effect_num == effects::MONO_ECHO_FILTER || effect_num == effects::STEREO_ECHO_FILTER || effect_num == effects::TAPE_DELAY || effect_num == effects::STEREO_TAPE_DELAY)
                 {
                     ui->dial_6->setDisabled(false);
                     ui->spinBox_6->setDisabled(false);
