@@ -92,7 +92,7 @@ namespace plug
     // functions setting variables
     void Effect::set_post_amp(bool value)
     {
-        position = ( value == true ? Position::effectsLoop : Position::input );
+        position = (value == true ? Position::effectsLoop : Position::input);
         set_changed(true);
     }
 
