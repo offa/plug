@@ -70,8 +70,8 @@ namespace plug
         MainWindow& operator=(const MainWindow&) = delete;
 
     public slots:
-        void start_amp(); // initialize the communication
-        void stop_amp();  // terminate communication
+        void start_amp();
+        void stop_amp();
         void set_effect(fx_pedal_settings);
         void set_amplifier(amp_settings);
         void save_on_amp(char*, int);
@@ -89,7 +89,6 @@ namespace plug
     private:
         const std::unique_ptr<Ui::MainWindow> ui;
 
-        // pointers to objects
         QString current_name;
         char names[100][32];
         bool manual_check, connected;

@@ -182,7 +182,7 @@ namespace plug
 
         try
         {
-            amp_ops->start_amp(names, name, &amplifier_set, effects_set); // request initialization of communication
+            amp_ops->start_amp(names, name, &amplifier_set, effects_set);
         }
         catch (const com::CommunicationException& ex)
         {
@@ -262,7 +262,7 @@ namespace plug
         ui->action_Load_from_amplifier->setDisabled(false);
         ui->actionSave_effects->setDisabled(false);
         ui->action_Library_view->setDisabled(false);
-        ui->statusBar->showMessage(tr("Connected"), 3000); // show message on the status bar
+        ui->statusBar->showMessage(tr("Connected"), 3000);
 
         connected = true;
     }
@@ -291,7 +291,7 @@ namespace plug
             ui->action_Library_view->setDisabled(true);
             setWindowTitle(QString(tr("PLUG")));
             setAccessibleName(QString(tr("Main window: None")));
-            ui->statusBar->showMessage(tr("Disconnected"), 5000); // show message on the status bar
+            ui->statusBar->showMessage(tr("Disconnected"), 5000);
 
             connected = false;
         }
