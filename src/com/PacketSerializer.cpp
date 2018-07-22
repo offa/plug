@@ -583,7 +583,6 @@ namespace plug::com
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-        const auto effectType = static_cast<effects>(value.effect_num);
         const std::uint8_t slot = (value.position == Position::effectsLoop ? (value.fx_slot + 4) : value.fx_slot); // where to put the effect
 
         // fill the form with data
@@ -594,13 +593,13 @@ namespace plug::com
         data[KNOB4] = value.knob4;
         data[KNOB5] = value.knob5;
 
-        if (hasExtraKnob(effectType) == true)
+        if (hasExtraKnob(value.effect_num) == true)
         {
             data[KNOB6] = value.knob6;
         }
 
         // fill the form with missing data
-        switch (effectType)
+        switch (value.effect_num)
         {
             case effects::OVERDRIVE:
                 data[DSP] = 0x06;
