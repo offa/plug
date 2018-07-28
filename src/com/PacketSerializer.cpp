@@ -307,7 +307,7 @@ namespace plug::com
     }
 
 
-    std::string decodeNameFromData(const unsigned char data[7][64])
+    std::string decodeNameFromData(const std::array<Packet, 7>& data)
     {
         constexpr std::size_t nameLength{32};
         std::string name(nameLength, '\0');
@@ -321,7 +321,7 @@ namespace plug::com
         return name;
     }
 
-    amp_settings decodeAmpFromData(const unsigned char data[7][64])
+    amp_settings decodeAmpFromData(const std::array<Packet, 7>& data)
     {
         amp_settings settings{};
         settings.amp_num = lookupAmpById(data[1][AMPLIFIER]);
@@ -344,7 +344,7 @@ namespace plug::com
         return settings;
     }
 
-    void decodeEffectsFromData(const unsigned char data[7][64], fx_pedal_settings* const& effects_set_out)
+    void decodeEffectsFromData(const std::array<Packet, 7>& data, fx_pedal_settings* const& effects_set_out)
     {
         for (int i = 2; i < 6; ++i)
         {

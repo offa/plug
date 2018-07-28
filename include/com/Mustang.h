@@ -57,7 +57,7 @@ namespace plug::com
     private:
         const std::unique_ptr<UsbComm> comm;
 
-        void decode_data(unsigned char[7][packetSize], char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
+        void decode_data(const std::array<Packet, 7>& data, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
         void loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set);
 
         void initializeAmp();

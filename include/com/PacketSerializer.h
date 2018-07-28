@@ -31,9 +31,9 @@
 
 namespace plug::com
 {
-    std::string decodeNameFromData(const unsigned char data[7][64]);
-    amp_settings decodeAmpFromData(const unsigned char data[7][64]);
-    void decodeEffectsFromData(const unsigned char data[7][64], fx_pedal_settings* const& effects_set_out);
+    std::string decodeNameFromData(const std::array<Packet, 7>& data);
+    amp_settings decodeAmpFromData(const std::array<Packet, 7>& data);
+    void decodeEffectsFromData(const std::array<Packet, 7>& data, fx_pedal_settings* const& effects_set_out);
 
     Packet serializeAmpSettings(const amp_settings& value);
     Packet serializeAmpSettingsUsbGain(const amp_settings& value);

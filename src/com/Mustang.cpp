@@ -104,7 +104,7 @@ namespace plug::com
 
     void Mustang::load_memory_bank(std::uint8_t slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        unsigned char data[7][packetSize];
+        std::array<Packet, 7> data;
 
         const auto loadCommand = serializeLoadSlotCommand(slot);
         auto n = sendPacket(loadCommand);
@@ -116,7 +116,7 @@ namespace plug::com
 
             if (i < 7)
             {
-                std::copy(recvData.cbegin(), recvData.cend(), data[i]);
+                std::copy(recvData.begin(), recvData.end(), data[i].begin());
             }
         }
 
@@ -126,7 +126,7 @@ namespace plug::com
         }
     }
 
-    void Mustang::decode_data(unsigned char data[7][packetSize], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    void Mustang::decode_data(const std::array<Packet, 7>& data, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         if (name != nullptr)
         {
@@ -163,9 +163,7 @@ namespace plug::com
     {
         if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
-            unsigned char recieved_data[296][packetSize];
-            memset(recieved_data, 0x00, 296 * packetSize);
-
+            std::array<Packet, 296> recieved_data;
             std::size_t i{0};
             std::size_t j{0};
 
@@ -176,7 +174,7 @@ namespace plug::com
             {
                 const auto recvData = receivePacket();
                 recieved = recvData.size();
-                std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i]);
+                std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i].begin());
             }
 
             const std::size_t max_to_receive = (i > 143 ? 200 : 48);
@@ -184,17 +182,17 @@ namespace plug::com
             {
                 for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
                 {
-                    memcpy(list[j], recieved_data[i] + 16, 32);
+                    memcpy(list[j], std::next(recieved_data[i].cbegin(), 16), 32);
                 }
             }
 
             if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
             {
-                unsigned char data[7][packetSize];
+                std::array<Packet, 7> data;
 
                 for (j = 0; j < 7; ++i, ++j)
                 {
-                    memcpy(data[j], recieved_data[i], packetSize);
+                    memcpy(data[j].data(), recieved_data[i].data(), packetSize);
                 }
                 decode_data(data, name, amp_set, effects_set);
             }
