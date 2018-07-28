@@ -24,7 +24,6 @@
 #include "com/IdLookup.h"
 #include "com/PacketSerializer.h"
 #include <algorithm>
-#include <cstring>
 
 namespace plug::com
 {
