@@ -182,7 +182,7 @@ namespace plug::com
             {
                 for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
                 {
-                    memcpy(list[j], std::next(recieved_data[i].cbegin(), 16), 32);
+                    std::copy_n(std::next(recieved_data[i].cbegin(), 16), 32, list[j]);
                 }
             }
 
@@ -192,7 +192,7 @@ namespace plug::com
 
                 for (j = 0; j < 7; ++i, ++j)
                 {
-                    memcpy(data[j].data(), recieved_data[i].data(), packetSize);
+                    std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
                 }
                 decode_data(data, name, amp_set, effects_set);
             }
