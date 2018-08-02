@@ -103,7 +103,7 @@ namespace plug::com
 
     void Mustang::load_memory_bank(std::uint8_t slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        std::array<Packet, 7> data;
+        std::array<Packet, 7> data{{}};
 
         const auto loadCommand = serializeLoadSlotCommand(slot);
         auto n = sendPacket(loadCommand);
@@ -162,7 +162,7 @@ namespace plug::com
     {
         if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
-            std::array<Packet, 296> recieved_data;
+            std::array<Packet, 296> recieved_data{{}};
             std::size_t i{0};
             std::size_t j{0};
 
@@ -187,7 +187,7 @@ namespace plug::com
 
             if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
             {
-                std::array<Packet, 7> data;
+                std::array<Packet, 7> data{{}};
 
                 for (j = 0; j < 7; ++i, ++j)
                 {
