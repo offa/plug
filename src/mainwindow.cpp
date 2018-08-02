@@ -389,7 +389,7 @@ namespace plug
         }
 
         QSettings settings;
-        amp_settings amplifier_set;
+        amp_settings amplifier_set{};
         fx_pedal_settings effects_set[4];
         char name[32];
 
