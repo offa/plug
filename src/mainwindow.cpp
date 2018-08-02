@@ -314,10 +314,8 @@ namespace plug
         if (!settings.value("Settings/oneSetToSetThemAll").toBool())
         {
             amp_ops->set_effect(pedal);
-            return;
         }
         amp->send_amp();
-        return;
     }
 
     void MainWindow::set_amplifier(amp_settings amp_settings)
