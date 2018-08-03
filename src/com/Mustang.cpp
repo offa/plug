@@ -98,26 +98,12 @@ namespace plug::com
     {
         const auto data = serializeName(slot, name);
         sendCommand(data);
-        load_memory_bank(slot, nullptr, nullptr, nullptr);
+        loadBankData(slot);
     }
 
     void Mustang::load_memory_bank(std::uint8_t slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        std::array<Packet, 7> data{{}};
-
-        const auto loadCommand = serializeLoadSlotCommand(slot);
-        auto n = sendPacket(loadCommand);
-
-        for (int i = 0; n != 0; ++i)
-        {
-            const auto recvData = receivePacket();
-            n = recvData.size();
-
-            if (i < 7)
-            {
-                std::copy(recvData.begin(), recvData.end(), data[i].begin());
-            }
-        }
+        const auto data = loadBankData(slot);
 
         if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
@@ -196,6 +182,26 @@ namespace plug::com
                 decode_data(data, name, amp_set, effects_set);
             }
         }
+    }
+
+    std::array<Packet, 7> Mustang::loadBankData(std::uint8_t slot)
+    {
+        std::array<Packet, 7> data{{}};
+
+        const auto loadCommand = serializeLoadSlotCommand(slot);
+        auto n = sendPacket(loadCommand);
+
+        for (int i = 0; n != 0; ++i)
+        {
+            const auto recvData = receivePacket();
+            n = recvData.size();
+
+            if (i < 7)
+            {
+                std::copy(recvData.begin(), recvData.end(), data[i].begin());
+            }
+        }
+        return data;
     }
 
     void Mustang::initializeAmp()
