@@ -389,10 +389,9 @@ namespace plug
         }
 
         QSettings settings;
-        amp_settings amplifier_set{};
         fx_pedal_settings effects_set[4];
 
-        const auto[name] = amp_ops->load_memory_bank(slot, &amplifier_set, effects_set);
+        const auto[name, ampSettings] = amp_ops->load_memory_bank(slot, effects_set);
         const QString bankName = QString::fromStdString(name);
 
 
@@ -409,7 +408,7 @@ namespace plug
 
         current_name = bankName;
 
-        amp->load(amplifier_set);
+        amp->load(ampSettings);
         if (settings.value("Settings/popupChangedWindows").toBool())
         {
             amp->show();

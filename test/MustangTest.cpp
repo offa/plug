@@ -86,6 +86,18 @@ protected:
         return data;
     }
 
+    void expectReceiveBankData(std::array<Packet, 7>& data)
+    {
+        EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+            .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
+            .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
+            .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
+            .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
+            .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
+            .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
+            .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(0), Return(0)));
+    }
+
 
     std::unique_ptr<com::Mustang> m;
     mock::UsbMock* usbmock;
@@ -455,10 +467,14 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
-    m->load_memory_bank(slot, nullptr, nullptr);
+    auto ampDummy = helper::createEmptyPacket();
+    ampDummy[ampPos] = 0x5e;
+
+    std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
+    expectReceiveBankData(data);
+
+    m->load_memory_bank(slot, nullptr);
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
@@ -475,7 +491,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(0), Return(0)));
 
-    const auto [name] = m->load_memory_bank(slot, nullptr, nullptr);
+    const auto [name, amp] = m->load_memory_bank(slot, nullptr);
     EXPECT_THAT(name, StrEq("abc"));
 }
 
@@ -517,8 +533,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
-    amp_settings settings{};
-    m->load_memory_bank(slot, &settings, nullptr);
+    const auto [name, settings] = m->load_memory_bank(slot, nullptr);
     EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_80S));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
@@ -546,20 +561,18 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
     const auto recvSize = recvData0.size();
 
+    auto ampDummy = helper::createEmptyPacket();
+    ampDummy[ampPos] = 0x5e;
+
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(recvData0.cbegin(), recvData0.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(recvData1.cbegin(), recvData1.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(recvData2.cbegin(), recvData2.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(recvData3.cbegin(), recvData3.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+
+    std::array<Packet, 7> data {{dummy, ampDummy, recvData0, recvData1, recvData2, recvData3, dummy}};
+    expectReceiveBankData(data);
 
     std::array<fx_pedal_settings, 4> settings{};
-    m->load_memory_bank(slot, nullptr, settings.data());
+    m->load_memory_bank(slot, settings.data());
 
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(11));
