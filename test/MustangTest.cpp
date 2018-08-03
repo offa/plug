@@ -458,7 +458,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
-    m->load_memory_bank(slot, nullptr, nullptr, nullptr);
+    m->load_memory_bank(slot, nullptr, nullptr);
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
@@ -475,9 +475,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(0), Return(0)));
 
-    std::array<char, packetSize> name{};
-    m->load_memory_bank(slot, name.data(), nullptr, nullptr);
-    EXPECT_THAT(name.data(), StrEq("abc"));
+    const auto [name] = m->load_memory_bank(slot, nullptr, nullptr);
+    EXPECT_THAT(name, StrEq("abc"));
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
@@ -519,7 +518,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
     amp_settings settings{};
-    m->load_memory_bank(slot, nullptr, &settings, nullptr);
+    m->load_memory_bank(slot, &settings, nullptr);
     EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_80S));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
@@ -560,7 +559,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
     std::array<fx_pedal_settings, 4> settings{};
-    m->load_memory_bank(slot, nullptr, nullptr, settings.data());
+    m->load_memory_bank(slot, nullptr, settings.data());
 
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(11));

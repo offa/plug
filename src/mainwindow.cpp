@@ -391,22 +391,23 @@ namespace plug
         QSettings settings;
         amp_settings amplifier_set{};
         fx_pedal_settings effects_set[4];
-        char name[32];
 
-        amp_ops->load_memory_bank(slot, name, &amplifier_set, effects_set);
+        const auto[name] = amp_ops->load_memory_bank(slot, &amplifier_set, effects_set);
+        const QString bankName = QString::fromStdString(name);
 
-        if (name[0] == 0x00)
+
+        if (bankName.isEmpty())
         {
             setWindowTitle(QString(tr("PLUG: NONE")));
             setAccessibleName(QString(tr("Main window: NONE")));
         }
         else
         {
-            setWindowTitle(QString(tr("PLUG: %1")).arg(name));
-            setAccessibleName(QString(tr("Main window: %1")).arg(name));
+            setWindowTitle(QString(tr("PLUG: %1")).arg(bankName));
+            setAccessibleName(QString(tr("Main window: %1")).arg(bankName));
         }
 
-        current_name = name;
+        current_name = bankName;
 
         amp->load(amplifier_set);
         if (settings.value("Settings/popupChangedWindows").toBool())

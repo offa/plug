@@ -101,14 +101,13 @@ namespace plug::com
         loadBankData(slot);
     }
 
-    void Mustang::load_memory_bank(std::uint8_t slot, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::load_memory_bank(std::uint8_t slot, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         const auto data = loadBankData(slot);
 
-        if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
-        {
-            decode_data(data, name, amp_set, effects_set);
-        }
+        char name[32];
+        decode_data(data, name, amp_set, effects_set);
+        return {name};
     }
 
     void Mustang::decode_data(const std::array<Packet, 7>& data, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
