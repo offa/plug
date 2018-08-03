@@ -494,6 +494,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 
     const auto [name, amp, effects] = m->load_memory_bank(slot);
     EXPECT_THAT(name, StrEq("abc"));
+    static_cast<void>(amp);
+    static_cast<void>(effects);
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
@@ -545,6 +547,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     EXPECT_THAT(settings.sag, Eq(recvData[sagPos]));
     EXPECT_THAT(settings.brightness, Eq(recvData[brightnessPos]));
     EXPECT_THAT(settings.usb_gain, Eq(extendedData[usbGainPos]));
+    static_cast<void>(name);
+    static_cast<void>(effects);
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
@@ -566,7 +570,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     expectReceiveBankData(data);
 
     const auto [name, amp, settings] = m->load_memory_bank(slot);
-
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(11));
     EXPECT_THAT(settings[0].knob2, Eq(22));
@@ -606,6 +609,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[3].knob6, Eq(6));
     EXPECT_THAT(settings[3].position, Eq(Position::effectsLoop));
     EXPECT_THAT(settings[3].effect_num, Eq(effects::TAPE_DELAY));
+    static_cast<void>(name);
+    static_cast<void>(amp);
 }
 
 TEST_F(MustangTest, setAmpSendsValues)
