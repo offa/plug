@@ -389,9 +389,7 @@ namespace plug
         }
 
         QSettings settings;
-        fx_pedal_settings effects_set[4];
-
-        const auto[name, ampSettings] = amp_ops->load_memory_bank(slot, effects_set);
+        const auto[name, ampSettings, effects_set] = amp_ops->load_memory_bank(slot);
         const QString bankName = QString::fromStdString(name);
 
 
