@@ -1465,8 +1465,10 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 {
     std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::SINE_CHORUS, 0, 1, 2, 3, 4, 5, Position::input}};
     constexpr int fxKnob{0x01};
-    constexpr std::size_t nameSize{22};
-    const std::string name(24, 'x');
+    constexpr std::size_t nameSize{24};
+    const std::string name(26, 'x');
+    const std::string nameExpected{name.cbegin(), std::next(name.cbegin(), nameSize-1)};
+
     Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1477,7 +1479,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
     dataName[posFxKnob] = fxKnob;
     dataName[posSaveField] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), nameSize), std::next(dataName.begin(), 16));
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameSize-1), std::next(dataName.begin(), 16));
 
 
     Sequence s;
@@ -1493,8 +1495,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
         .InSequence(s)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
-
-    m->save_effects(slot, name, settings);
+    m->save_effects(slot, nameExpected, settings);
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
