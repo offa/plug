@@ -311,13 +311,15 @@ namespace plug::com
     {
         constexpr std::size_t nameLength{32};
         std::string name(nameLength, '\0');
+        std::size_t length{0};
 
         for (int i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
         {
             name[i] = data[0][j];
+            ++length;
         }
 
-        name.resize(nameLength);
+        name.resize(std::min(length, nameLength));
         return name;
     }
 
@@ -342,6 +344,13 @@ namespace plug::com
         settings.brightness = data[1][BRIGHTNESS] != 0u;
         settings.usb_gain = data[6][16];
         return settings;
+    }
+
+    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data)
+    {
+        std::array<fx_pedal_settings, 4> effects{{}};
+        decodeEffectsFromData(data, effects.data());
+        return effects;
     }
 
     void decodeEffectsFromData(const std::array<Packet, 7>& data, fx_pedal_settings* const& effects_set_out)

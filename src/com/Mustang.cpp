@@ -105,11 +105,9 @@ namespace plug::com
     {
         const auto data = loadBankData(slot);
 
-        char name[32];
-        amp_settings amp;
-        std::array<fx_pedal_settings, 4> effects{{}};
-
-        decode_data(data, name, &amp, effects.data());
+        const auto name = decodeNameFromData(data);
+        const auto amp = decodeAmpFromData(data);
+        const auto effects = decodeEffectsFromData(data);
 
         return {name, amp, effects};
     }

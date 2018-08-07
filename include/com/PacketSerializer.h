@@ -27,12 +27,15 @@
 #include "com/Packet.h"
 #include <string>
 #include <vector>
+#include <array>
 #include <cstdint>
 
 namespace plug::com
 {
     std::string decodeNameFromData(const std::array<Packet, 7>& data);
     amp_settings decodeAmpFromData(const std::array<Packet, 7>& data);
+
+    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data);
     void decodeEffectsFromData(const std::array<Packet, 7>& data, fx_pedal_settings* const& effects_set_out);
 
     Packet serializeAmpSettings(const amp_settings& value);
