@@ -566,7 +566,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
 
-    std::array<Packet, 7> data {{dummy, ampDummy, recvData0, recvData1, recvData2, recvData3, dummy}};
+    std::array<Packet, 7> data{{dummy, ampDummy, recvData0, recvData1, recvData2, recvData3, dummy}};
     expectReceiveBankData(data);
 
     const auto [name, amp, settings] = m->load_memory_bank(slot);

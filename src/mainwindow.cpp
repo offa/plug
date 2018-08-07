@@ -389,7 +389,7 @@ namespace plug
         }
 
         QSettings settings;
-        const auto[name, ampSettings, effects_set] = amp_ops->load_memory_bank(slot);
+        const auto [name, ampSettings, effects_set] = amp_ops->load_memory_bank(slot);
         const QString bankName = QString::fromStdString(name);
 
 
