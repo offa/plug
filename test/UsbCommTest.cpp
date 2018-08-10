@@ -254,6 +254,20 @@ TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransfer)
     EXPECT_THAT(n, Eq(partial.size()));
 }
 
+TEST_F(UsbCommTest, interruptWriteThrowsOnTransferError)
+{
+    setupHandle();
+
+    const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
+    constexpr std::uint8_t endpoint{0x81};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+        .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(17)));
+
+    EXPECT_THROW(comm->interruptWrite(endpoint, data), CommunicationException);
+}
+
 TEST_F(UsbCommTest, interruptReadReceivesData)
 {
     setupHandle();
@@ -286,4 +300,18 @@ TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialTransfer)
 
     const auto buffer = comm->interruptReceive(endpoint, readSize);
     EXPECT_THAT(buffer, ContainerEq(expected));
+}
+
+TEST_F(UsbCommTest, interruptReceiveThrowsOnTransferError)
+{
+    setupHandle();
+
+    const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
+    constexpr std::uint8_t endpoint{0x81};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(18)));
+
+    EXPECT_THROW(comm->interruptReceive(endpoint, data.size()), CommunicationException);
 }
