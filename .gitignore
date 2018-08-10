@@ -1,1 +1,4 @@
 build/*
+
+cppcheck-*
+*.cppcheck
