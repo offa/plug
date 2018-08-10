@@ -101,7 +101,7 @@ protected:
 
 
     std::unique_ptr<com::Mustang> m;
-    mock::UsbMock* usbmock;
+    mock::UsbMock* usbmock = nullptr;
     libusb_device_handle handle{};
     const Packet dummy = helper::createEmptyPacket();
     const Packet initCmd = helper::createInitCmdPacket();

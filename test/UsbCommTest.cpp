@@ -55,7 +55,7 @@ protected:
     }
 
     std::unique_ptr<UsbComm> comm;
-    mock::UsbMock* usbmock;
+    mock::UsbMock* usbmock = nullptr;
     libusb_device_handle handle{};
     static inline constexpr std::uint16_t vid{7};
     static inline constexpr std::uint16_t pid{9};
