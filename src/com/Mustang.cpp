@@ -104,7 +104,6 @@ namespace plug::com
     MemoryBank Mustang::load_memory_bank(std::uint8_t slot)
     {
         const auto data = loadBankData(slot);
-
         const auto name = decodeNameFromData(data);
         const auto amp = decodeAmpFromData(data);
         const auto effects = decodeEffectsFromData(data);

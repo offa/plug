@@ -1467,7 +1467,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
     constexpr int fxKnob{0x01};
     constexpr std::size_t nameSize{24};
     const std::string name(26, 'x');
-    const std::string nameExpected{name.cbegin(), std::next(name.cbegin(), nameSize-1)};
+    const std::string nameExpected{name.cbegin(), std::next(name.cbegin(), nameSize - 1)};
 
     Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1479,7 +1479,7 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
     dataName[posFxKnob] = fxKnob;
     dataName[posSaveField] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), nameSize-1), std::next(dataName.begin(), 16));
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameSize - 1), std::next(dataName.begin(), 16));
 
 
     Sequence s;
