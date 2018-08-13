@@ -192,7 +192,7 @@ namespace plug::com
         const auto loadCommand = serializeLoadSlotCommand(slot);
         auto n = sendPacket(loadCommand);
 
-        for (int i = 0; n != 0; ++i)
+        for (std::size_t i = 0; n != 0; ++i)
         {
             const auto recvData = receivePacket();
             n = recvData.size();
