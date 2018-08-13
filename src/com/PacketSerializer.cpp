@@ -411,15 +411,7 @@ namespace plug::com
         packet[TREBLE] = value.treble;
         packet[MIDDLE] = value.middle;
         packet[BASS] = value.bass;
-
-        if (plug::value(value.cabinet) > 0x0c) // XXX:INFO This can be removed later as scoped enums are used here
-        {
-            packet[CABINET] = 0x00;
-        }
-        else
-        {
-            packet[CABINET] = plug::value(value.cabinet);
-        }
+        packet[CABINET] = plug::value(value.cabinet);
 
         if (value.noise_gate > 0x05)
         {
