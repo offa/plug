@@ -199,7 +199,7 @@ namespace plug::com
 
             if (i < 7)
             {
-                std::copy(recvData.begin(), recvData.end(), data[i].begin());
+                std::copy(recvData.cbegin(), recvData.cend(), data[i].begin());
             }
         }
         return data;
