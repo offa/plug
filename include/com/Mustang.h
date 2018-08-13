@@ -24,12 +24,10 @@
 #include "data_structs.h"
 #include "effects_enum.h"
 #include "com/Packet.h"
-#include "com/MustangConstants.h"
 #include <string_view>
 #include <vector>
 #include <memory>
 #include <cstdint>
-
 #include <array>
 #include <tuple>
 

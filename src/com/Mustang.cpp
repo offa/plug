@@ -23,6 +23,7 @@
 #include "com/UsbComm.h"
 #include "com/IdLookup.h"
 #include "com/PacketSerializer.h"
+#include "com/MustangConstants.h"
 #include <algorithm>
 
 namespace plug::com
