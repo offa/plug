@@ -58,7 +58,7 @@ namespace plug::com
 
 
     private:
-        void decode_data(const std::array<Packet, 7>& data, char* name = nullptr, amp_settings* amp_set = nullptr, fx_pedal_settings* effects_set = nullptr);
+        void decode_data(const std::array<Packet, 7>& data, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set);
         void loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set);
         std::array<Packet, 7> loadBankData(std::uint8_t slot);
 
