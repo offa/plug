@@ -118,6 +118,7 @@ namespace plug::com
         {
             const std::string nameDecoded = decodeNameFromData(data);
             std::copy(nameDecoded.cbegin(), nameDecoded.cend(), name);
+            name[nameDecoded.size()] = '\0';
         }
 
         if (amp_set != nullptr)

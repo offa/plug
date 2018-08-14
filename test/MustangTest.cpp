@@ -188,7 +188,8 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
     EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
 
-    auto recvData = helper::createEmptyNamedPacket("abc");
+    const std::string actualName{"abc"};
+    auto recvData = helper::createEmptyNamedPacket(actualName);
     const int recvSize = recvData.size();
     const int recvSizeResponse = recvSize;
 
@@ -217,8 +218,10 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
     char nameList[100][nameLength];
     std::array<char, nameLength> name{};
+    std::fill(name.begin(), name.end(), 'x');
     m->start_amp(nameList, name.data(), nullptr, nullptr);
-    EXPECT_THAT(name.data(), StrEq("abc"));
+    EXPECT_THAT(name[actualName.size()], Eq('\0'));
+    EXPECT_THAT(name.data(), StrEq(actualName));
 
     ignoreClose();
 }
