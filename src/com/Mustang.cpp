@@ -177,7 +177,7 @@ namespace plug::com
             {
                 std::array<Packet, 7> data{{}};
 
-                for (j = 0; j < 7; ++i, ++j)
+                for (i = max_to_receive, j = 0; j < 7; ++i, ++j)
                 {
                     std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
                 }
