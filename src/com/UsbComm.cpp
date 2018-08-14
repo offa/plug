@@ -91,7 +91,12 @@ namespace plug::com
         int actualTransfered{0};
         std::vector<std::uint8_t> buffer(recvSize);
         const auto rtn = libusb_interrupt_transfer(handle, endpoint, buffer.data(), buffer.size(), &actualTransfered, timeout.count());
-        checked(rtn, "Interrupt receive failed");
+
+        if (rtn != LIBUSB_ERROR_TIMEOUT)
+        {
+            checked(rtn, "Interrupt receive failed");
+        }
+
         buffer.resize(actualTransfered);
 
         return buffer;

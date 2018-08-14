@@ -24,6 +24,7 @@
 #include "helper/Matcher.h"
 #include <vector>
 #include <array>
+#include <libusb-1.0/libusb.h>
 #include <gmock/gmock.h>
 
 using plug::com::CommunicationException;
@@ -59,7 +60,8 @@ protected:
     libusb_device_handle handle{};
     static inline constexpr std::uint16_t vid{7};
     static inline constexpr std::uint16_t pid{9};
-    static inline constexpr int failed{17};
+    static inline constexpr int failed{LIBUSB_ERROR_NO_DEVICE};
+    static inline constexpr int errorTimeout{LIBUSB_ERROR_TIMEOUT};
     static inline constexpr std::uint16_t timeout{500};
 };
 
@@ -263,7 +265,7 @@ TEST_F(UsbCommTest, interruptWriteThrowsOnTransferError)
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
-        .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(17)));
+        .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(failed)));
 
     EXPECT_THROW(comm->interruptWrite(endpoint, data), CommunicationException);
 }
@@ -311,7 +313,24 @@ TEST_F(UsbCommTest, interruptReceiveThrowsOnTransferError)
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(18)));
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(failed)));
 
     EXPECT_THROW(comm->interruptReceive(endpoint, data.size()), CommunicationException);
 }
+
+TEST_F(UsbCommTest, interruptReceiveAcceptsTimeoutAndReturnsEmpty)
+{
+    setupHandle();
+
+    const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
+    constexpr std::uint8_t endpoint{0x81};
+    constexpr std::size_t readSize{0};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(errorTimeout)));
+
+    const auto buffer = comm->interruptReceive(endpoint, data.size());
+    EXPECT_THAT(buffer, IsEmpty());
+}
+
