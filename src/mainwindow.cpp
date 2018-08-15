@@ -664,7 +664,9 @@ namespace plug
     void MainWindow::show_fx1()
     {
         if (!effect1->isVisible())
+        {
             effect1->show();
+        }
         effect1->activateWindow();
     }
 
