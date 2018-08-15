@@ -333,4 +333,3 @@ TEST_F(UsbCommTest, interruptReceiveAcceptsTimeoutAndReturnsEmpty)
     const auto buffer = comm->interruptReceive(endpoint, data.size());
     EXPECT_THAT(buffer, IsEmpty());
 }
-
