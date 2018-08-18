@@ -30,6 +30,7 @@ protected:
     void SetUp() override
     {
     }
+
     void TearDown() override
     {
     }
@@ -42,6 +43,7 @@ TEST_F(PacketSerializerTest, serializeInitCommand)
     Packet packet2{};
     packet2[0] = 0x1a;
     packet2[1] = 0x03;
+
     const auto packets = serializeInitCommand();
     EXPECT_THAT(packets, SizeIs(2));
     EXPECT_THAT(packets[0], ElementsAreArray(packet1));
@@ -53,6 +55,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommand)
     Packet expected{};
     expected[0] = 0x1c;
     expected[1] = 0x03;
+
     const auto packet = serializeApplyCommand();
     EXPECT_THAT(packet, ElementsAreArray(expected));
 }
@@ -62,6 +65,7 @@ TEST_F(PacketSerializerTest, serializeLoadCommand)
     Packet expected{};
     expected[0] = 0xff;
     expected[1] = 0xc1;
+
     const auto packet = serializeLoadCommand();
     EXPECT_THAT(packet, ElementsAreArray(expected));
 }
@@ -75,7 +79,7 @@ TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
     expected[2] = 0x01;
     expected[SAVE_SLOT] = slot;
     expected[6] = 0x01;
+
     const auto packet = serializeLoadSlotCommand(slot);
     EXPECT_THAT(packet, ElementsAreArray(expected));
 }
-
