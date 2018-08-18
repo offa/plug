@@ -12,13 +12,17 @@ add_subdirectory(mocks)
 
 
 
-add_executable(MustangTest MustangTest.cpp)
+add_executable(MustangTest
+                MustangTest.cpp
+                PacketSerializerTest.cpp
+                )
 add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest PRIVATE
                         plug-mustang
                         TestLibs
                         LibUsbMocks
                         )
+
 
 
 add_executable(CommunicationTest UsbCommTest.cpp)
