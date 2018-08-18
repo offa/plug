@@ -52,3 +52,17 @@ TEST_F(PacketSerializerTest, serializeLoadCommand)
     const auto packet = serializeLoadCommand();
     EXPECT_THAT(packet, ElementsAreArray(expected));
 }
+
+TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
+{
+    constexpr std::uint8_t slot{15};
+    Packet expected{};
+    expected[0] = 0x1c;
+    expected[1] = 0x01;
+    expected[2] = 0x01;
+    expected[SAVE_SLOT] = slot;
+    expected[6] = 0x01;
+    const auto packet = serializeLoadSlotCommand(slot);
+    EXPECT_THAT(packet, ElementsAreArray(expected));
+}
+
