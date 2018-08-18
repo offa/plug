@@ -46,8 +46,8 @@ TEST_F(PacketSerializerTest, serializeInitCommand)
 
     const auto packets = serializeInitCommand();
     EXPECT_THAT(packets, SizeIs(2));
-    EXPECT_THAT(packets[0], ElementsAreArray(packet1));
-    EXPECT_THAT(packets[1], ElementsAreArray(packet2));
+    EXPECT_THAT(packets[0], ContainerEq(packet1));
+    EXPECT_THAT(packets[1], ContainerEq(packet2));
 }
 
 TEST_F(PacketSerializerTest, serializeApplyCommand)
@@ -57,7 +57,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommand)
     expected[1] = 0x03;
 
     const auto packet = serializeApplyCommand();
-    EXPECT_THAT(packet, ElementsAreArray(expected));
+    EXPECT_THAT(packet, ContainerEq(expected));
 }
 
 TEST_F(PacketSerializerTest, serializeLoadCommand)
@@ -67,7 +67,7 @@ TEST_F(PacketSerializerTest, serializeLoadCommand)
     expected[1] = 0xc1;
 
     const auto packet = serializeLoadCommand();
-    EXPECT_THAT(packet, ElementsAreArray(expected));
+    EXPECT_THAT(packet, ContainerEq(expected));
 }
 
 TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
@@ -81,5 +81,5 @@ TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
     expected[6] = 0x01;
 
     const auto packet = serializeLoadSlotCommand(slot);
-    EXPECT_THAT(packet, ElementsAreArray(expected));
+    EXPECT_THAT(packet, ContainerEq(expected));
 }
