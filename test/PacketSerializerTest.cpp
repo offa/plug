@@ -35,6 +35,19 @@ protected:
     }
 };
 
+TEST_F(PacketSerializerTest, serializeInitCommand)
+{
+    Packet packet1{};
+    packet1[1] = 0xc3;
+    Packet packet2{};
+    packet2[0] = 0x1a;
+    packet2[1] = 0x03;
+    const auto packets = serializeInitCommand();
+    EXPECT_THAT(packets, SizeIs(2));
+    EXPECT_THAT(packets[0], ElementsAreArray(packet1));
+    EXPECT_THAT(packets[1], ElementsAreArray(packet2));
+}
+
 TEST_F(PacketSerializerTest, serializeApplyCommand)
 {
     Packet expected{};
