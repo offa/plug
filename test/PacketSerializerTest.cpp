@@ -44,3 +44,11 @@ TEST_F(PacketSerializerTest, serializeApplyCommand)
     EXPECT_THAT(packet, ElementsAreArray(expected));
 }
 
+TEST_F(PacketSerializerTest, serializeLoadCommand)
+{
+    Packet expected{};
+    expected[0] = 0xff;
+    expected[1] = 0xc1;
+    const auto packet = serializeLoadCommand();
+    EXPECT_THAT(packet, ElementsAreArray(expected));
+}
