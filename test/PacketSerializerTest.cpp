@@ -19,8 +19,10 @@
  */
 
 #include "com/PacketSerializer.h"
+#include "data_structs.h"
 #include <gmock/gmock.h>
 
+using namespace plug;
 using namespace plug::com;
 using namespace testing;
 
@@ -81,5 +83,45 @@ TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
     expected[6] = 0x01;
 
     const auto packet = serializeLoadSlotCommand(slot);
+    EXPECT_THAT(packet, ContainerEq(expected));
+}
+
+TEST_F(PacketSerializerTest, serializeAmpSettingsSetsValues)
+{
+    const amp_settings settings{amps::METAL_2000, 11, 22, 33, 44, 55, cabinets::cab2x12C, 1, 2, 3, 4, 5, 6, 7, 8, true, 0};
+
+    Packet expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
+                     0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
+                     0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+
+    expected[DSP] = 0x05;
+    expected[GAIN] = 11;
+    expected[VOLUME] = 22;
+    expected[TREBLE] = 33;
+    expected[MIDDLE] = 44;
+    expected[BASS] = 55;
+    expected[CABINET] = plug::value(cabinets::cab2x12C);
+    expected[NOISE_GATE] = 1;
+    expected[MASTER_VOL] = 2;
+    expected[GAIN2] = 3;
+    expected[PRESENCE] = 4;
+    expected[THRESHOLD] = 0;
+    expected[DEPTH] = 0x80;
+    expected[BIAS] = 7;
+    expected[SAG] = 1;
+    expected[BRIGHTNESS] = 1;
+    expected[AMPLIFIER] = 0x6d;
+    expected[44] = 0x08;
+    expected[45] = 0x08;
+    expected[46] = 0x08;
+    expected[50] = 0x08;
+    expected[54] = 0x75;
+
+    const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet, ContainerEq(expected));
 }
