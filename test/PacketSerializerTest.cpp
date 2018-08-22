@@ -105,7 +105,7 @@ TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
-TEST_F(PacketSerializerTest, serializeAmpSettingsSetsValues)
+TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
 {
     const amp_settings settings{amps::METAL_2000, 11, 22, 33, 44, 55, cabinets::cab2x12C, 1, 2, 3, 4, 5, 6, 7, 8, true, 0};
 
