@@ -26,7 +26,7 @@ using namespace plug;
 using namespace plug::com;
 using namespace testing;
 
-MATCHER_P4(AmpSpecificValuesAre, ampId, v0, v1, v2, "")
+MATCHER_P4(AmpDataIs, ampId, v0, v1, v2, "")
 {
     const std::tuple actual(arg[AMPLIFIER], arg[40], arg[43], arg[44], arg[45], arg[46], arg[50], arg[54]);
     const auto[a0, a1, a2, a3, a4, a5, a6, a7] = actual;
@@ -151,18 +151,18 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpSpecificValues)
         return amp_settings{a, 0, 0, 0, 0, 0, cabinets::cab2x12C, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
     };
 
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_DELUXE)), AmpSpecificValuesAre(0x67, 0x80, 0x01, 0x53));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_59_BASSMAN)), AmpSpecificValuesAre(0x64, 0x80, 0x02, 0x67));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_CHAMP)), AmpSpecificValuesAre(0x7c, 0x80, 0x0c, 0x00));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_DELUXE_REVERB)), AmpSpecificValuesAre(0x53, 0x00, 0x03, 0x6a));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_PRINCETON)), AmpSpecificValuesAre(0x6a, 0x80, 0x04, 0x61));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_TWIN_REVERB)), AmpSpecificValuesAre(0x75, 0x80, 0x05, 0x72));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_SUPER_SONIC)), AmpSpecificValuesAre(0x72, 0x80, 0x06, 0x79));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_60S)), AmpSpecificValuesAre(0x61, 0x80, 0x07, 0x5e));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_70S)), AmpSpecificValuesAre(0x79, 0x80, 0x0b, 0x7c));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_80S)), AmpSpecificValuesAre(0x5e, 0x80, 0x09, 0x5d));
-    EXPECT_THAT(serializeAmpSettings(create(amps::AMERICAN_90S)), AmpSpecificValuesAre(0x5d, 0x80, 0x0a, 0x6d));
-    EXPECT_THAT(serializeAmpSettings(create(amps::METAL_2000)), AmpSpecificValuesAre(0x6d, 0x80, 0x08, 0x75));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_DELUXE)), AmpDataIs(0x67, 0x80, 0x01, 0x53));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_59_BASSMAN)), AmpDataIs(0x64, 0x80, 0x02, 0x67));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_CHAMP)), AmpDataIs(0x7c, 0x80, 0x0c, 0x00));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_DELUXE_REVERB)), AmpDataIs(0x53, 0x00, 0x03, 0x6a));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_PRINCETON)), AmpDataIs(0x6a, 0x80, 0x04, 0x61));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_TWIN_REVERB)), AmpDataIs(0x75, 0x80, 0x05, 0x72));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_SUPER_SONIC)), AmpDataIs(0x72, 0x80, 0x06, 0x79));
+    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_60S)), AmpDataIs(0x61, 0x80, 0x07, 0x5e));
+    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_70S)), AmpDataIs(0x79, 0x80, 0x0b, 0x7c));
+    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_80S)), AmpDataIs(0x5e, 0x80, 0x09, 0x5d));
+    EXPECT_THAT(serializeAmpSettings(create(amps::AMERICAN_90S)), AmpDataIs(0x5d, 0x80, 0x0a, 0x6d));
+    EXPECT_THAT(serializeAmpSettings(create(amps::METAL_2000)), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
 }
 
 
