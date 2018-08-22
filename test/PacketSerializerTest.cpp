@@ -145,7 +145,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsValues)
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
-TEST_F(PacketSerializerTest, serializeAmpSettingsAmpSpecificValues)
+TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 {
     auto create = [](amps a) {
         return amp_settings{a, 0, 0, 0, 0, 0, cabinets::cab2x12C, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
@@ -165,8 +165,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpSpecificValues)
     EXPECT_THAT(serializeAmpSettings(create(amps::METAL_2000)), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
 }
 
-
-TEST_F(PacketSerializerTest, serializeAmpSettingsCabinets)
+TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
 {
     auto create = [](cabinets c) {
         return amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
