@@ -37,10 +37,10 @@ MATCHER_P4(AmpSpecificValuesAre, ampId, v0, v1, v2, "")
     return std::tuple(ampId, v0, v0, v1, v1, v1, v1, v2) == actual;
 }
 
-MATCHER_P(CabinetSpecificValueIs, cabinetValue, "")
+MATCHER_P(CabinetDataIs, cabinetValue, "")
 {
     const auto actual = arg[CABINET];
-    *result_listener << " with cabinet value: " << int{actual};
+    *result_listener << " with cabinet data: " << int{actual};
     return actual == cabinetValue;
 }
 
@@ -172,17 +172,17 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsCabinets)
         return amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
     };
 
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::OFF)), CabinetSpecificValueIs(0x00));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab57DLX)), CabinetSpecificValueIs(0x01));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabBSSMN)), CabinetSpecificValueIs(0x02));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65DLX)), CabinetSpecificValueIs(0x03));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65PRN)), CabinetSpecificValueIs(0x04));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabCHAMP)), CabinetSpecificValueIs(0x05));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12M)), CabinetSpecificValueIs(0x06));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab2x12C)), CabinetSpecificValueIs(0x07));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12G)), CabinetSpecificValueIs(0x08));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65TWN)), CabinetSpecificValueIs(0x09));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12V)), CabinetSpecificValueIs(0x0a));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS212)), CabinetSpecificValueIs(0x0b));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS112)), CabinetSpecificValueIs(0x0c));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::OFF)), CabinetDataIs(0x00));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab57DLX)), CabinetDataIs(0x01));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabBSSMN)), CabinetDataIs(0x02));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65DLX)), CabinetDataIs(0x03));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65PRN)), CabinetDataIs(0x04));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabCHAMP)), CabinetDataIs(0x05));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12M)), CabinetDataIs(0x06));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab2x12C)), CabinetDataIs(0x07));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12G)), CabinetDataIs(0x08));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65TWN)), CabinetDataIs(0x09));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12V)), CabinetDataIs(0x0a));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS212)), CabinetDataIs(0x0b));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS112)), CabinetDataIs(0x0c));
 }
