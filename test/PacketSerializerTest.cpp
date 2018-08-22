@@ -37,6 +37,13 @@ MATCHER_P4(AmpSpecificValuesAre, ampId, v0, v1, v2, "")
     return std::tuple(ampId, v0, v0, v1, v1, v1, v1, v2) == actual;
 }
 
+MATCHER_P(CabinetSpecificValueIs, cabinetValue, "")
+{
+    const auto actual = arg[CABINET];
+    *result_listener << " with cabinet value: " << int{actual};
+    return actual == cabinetValue;
+}
+
 
 class PacketSerializerTest : public testing::Test
 {
@@ -158,3 +165,24 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpSpecificValues)
     EXPECT_THAT(serializeAmpSettings(create(amps::METAL_2000)), AmpSpecificValuesAre(0x6d, 0x80, 0x08, 0x75));
 }
 
+
+TEST_F(PacketSerializerTest, serializeAmpSettingsCabinets)
+{
+    auto create = [](cabinets c) {
+        return amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
+    };
+
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::OFF)), CabinetSpecificValueIs(0x00));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab57DLX)), CabinetSpecificValueIs(0x01));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabBSSMN)), CabinetSpecificValueIs(0x02));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65DLX)), CabinetSpecificValueIs(0x03));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65PRN)), CabinetSpecificValueIs(0x04));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabCHAMP)), CabinetSpecificValueIs(0x05));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12M)), CabinetSpecificValueIs(0x06));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab2x12C)), CabinetSpecificValueIs(0x07));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12G)), CabinetSpecificValueIs(0x08));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65TWN)), CabinetSpecificValueIs(0x09));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12V)), CabinetSpecificValueIs(0x0a));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS212)), CabinetSpecificValueIs(0x0b));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS112)), CabinetSpecificValueIs(0x0c));
+}
