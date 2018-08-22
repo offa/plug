@@ -145,6 +145,46 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsValues)
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
+TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
+{
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
+
+    Packet expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
+                     0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
+                     0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+
+    expected[DSP] = 0x05;
+    expected[GAIN] = 0;
+    expected[VOLUME] = 0;
+    expected[TREBLE] = 0;
+    expected[MIDDLE] = 0;
+    expected[BASS] = 0;
+    expected[CABINET] = plug::value(cabinets::OFF);
+    expected[NOISE_GATE] = 0;
+    expected[MASTER_VOL] = 0;
+    expected[GAIN2] = 0;
+    expected[PRESENCE] = 0;
+    expected[THRESHOLD] = 0;
+    expected[DEPTH] = 0x80;
+    expected[BIAS] = 0;
+    expected[SAG] = 0;
+    expected[BRIGHTNESS] = 0;
+    expected[AMPLIFIER] = 0x61;
+    expected[44] = 0x07;
+    expected[45] = 0x07;
+    expected[46] = 0x07;
+    expected[50] = 0x07;
+    expected[54] = 0x5e;
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet, ContainerEq(expected));
+}
+
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 {
     auto create = [](amps a) {
