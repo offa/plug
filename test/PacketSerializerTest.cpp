@@ -226,11 +226,19 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
     EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS112)), CabinetDataIs(0x0c));
 }
 
-TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagValue)
+TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagData)
 {
     const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0x03, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[SAG], Eq(0x01));
+}
+
+TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)
+{
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, true, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[BRIGHTNESS], Eq(0x01));
 }
 
