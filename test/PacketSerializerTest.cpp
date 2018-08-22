@@ -242,3 +242,21 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)
     EXPECT_THAT(packet[BRIGHTNESS], Eq(0x01));
 }
 
+TEST_F(PacketSerializerTest, serializeAmpSettingsSetsNoiseGate)
+{
+    constexpr std::uint8_t value{0x04};
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[NOISE_GATE], Eq(value));
+}
+
+TEST_F(PacketSerializerTest, serializeAmpSettingsLimitsNoiseGate)
+{
+    constexpr std::uint8_t value{0x06};
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[NOISE_GATE], Eq(0x00));
+}
+
