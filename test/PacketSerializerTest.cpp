@@ -124,7 +124,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
     expected[TREBLE] = 33;
     expected[MIDDLE] = 44;
     expected[BASS] = 55;
-    expected[CABINET] = plug::value(cabinets::cab2x12C);
+    expected[CABINET] = 0x07;
     expected[NOISE_GATE] = 1;
     expected[MASTER_VOL] = 2;
     expected[GAIN2] = 3;
@@ -164,7 +164,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
     expected[TREBLE] = 0;
     expected[MIDDLE] = 0;
     expected[BASS] = 0;
-    expected[CABINET] = plug::value(cabinets::OFF);
+    expected[CABINET] = 0x00;
     expected[NOISE_GATE] = 0;
     expected[MASTER_VOL] = 0;
     expected[GAIN2] = 0;
