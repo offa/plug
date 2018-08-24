@@ -260,3 +260,37 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsLimitsNoiseGate)
     EXPECT_THAT(packet[NOISE_GATE], Eq(0x00));
 }
 
+TEST_F(PacketSerializerTest, serializeAmpSettingsSetsThresholdAndDepthIfNoiseGateFull)
+{
+    constexpr std::uint8_t noiseGate{0x05};
+    constexpr std::uint8_t threshold{0x08};
+    constexpr std::uint8_t depth{0x19};
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[THRESHOLD], Eq(threshold));
+    EXPECT_THAT(packet[DEPTH], Eq(depth));
+}
+
+TEST_F(PacketSerializerTest, serializeAmpSettingsDoesNotSetThresholdAndDepthIfNoiseGateIsNotFull)
+{
+    constexpr std::uint8_t noiseGate{0x04};
+    constexpr std::uint8_t threshold{0x08};
+    constexpr std::uint8_t depth{0x19};
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
+    EXPECT_THAT(packet[DEPTH], Eq(0x80));
+}
+
+TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
+{
+    constexpr std::uint8_t noiseGate{0x05};
+    constexpr std::uint8_t threshold{0x0a};
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, 0, 0, 0, false, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
+}
+
