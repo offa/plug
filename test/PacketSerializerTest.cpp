@@ -185,6 +185,33 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
+TEST_F(PacketSerializerTest, serializeAmpSettingsDspData)
+{
+    const amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[DSP], Eq(0x05));
+}
+
+TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
+{
+    const amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
+
+    const auto packet = serializeAmpSettings(settings);
+    EXPECT_THAT(packet[GAIN], Eq(123));
+    EXPECT_THAT(packet[GAIN2], Eq(15));
+    EXPECT_THAT(packet[VOLUME], Eq(101));
+    EXPECT_THAT(packet[TREBLE], Eq(93));
+    EXPECT_THAT(packet[MIDDLE], Eq(30));
+    EXPECT_THAT(packet[BASS], Eq(61));
+    EXPECT_THAT(packet[MASTER_VOL], Eq(10));
+    EXPECT_THAT(packet[PRESENCE], Eq(40));
+    EXPECT_THAT(packet[NOISE_GATE], Eq(3));
+    EXPECT_THAT(packet[BIAS], Eq(100));
+    EXPECT_THAT(packet[BRIGHTNESS], Eq(0));
+    EXPECT_THAT(packet[SAG], Eq(1));
+}
+
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 {
     auto create = [](amps a) {
