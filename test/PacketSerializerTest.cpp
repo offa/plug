@@ -321,6 +321,23 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
     EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
 }
 
+TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
+{
+    constexpr std::size_t value{101};
+    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, value};
+
+    Packet expected{};
+    expected[0] = 0x1c;
+    expected[1] = 0x03;
+    expected[2] = 0x0d;
+    expected[6] = 0x01;
+    expected[7] = 0x01;
+    expected[16] = value;
+
+    const auto packet = serializeAmpSettingsUsbGain(settings);
+    EXPECT_THAT(packet, ContainerEq(expected));
+}
+
 TEST_F(PacketSerializerTest, serializeClearEffectsSettingsData)
 {
     const Packet expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
