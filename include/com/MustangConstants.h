@@ -73,6 +73,8 @@ namespace plug::com
     inline constexpr std::size_t SAG{51};
     inline constexpr std::size_t BRIGHTNESS{52};
 
+    inline constexpr std::size_t USB_GAIN{16};
+
     // save fields
     inline constexpr std::size_t SAVE_SLOT{4};
     inline constexpr std::size_t FXKNOB{3};

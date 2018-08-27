@@ -332,7 +332,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
     expected[2] = 0x0d;
     expected[6] = 0x01;
     expected[7] = 0x01;
-    expected[16] = value;
+    expected[USB_GAIN] = value;
 
     const auto packet = serializeAmpSettingsUsbGain(settings);
     EXPECT_THAT(packet, ContainerEq(expected));

@@ -551,7 +551,7 @@ namespace plug::com
         packet[2] = 0x0d;
         packet[6] = 0x01;
         packet[7] = 0x01;
-        packet[16] = value.usb_gain;
+        packet[USB_GAIN] = value.usb_gain;
         return packet;
     }
 
