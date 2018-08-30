@@ -365,7 +365,7 @@ TEST_F(PacketSerializerTest, serializeNameData)
     expected[SAVE_SLOT] = slot;
     expected[6] = 0x01;
     expected[7] = 0x01;
-    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), 16));
+    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), NAME));
 
     const auto packet = serializeName(slot, name);
     EXPECT_THAT(packet, ContainerEq(expected));
@@ -393,9 +393,9 @@ TEST_F(PacketSerializerTest, serializeNameLimitsToLength)
     expected[SAVE_SLOT] = slot;
     expected[6] = 0x01;
     expected[7] = 0x01;
-    std::copy(name.cbegin(), std::next(name.cbegin(), maxSize - 1), std::next(expected.begin(), 16));
+    std::copy(name.cbegin(), std::next(name.cbegin(), maxSize - 1), std::next(expected.begin(), NAME));
 
     const auto packet = serializeName(slot, name);
-    EXPECT_THAT(packet[16 + maxSize], Eq('\0'));
+    EXPECT_THAT(packet[NAME + maxSize], Eq('\0'));
     EXPECT_THAT(packet, ContainerEq(expected));
 }

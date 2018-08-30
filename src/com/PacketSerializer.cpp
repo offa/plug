@@ -569,7 +569,7 @@ namespace plug::com
         constexpr std::size_t nameLength{31};
         std::string sizedName{name};
         sizedName.resize(nameLength, '\0');
-        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), 16));
+        std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(data.data(), NAME));
         return data;
     }
 
