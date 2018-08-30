@@ -352,3 +352,21 @@ TEST_F(PacketSerializerTest, serializeClearEffectsSettingsData)
     const auto packet = serializeClearEffectSettings();
     EXPECT_THAT(packet, ContainerEq(expected));
 }
+
+TEST_F(PacketSerializerTest, serializeNameData)
+{
+    const std::string name{"name 123"};
+    constexpr std::size_t slot{3};
+
+    Packet expected{};
+    expected[0] = 0x1c;
+    expected[1] = 0x01;
+    expected[2] = 0x03;
+    expected[SAVE_SLOT] = slot;
+    expected[6] = 0x01;
+    expected[7] = 0x01;
+    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), 16));
+
+    const auto packet = serializeName(slot, name);
+    EXPECT_THAT(packet, ContainerEq(expected));
+}
