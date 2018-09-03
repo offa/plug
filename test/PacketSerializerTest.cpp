@@ -428,18 +428,20 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsData)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetsInputPosition)
 {
-    const fx_pedal_settings settings{45, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
+    constexpr std::uint8_t value{45};
+    const fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[FXSLOT], Eq(45));
+    EXPECT_THAT(packet[FXSLOT], Eq(value));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsEffectsSetsLoopPosition)
 {
-    const fx_pedal_settings settings{60, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr std::uint8_t value{60};
+    const fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[FXSLOT], Eq(64));
+    EXPECT_THAT(packet[FXSLOT], Eq(value + 4));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNotRequired)
@@ -452,9 +454,10 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
 {
-    const fx_pedal_settings settings{10, effects::STEREO_TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
+    constexpr std::uint8_t value{6};
+    const fx_pedal_settings settings{10, effects::STEREO_TAPE_DELAY, 1, 2, 3, 4, 5, value, Position::effectsLoop};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[KNOB6], Eq(6));
+    EXPECT_THAT(packet[KNOB6], Eq(value));
 }
 
