@@ -49,7 +49,7 @@ MATCHER_P4(EffectDataIs, dsp, effect, v0, v1, "")
     const std::tuple actual(arg[DSP], arg[EFFECT], arg[19], arg[20]);
     const auto [a0, a1, a2, a3] = actual;
     *result_listener << " with effect values: (" << int{a0} << ", " << int{a1}
-                     << ", " << int{a2} << ", " << int{a3} << ")";
+                    << ", " << int{a2} << ", " << int{a3} << ")";
 
     return std::tuple(dsp, effect, v0, v1) == actual;
 }
@@ -464,11 +464,14 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
 {
-    constexpr std::uint8_t value{6};
-    const fx_pedal_settings settings{10, effects::STEREO_TAPE_DELAY, 1, 2, 3, 4, 5, value, Position::input};
+    auto create = [](effects e, std::uint8_t knob6) {
+        return fx_pedal_settings{100, e, 0, 0, 0, 0, 0, knob6, Position::input};
+    };
 
-    const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[KNOB6], Eq(value));
+    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_ECHO_FILTER, 1))[KNOB6], Eq(1));
+    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_ECHO_FILTER, 2))[KNOB6], Eq(2));
+    EXPECT_THAT(serializeEffectSettings(create(effects::TAPE_DELAY, 3))[KNOB6], Eq(3));
+    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_TAPE_DELAY, 4))[KNOB6], Eq(4));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
