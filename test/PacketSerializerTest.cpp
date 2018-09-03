@@ -490,7 +490,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     EXPECT_THAT(serializeEffectSettings(create(effects::TOUCH_WAH)), EffectDataIs(dsp0, 0x4a, 0x01, 0x08));
     EXPECT_THAT(serializeEffectSettings(create(effects::FUZZ)), EffectDataIs(dsp0, 0x1a, 0x00, 0x08));
     EXPECT_THAT(serializeEffectSettings(create(effects::FUZZ_TOUCH_WAH)), EffectDataIs(dsp0, 0x1c, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::SIMPLE_COMP)), EffectDataIs(dsp0, 0x88, 0x08, 0x08)); // TODO: Additional behaviour
+    EXPECT_THAT(serializeEffectSettings(create(effects::SIMPLE_COMP)), EffectDataIs(dsp0, 0x88, 0x08, 0x08));
     EXPECT_THAT(serializeEffectSettings(create(effects::COMPRESSOR)), EffectDataIs(dsp0, 0x07, 0x00, 0x08));
 
     EXPECT_THAT(serializeEffectSettings(create(effects::SINE_CHORUS)), EffectDataIs(dsp1, 0x12, 0x01, 0x01));
@@ -526,3 +526,30 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     EXPECT_THAT(serializeEffectSettings(create(effects::FENDER_63_SPRING_REVERB)), EffectDataIs(dsp3, 0x21, 0x00, 0x08));
     EXPECT_THAT(serializeEffectSettings(create(effects::FENDER_65_SPRING_REVERB)), EffectDataIs(dsp3, 0x0b, 0x00, 0x08));
 }
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompKnobSetting)
+{
+    const fx_pedal_settings settings{10, effects::SIMPLE_COMP, 3, 2, 3, 4, 5, 6, Position::input};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[KNOB1], Eq(3));
+    EXPECT_THAT(packet[KNOB2], Eq(0));
+    EXPECT_THAT(packet[KNOB3], Eq(0));
+    EXPECT_THAT(packet[KNOB4], Eq(0));
+    EXPECT_THAT(packet[KNOB5], Eq(0));
+    EXPECT_THAT(packet[KNOB6], Eq(0));
+}
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompLimitsValue)
+{
+    const fx_pedal_settings settings{10, effects::SIMPLE_COMP, 4, 2, 3, 4, 5, 6, Position::input};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[KNOB1], Eq(3));
+    EXPECT_THAT(packet[KNOB2], Eq(0));
+    EXPECT_THAT(packet[KNOB3], Eq(0));
+    EXPECT_THAT(packet[KNOB4], Eq(0));
+    EXPECT_THAT(packet[KNOB5], Eq(0));
+    EXPECT_THAT(packet[KNOB6], Eq(0));
+}
+
