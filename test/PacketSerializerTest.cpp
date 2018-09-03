@@ -44,6 +44,16 @@ MATCHER_P(CabinetDataIs, cabinetValue, "")
     return actual == cabinetValue;
 }
 
+MATCHER_P4(EffectDataIs, dsp, effect, v0, v1, "")
+{
+    const std::tuple actual(arg[DSP], arg[EFFECT], arg[19], arg[20]);
+    const auto [a0, a1, a2, a3] = actual;
+    *result_listener << " with effect values: (" << int{a0} << ", " << int{a1}
+                     << ", " << int{a2} << ", " << int{a3} << ")";
+
+    return std::tuple(dsp, effect, v0, v1) == actual;
+}
+
 
 class PacketSerializerTest : public testing::Test
 {
@@ -455,9 +465,61 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
 {
     constexpr std::uint8_t value{6};
-    const fx_pedal_settings settings{10, effects::STEREO_TAPE_DELAY, 1, 2, 3, 4, 5, value, Position::effectsLoop};
+    const fx_pedal_settings settings{10, effects::STEREO_TAPE_DELAY, 1, 2, 3, 4, 5, value, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet[KNOB6], Eq(value));
 }
 
+TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
+{
+    constexpr std::uint8_t dsp0{0x06};
+    constexpr std::uint8_t dsp1{0x07};
+    constexpr std::uint8_t dsp2{0x08};
+    constexpr std::uint8_t dsp3{0x09};
+
+    auto create = [](effects e) {
+        return fx_pedal_settings{100, e, 1, 2, 3, 4, 5, 6, Position::input};
+    };
+
+    EXPECT_THAT(serializeEffectSettings(create(effects::OVERDRIVE)), EffectDataIs(dsp0, 0x3c, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::WAH)), EffectDataIs(dsp0, 0x49, 0x01, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::TOUCH_WAH)), EffectDataIs(dsp0, 0x4a, 0x01, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::FUZZ)), EffectDataIs(dsp0, 0x1a, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::FUZZ_TOUCH_WAH)), EffectDataIs(dsp0, 0x1c, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::SIMPLE_COMP)), EffectDataIs(dsp0, 0x88, 0x08, 0x08)); // TODO: Additional behaviour
+    EXPECT_THAT(serializeEffectSettings(create(effects::COMPRESSOR)), EffectDataIs(dsp0, 0x07, 0x00, 0x08));
+
+    EXPECT_THAT(serializeEffectSettings(create(effects::SINE_CHORUS)), EffectDataIs(dsp1, 0x12, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::TRIANGLE_CHORUS)), EffectDataIs(dsp1, 0x13, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::SINE_FLANGER)), EffectDataIs(dsp1, 0x18, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::TRIANGLE_FLANGER)), EffectDataIs(dsp1, 0x19, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::VIBRATONE)), EffectDataIs(dsp1, 0x2d, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::VINTAGE_TREMOLO)), EffectDataIs(dsp1, 0x40, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::SINE_TREMOLO)), EffectDataIs(dsp1, 0x41, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::RING_MODULATOR)), EffectDataIs(dsp1, 0x22, 0x01, 0x08)); // TODO: Additional behaviour
+    EXPECT_THAT(serializeEffectSettings(create(effects::STEP_FILTER)), EffectDataIs(dsp1, 0x29, 0x01, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::PHASER)), EffectDataIs(dsp1, 0x4f, 0x01, 0x01)); // TODO: Additional behaviour
+    EXPECT_THAT(serializeEffectSettings(create(effects::PITCH_SHIFTER)), EffectDataIs(dsp1, 0x1f, 0x01, 0x08));
+
+    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_DELAY)), EffectDataIs(dsp2, 0x16, 0x02, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_ECHO_FILTER)), EffectDataIs(dsp2, 0x43, 0x02, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_ECHO_FILTER)), EffectDataIs(dsp2, 0x48, 0x02, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::MULTITAP_DELAY)), EffectDataIs(dsp2, 0x44, 0x02, 0x01)); // TODO: Additional behaviour
+    EXPECT_THAT(serializeEffectSettings(create(effects::PING_PONG_DELAY)), EffectDataIs(dsp2, 0x45, 0x02, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::DUCKING_DELAY)), EffectDataIs(dsp2, 0x15, 0x02, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::REVERSE_DELAY)), EffectDataIs(dsp2, 0x46, 0x02, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::TAPE_DELAY)), EffectDataIs(dsp2, 0x2b, 0x02, 0x01));
+    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_TAPE_DELAY)), EffectDataIs(dsp2, 0x2a, 0x02, 0x01));
+
+    EXPECT_THAT(serializeEffectSettings(create(effects::SMALL_HALL_REVERB)), EffectDataIs(dsp3, 0x24, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::LARGE_HALL_REVERB)), EffectDataIs(dsp3, 0x3a, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::SMALL_ROOM_REVERB)), EffectDataIs(dsp3, 0x26, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::LARGE_ROOM_REVERB)), EffectDataIs(dsp3, 0x3b, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::SMALL_PLATE_REVERB)), EffectDataIs(dsp3, 0x4e, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::LARGE_PLATE_REVERB)), EffectDataIs(dsp3, 0x4b, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::AMBIENT_REVERB)), EffectDataIs(dsp3, 0x4c, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::ARENA_REVERB)), EffectDataIs(dsp3, 0x4d, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::FENDER_63_SPRING_REVERB)), EffectDataIs(dsp3, 0x21, 0x00, 0x08));
+    EXPECT_THAT(serializeEffectSettings(create(effects::FENDER_65_SPRING_REVERB)), EffectDataIs(dsp3, 0x0b, 0x00, 0x08));
+}
