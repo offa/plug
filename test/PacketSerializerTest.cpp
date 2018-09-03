@@ -399,3 +399,62 @@ TEST_F(PacketSerializerTest, serializeNameLimitsToLength)
     EXPECT_THAT(packet[NAME + maxSize], Eq('\0'));
     EXPECT_THAT(packet, ContainerEq(expected));
 }
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsData)
+{
+    const fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
+
+    Packet expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    expected[FXSLOT] = 10;
+    expected[KNOB1] = 11;
+    expected[KNOB2] = 22;
+    expected[KNOB3] = 33;
+    expected[KNOB4] = 44;
+    expected[KNOB5] = 55;
+    expected[KNOB6] = 0x00;
+    expected[DSP] = 0x06;
+    expected[EFFECT] = 0x3c;
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet, ContainerEq(expected));
+}
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsSetsInputPosition)
+{
+    const fx_pedal_settings settings{45, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[FXSLOT], Eq(45));
+}
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsEffectsSetsLoopPosition)
+{
+    const fx_pedal_settings settings{60, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[FXSLOT], Eq(64));
+}
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNotRequired)
+{
+    const fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[KNOB6], Eq(0x00));
+}
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
+{
+    const fx_pedal_settings settings{10, effects::STEREO_TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[KNOB6], Eq(6));
+}
+
