@@ -502,7 +502,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     EXPECT_THAT(serializeEffectSettings(create(effects::SINE_TREMOLO)), EffectDataIs(dsp1, 0x41, 0x01, 0x01));
     EXPECT_THAT(serializeEffectSettings(create(effects::RING_MODULATOR)), EffectDataIs(dsp1, 0x22, 0x01, 0x08));
     EXPECT_THAT(serializeEffectSettings(create(effects::STEP_FILTER)), EffectDataIs(dsp1, 0x29, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::PHASER)), EffectDataIs(dsp1, 0x4f, 0x01, 0x01)); // TODO: Additional behaviour
+    EXPECT_THAT(serializeEffectSettings(create(effects::PHASER)), EffectDataIs(dsp1, 0x4f, 0x01, 0x01));
     EXPECT_THAT(serializeEffectSettings(create(effects::PITCH_SHIFTER)), EffectDataIs(dsp1, 0x1f, 0x01, 0x08));
 
     EXPECT_THAT(serializeEffectSettings(create(effects::MONO_DELAY)), EffectDataIs(dsp2, 0x16, 0x02, 0x01));
@@ -563,6 +563,19 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsRingModulatorLimitsValue)
     EXPECT_THAT(packet[KNOB3], Eq(3));
     EXPECT_THAT(packet[KNOB4], Eq(1));
     EXPECT_THAT(packet[KNOB5], Eq(5));
+    EXPECT_THAT(packet[KNOB6], Eq(0));
+}
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
+{
+    const fx_pedal_settings settings{10, effects::PHASER, 1, 2, 3, 2, 2, 6, Position::input};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[KNOB1], Eq(1));
+    EXPECT_THAT(packet[KNOB2], Eq(2));
+    EXPECT_THAT(packet[KNOB3], Eq(3));
+    EXPECT_THAT(packet[KNOB4], Eq(2));
+    EXPECT_THAT(packet[KNOB5], Eq(1));
     EXPECT_THAT(packet[KNOB6], Eq(0));
 }
 
