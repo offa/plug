@@ -508,7 +508,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     EXPECT_THAT(serializeEffectSettings(create(effects::MONO_DELAY)), EffectDataIs(dsp2, 0x16, 0x02, 0x01));
     EXPECT_THAT(serializeEffectSettings(create(effects::MONO_ECHO_FILTER)), EffectDataIs(dsp2, 0x43, 0x02, 0x01));
     EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_ECHO_FILTER)), EffectDataIs(dsp2, 0x48, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::MULTITAP_DELAY)), EffectDataIs(dsp2, 0x44, 0x02, 0x01)); // TODO: Additional behaviour
+    EXPECT_THAT(serializeEffectSettings(create(effects::MULTITAP_DELAY)), EffectDataIs(dsp2, 0x44, 0x02, 0x01));
     EXPECT_THAT(serializeEffectSettings(create(effects::PING_PONG_DELAY)), EffectDataIs(dsp2, 0x45, 0x02, 0x01));
     EXPECT_THAT(serializeEffectSettings(create(effects::DUCKING_DELAY)), EffectDataIs(dsp2, 0x15, 0x02, 0x01));
     EXPECT_THAT(serializeEffectSettings(create(effects::REVERSE_DELAY)), EffectDataIs(dsp2, 0x46, 0x02, 0x01));
@@ -576,6 +576,19 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
     EXPECT_THAT(packet[KNOB3], Eq(3));
     EXPECT_THAT(packet[KNOB4], Eq(2));
     EXPECT_THAT(packet[KNOB5], Eq(1));
+    EXPECT_THAT(packet[KNOB6], Eq(0));
+}
+
+TEST_F(PacketSerializerTest, serializeEffectSettingsMultitapDelayLimitsValue)
+{
+    const fx_pedal_settings settings{10, effects::MULTITAP_DELAY, 1, 2, 3, 2, 4, 6, Position::input};
+
+    const auto packet = serializeEffectSettings(settings);
+    EXPECT_THAT(packet[KNOB1], Eq(1));
+    EXPECT_THAT(packet[KNOB2], Eq(2));
+    EXPECT_THAT(packet[KNOB3], Eq(3));
+    EXPECT_THAT(packet[KNOB4], Eq(2));
+    EXPECT_THAT(packet[KNOB5], Eq(3));
     EXPECT_THAT(packet[KNOB6], Eq(0));
 }
 
