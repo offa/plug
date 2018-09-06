@@ -28,13 +28,13 @@ using namespace testing;
 
 MATCHER_P4(AmpDataIs, ampId, v0, v1, v2, "")
 {
-    const std::tuple actual(arg[AMPLIFIER], arg[40], arg[43], arg[44], arg[45], arg[46], arg[50], arg[54]);
+    const std::tuple actual{arg[AMPLIFIER], arg[40], arg[43], arg[44], arg[45], arg[46], arg[50], arg[54]};
     const auto [a0, a1, a2, a3, a4, a5, a6, a7] = actual;
     *result_listener << " with amp specific values: ("
                      << int{a0} << ", {" << int{a1} << ", " << int{a2} << "}, {"
                      << int{a3} << ", " << int{a4} << ", " << int{a5} << ", " << int{a6}
                      << "}, " << int{a7} << ")";
-    return std::tuple(ampId, v0, v0, v1, v1, v1, v1, v2) == actual;
+    return std::tuple{ampId, v0, v0, v1, v1, v1, v1, v2} == actual;
 }
 
 MATCHER_P(CabinetDataIs, cabinetValue, "")
@@ -46,12 +46,12 @@ MATCHER_P(CabinetDataIs, cabinetValue, "")
 
 MATCHER_P4(EffectDataIs, dsp, effect, v0, v1, "")
 {
-    const std::tuple actual(arg[DSP], arg[EFFECT], arg[19], arg[20]);
+    const std::tuple actual{arg[DSP], arg[EFFECT], arg[19], arg[20]};
     const auto [a0, a1, a2, a3] = actual;
     *result_listener << " with effect values: (" << int{a0} << ", " << int{a1}
                     << ", " << int{a2} << ", " << int{a3} << ")";
 
-    return std::tuple(dsp, effect, v0, v1) == actual;
+    return std::tuple{dsp, effect, v0, v1} == actual;
 }
 
 
