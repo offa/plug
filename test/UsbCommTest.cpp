@@ -21,7 +21,7 @@
 #include "com/UsbComm.h"
 #include "com/CommunicationException.h"
 #include "mocks/LibUsbMocks.h"
-#include "helper/Matcher.h"
+#include "matcher/Matcher.h"
 #include <vector>
 #include <array>
 #include <libusb-1.0/libusb.h>
