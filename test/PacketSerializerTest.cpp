@@ -49,9 +49,19 @@ MATCHER_P4(EffectDataIs, dsp, effect, v0, v1, "")
     const std::tuple actual{arg[DSP], arg[EFFECT], arg[19], arg[20]};
     const auto [a0, a1, a2, a3] = actual;
     *result_listener << " with effect values: (" << int{a0} << ", " << int{a1}
-                    << ", " << int{a2} << ", " << int{a3} << ")";
+                     << ", " << int{a2} << ", " << int{a3} << ")";
 
     return std::tuple{dsp, effect, v0, v1} == actual;
+}
+
+MATCHER_P6(KnobsAre, k1, k2, k3, k4, k5, k6, "")
+{
+    const std::tuple actual{arg[KNOB1], arg[KNOB2], arg[KNOB3],
+                            arg[KNOB4], arg[KNOB5], arg[KNOB6]};
+    const auto [a1, a2, a3, a4, a5, a6] = actual;
+    *result_listener << " with knobs: (" << int{a1} << ", " << int{a2} << ", " << int{a3}
+                     << ", " << int{a4} << ", " << int{a5} << ", " << int{a6} << ")";
+    return std::tuple{k1, k2, k3, k4, k5, k6} == actual;
 }
 
 
@@ -532,12 +542,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompKnobSetting)
     const fx_pedal_settings settings{10, effects::SIMPLE_COMP, 3, 2, 3, 4, 5, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[KNOB1], Eq(3));
-    EXPECT_THAT(packet[KNOB2], Eq(0));
-    EXPECT_THAT(packet[KNOB3], Eq(0));
-    EXPECT_THAT(packet[KNOB4], Eq(0));
-    EXPECT_THAT(packet[KNOB5], Eq(0));
-    EXPECT_THAT(packet[KNOB6], Eq(0));
+    EXPECT_THAT(packet, KnobsAre(3, 0, 0, 0, 0, 0));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompLimitsValue)
@@ -545,12 +550,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompLimitsValue)
     const fx_pedal_settings settings{10, effects::SIMPLE_COMP, 4, 2, 3, 4, 5, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[KNOB1], Eq(3));
-    EXPECT_THAT(packet[KNOB2], Eq(0));
-    EXPECT_THAT(packet[KNOB3], Eq(0));
-    EXPECT_THAT(packet[KNOB4], Eq(0));
-    EXPECT_THAT(packet[KNOB5], Eq(0));
-    EXPECT_THAT(packet[KNOB6], Eq(0));
+    EXPECT_THAT(packet, KnobsAre(3, 0, 0, 0, 0, 0));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsRingModulatorLimitsValue)
@@ -558,12 +558,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsRingModulatorLimitsValue)
     const fx_pedal_settings settings{10, effects::RING_MODULATOR, 1, 2, 3, 2, 5, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[KNOB1], Eq(1));
-    EXPECT_THAT(packet[KNOB2], Eq(2));
-    EXPECT_THAT(packet[KNOB3], Eq(3));
-    EXPECT_THAT(packet[KNOB4], Eq(1));
-    EXPECT_THAT(packet[KNOB5], Eq(5));
-    EXPECT_THAT(packet[KNOB6], Eq(0));
+    EXPECT_THAT(packet, KnobsAre(1, 2, 3, 1, 5, 0));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
@@ -571,12 +566,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
     const fx_pedal_settings settings{10, effects::PHASER, 1, 2, 3, 2, 2, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[KNOB1], Eq(1));
-    EXPECT_THAT(packet[KNOB2], Eq(2));
-    EXPECT_THAT(packet[KNOB3], Eq(3));
-    EXPECT_THAT(packet[KNOB4], Eq(2));
-    EXPECT_THAT(packet[KNOB5], Eq(1));
-    EXPECT_THAT(packet[KNOB6], Eq(0));
+    EXPECT_THAT(packet, KnobsAre(1, 2, 3, 2, 1, 0));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsMultitapDelayLimitsValue)
@@ -584,11 +574,5 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsMultitapDelayLimitsValue)
     const fx_pedal_settings settings{10, effects::MULTITAP_DELAY, 1, 2, 3, 2, 4, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
-    EXPECT_THAT(packet[KNOB1], Eq(1));
-    EXPECT_THAT(packet[KNOB2], Eq(2));
-    EXPECT_THAT(packet[KNOB3], Eq(3));
-    EXPECT_THAT(packet[KNOB4], Eq(2));
-    EXPECT_THAT(packet[KNOB5], Eq(3));
-    EXPECT_THAT(packet[KNOB6], Eq(0));
+    EXPECT_THAT(packet, KnobsAre(1, 2, 3, 2, 3, 0));
 }
-
