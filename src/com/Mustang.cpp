@@ -140,10 +140,7 @@ namespace plug::com
         const auto packets = serializeSaveEffectPacket(slot, effects);
         std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(p); });
 
-        Packet applyCommand = serializeApplyCommand();
-        applyCommand[FXKNOB] = getFxKnob(effects[0]);
-
-        sendCommand(applyCommand);
+        sendCommand(serializeApplyCommand(getFxKnob(effects[0])));
     }
 
     void Mustang::loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
