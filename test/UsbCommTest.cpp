@@ -245,6 +245,21 @@ TEST_F(UsbCommTest, interruptWriteTransfersDataArray)
     EXPECT_THAT(n, Eq(data.size()));
 }
 
+TEST_F(UsbCommTest, interruptWriteDoesNothingOnEmptyData)
+{
+    setupHandle();
+
+    const std::array<std::uint8_t, 4> data{};
+    constexpr std::uint8_t endpoint{0x81};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+        .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
+
+    const auto n = comm->interruptWrite(endpoint, data);
+    EXPECT_THAT(n, Eq(data.size()));
+}
+
 TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransfer)
 {
     setupHandle();
