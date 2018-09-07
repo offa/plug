@@ -146,6 +146,7 @@ TEST_F(UsbCommTest, openFirstThrowsIfOpenFails)
 
 TEST_F(UsbCommTest, openFirstThrowsOnEmptyPidList)
 {
+    EXPECT_CALL(*usbmock, init(_));
     EXPECT_THROW(comm->openFirst(vid, {}), CommunicationException);
 }
 
