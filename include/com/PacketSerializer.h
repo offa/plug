@@ -49,6 +49,7 @@ namespace plug::com
     Packet serializeLoadSlotCommand(std::uint8_t slot);
     Packet serializeLoadCommand();
     Packet serializeApplyCommand();
+    Packet serializeApplyCommand(std::uint8_t fxKnob);
 
     std::array<Packet, 2> serializeInitCommand();
 

@@ -65,6 +65,18 @@ TEST_F(PacketSerializerTest, serializeApplyCommand)
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
+TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
+{
+    constexpr std::uint8_t fxKnob{0x02};
+    Packet expected{};
+    expected[0] = 0x1c;
+    expected[1] = 0x03;
+    expected[FXKNOB] = fxKnob;
+
+    const auto packet = serializeApplyCommand(fxKnob);
+    EXPECT_THAT(packet, ContainerEq(expected));
+}
+
 TEST_F(PacketSerializerTest, serializeLoadCommand)
 {
     Packet expected{};
@@ -673,3 +685,4 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
     const auto packet = serializeSaveEffectName(0, name, {effect});
     EXPECT_THAT(packet[NAME + 24], Eq('\0'));
 }
+

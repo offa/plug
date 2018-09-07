@@ -948,6 +948,15 @@ namespace plug::com
         return applyCommand;
     }
 
+    Packet serializeApplyCommand(std::uint8_t fxKnob)
+    {
+        Packet applyCommand{};
+        applyCommand[0] = 0x1c;
+        applyCommand[1] = 0x03;
+        applyCommand[FXKNOB] = fxKnob;
+        return applyCommand;
+    }
+
     std::array<Packet, 2> serializeInitCommand()
     {
         Packet packet1{};
