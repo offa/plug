@@ -904,7 +904,6 @@ namespace plug::com
         constexpr std::size_t nameLength{24};
         std::string sizedName{name};
         sizedName.resize(nameLength, '\0');
-        sizedName[nameLength - 1] = '\0';
         std::copy(sizedName.cbegin(), std::next(sizedName.cend()), std::next(packet.begin(), 16));
 
         return packet;
