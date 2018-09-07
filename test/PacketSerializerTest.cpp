@@ -625,6 +625,18 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameThrowsOnInvalidEffect)
     EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::COMPRESSOR)), std::invalid_argument);
 }
 
+TEST_F(PacketSerializerTest, serializeSaveEffectNameSetsFxKnobOfFirstEffect)
+{
+    constexpr std::uint8_t slot{8};
+    const std::string name{"ignore"};
+
+    auto create = [](effects e) {
+        return fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input};
+    };
+
+    EXPECT_THAT(serializeSaveEffectName(slot, name, {create(effects::ARENA_REVERB), create(effects::SINE_CHORUS)}), FxKnobIs(0x02));
+}
+
 TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
 {
     constexpr std::uint8_t slot{17};
@@ -646,5 +658,19 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
 
     const auto packet = serializeSaveEffectName(slot, name, {effect});
     EXPECT_THAT(packet, ContainerEq(expected));
+}
+
+TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
+{
+    constexpr std::uint8_t slot{17};
+    constexpr std::size_t nameLength{24};
+    std::string name(nameLength + 5, 'x');
+    const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+
+    Packet expected{};
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), 16));
+
+    const auto packet = serializeSaveEffectName(slot, name, {effect});
+    EXPECT_THAT(packet[16 + 24], Eq('\0'));
 }
 
