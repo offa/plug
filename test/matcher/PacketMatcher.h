@@ -66,4 +66,11 @@ namespace test::matcher
                          << ", " << int{a4} << ", " << int{a5} << ", " << int{a6} << ")";
         return std::tuple{k1, k2, k3, k4, k5, k6} == actual;
     }
+
+    MATCHER_P(FxKnobIs, value, "")
+    {
+        const auto a = arg[plug::com::FXKNOB];
+        *result_listener << " with FX Knob " << int{a};
+        return value == a;
+    }
 }

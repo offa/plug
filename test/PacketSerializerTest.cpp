@@ -562,3 +562,89 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
     const auto packet = serializeSaveEffectName(slot, name, {effect});
     EXPECT_THAT(packet, ContainerEq(expected));
 }
+
+TEST_F(PacketSerializerTest, serializeSaveEffectNameFxKnobData)
+{
+    constexpr std::uint8_t slot{8};
+    const std::string name{"ignore"};
+
+    auto create = [](effects e) -> std::vector<fx_pedal_settings> {
+        return {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}};
+    };
+
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SINE_CHORUS)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::TRIANGLE_CHORUS)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SINE_FLANGER)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::TRIANGLE_FLANGER)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::VIBRATONE)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::VINTAGE_TREMOLO)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SINE_TREMOLO)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::RING_MODULATOR)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::STEP_FILTER)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::PHASER)), FxKnobIs(0x01));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::PITCH_SHIFTER)), FxKnobIs(0x01));
+
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::MONO_DELAY)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::MONO_ECHO_FILTER)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::STEREO_ECHO_FILTER)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::MULTITAP_DELAY)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::PING_PONG_DELAY)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::DUCKING_DELAY)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::REVERSE_DELAY)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::TAPE_DELAY)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::STEREO_TAPE_DELAY)), FxKnobIs(0x02));
+
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SMALL_HALL_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::LARGE_HALL_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SMALL_ROOM_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::LARGE_ROOM_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SMALL_PLATE_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::LARGE_PLATE_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::AMBIENT_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::ARENA_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::FENDER_63_SPRING_REVERB)), FxKnobIs(0x02));
+    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::FENDER_65_SPRING_REVERB)), FxKnobIs(0x02));
+}
+
+
+TEST_F(PacketSerializerTest, serializeSaveEffectNameThrowsOnInvalidEffect)
+{
+    constexpr std::uint8_t slot{8};
+    const std::string name{"ignore"};
+
+    auto create = [](effects e) -> std::vector<fx_pedal_settings> {
+        return {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}};
+    };
+
+    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::OVERDRIVE)), std::invalid_argument);
+    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::WAH)), std::invalid_argument);
+    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::TOUCH_WAH)), std::invalid_argument);
+    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::FUZZ)), std::invalid_argument);
+    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::FUZZ_TOUCH_WAH)), std::invalid_argument);
+    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::SIMPLE_COMP)), std::invalid_argument);
+    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::COMPRESSOR)), std::invalid_argument);
+}
+
+TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
+{
+    constexpr std::uint8_t slot{17};
+    constexpr std::size_t nameLength{24};
+    std::string name(nameLength + 5, 'x');
+    const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+
+    Packet expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+    expected[FXKNOB] = 0x01;
+    expected[SAVE_SLOT] = slot;
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), 16));
+
+    const auto packet = serializeSaveEffectName(slot, name, {effect});
+    EXPECT_THAT(packet, ContainerEq(expected));
+}
+
