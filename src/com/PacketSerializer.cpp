@@ -94,13 +94,12 @@ namespace plug::com
             packet[KNOB5] = effects[i].knob5;
 
             const auto effect = effects[i].effect_num;
-            // some effects have more knobs
+
             if (hasExtraKnob(effect) == true)
             {
                 packet[KNOB6] = effects[i].knob6;
             }
 
-            // fill the form with missing data
             switch (effect)
             {
                 case effects::SINE_CHORUS:
@@ -584,9 +583,8 @@ namespace plug::com
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-        const std::uint8_t slot = (value.position == Position::effectsLoop ? (value.fx_slot + 4) : value.fx_slot); // where to put the effect
+        const std::uint8_t slot = (value.position == Position::effectsLoop ? (value.fx_slot + 4) : value.fx_slot);
 
-        // fill the form with data
         data[FXSLOT] = slot;
         data[KNOB1] = value.knob1;
         data[KNOB2] = value.knob2;
@@ -599,7 +597,6 @@ namespace plug::com
             data[KNOB6] = value.knob6;
         }
 
-        // fill the form with missing data
         switch (value.effect_num)
         {
             case effects::OVERDRIVE:
@@ -900,7 +897,6 @@ namespace plug::com
         packet[FXKNOB] = getFxKnob(effects[0]);
         packet[SAVE_SLOT] = slot;
 
-        // set and send the name
         constexpr std::size_t nameLength{24};
         std::string sizedName{name};
         sizedName.resize(nameLength, '\0');
