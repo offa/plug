@@ -102,13 +102,13 @@ namespace plug::com
         return buffer;
     }
 
-    std::int32_t UsbComm::interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size)
+    std::size_t UsbComm::interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size)
     {
         int actualTransfered{0};
         const auto rtn = libusb_interrupt_transfer(handle, endpoint, data, size, &actualTransfered, timeout.count());
         checked(rtn, "Interrupt write failed");
 
-        return std::int32_t{actualTransfered};
+        return static_cast<std::size_t>(actualTransfered);
     }
 
     void UsbComm::initInterface()
