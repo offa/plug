@@ -306,6 +306,22 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
     EXPECT_THAT(buffer, ContainerEq(data));
 }
 
+TEST_F(UsbCommTest, interruptReadReturnsEmptyContainerIfReceiveSizeIsEmpty)
+{
+    setupHandle();
+
+    const std::vector<std::uint8_t> data{};
+    const std::size_t readSize = data.size();
+    constexpr std::uint8_t endpoint{0x01};
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(0)));
+
+    const auto buffer = comm->interruptReceive(endpoint, 0);
+    EXPECT_THAT(buffer, IsEmpty());
+}
+
 TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialTransfer)
 {
     setupHandle();
