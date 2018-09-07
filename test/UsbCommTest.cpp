@@ -144,6 +144,11 @@ TEST_F(UsbCommTest, openFirstThrowsIfOpenFails)
     EXPECT_THROW(comm->openFirst(vid, {pid}), CommunicationException);
 }
 
+TEST_F(UsbCommTest, openFirstThrowsOnEmptyPidList)
+{
+    EXPECT_THROW(comm->openFirst(vid, {}), CommunicationException);
+}
+
 TEST_F(UsbCommTest, openFirstDetachesDriverIfNotActive)
 {
     InSequence s;
