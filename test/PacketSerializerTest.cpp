@@ -557,7 +557,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
     expected[FXKNOB] = 0x01;
     expected[SAVE_SLOT] = slot;
-    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), 16));
+    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), NAME));
 
     const auto packet = serializeSaveEffectName(slot, name, {effect});
     EXPECT_THAT(packet, ContainerEq(expected));
@@ -654,7 +654,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
     expected[FXKNOB] = 0x01;
     expected[SAVE_SLOT] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), 16));
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), NAME));
 
     const auto packet = serializeSaveEffectName(slot, name, {effect});
     EXPECT_THAT(packet, ContainerEq(expected));
@@ -668,9 +668,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
     const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
     Packet expected{};
-    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), 16));
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), NAME));
 
-    const auto packet = serializeSaveEffectName(slot, name, {effect});
-    EXPECT_THAT(packet[16 + 24], Eq('\0'));
+    const auto packet = serializeSaveEffectName(0, name, {effect});
+    EXPECT_THAT(packet[NAME + 24], Eq('\0'));
 }
-
