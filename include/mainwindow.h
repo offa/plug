@@ -40,9 +40,6 @@
 #include <QSettings>
 #include <QShortcut>
 #include <QtDebug>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
 #include <memory>
 
 namespace Ui
@@ -106,8 +103,6 @@ namespace plug
         std::unique_ptr<Library> library;
         std::unique_ptr<DefaultEffects> deffx;
         QuickPresets* quickpres;
-
-        QNetworkReply* reply;
 
     private slots:
         void about();
