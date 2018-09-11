@@ -33,12 +33,7 @@
 #include "saveonamp.h"
 #include "savetofile.h"
 #include "settings.h"
-#include <QFileDialog>
-#include <QLabel>
 #include <QMainWindow>
-#include <QMessageBox>
-#include <QSettings>
-#include <QShortcut>
 #include <memory>
 
 namespace Ui

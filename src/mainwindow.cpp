@@ -25,6 +25,10 @@
 #include "com/MustangUpdater.h"
 #include "ui_defaulteffects.h"
 #include "ui_mainwindow.h"
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QSettings>
+#include <QShortcut>
 
 namespace plug
 {
