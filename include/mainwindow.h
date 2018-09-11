@@ -39,7 +39,6 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QShortcut>
-#include <QtDebug>
 #include <memory>
 
 namespace Ui
