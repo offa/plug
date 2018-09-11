@@ -82,7 +82,7 @@ namespace plug
 
         QString current_name;
         char names[100][32];
-        bool manual_check, connected;
+        bool connected;
         const std::unique_ptr<com::Mustang> amp_ops;
         Amplifier* amp;
         Effect* effect1;
