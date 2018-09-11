@@ -471,24 +471,6 @@ namespace plug
         ui->action_Library_view->setDisabled(false);
     }
 
-    void MainWindow::httpReadyRead()
-    {
-        if (reply->readAll() > QCoreApplication::applicationVersion())
-        {
-            QLabel* label = new QLabel(tr("<b>Update available!</b>"), this);
-            ui->statusBar->addWidget(label);
-            QMessageBox::information(this, "Update", "<b>Update available!</b><br/><br/>Check homepage for new version.");
-        }
-        else if (manual_check)
-        {
-            ui->statusBar->showMessage(tr("You are using the newest version"), 5000);
-        }
-        else
-        {
-            // Empty
-        }
-    }
-
     void MainWindow::change_name(int slot, QString* name)
     {
         load->change_name(slot, name);

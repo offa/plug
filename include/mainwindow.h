@@ -111,7 +111,6 @@ namespace plug
 
     private slots:
         void about();
-        void httpReadyRead();
         void show_fx1();
         void show_fx2();
         void show_fx3();
