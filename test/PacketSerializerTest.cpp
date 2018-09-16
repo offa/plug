@@ -686,3 +686,27 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
     EXPECT_THAT(packet[NAME + 24], Eq('\0'));
 }
 
+TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
+{
+    constexpr std::uint8_t slot{8};
+    const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+
+    Packet expected = serializeEffectSettings(effect);
+    expected[FXKNOB] = 0x01;
+    expected[SAVE_SLOT] = slot;
+    expected[1] = 0x03;
+    expected[6] = 0x00;
+
+    const auto packet = serializeSaveEffectPacket(slot, {effect});
+    EXPECT_THAT(packet, SizeIs(1));
+    EXPECT_THAT(packet[0], ContainerEq(expected));
+}
+
+TEST_F(PacketSerializerTest, serializeSaveEffectPacketThrowsOnInvalidEffect)
+{
+    constexpr std::uint8_t slot{8};
+    const fx_pedal_settings effect{slot, effects::COMPRESSOR, 1, 2, 3, 4, 5, 6, Position::input};
+
+    EXPECT_THROW(serializeSaveEffectPacket(slot, {effect}), std::invalid_argument);
+}
+
