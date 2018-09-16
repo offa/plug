@@ -710,3 +710,36 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketThrowsOnInvalidEffect)
     EXPECT_THROW(serializeSaveEffectPacket(slot, {effect}), std::invalid_argument);
 }
 
+TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects)
+{
+    constexpr std::uint8_t slot{9};
+    const fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    const fx_pedal_settings effect2{slot, effects::MONO_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+
+    const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2});
+    EXPECT_THAT(packet, SizeIs(2));
+}
+
+TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffectsData)
+{
+    constexpr std::uint8_t slot{9};
+    const fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    const fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+
+    Packet expected1 = serializeEffectSettings(effect1);
+    expected1[FXKNOB] = 0x02;
+    expected1[SAVE_SLOT] = slot;
+    expected1[1] = 0x03;
+    expected1[6] = 0x00;
+    Packet expected2 = serializeEffectSettings(effect2);
+    expected2[FXKNOB] = 0x02;
+    expected2[SAVE_SLOT] = slot;
+    expected2[1] = 0x03;
+    expected2[6] = 0x00;
+
+    const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2});
+    EXPECT_THAT(packet, SizeIs(2));
+    EXPECT_THAT(packet[0], ContainerEq(expected1));
+    EXPECT_THAT(packet[1], ContainerEq(expected2));
+}
+
