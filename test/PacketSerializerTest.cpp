@@ -743,3 +743,14 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
     EXPECT_THAT(packet[1], ContainerEq(expected2));
 }
 
+TEST_F(PacketSerializerTest, serializeSaveEffectPacketLimitsInputEffects)
+{
+    constexpr std::uint8_t slot{9};
+    const fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    const fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    const fx_pedal_settings effect3{slot, effects::PING_PONG_DELAY, 0, 0, 0, 0, 0, 0, Position::effectsLoop};
+
+    const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2, effect3});
+    EXPECT_THAT(packet, SizeIs(1));
+}
+
