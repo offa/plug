@@ -14,7 +14,7 @@ RUN apt-get install -y --no-install-recommends pkg-config qt5-default libusb-1.0
         git clone --depth=1 https://github.com/google/googletest.git && \
         cd googletest && \
         mkdir build && cd build && \
-        cmake -DCMAKE_CXX_STANDARD=14 .. && \
+        cmake -DCMAKE_CXX_STANDARD=17 .. && \
         make && make install && \
         git clone --depth=1 https://github.com/linux-test-project/lcov.git && \
         cd lcov && make install && \
