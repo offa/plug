@@ -27,7 +27,7 @@ clang-7:
   image: ${DOCKER_IMG}/clang-7:latest
   stage: build
   script:
-    - script/ci_build.sh -asan -ubsan
+    - script/ci_build.sh -asan # UBSan disabled, see #129
 
 clang-6:
   image: ${DOCKER_IMG}/clang-6:latest
