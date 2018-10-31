@@ -757,8 +757,10 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketLimitsInputEffects)
 TEST_F(PacketSerializerTest, decodeNameFromData)
 {
     const std::string name{"test name"};
-    std::array<Packet, 7> data{}; // TODO: Test if test passes if non-0 values are filled
-    std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
+    std::array<Packet, 7> data{};
+    std::fill(data[0].begin(), data[1].end(), 0xff);
+    const auto itr = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
+    *itr = '\0';
 
     const auto result = decodeNameFromData(data);
     EXPECT_THAT(result, Eq(name));
@@ -768,7 +770,8 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
 {
     constexpr std::size_t nameLength{32};
     const std::string name(nameLength+3, 'z');
-    std::array<Packet, 7> data{}; // TODO: Test if test passes if non-0 values are filled
+    std::array<Packet, 7> data{};
+    std::fill(data[0].begin(), data[1].end(), 0xff);
     std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
 
     const auto result = decodeNameFromData(data);
