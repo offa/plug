@@ -754,3 +754,24 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketLimitsInputEffects)
     EXPECT_THAT(packet, SizeIs(1));
 }
 
+TEST_F(PacketSerializerTest, decodeNameFromData)
+{
+    const std::string name{"test name"};
+    std::array<Packet, 7> data{}; // TODO: Test if test passes if non-0 values are filled
+    std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
+
+    const auto result = decodeNameFromData(data);
+    EXPECT_THAT(result, Eq(name));
+}
+
+TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
+{
+    constexpr std::size_t nameLength{32};
+    const std::string name(nameLength+3, 'z');
+    std::array<Packet, 7> data{}; // TODO: Test if test passes if non-0 values are filled
+    std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
+
+    const auto result = decodeNameFromData(data);
+    EXPECT_THAT(result, Eq(name.substr(0, nameLength)));
+    EXPECT_THAT(nameLength, Eq(result.size()));
+}
