@@ -42,7 +42,7 @@ namespace plug
         QString* m_name;
         amp_settings* m_amp_settings;
         fx_pedal_settings* m_fx_settings;
-        std::unique_ptr<QXmlStreamReader> m_xml;
+        const std::unique_ptr<QXmlStreamReader> m_xml;
 
         void parseAmp();
         void parseFX();
