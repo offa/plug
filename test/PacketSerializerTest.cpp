@@ -759,8 +759,8 @@ TEST_F(PacketSerializerTest, decodeNameFromData)
     const std::string name{"test name"};
     std::array<Packet, 7> data{};
     std::fill(data[0].begin(), data[0].end(), 0xff);
-    const auto itr = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
-    *itr = '\0';
+    const auto nameEnd = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
+    *nameEnd = '\0';
 
     const auto result = decodeNameFromData(data);
     EXPECT_THAT(result, Eq(name));
