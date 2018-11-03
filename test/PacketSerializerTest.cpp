@@ -758,7 +758,7 @@ TEST_F(PacketSerializerTest, decodeNameFromData)
 {
     const std::string name{"test name"};
     std::array<Packet, 7> data{};
-    std::fill(data[0].begin(), data[1].end(), 0xff);
+    std::fill(data[0].begin(), data[0].end(), 0xff);
     const auto itr = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
     *itr = '\0';
 
@@ -771,7 +771,7 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
     constexpr std::size_t nameLength{32};
     const std::string name(nameLength+3, 'z');
     std::array<Packet, 7> data{};
-    std::fill(data[0].begin(), data[1].end(), 0xff);
+    std::fill(data[0].begin(), data[0].end(), 0xff);
     std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
 
     const auto result = decodeNameFromData(data);
