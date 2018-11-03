@@ -312,7 +312,7 @@ namespace plug::com
         std::string name(nameLength, '\0');
         std::size_t length{0};
 
-        for (int i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
+        for (std::size_t i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
         {
             name[i] = data[0][j];
             ++length;
