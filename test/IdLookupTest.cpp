@@ -23,8 +23,10 @@
 
 using plug::amps;
 using plug::effects;
+using plug::cabinets;
 using plug::lookupAmpById;
 using plug::lookupEffectById;
+using plug::lookupCabinetById;
 
 class IdLookupTest : public testing::Test
 {
@@ -98,4 +100,26 @@ TEST_F(IdLookupTest, lookupEffectById)
 TEST_F(IdLookupTest, lookupEffectByIdThrowsOnInvalidId)
 {
     EXPECT_THROW(lookupEffectById(0xff), std::invalid_argument);
+}
+
+TEST_F(IdLookupTest, lookupCabinetById)
+{
+    EXPECT_EQ(lookupCabinetById(0x00), cabinets::OFF);
+    EXPECT_EQ(lookupCabinetById(0x01), cabinets::cab57DLX);
+    EXPECT_EQ(lookupCabinetById(0x02), cabinets::cabBSSMN);
+    EXPECT_EQ(lookupCabinetById(0x03), cabinets::cab65DLX);
+    EXPECT_EQ(lookupCabinetById(0x04), cabinets::cab65PRN);
+    EXPECT_EQ(lookupCabinetById(0x05), cabinets::cabCHAMP);
+    EXPECT_EQ(lookupCabinetById(0x06), cabinets::cab4x12M);
+    EXPECT_EQ(lookupCabinetById(0x07), cabinets::cab2x12C);
+    EXPECT_EQ(lookupCabinetById(0x08), cabinets::cab4x12G);
+    EXPECT_EQ(lookupCabinetById(0x09), cabinets::cab65TWN);
+    EXPECT_EQ(lookupCabinetById(0x0a), cabinets::cab4x12V);
+    EXPECT_EQ(lookupCabinetById(0x0b), cabinets::cabSS212);
+    EXPECT_EQ(lookupCabinetById(0x0c), cabinets::cabSS112);
+}
+
+TEST_F(IdLookupTest, lookupCabinetByIdThrowsOnInvalidId)
+{
+    EXPECT_THROW(lookupCabinetById(0xff), std::invalid_argument);
 }
