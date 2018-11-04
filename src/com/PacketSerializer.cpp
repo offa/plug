@@ -317,7 +317,7 @@ namespace plug::com
             name[i] = data[0][j];
             ++length;
 
-            if (length > nameLength)
+            if( length > nameLength )
             {
                 break;
             }
@@ -336,7 +336,7 @@ namespace plug::com
         settings.treble = data[1][TREBLE];
         settings.middle = data[1][MIDDLE];
         settings.bass = data[1][BASS];
-        settings.cabinet = static_cast<cabinets>(data[1][CABINET]);
+        settings.cabinet = lookupCabinetById(data[1][CABINET]);
         settings.noise_gate = data[1][NOISE_GATE];
         settings.master_vol = data[1][MASTER_VOL];
         settings.gain2 = data[1][GAIN2];
