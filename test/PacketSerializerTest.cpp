@@ -778,3 +778,47 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
     EXPECT_THAT(result, Eq(name.substr(0, nameLength)));
     EXPECT_THAT(nameLength, Eq(result.size()));
 }
+
+TEST_F(PacketSerializerTest, decodeAmpFromData)
+{
+    std::array<Packet, 7> data{};
+    std::fill(data[1].begin(), data[1].end(), 0xff);
+    std::fill(data[6].begin(), data[6].end(), 0xff);
+    data[1][AMPLIFIER] = 0x5e;
+    data[1][GAIN] = 0xaa;
+    data[1][VOLUME] = 0x10;
+    data[1][TREBLE] = 0x20;
+    data[1][MIDDLE] = 0x30;
+    data[1][BASS] = 0x40;
+    data[1][CABINET] = static_cast<std::uint8_t>(cabinets::cab65DLX);
+    data[1][NOISE_GATE] = 0x02;
+    data[1][MASTER_VOL] = 0x04;
+    data[1][GAIN2] = 0x05;
+    data[1][PRESENCE] = 0x15;
+    data[1][THRESHOLD] = 0x16;
+    data[1][DEPTH] = 0x21;
+    data[1][BIAS] = 0x19;
+    data[1][SAG] = 0x09;
+    data[1][BRIGHTNESS] = 0x01;
+    data[6][USB_GAIN] = 0xe1;
+
+    const auto result = decodeAmpFromData(data);
+    EXPECT_THAT(result.amp_num, Eq(amps::BRITISH_80S));
+    EXPECT_THAT(result.gain, Eq(0xaa));
+    EXPECT_THAT(result.volume, Eq(0x10));
+    EXPECT_THAT(result.treble, Eq(0x20));
+    EXPECT_THAT(result.middle, Eq(0x30));
+    EXPECT_THAT(result.bass, Eq(0x40));
+    EXPECT_THAT(result.cabinet, Eq(cabinets::cab65DLX));
+    EXPECT_THAT(result.noise_gate, Eq(0x02));
+    EXPECT_THAT(result.master_vol, Eq(0x04));
+    EXPECT_THAT(result.gain2, Eq(0x05));
+    EXPECT_THAT(result.presence, Eq(0x15));
+    EXPECT_THAT(result.threshold, Eq(0x16));
+    EXPECT_THAT(result.depth, Eq(0x21));
+    EXPECT_THAT(result.bias, Eq(0x19));
+    EXPECT_THAT(result.sag, Eq(0x09));
+    EXPECT_THAT(result.brightness, Eq(true));
+    EXPECT_THAT(result.usb_gain, Eq(0xe1));
+}
+
