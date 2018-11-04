@@ -22,11 +22,11 @@
 #include <gmock/gmock.h>
 
 using plug::amps;
-using plug::effects;
 using plug::cabinets;
+using plug::effects;
 using plug::lookupAmpById;
-using plug::lookupEffectById;
 using plug::lookupCabinetById;
+using plug::lookupEffectById;
 
 class IdLookupTest : public testing::Test
 {

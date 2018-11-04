@@ -317,7 +317,7 @@ namespace plug::com
             name[i] = data[0][j];
             ++length;
 
-            if( length > nameLength )
+            if (length > nameLength)
             {
                 break;
             }
