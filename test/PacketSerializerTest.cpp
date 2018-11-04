@@ -769,7 +769,7 @@ TEST_F(PacketSerializerTest, decodeNameFromData)
 TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
 {
     constexpr std::size_t nameLength{32};
-    const std::string name(nameLength+3, 'z');
+    const std::string name(nameLength + 3, 'z');
     std::array<Packet, 7> data{};
     std::fill(data[0].begin(), data[0].end(), 0xff);
     std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
@@ -821,4 +821,3 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
     EXPECT_THAT(result.brightness, Eq(true));
     EXPECT_THAT(result.usb_gain, Eq(0xe1));
 }
-
