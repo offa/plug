@@ -345,7 +345,7 @@ namespace plug::com
         settings.depth = data[1][DEPTH];
         settings.bias = data[1][BIAS];
         settings.sag = data[1][SAG];
-        settings.brightness = data[1][BRIGHTNESS] != 0u;
+        settings.brightness = (data[1][BRIGHTNESS] != 0u);
         settings.usb_gain = data[6][USB_GAIN];
         return settings;
     }
