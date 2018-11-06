@@ -39,6 +39,22 @@ protected:
     void TearDown() override
     {
     }
+
+    constexpr std::array<Packet, 7> ampPackage(std::uint8_t ampId) const
+    {
+        std::array<Packet, 7> data{};
+        data[1][AMPLIFIER] = ampId;
+        data[1][CABINET] = static_cast<std::uint8_t>(cabinets::OFF);
+        return data;
+    };
+
+    constexpr std::array<Packet, 7> cabinetPackage(std::uint8_t cabinetId) const
+    {
+        std::array<Packet, 7> data{};
+        data[1][AMPLIFIER] = 0x67;
+        data[1][CABINET] = cabinetId;
+        return data;
+    };
 };
 
 TEST_F(PacketSerializerTest, serializeInitCommand)
@@ -824,13 +840,6 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataAmps)
 {
-    auto ampPackage = [](std::uint8_t ampId) {
-        std::array<Packet, 7> data{};
-        data[1][AMPLIFIER] = ampId;
-        data[1][CABINET] = static_cast<std::uint8_t>(cabinets::OFF);
-        return data;
-    };
-
     EXPECT_THAT(decodeAmpFromData(ampPackage(0x67)).amp_num, Eq(amps::FENDER_57_DELUXE));
     EXPECT_THAT(decodeAmpFromData(ampPackage(0x64)).amp_num, Eq(amps::FENDER_59_BASSMAN));
     EXPECT_THAT(decodeAmpFromData(ampPackage(0x7c)).amp_num, Eq(amps::FENDER_57_CHAMP));
@@ -847,25 +856,11 @@ TEST_F(PacketSerializerTest, decodeAmpFromDataAmps)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidAmpId)
 {
-    auto ampPackage = [](std::uint8_t ampId) {
-        std::array<Packet, 7> data{};
-        data[1][AMPLIFIER] = ampId;
-        data[1][CABINET] = static_cast<std::uint8_t>(cabinets::OFF);
-        return data;
-    };
-
     EXPECT_THROW(decodeAmpFromData(ampPackage(0xf0)), std::invalid_argument);
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataCabinets)
 {
-    auto cabinetPackage = [](std::uint8_t cabinetId) {
-        std::array<Packet, 7> data{};
-        data[1][AMPLIFIER] = 0x67;
-        data[1][CABINET] = cabinetId;
-        return data;
-    };
-
     EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x00)).cabinet, Eq(cabinets::OFF));
     EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x01)).cabinet, Eq(cabinets::cab57DLX));
     EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x02)).cabinet, Eq(cabinets::cabBSSMN));
@@ -883,13 +878,6 @@ TEST_F(PacketSerializerTest, decodeAmpFromDataCabinets)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidCabinetId)
 {
-    auto cabinetPackage = [](std::uint8_t cabinetId) {
-        std::array<Packet, 7> data{};
-        data[1][AMPLIFIER] = 0x67;
-        data[1][CABINET] = cabinetId;
-        return data;
-    };
-
     EXPECT_THROW(decodeAmpFromData(cabinetPackage(0xe0)), std::invalid_argument);
 }
 
