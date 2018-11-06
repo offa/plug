@@ -679,7 +679,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
     constexpr std::uint8_t slot{17};
     constexpr std::size_t nameLength{24};
     std::string name(nameLength + 5, 'x');
-    const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
     Packet expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -702,7 +702,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
     constexpr std::uint8_t slot{17};
     constexpr std::size_t nameLength{24};
     std::string name(nameLength + 5, 'x');
-    const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
     Packet expected{};
     std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), NAME));
@@ -714,7 +714,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
 {
     constexpr std::uint8_t slot{8};
-    const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
     Packet expected = serializeEffectSettings(effect);
     expected[FXKNOB] = 0x01;
@@ -730,7 +730,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketThrowsOnInvalidEffect)
 {
     constexpr std::uint8_t slot{8};
-    const fx_pedal_settings effect{slot, effects::COMPRESSOR, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect{slot, effects::COMPRESSOR, 1, 2, 3, 4, 5, 6, Position::input};
 
     EXPECT_THROW(serializeSaveEffectPacket(slot, {effect}), std::invalid_argument);
 }
@@ -738,8 +738,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketThrowsOnInvalidEffect)
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects)
 {
     constexpr std::uint8_t slot{9};
-    const fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
-    const fx_pedal_settings effect2{slot, effects::MONO_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
 
     const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2});
     EXPECT_THAT(packet, SizeIs(2));
@@ -748,8 +748,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffectsData)
 {
     constexpr std::uint8_t slot{9};
-    const fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
-    const fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
     Packet expected1 = serializeEffectSettings(effect1);
     expected1[FXKNOB] = 0x02;
@@ -771,9 +771,9 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketLimitsInputEffects)
 {
     constexpr std::uint8_t slot{9};
-    const fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
-    const fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
-    const fx_pedal_settings effect3{slot, effects::PING_PONG_DELAY, 0, 0, 0, 0, 0, 0, Position::effectsLoop};
+    constexpr fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr fx_pedal_settings effect3{slot, effects::PING_PONG_DELAY, 0, 0, 0, 0, 0, 0, Position::effectsLoop};
 
     const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2, effect3});
     EXPECT_THAT(packet, SizeIs(1));
