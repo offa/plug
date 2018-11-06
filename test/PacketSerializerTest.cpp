@@ -40,6 +40,15 @@ protected:
     {
     }
 
+    const std::array<Packet, 7> filledPackage(std::uint8_t value) const
+    {
+        Packet packet{};
+        std::fill(packet.begin(), packet.end(), value);
+        std::array<Packet, 7> data{};
+        std::fill(data.begin(), data.end(), packet);
+        return data;
+    };
+
     constexpr std::array<Packet, 7> ampPackage(std::uint8_t ampId) const
     {
         std::array<Packet, 7> data{};
@@ -773,8 +782,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketLimitsInputEffects)
 TEST_F(PacketSerializerTest, decodeNameFromData)
 {
     const std::string name{"test name"};
-    std::array<Packet, 7> data{};
-    std::fill(data[0].begin(), data[0].end(), 0xff);
+    auto data = filledPackage(0xff);
     const auto nameEnd = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
     *nameEnd = '\0';
 
@@ -786,8 +794,7 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
 {
     constexpr std::size_t nameLength{32};
     const std::string name(nameLength + 3, 'z');
-    std::array<Packet, 7> data{};
-    std::fill(data[0].begin(), data[0].end(), 0xff);
+    auto data = filledPackage(0xff);
     std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
 
     const auto result = decodeNameFromData(data);
@@ -797,9 +804,7 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
 
 TEST_F(PacketSerializerTest, decodeAmpFromData)
 {
-    std::array<Packet, 7> data{};
-    std::fill(data[1].begin(), data[1].end(), 0xff);
-    std::fill(data[6].begin(), data[6].end(), 0xff);
+    auto data = filledPackage(0xff);
     data[1][AMPLIFIER] = 0x5e;
     data[1][GAIN] = 0xaa;
     data[1][VOLUME] = 0x10;
