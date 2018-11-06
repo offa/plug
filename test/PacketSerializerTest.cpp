@@ -821,3 +821,75 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
     EXPECT_THAT(result.brightness, Eq(true));
     EXPECT_THAT(result.usb_gain, Eq(0xe1));
 }
+
+TEST_F(PacketSerializerTest, decodeAmpFromDataAmps)
+{
+    auto ampPackage = [](std::uint8_t ampId) {
+        std::array<Packet, 7> data{};
+        data[1][AMPLIFIER] = ampId;
+        data[1][CABINET] = static_cast<std::uint8_t>(cabinets::OFF);
+        return data;
+    };
+
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x67)).amp_num, Eq(amps::FENDER_57_DELUXE));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x64)).amp_num, Eq(amps::FENDER_59_BASSMAN));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x7c)).amp_num, Eq(amps::FENDER_57_CHAMP));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x53)).amp_num, Eq(amps::FENDER_65_DELUXE_REVERB));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6a)).amp_num, Eq(amps::FENDER_65_PRINCETON));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x75)).amp_num, Eq(amps::FENDER_65_TWIN_REVERB));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x72)).amp_num, Eq(amps::FENDER_SUPER_SONIC));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x61)).amp_num, Eq(amps::BRITISH_60S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x79)).amp_num, Eq(amps::BRITISH_70S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5e)).amp_num, Eq(amps::BRITISH_80S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5d)).amp_num, Eq(amps::AMERICAN_90S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6d)).amp_num, Eq(amps::METAL_2000));
+}
+
+TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidAmpId)
+{
+    auto ampPackage = [](std::uint8_t ampId) {
+        std::array<Packet, 7> data{};
+        data[1][AMPLIFIER] = ampId;
+        data[1][CABINET] = static_cast<std::uint8_t>(cabinets::OFF);
+        return data;
+    };
+
+    EXPECT_THROW(decodeAmpFromData(ampPackage(0xf0)), std::invalid_argument);
+}
+
+TEST_F(PacketSerializerTest, decodeAmpFromDataCabinets)
+{
+    auto cabinetPackage = [](std::uint8_t cabinetId) {
+        std::array<Packet, 7> data{};
+        data[1][AMPLIFIER] = 0x67;
+        data[1][CABINET] = cabinetId;
+        return data;
+    };
+
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x00)).cabinet, Eq(cabinets::OFF));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x01)).cabinet, Eq(cabinets::cab57DLX));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x02)).cabinet, Eq(cabinets::cabBSSMN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x03)).cabinet, Eq(cabinets::cab65DLX));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x04)).cabinet, Eq(cabinets::cab65PRN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x05)).cabinet, Eq(cabinets::cabCHAMP));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x06)).cabinet, Eq(cabinets::cab4x12M));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x07)).cabinet, Eq(cabinets::cab2x12C));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x08)).cabinet, Eq(cabinets::cab4x12G));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x09)).cabinet, Eq(cabinets::cab65TWN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0a)).cabinet, Eq(cabinets::cab4x12V));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0b)).cabinet, Eq(cabinets::cabSS212));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0c)).cabinet, Eq(cabinets::cabSS112));
+}
+
+TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidCabinetId)
+{
+    auto cabinetPackage = [](std::uint8_t cabinetId) {
+        std::array<Packet, 7> data{};
+        data[1][AMPLIFIER] = 0x67;
+        data[1][CABINET] = cabinetId;
+        return data;
+    };
+
+    EXPECT_THROW(decodeAmpFromData(cabinetPackage(0xe0)), std::invalid_argument);
+}
+
