@@ -128,7 +128,7 @@ TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
 {
-    const amp_settings settings{amps::METAL_2000, 11, 22, 33, 44, 55, cabinets::cab2x12C, 1, 2, 3, 4, 5, 6, 7, 8, true, 0};
+    constexpr amp_settings settings{amps::METAL_2000, 11, 22, 33, 44, 55, cabinets::cab2x12C, 1, 2, 3, 4, 5, 6, 7, 8, true, 0};
 
     Packet expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -168,7 +168,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
 {
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
     Packet expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -208,7 +208,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsDspData)
 {
-    const amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
+    constexpr amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[DSP], Eq(0x05));
@@ -216,7 +216,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsDspData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
 {
-    const amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
+    constexpr amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[GAIN], Eq(123));
@@ -235,7 +235,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 {
-    auto create = [](amps a) {
+    constexpr auto create = [](amps a) {
         return amp_settings{a, 0, 0, 0, 0, 0, cabinets::cab2x12C, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
     };
 
@@ -255,7 +255,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
 {
-    auto create = [](cabinets c) {
+    constexpr auto create = [](cabinets c) {
         return amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
     };
 
@@ -276,7 +276,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagData)
 {
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0x03, false, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0x03, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[SAG], Eq(0x01));
@@ -284,7 +284,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)
 {
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, true, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, true, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[BRIGHTNESS], Eq(0x01));
@@ -293,7 +293,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsNoiseGate)
 {
     constexpr std::uint8_t value{0x04};
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[NOISE_GATE], Eq(value));
@@ -302,7 +302,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsNoiseGate)
 TEST_F(PacketSerializerTest, serializeAmpSettingsLimitsNoiseGate)
 {
     constexpr std::uint8_t value{0x06};
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[NOISE_GATE], Eq(0x00));
@@ -313,7 +313,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsThresholdAndDepthIfNoiseGat
     constexpr std::uint8_t noiseGate{0x05};
     constexpr std::uint8_t threshold{0x08};
     constexpr std::uint8_t depth{0x19};
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[THRESHOLD], Eq(threshold));
@@ -325,7 +325,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsDoesNotSetThresholdAndDepthIfNo
     constexpr std::uint8_t noiseGate{0x04};
     constexpr std::uint8_t threshold{0x08};
     constexpr std::uint8_t depth{0x19};
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
@@ -336,7 +336,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
 {
     constexpr std::uint8_t noiseGate{0x05};
     constexpr std::uint8_t threshold{0x0a};
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, 0, 0, 0, false, 0};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, 0, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
     EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
@@ -345,7 +345,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
 TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
 {
     constexpr std::size_t value{101};
-    const amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, value};
+    constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, value};
 
     Packet expected{};
     expected[0] = 0x1c;
@@ -423,7 +423,7 @@ TEST_F(PacketSerializerTest, serializeNameLimitsToLength)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsData)
 {
-    const fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
+    constexpr fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
 
     Packet expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -450,7 +450,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsData)
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetsInputPosition)
 {
     constexpr std::uint8_t value{45};
-    const fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
+    constexpr fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet[FXSLOT], Eq(value));
@@ -459,7 +459,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSetsInputPosition)
 TEST_F(PacketSerializerTest, serializeEffectSettingsEffectsSetsLoopPosition)
 {
     constexpr std::uint8_t value{60};
-    const fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet[FXSLOT], Eq(value + 4));
@@ -467,7 +467,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsEffectsSetsLoopPosition)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNotRequired)
 {
-    const fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet[KNOB6], Eq(0x00));
@@ -475,7 +475,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
 {
-    auto create = [](effects e, std::uint8_t knob6) {
+    constexpr auto create = [](effects e, std::uint8_t knob6) {
         return fx_pedal_settings{100, e, 0, 0, 0, 0, 0, knob6, Position::input};
     };
 
@@ -492,7 +492,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     constexpr std::uint8_t dsp2{0x08};
     constexpr std::uint8_t dsp3{0x09};
 
-    auto create = [](effects e) {
+    constexpr auto create = [](effects e) {
         return fx_pedal_settings{100, e, 1, 2, 3, 4, 5, 6, Position::input};
     };
 
@@ -540,7 +540,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompKnobSetting)
 {
-    const fx_pedal_settings settings{10, effects::SIMPLE_COMP, 3, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings settings{10, effects::SIMPLE_COMP, 3, 2, 3, 4, 5, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet, KnobsAre(3, 0, 0, 0, 0, 0));
@@ -548,7 +548,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompKnobSetting)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompLimitsValue)
 {
-    const fx_pedal_settings settings{10, effects::SIMPLE_COMP, 4, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings settings{10, effects::SIMPLE_COMP, 4, 2, 3, 4, 5, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet, KnobsAre(3, 0, 0, 0, 0, 0));
@@ -556,7 +556,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompLimitsValue)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsRingModulatorLimitsValue)
 {
-    const fx_pedal_settings settings{10, effects::RING_MODULATOR, 1, 2, 3, 2, 5, 6, Position::input};
+    constexpr fx_pedal_settings settings{10, effects::RING_MODULATOR, 1, 2, 3, 2, 5, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet, KnobsAre(1, 2, 3, 1, 5, 0));
@@ -564,7 +564,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsRingModulatorLimitsValue)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
 {
-    const fx_pedal_settings settings{10, effects::PHASER, 1, 2, 3, 2, 2, 6, Position::input};
+    constexpr fx_pedal_settings settings{10, effects::PHASER, 1, 2, 3, 2, 2, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet, KnobsAre(1, 2, 3, 2, 1, 0));
@@ -572,7 +572,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsMultitapDelayLimitsValue)
 {
-    const fx_pedal_settings settings{10, effects::MULTITAP_DELAY, 1, 2, 3, 2, 4, 6, Position::input};
+    constexpr fx_pedal_settings settings{10, effects::MULTITAP_DELAY, 1, 2, 3, 2, 4, 6, Position::input};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet, KnobsAre(1, 2, 3, 2, 3, 0));
@@ -582,7 +582,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
 {
     constexpr std::uint8_t slot{17};
     const std::string name{"name 17"};
-    const fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
     Packet expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -605,7 +605,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameFxKnobData)
     constexpr std::uint8_t slot{8};
     const std::string name{"ignore"};
 
-    auto create = [](effects e) -> std::vector<fx_pedal_settings> {
+    constexpr auto create = [](effects e) -> std::vector<fx_pedal_settings> {
         return {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}};
     };
 
@@ -649,7 +649,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameThrowsOnInvalidEffect)
     constexpr std::uint8_t slot{8};
     const std::string name{"ignore"};
 
-    auto create = [](effects e) -> std::vector<fx_pedal_settings> {
+    constexpr auto create = [](effects e) -> std::vector<fx_pedal_settings> {
         return {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}};
     };
 
@@ -667,7 +667,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameSetsFxKnobOfFirstEffect)
     constexpr std::uint8_t slot{8};
     const std::string name{"ignore"};
 
-    auto create = [](effects e) {
+    constexpr auto create = [](effects e) {
         return fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input};
     };
 
