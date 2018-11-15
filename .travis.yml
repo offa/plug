@@ -1,6 +1,6 @@
 language: generic
 
-dist: trusty
+dist: xenial
 sudo: required
 
 services:
@@ -25,5 +25,5 @@ before_install:
   - docker pull ${DOCKER_IMG}/${COMPILER}:latest
 
 script:
-  - docker run -v ${PWD}:/mnt -it ${DOCKER_IMG}/${COMPILER} /bin/bash -c "cd /mnt; script/ci_build.sh ${ANALYSE}"
+  - docker run --cap-add SYS_PTRACE -v ${PWD}:/mnt -it ${DOCKER_IMG}/${COMPILER} /bin/bash -c "cd /mnt; script/ci_build.sh ${ANALYSE}"
 
