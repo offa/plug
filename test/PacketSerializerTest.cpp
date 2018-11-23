@@ -886,3 +886,40 @@ TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidCabinetId)
     EXPECT_THROW(decodeAmpFromData(cabinetPackage(0xe0)), std::invalid_argument);
 }
 
+TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
+{
+    auto package = filledPackage(0x00);
+    auto& data = package[2];
+    data[FXSLOT] = 0x01;
+    data[KNOB1] = 0x11;
+    data[KNOB2] = 0x22;
+    data[KNOB3] = 0x33;
+    data[KNOB4] = 0x44;
+    data[KNOB5] = 0x55;
+    data[KNOB6] = 0x66;
+    data[EFFECT] = 0x49;
+
+    const auto result = decodeEffectsFromData(package);
+    EXPECT_THAT(result[1].fx_slot, Eq(0x01));
+    EXPECT_THAT(result[1].knob1, Eq(0x11));
+    EXPECT_THAT(result[1].knob2, Eq(0x22));
+    EXPECT_THAT(result[1].knob3, Eq(0x33));
+    EXPECT_THAT(result[1].knob4, Eq(0x44));
+    EXPECT_THAT(result[1].knob5, Eq(0x55));
+    EXPECT_THAT(result[1].knob6, Eq(0x66));
+    EXPECT_THAT(result[1].position, Eq(Position::input));
+    EXPECT_THAT(result[1].effect_num, Eq(effects::WAH));
+}
+
+TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPosition)
+{
+    auto package = filledPackage(0x00);
+    package[2][FXSLOT] = 0x01;
+    package[3][FXSLOT] = 0x06;
+
+    const auto result = decodeEffectsFromData(package);
+    EXPECT_THAT(result[1].position, Eq(Position::input));
+    EXPECT_THAT(result[2].position, Eq(Position::effectsLoop));
+}
+
+
