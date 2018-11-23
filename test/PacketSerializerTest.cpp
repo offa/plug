@@ -64,6 +64,14 @@ protected:
         data[1][CABINET] = cabinetId;
         return data;
     };
+
+    constexpr std::array<Packet, 7> effectPackage(std::uint8_t effectId) const
+    {
+        std::array<Packet, 7> package{};
+        package[2][FXSLOT] = 0x01;
+        package[2][EFFECT] = effectId;
+        return package;
+    };
 };
 
 TEST_F(PacketSerializerTest, serializeInitCommand)
@@ -913,13 +921,6 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
 {
-    auto effectPackage = [](std::uint8_t effectId) {
-        std::array<Packet, 7> package{};
-        package[2][FXSLOT] = 0x01;
-        package[2][EFFECT] = effectId;
-        return package;
-    };
-
     EXPECT_THAT(decodeEffectsFromData(effectPackage(0x00))[1].effect_num, Eq(effects::EMPTY));
     EXPECT_THAT(decodeEffectsFromData(effectPackage(0x3c))[1].effect_num, Eq(effects::OVERDRIVE));
     EXPECT_THAT(decodeEffectsFromData(effectPackage(0x49))[1].effect_num, Eq(effects::WAH));
@@ -997,4 +998,3 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
     EXPECT_THAT(result[3].fx_slot, Eq(3));
     EXPECT_THAT(result[3].position, Eq(Position::effectsLoop));
 }
-
