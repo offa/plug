@@ -911,17 +911,6 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
     EXPECT_THAT(result[1].effect_num, Eq(effects::WAH));
 }
 
-TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPosition)
-{
-    auto package = filledPackage(0x00);
-    package[2][FXSLOT] = 0x01;
-    package[3][FXSLOT] = 0x06;
-
-    const auto result = decodeEffectsFromData(package);
-    EXPECT_THAT(result[1].position, Eq(Position::input));
-    EXPECT_THAT(result[2].position, Eq(Position::effectsLoop));
-}
-
 TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
 {
     auto effectPackage = [](std::uint8_t effectId) {
@@ -969,5 +958,43 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
     EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4d))[1].effect_num, Eq(effects::ARENA_REVERB));
     EXPECT_THAT(decodeEffectsFromData(effectPackage(0x21))[1].effect_num, Eq(effects::FENDER_63_SPRING_REVERB));
     EXPECT_THAT(decodeEffectsFromData(effectPackage(0x0b))[1].effect_num, Eq(effects::FENDER_65_SPRING_REVERB));
+}
+
+TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
+{
+    auto package = filledPackage(0x00);
+    package[2][FXSLOT] = 0x00;
+    package[3][FXSLOT] = 0x01;
+    package[4][FXSLOT] = 0x02;
+    package[5][FXSLOT] = 0x03;
+
+    const auto result = decodeEffectsFromData(package);
+    EXPECT_THAT(result[0].fx_slot, Eq(0));
+    EXPECT_THAT(result[0].position, Eq(Position::input));
+    EXPECT_THAT(result[1].fx_slot, Eq(1));
+    EXPECT_THAT(result[1].position, Eq(Position::input));
+    EXPECT_THAT(result[2].fx_slot, Eq(2));
+    EXPECT_THAT(result[2].position, Eq(Position::input));
+    EXPECT_THAT(result[3].fx_slot, Eq(3));
+    EXPECT_THAT(result[3].position, Eq(Position::input));
+}
+
+TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
+{
+    auto package = filledPackage(0x00);
+    package[2][FXSLOT] = 0x04;
+    package[3][FXSLOT] = 0x05;
+    package[4][FXSLOT] = 0x06;
+    package[5][FXSLOT] = 0x07;
+
+    const auto result = decodeEffectsFromData(package);
+    EXPECT_THAT(result[0].fx_slot, Eq(0));
+    EXPECT_THAT(result[0].position, Eq(Position::effectsLoop));
+    EXPECT_THAT(result[1].fx_slot, Eq(1));
+    EXPECT_THAT(result[1].position, Eq(Position::effectsLoop));
+    EXPECT_THAT(result[2].fx_slot, Eq(2));
+    EXPECT_THAT(result[2].position, Eq(Position::effectsLoop));
+    EXPECT_THAT(result[3].fx_slot, Eq(3));
+    EXPECT_THAT(result[3].position, Eq(Position::effectsLoop));
 }
 
