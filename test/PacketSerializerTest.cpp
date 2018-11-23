@@ -922,4 +922,52 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPosition)
     EXPECT_THAT(result[2].position, Eq(Position::effectsLoop));
 }
 
+TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
+{
+    auto effectPackage = [](std::uint8_t effectId) {
+        std::array<Packet, 7> package{};
+        package[2][FXSLOT] = 0x01;
+        package[2][EFFECT] = effectId;
+        return package;
+    };
+
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x00))[1].effect_num, Eq(effects::EMPTY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x3c))[1].effect_num, Eq(effects::OVERDRIVE));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x49))[1].effect_num, Eq(effects::WAH));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4a))[1].effect_num, Eq(effects::TOUCH_WAH));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x1a))[1].effect_num, Eq(effects::FUZZ));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x1c))[1].effect_num, Eq(effects::FUZZ_TOUCH_WAH));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x88))[1].effect_num, Eq(effects::SIMPLE_COMP));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x07))[1].effect_num, Eq(effects::COMPRESSOR));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x12))[1].effect_num, Eq(effects::SINE_CHORUS));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x13))[1].effect_num, Eq(effects::TRIANGLE_CHORUS));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x18))[1].effect_num, Eq(effects::SINE_FLANGER));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x19))[1].effect_num, Eq(effects::TRIANGLE_FLANGER));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x2d))[1].effect_num, Eq(effects::VIBRATONE));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x40))[1].effect_num, Eq(effects::VINTAGE_TREMOLO));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x41))[1].effect_num, Eq(effects::SINE_TREMOLO));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x22))[1].effect_num, Eq(effects::RING_MODULATOR));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x29))[1].effect_num, Eq(effects::STEP_FILTER));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4f))[1].effect_num, Eq(effects::PHASER));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x1f))[1].effect_num, Eq(effects::PITCH_SHIFTER));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x16))[1].effect_num, Eq(effects::MONO_DELAY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x43))[1].effect_num, Eq(effects::MONO_ECHO_FILTER));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x48))[1].effect_num, Eq(effects::STEREO_ECHO_FILTER));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x44))[1].effect_num, Eq(effects::MULTITAP_DELAY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x45))[1].effect_num, Eq(effects::PING_PONG_DELAY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x15))[1].effect_num, Eq(effects::DUCKING_DELAY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x46))[1].effect_num, Eq(effects::REVERSE_DELAY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x2b))[1].effect_num, Eq(effects::TAPE_DELAY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x2a))[1].effect_num, Eq(effects::STEREO_TAPE_DELAY));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x24))[1].effect_num, Eq(effects::SMALL_HALL_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x3a))[1].effect_num, Eq(effects::LARGE_HALL_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x26))[1].effect_num, Eq(effects::SMALL_ROOM_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x3b))[1].effect_num, Eq(effects::LARGE_ROOM_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4e))[1].effect_num, Eq(effects::SMALL_PLATE_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4b))[1].effect_num, Eq(effects::LARGE_PLATE_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4c))[1].effect_num, Eq(effects::AMBIENT_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4d))[1].effect_num, Eq(effects::ARENA_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x21))[1].effect_num, Eq(effects::FENDER_63_SPRING_REVERB));
+    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x0b))[1].effect_num, Eq(effects::FENDER_65_SPRING_REVERB));
+}
 
