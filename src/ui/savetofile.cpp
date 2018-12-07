@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "savetofile.h"
-#include "mainwindow.h"
+#include "ui/savetofile.h"
+#include "ui/mainwindow.h"
 #include "ui_savetofile.h"
 
 namespace plug
@@ -652,4 +652,4 @@ namespace plug
     }
 }
 
-#include "moc_savetofile.moc"
+#include "ui/moc_savetofile.moc"

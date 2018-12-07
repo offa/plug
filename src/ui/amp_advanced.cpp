@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "amp_advanced.h"
+#include "ui/amp_advanced.h"
 #include "ui_amp_advanced.h"
 
 namespace plug
@@ -129,4 +129,4 @@ namespace plug
     }
 }
 
-#include "moc_amp_advanced.moc"
+#include "ui/moc_amp_advanced.moc"

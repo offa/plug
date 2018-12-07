@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "effect.h"
-#include "mainwindow.h"
+#include "ui/effect.h"
+#include "ui/mainwindow.h"
 #include "ui_effect.h"
 
 namespace plug
@@ -2026,4 +2026,4 @@ namespace plug
     }
 }
 
-#include "moc_effect.moc"
+#include "ui/moc_effect.moc"

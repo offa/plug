@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "defaulteffects.h"
-#include "mainwindow.h"
+#include "ui/defaulteffects.h"
+#include "ui/mainwindow.h"
 #include "ui_defaulteffects.h"
 #include <array>
 
@@ -1111,4 +1111,4 @@ namespace plug
     }
 }
 
-#include "moc_defaulteffects.moc"
+#include "ui/moc_defaulteffects.moc"

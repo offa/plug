@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
+#include "ui/mainwindow.h"
 #include "com/Mustang.h"
 #include "com/CommunicationException.h"
 #include "com/MustangUpdater.h"
@@ -899,4 +899,4 @@ namespace plug
     }
 }
 
-#include "moc_mainwindow.moc"
+#include "ui/moc_mainwindow.moc"

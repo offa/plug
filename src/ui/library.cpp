@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "library.h"
-#include "mainwindow.h"
+#include "ui/library.h"
+#include "ui/mainwindow.h"
 #include "ui_library.h"
 
 namespace plug
@@ -153,4 +153,4 @@ namespace plug
     }
 }
 
-#include "moc_library.moc"
+#include "ui/moc_library.moc"

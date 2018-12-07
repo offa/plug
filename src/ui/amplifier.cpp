@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "amplifier.h"
-#include "mainwindow.h"
+#include "ui/amplifier.h"
+#include "ui/mainwindow.h"
 #include "ui_amplifier.h"
 
 namespace plug
@@ -359,4 +359,4 @@ namespace plug
     }
 }
 
-#include "moc_amplifier.moc"
+#include "ui/moc_amplifier.moc"

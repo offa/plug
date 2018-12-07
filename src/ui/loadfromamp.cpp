@@ -19,47 +19,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "saveonamp.h"
-#include "mainwindow.h"
-#include "ui_saveonamp.h"
+#include "ui/loadfromamp.h"
+#include "ui/mainwindow.h"
+#include "ui_loadfromamp.h"
 
 namespace plug
 {
 
-    SaveOnAmp::SaveOnAmp(QWidget* parent)
+    LoadFromAmp::LoadFromAmp(QWidget* parent)
         : QMainWindow(parent),
-          ui(std::make_unique<Ui::SaveOnAmp>())
+          ui(std::make_unique<Ui::LoadFromAmp>())
     {
         ui->setupUi(this);
 
         QSettings settings;
-        restoreGeometry(settings.value("Windows/saveAmpPresetWindowGeometry").toByteArray());
+        restoreGeometry(settings.value("Windows/loadAmpPresetWindowGeometry").toByteArray());
 
-        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(save()));
+        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(load()));
         connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
     }
 
-    SaveOnAmp::~SaveOnAmp()
+    LoadFromAmp::~LoadFromAmp()
     {
         QSettings settings;
-        settings.setValue("Windows/saveAmpPresetWindowGeometry", saveGeometry());
+        settings.setValue("Windows/loadAmpPresetWindowGeometry", saveGeometry());
     }
 
-    void SaveOnAmp::save()
+    void LoadFromAmp::load()
     {
         QSettings settings;
-        QString name(QString("[%1] %2").arg(ui->comboBox->currentIndex()).arg(ui->lineEdit->text()));
 
-        ui->comboBox->setItemText(ui->comboBox->currentIndex(), name);
-        dynamic_cast<MainWindow*>(parent())->change_name(ui->comboBox->currentIndex(), &name);
-        dynamic_cast<MainWindow*>(parent())->save_on_amp(ui->lineEdit->text().toLatin1().data(), ui->comboBox->currentIndex());
+        dynamic_cast<MainWindow*>(parent())->load_from_amp(ui->comboBox->currentIndex());
+        dynamic_cast<MainWindow*>(parent())->set_index(ui->comboBox->currentIndex());
+
         if (!settings.value("Settings/keepWindowsOpen").toBool())
         {
             this->close();
         }
     }
 
-    void SaveOnAmp::load_names(char names[][32])
+    void LoadFromAmp::load_names(char names[][32])
     {
         for (std::size_t i = 0; i < 100; ++i)
         {
@@ -71,7 +70,7 @@ namespace plug
         }
     }
 
-    void SaveOnAmp::delete_items()
+    void LoadFromAmp::delete_items()
     {
         for (int i = 0; i < ui->comboBox->count(); ++i)
         {
@@ -79,14 +78,11 @@ namespace plug
         }
     }
 
-    void SaveOnAmp::change_index(int value, const QString& name)
+    void LoadFromAmp::change_name(int slot, QString* name)
     {
-        if (value > 0)
-        {
-            ui->comboBox->setCurrentIndex(value);
-        }
-        ui->lineEdit->setText(name);
+        ui->comboBox->setItemText(slot, *name);
+        ui->comboBox->setCurrentIndex(slot);
     }
 }
 
-#include "moc_saveonamp.moc"
+#include "ui/moc_loadfromamp.moc"

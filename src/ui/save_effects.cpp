@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "save_effects.h"
-#include "mainwindow.h"
+#include "ui/save_effects.h"
+#include "ui/mainwindow.h"
 #include "ui_save_effects.h"
 
 namespace plug
@@ -96,4 +96,4 @@ namespace plug
     }
 }
 
-#include "moc_save_effects.moc"
+#include "ui/moc_save_effects.moc"

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "quickpresets.h"
+#include "ui/quickpresets.h"
 #include "ui_quickpresets.h"
 
 namespace plug
@@ -293,4 +293,4 @@ namespace plug
     }
 }
 
-#include "moc_quickpresets.moc"
+#include "ui/moc_quickpresets.moc"

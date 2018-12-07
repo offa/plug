@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "settings.h"
+#include "ui/settings.h"
 #include "ui_settings.h"
 
 namespace plug
@@ -82,4 +82,4 @@ namespace plug
     }
 }
 
-#include "moc_settings.moc"
+#include "ui/moc_settings.moc"
