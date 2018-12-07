@@ -136,7 +136,7 @@ namespace plug::com
             array[0] = array[1] = 0x03;
             array[2] = number;
             number++;
-            array[3] = fread(array + 4, 1, packetSize - 8, file);
+            array[3] = static_cast<std::uint8_t>(fread(array + 4, 1, packetSize - 8, file));
             ret = libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
             libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
             usleep(10000);

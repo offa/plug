@@ -90,14 +90,14 @@ namespace plug::com
     {
         int actualTransfered{0};
         std::vector<std::uint8_t> buffer(recvSize);
-        const auto rtn = libusb_interrupt_transfer(handle, endpoint, buffer.data(), buffer.size(), &actualTransfered, timeout.count());
+        const auto rtn = libusb_interrupt_transfer(handle, endpoint, buffer.data(), static_cast<int>(buffer.size()), &actualTransfered, timeout.count());
 
         if (rtn != LIBUSB_ERROR_TIMEOUT)
         {
             checked(rtn, "Interrupt receive failed");
         }
 
-        buffer.resize(actualTransfered);
+        buffer.resize(static_cast<std::size_t>(actualTransfered));
 
         return buffer;
     }
@@ -105,7 +105,7 @@ namespace plug::com
     std::size_t UsbComm::interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size)
     {
         int actualTransfered{0};
-        const auto rtn = libusb_interrupt_transfer(handle, endpoint, data, size, &actualTransfered, timeout.count());
+        const auto rtn = libusb_interrupt_transfer(handle, endpoint, data, static_cast<int>(size), &actualTransfered, timeout.count());
         checked(rtn, "Interrupt write failed");
 
         return static_cast<std::size_t>(actualTransfered);

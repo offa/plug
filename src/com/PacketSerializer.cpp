@@ -314,7 +314,7 @@ namespace plug::com
 
         for (std::size_t i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
         {
-            name[i] = data[0][j];
+            name[i] = static_cast<char>(data[0][j]);
             ++length;
 
             if (length > nameLength)
@@ -359,9 +359,9 @@ namespace plug::com
 
     void decodeEffectsFromData(const std::array<Packet, 7>& data, fx_pedal_settings* const& effects_set_out)
     {
-        for (int i = 2; i < 6; ++i)
+        for (std::size_t i = 2; i < 6; ++i)
         {
-            int j = 0;
+            std::size_t j{0};
 
             switch (data[i][FXSLOT])
             {
@@ -386,7 +386,7 @@ namespace plug::com
                     break;
             }
 
-            effects_set_out[j].fx_slot = j;
+            effects_set_out[j].fx_slot = static_cast<std::uint8_t>(j);
             effects_set_out[j].knob1 = data[i][KNOB1];
             effects_set_out[j].knob2 = data[i][KNOB2];
             effects_set_out[j].knob3 = data[i][KNOB3];

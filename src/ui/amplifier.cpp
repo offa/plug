@@ -78,31 +78,31 @@ namespace plug
 
     void Amplifier::set_gain(int value)
     {
-        gain = value;
+        gain = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_volume(int value)
     {
-        volume = value;
+        volume = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_treble(int value)
     {
-        treble = value;
+        treble = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_middle(int value)
     {
-        middle = value;
+        middle = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_bass(int value)
     {
-        bass = value;
+        bass = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
@@ -114,49 +114,49 @@ namespace plug
 
     void Amplifier::set_noise_gate(int value)
     {
-        noise_gate = value;
+        noise_gate = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_presence(int value)
     {
-        presence = value;
+        presence = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_gain2(int value)
     {
-        gain2 = value;
+        gain2 = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_master_vol(int value)
     {
-        master_vol = value;
+        master_vol = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_threshold(int value)
     {
-        threshold = value;
+        threshold = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_depth(int value)
     {
-        depth = value;
+        depth = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_bias(int value)
     {
-        bias = value;
+        bias = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
     void Amplifier::set_sag(int value)
     {
-        sag = value;
+        sag = static_cast<std::uint8_t>(value);
         changed = true;
     }
 
@@ -168,7 +168,7 @@ namespace plug
 
     void Amplifier::set_usb_gain(int value)
     {
-        usb_gain = value;
+        usb_gain = static_cast<std::uint8_t>(value);
         changed = true;
     }
 

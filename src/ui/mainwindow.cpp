@@ -368,7 +368,7 @@ namespace plug
             return;
         }
 
-        amp_ops->save_on_amp(name, slot);
+        amp_ops->save_on_amp(name, static_cast<std::uint8_t>(slot));
 
         if (name[0] == 0x00)
         {
@@ -393,7 +393,7 @@ namespace plug
         }
 
         QSettings settings;
-        const auto [name, ampSettings, effects_set] = amp_ops->load_memory_bank(slot);
+        const auto [name, ampSettings, effects_set] = amp_ops->load_memory_bank(static_cast<std::uint8_t>(slot));
         const QString bankName = QString::fromStdString(name);
 
 
@@ -416,7 +416,7 @@ namespace plug
             amp->show();
         }
 
-        for (int i = 0; i < 4; i++)
+        for (std::size_t i = 0; i < 4; i++)
         {
             switch (effects_set[i].fx_slot)
             {
@@ -488,7 +488,7 @@ namespace plug
 
     void MainWindow::save_effects(int slot, char* name, int fx_num, bool mod, bool dly, bool rev)
     {
-        std::vector<fx_pedal_settings> effects(fx_num);
+        std::vector<fx_pedal_settings> effects(static_cast<std::size_t>(fx_num));
 
         if (fx_num == 1)
         {
@@ -520,7 +520,7 @@ namespace plug
             set_effect(effects[1]);
         }
 
-        amp_ops->save_effects(slot, name, effects);
+        amp_ops->save_effects(static_cast<std::uint8_t>(slot), name, effects);
     }
 
     void MainWindow::loadfile(QString filename)

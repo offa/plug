@@ -52,7 +52,7 @@ namespace plug
                 }
                 else if (m_xml->name().toString() == "UsbGain")
                 {
-                    m_amp_settings->usb_gain = m_xml->readElementText().toInt();
+                    m_amp_settings->usb_gain = static_cast<std::uint8_t>(m_xml->readElementText().toUInt());
                 }
             }
             m_xml->readNextStartElement();
@@ -126,51 +126,51 @@ namespace plug
                     {
                         case 0:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->volume = i;
+                            m_amp_settings->volume = static_cast<std::uint8_t>(i);
                             break;
                         case 1:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->gain = i;
+                            m_amp_settings->gain = static_cast<std::uint8_t>(i);
                             break;
                         case 2:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->gain2 = i;
+                            m_amp_settings->gain2 = static_cast<std::uint8_t>(i);
                             break;
                         case 3:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->master_vol = i;
+                            m_amp_settings->master_vol = static_cast<std::uint8_t>(i);
                             break;
                         case 4:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->treble = i;
+                            m_amp_settings->treble = static_cast<std::uint8_t>(i);
                             break;
                         case 5:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->middle = i;
+                            m_amp_settings->middle = static_cast<std::uint8_t>(i);
                             break;
                         case 6:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->bass = i;
+                            m_amp_settings->bass = static_cast<std::uint8_t>(i);
                             break;
                         case 7:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->presence = i;
+                            m_amp_settings->presence = static_cast<std::uint8_t>(i);
                             break;
                         case 9:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->depth = i;
+                            m_amp_settings->depth = static_cast<std::uint8_t>(i);
                             break;
                         case 10:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->bias = i;
+                            m_amp_settings->bias = static_cast<std::uint8_t>(i);
                             break;
                         case 15:
                             i = m_xml->readElementText().toInt();
-                            m_amp_settings->noise_gate = i;
+                            m_amp_settings->noise_gate = static_cast<std::uint8_t>(i);
                             break;
                         case 16:
                             i = m_xml->readElementText().toInt();
-                            m_amp_settings->threshold = i;
+                            m_amp_settings->threshold = static_cast<std::uint8_t>(i);
                             break;
                         case 17:
                             i = m_xml->readElementText().toInt();
@@ -178,7 +178,7 @@ namespace plug
                             break;
                         case 19:
                             i = m_xml->readElementText().toInt();
-                            m_amp_settings->sag = i;
+                            m_amp_settings->sag = static_cast<std::uint8_t>(i);
                             break;
                         case 20:
                             m_amp_settings->brightness = (m_xml->readElementText().toInt() != 0);
@@ -393,27 +393,27 @@ namespace plug
                     {
                         case 0:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_fx_settings[x].knob1 = i;
+                            m_fx_settings[x].knob1 = static_cast<std::uint8_t>(i);
                             break;
                         case 1:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_fx_settings[x].knob2 = i;
+                            m_fx_settings[x].knob2 = static_cast<std::uint8_t>(i);
                             break;
                         case 2:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_fx_settings[x].knob3 = i;
+                            m_fx_settings[x].knob3 = static_cast<std::uint8_t>(i);
                             break;
                         case 3:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_fx_settings[x].knob4 = i;
+                            m_fx_settings[x].knob4 = static_cast<std::uint8_t>(i);
                             break;
                         case 4:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_fx_settings[x].knob5 = i;
+                            m_fx_settings[x].knob5 = static_cast<std::uint8_t>(i);
                             break;
                         case 5:
                             i = m_xml->readElementText().toInt() >> 8;
-                            m_fx_settings[x].knob6 = i;
+                            m_fx_settings[x].knob6 = static_cast<std::uint8_t>(i);
                             break;
                     }
                 }
@@ -425,7 +425,7 @@ namespace plug
         {
             if (fx_slots[i] != 0)
             {
-                m_fx_settings[fx_slots[i] - 1].fx_slot = j;
+                m_fx_settings[fx_slots[i] - 1].fx_slot = static_cast<std::uint8_t>(j);
                 ++j;
             }
         }

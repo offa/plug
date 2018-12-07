@@ -1085,7 +1085,7 @@ namespace plug
         std::array<fx_pedal_settings, 4> settings_data{};
         dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data.data());
 
-        const auto index = ui->comboBox_2->currentIndex();
+        const std::size_t index = static_cast<std::size_t>(ui->comboBox_2->currentIndex());
         ui->comboBox->setCurrentIndex(value(settings_data[index].effect_num));
         ui->dial->setValue(settings_data[index].knob1);
         ui->dial_2->setValue(settings_data[index].knob2);

@@ -29,7 +29,7 @@ namespace plug
     Effect::Effect(QWidget* parent, int number)
         : QMainWindow(parent),
           ui(std::make_unique<Ui::Effect>()),
-          fx_slot(number),
+          fx_slot(static_cast<std::uint8_t>(number)),
           effect_num(effects::EMPTY),
           knob1(0),
           knob2(0),
@@ -98,37 +98,37 @@ namespace plug
 
     void Effect::set_knob1(int value)
     {
-        knob1 = value;
+        knob1 = static_cast<std::uint8_t>(value);
         set_changed(true);
     }
 
     void Effect::set_knob2(int value)
     {
-        knob2 = value;
+        knob2 = static_cast<std::uint8_t>(value);
         set_changed(true);
     }
 
     void Effect::set_knob3(int value)
     {
-        knob3 = value;
+        knob3 = static_cast<std::uint8_t>(value);
         set_changed(true);
     }
 
     void Effect::set_knob4(int value)
     {
-        knob4 = value;
+        knob4 = static_cast<std::uint8_t>(value);
         set_changed(true);
     }
 
     void Effect::set_knob5(int value)
     {
-        knob5 = value;
+        knob5 = static_cast<std::uint8_t>(value);
         set_changed(true);
     }
 
     void Effect::set_knob6(int value)
     {
-        knob6 = value;
+        knob6 = static_cast<std::uint8_t>(value);
         set_changed(true);
     }
 
