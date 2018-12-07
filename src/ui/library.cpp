@@ -86,7 +86,7 @@ namespace plug
     void Library::get_directory()
     {
         QSettings settings;
-        QString directory = QFileDialog::getExistingDirectory(this, QString(tr("Choose directory")), settings.value("Library/lastDirectory", QString(QDir::homePath())).toString());
+        QString directory = QFileDialog::getExistingDirectory(this, tr("Choose directory"), settings.value("Library/lastDirectory", QDir::homePath()).toString());
 
         if (directory.isEmpty())
         {
