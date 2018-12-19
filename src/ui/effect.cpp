@@ -26,10 +26,10 @@
 namespace plug
 {
 
-    Effect::Effect(QWidget* parent, int number)
+    Effect::Effect(QWidget* parent, std::uint8_t fxSlot)
         : QMainWindow(parent),
           ui(std::make_unique<Ui::Effect>()),
-          fx_slot(static_cast<std::uint8_t>(number)),
+          fx_slot(fxSlot),
           effect_num(effects::EMPTY),
           knob1(0),
           knob2(0),

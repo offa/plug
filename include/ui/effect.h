@@ -41,7 +41,7 @@ namespace plug
         Q_OBJECT
 
     public:
-        explicit Effect(QWidget* parent = nullptr, int number = 0);
+        explicit Effect(QWidget* parent = nullptr, std::uint8_t fxSlot = 0);
         Effect(const Effect&) = delete;
         ~Effect() override;
 
@@ -52,7 +52,7 @@ namespace plug
 
     private:
         const std::unique_ptr<Ui::Effect> ui;
-        unsigned char fx_slot;
+        std::uint8_t fx_slot;
         effects effect_num;
         unsigned char knob1;
         unsigned char knob2;
