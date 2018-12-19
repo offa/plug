@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Plug
+Comment=Software for Fender Mustang Amps.
+Path=/usr/bin/plug
+Exec=plug
+#Icon=plug
+Terminal=false
+Categories=AudioVideo;Audio;Music;Qt
+
