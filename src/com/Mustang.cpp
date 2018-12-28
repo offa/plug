@@ -53,7 +53,7 @@ namespace plug::com
         this->stop_amp();
     }
 
-    void Mustang::start_amp(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::start_amp(char list[][32], amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
         if (comm->isOpen() == false)
         {
@@ -62,7 +62,7 @@ namespace plug::com
 
         initializeAmp();
 
-        loadInitialData(list, name, amp_set, effects_set);
+        return loadInitialData(list, amp_set, effects_set);
     }
 
     void Mustang::stop_amp()
@@ -112,24 +112,27 @@ namespace plug::com
         return {name, amp, effects};
     }
 
-    void Mustang::decode_data(const std::array<Packet, 7>& data, char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::decode_data(const std::array<Packet, 7>& data, amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        if (name != nullptr)
-        {
-            const std::string nameDecoded = decodeNameFromData(data);
-            std::copy(nameDecoded.cbegin(), nameDecoded.cend(), name);
-            name[nameDecoded.size()] = '\0';
-        }
+        const std::string name = decodeNameFromData(data);
+        amp_settings a{};
+        std::array<fx_pedal_settings, 4> e{{}};
 
         if (amp_set != nullptr)
         {
             *amp_set = decodeAmpFromData(data);
+
+            a = *amp_set;
         }
 
         if (effects_set != nullptr)
         {
             decodeEffectsFromData(data, effects_set);
+
+            e = decodeEffectsFromData(data);
         }
+
+        return {name, a, e};
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
@@ -143,9 +146,9 @@ namespace plug::com
         sendCommand(serializeApplyCommand(effects[0]));
     }
 
-    void Mustang::loadInitialData(char list[][32], char* name, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::loadInitialData(char list[][32], amp_settings* amp_set, fx_pedal_settings* effects_set)
     {
-        if (list != nullptr || name != nullptr || amp_set != nullptr || effects_set != nullptr)
+        if (list != nullptr || amp_set != nullptr || effects_set != nullptr)
         {
             std::array<Packet, 296> recieved_data{{}};
             std::size_t i{0};
@@ -170,17 +173,16 @@ namespace plug::com
                 }
             }
 
-            if (name != nullptr || amp_set != nullptr || effects_set != nullptr)
-            {
-                std::array<Packet, 7> data{{}};
+            std::array<Packet, 7> data{{}};
 
-                for (i = max_to_receive, j = 0; j < 7; ++i, ++j)
-                {
-                    std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
-                }
-                decode_data(data, name, amp_set, effects_set);
+            for (i = max_to_receive, j = 0; j < 7; ++i, ++j)
+            {
+                std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
             }
+            return decode_data(data, amp_set, effects_set);
         }
+
+        return {};
     }
 
     std::array<Packet, 7> Mustang::loadBankData(std::uint8_t slot)

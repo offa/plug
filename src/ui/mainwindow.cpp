@@ -179,14 +179,15 @@ namespace plug
         QSettings settings;
         amp_settings amplifier_set{};
         fx_pedal_settings effects_set[4];
-        char name[32];
+        QString name;
 
         ui->statusBar->showMessage(tr("Connecting..."));
         this->repaint(); // this should not be needed!
 
         try
         {
-            amp_ops->start_amp(names, name, &amplifier_set, effects_set);
+            const auto bank = amp_ops->start_amp(names, &amplifier_set, effects_set);
+            name = QString::fromStdString(std::get<0>(bank));
         }
         catch (const com::CommunicationException& ex)
         {
