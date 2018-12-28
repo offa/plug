@@ -54,20 +54,6 @@ namespace plug::com
     std::array<Packet, 2> serializeInitCommand();
 
 
-    constexpr bool hasExtraKnob(effects e)
-    {
-        switch (e)
-        {
-            case effects::MONO_ECHO_FILTER:
-            case effects::STEREO_ECHO_FILTER:
-            case effects::TAPE_DELAY:
-            case effects::STEREO_TAPE_DELAY:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     constexpr std::uint8_t getFxKnob(const fx_pedal_settings& effect)
     {
         if ((effect.effect_num >= effects::SINE_CHORUS) && (effect.effect_num <= effects::PITCH_SHIFTER))

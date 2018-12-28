@@ -27,6 +27,21 @@ namespace plug::com
 {
     namespace
     {
+        constexpr bool hasExtraKnob(effects e)
+        {
+            switch (e)
+            {
+                case effects::MONO_ECHO_FILTER:
+                case effects::STEREO_ECHO_FILTER:
+                case effects::TAPE_DELAY:
+                case effects::STEREO_TAPE_DELAY:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+
         std::size_t getSaveEffectsRepeats(const std::vector<fx_pedal_settings>& effects)
         {
             const auto size = effects.size();
