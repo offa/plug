@@ -49,17 +49,8 @@ namespace plug::com
     Packet serializeLoadSlotCommand(std::uint8_t slot);
     Packet serializeLoadCommand();
     Packet serializeApplyCommand();
-    Packet serializeApplyCommand(std::uint8_t fxKnob);
+    Packet serializeApplyCommand(fx_pedal_settings effect);
 
     std::array<Packet, 2> serializeInitCommand();
 
-
-    constexpr std::uint8_t getFxKnob(const fx_pedal_settings& effect)
-    {
-        if ((effect.effect_num >= effects::SINE_CHORUS) && (effect.effect_num <= effects::PITCH_SHIFTER))
-        {
-            return 0x01;
-        }
-        return 0x02;
-    }
 }

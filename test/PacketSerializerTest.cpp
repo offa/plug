@@ -101,12 +101,13 @@ TEST_F(PacketSerializerTest, serializeApplyCommand)
 TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
 {
     constexpr std::uint8_t fxKnob{0x02};
+    const fx_pedal_settings effect{fxKnob, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
     Packet expected{};
     expected[0] = 0x1c;
     expected[1] = 0x03;
     expected[FXKNOB] = fxKnob;
 
-    const auto packet = serializeApplyCommand(fxKnob);
+    const auto packet = serializeApplyCommand(effect);
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 

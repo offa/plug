@@ -27,6 +27,15 @@ namespace plug::com
 {
     namespace
     {
+        constexpr std::uint8_t getFxKnob(const fx_pedal_settings& effect)
+        {
+            if ((effect.effect_num >= effects::SINE_CHORUS) && (effect.effect_num <= effects::PITCH_SHIFTER))
+            {
+                return 0x01;
+            }
+            return 0x02;
+        }
+
         constexpr bool hasExtraKnob(effects e)
         {
             switch (e)
@@ -962,15 +971,16 @@ namespace plug::com
 
     Packet serializeApplyCommand()
     {
-        return serializeApplyCommand(0);
-    }
-
-    Packet serializeApplyCommand(std::uint8_t fxKnob)
-    {
         Packet applyCommand{};
         applyCommand[0] = 0x1c;
         applyCommand[1] = 0x03;
-        applyCommand[FXKNOB] = fxKnob;
+        return applyCommand;
+    }
+
+    Packet serializeApplyCommand(fx_pedal_settings effect)
+    {
+        auto applyCommand = serializeApplyCommand();
+        applyCommand[FXKNOB] = getFxKnob(effect);
         return applyCommand;
     }
 
