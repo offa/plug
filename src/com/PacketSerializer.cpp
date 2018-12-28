@@ -962,10 +962,7 @@ namespace plug::com
 
     Packet serializeApplyCommand()
     {
-        Packet applyCommand{};
-        applyCommand[0] = 0x1c;
-        applyCommand[1] = 0x03;
-        return applyCommand;
+        return serializeApplyCommand(0);
     }
 
     Packet serializeApplyCommand(std::uint8_t fxKnob)
