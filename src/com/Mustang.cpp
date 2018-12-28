@@ -53,7 +53,7 @@ namespace plug::com
         this->stop_amp();
     }
 
-    MemoryBank Mustang::start_amp(char list[][32], amp_settings* amp_set, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::start_amp(char list[][32], fx_pedal_settings* effects_set)
     {
         if (comm->isOpen() == false)
         {
@@ -62,7 +62,7 @@ namespace plug::com
 
         initializeAmp();
 
-        return loadInitialData(list, amp_set, effects_set);
+        return loadInitialData(list, effects_set);
     }
 
     void Mustang::stop_amp()
@@ -112,18 +112,11 @@ namespace plug::com
         return {name, amp, effects};
     }
 
-    MemoryBank Mustang::decode_data(const std::array<Packet, 7>& data, amp_settings* amp_set, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::decode_data(const std::array<Packet, 7>& data, fx_pedal_settings* effects_set)
     {
         const std::string name = decodeNameFromData(data);
-        amp_settings a{};
+        const amp_settings amp = decodeAmpFromData(data);
         std::array<fx_pedal_settings, 4> e{{}};
-
-        if (amp_set != nullptr)
-        {
-            *amp_set = decodeAmpFromData(data);
-
-            a = *amp_set;
-        }
 
         if (effects_set != nullptr)
         {
@@ -132,7 +125,7 @@ namespace plug::com
             e = decodeEffectsFromData(data);
         }
 
-        return {name, a, e};
+        return {name, amp, e};
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
@@ -146,9 +139,9 @@ namespace plug::com
         sendCommand(serializeApplyCommand(effects[0]));
     }
 
-    MemoryBank Mustang::loadInitialData(char list[][32], amp_settings* amp_set, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::loadInitialData(char list[][32], fx_pedal_settings* effects_set)
     {
-        if (list != nullptr || amp_set != nullptr || effects_set != nullptr)
+        if (list != nullptr || effects_set != nullptr)
         {
             std::array<Packet, 296> recieved_data{{}};
             std::size_t i{0};
@@ -179,7 +172,7 @@ namespace plug::com
             {
                 std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
             }
-            return decode_data(data, amp_set, effects_set);
+            return decode_data(data, effects_set);
         }
 
         return {};

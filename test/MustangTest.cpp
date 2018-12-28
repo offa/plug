@@ -56,7 +56,7 @@ protected:
         EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(0));
         EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(0));
         EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
-        m->start_amp(nullptr, nullptr, nullptr);
+        m->start_amp(nullptr, nullptr);
     }
 
     void expectClose()
@@ -133,7 +133,7 @@ TEST_F(MustangTest, startInitializesUsb)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)));
 
-    m->start_amp(nullptr, nullptr, nullptr);
+    m->start_amp(nullptr, nullptr);
 
     ignoreClose();
 }
@@ -146,7 +146,7 @@ TEST_F(MustangTest, startHandlesErrorOnInitFailure)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(usbSuccess));
     EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(usbError));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr), plug::com::CommunicationException);
+    EXPECT_THROW(m->start_amp(nullptr, nullptr), plug::com::CommunicationException);
 
     ignoreClose();
 }
@@ -165,7 +165,7 @@ TEST_F(MustangTest, startDeterminesAmpType)
     EXPECT_CALL(*usbmock, claim_interface(_, 0));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
 
-    m->start_amp(nullptr, nullptr, nullptr);
+    m->start_amp(nullptr, nullptr);
 
     ignoreClose();
 }
@@ -178,7 +178,7 @@ TEST_F(MustangTest, startFailsIfNoDeviceFound)
         .Times(AtLeast(1))
         .WillRepeatedly(Return(nullptr));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr, nullptr), plug::com::CommunicationException);
+    EXPECT_THROW(m->start_amp(nullptr, nullptr), plug::com::CommunicationException);
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
@@ -217,7 +217,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(0), Return(0)));
 
     char nameList[100][nameLength];
-    const auto bank = m->start_amp(nameList, nullptr, nullptr);
+    const auto bank = m->start_amp(nameList, nullptr);
     const auto name = std::get<0>(bank);
     EXPECT_THAT(name, StrEq(actualName));
 
@@ -283,8 +283,8 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
     char nameList[100][32];
-    amp_settings settings{};
-    m->start_amp(nameList, &settings, nullptr);
+    const auto bank = m->start_amp(nameList, nullptr);
+    const auto settings = std::get<1>(bank);
     EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_60S));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
     EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
@@ -349,7 +349,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
     char nameList[100][32];
     std::array<fx_pedal_settings, 4> settings{};
-    m->start_amp(nameList, nullptr, settings.data());
+    m->start_amp(nameList, settings.data());
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(10));
     EXPECT_THAT(settings[0].knob2, Eq(20));
@@ -395,7 +395,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     constexpr std::size_t numberOfNames{100};
     char names[numberOfNames][nameLength];
 
-    m->start_amp(names, nullptr, nullptr);
+    m->start_amp(names, nullptr);
     EXPECT_THAT(names[0], StrEq("abc"));
     EXPECT_THAT(names[1], StrEq("def"));
     EXPECT_THAT(names[2], StrEq("ghi"));
@@ -415,8 +415,8 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
         .Times(numOfCalls * 4)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    m->start_amp(nullptr, nullptr, nullptr);
-    m->start_amp(nullptr, nullptr, nullptr);
+    m->start_amp(nullptr, nullptr);
+    m->start_amp(nullptr, nullptr);
 
     ignoreClose();
 }

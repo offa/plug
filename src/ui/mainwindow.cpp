@@ -186,8 +186,9 @@ namespace plug
 
         try
         {
-            const auto bank = amp_ops->start_amp(names, &amplifier_set, effects_set);
+            const auto bank = amp_ops->start_amp(names, effects_set);
             name = QString::fromStdString(std::get<0>(bank));
+            amplifier_set = std::get<1>(bank);
         }
         catch (const com::CommunicationException& ex)
         {
