@@ -163,7 +163,7 @@ namespace plug
                               "<p><a href=\"https://github.com/offa/plug/\">Plug (GitHub)</a> / <a href=\"https://gitlab.com/offa/plug/\">Plug (GitLab)</a></p>"
                               "<p><a href=\"http://piorekf.org/plug/\">piorekf.org/plug</a></p>"
                               "<hr>"
-                              "<p>Copyright © 2017-2018 offa</p>"
+                              "<p>Copyright © 2017-2019 offa</p>"
                               "<p>Copyright © 2010-2016 piorekf <piorek@piorekf.org></p>"
                               "<p>License: <a href=\"http://www.gnu.org/licenses/gpl.txt\">GPLv3</a></p>"
                               "</center>")
