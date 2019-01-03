@@ -53,7 +53,7 @@ namespace plug::com
         this->stop_amp();
     }
 
-    MemoryBank Mustang::start_amp(char list[][32], fx_pedal_settings* effects_set)
+    MemoryBank Mustang::start_amp(char list[][32])
     {
         if (comm->isOpen() == false)
         {
@@ -62,7 +62,7 @@ namespace plug::com
 
         initializeAmp();
 
-        return loadInitialData(list, effects_set);
+        return loadInitialData(list);
     }
 
     void Mustang::stop_amp()
@@ -112,20 +112,13 @@ namespace plug::com
         return {name, amp, effects};
     }
 
-    MemoryBank Mustang::decode_data(const std::array<Packet, 7>& data, fx_pedal_settings* effects_set)
+    MemoryBank Mustang::decode_data(const std::array<Packet, 7>& data)
     {
         const std::string name = decodeNameFromData(data);
         const amp_settings amp = decodeAmpFromData(data);
-        std::array<fx_pedal_settings, 4> e{{}};
+        const std::array<fx_pedal_settings, 4> effects = decodeEffectsFromData(data);
 
-        if (effects_set != nullptr)
-        {
-            decodeEffectsFromData(data, effects_set);
-
-            e = decodeEffectsFromData(data);
-        }
-
-        return {name, amp, e};
+        return {name, amp, effects};
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
@@ -139,9 +132,9 @@ namespace plug::com
         sendCommand(serializeApplyCommand(effects[0]));
     }
 
-    MemoryBank Mustang::loadInitialData(char list[][32], fx_pedal_settings* effects_set)
+    MemoryBank Mustang::loadInitialData(char list[][32])
     {
-        if (list != nullptr || effects_set != nullptr)
+        if (list != nullptr)
         {
             std::array<Packet, 296> recieved_data{{}};
             std::size_t i{0};
@@ -174,7 +167,7 @@ namespace plug::com
                 std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
             }
 
-            return decode_data(data, effects_set);
+            return decode_data(data);
         }
 
         return {};

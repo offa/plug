@@ -178,7 +178,7 @@ namespace plug
     {
         QSettings settings;
         amp_settings amplifier_set{};
-        fx_pedal_settings effects_set[4];
+        std::array<fx_pedal_settings, 4> effects_set{{}};
         QString name;
 
         ui->statusBar->showMessage(tr("Connecting..."));
@@ -186,9 +186,10 @@ namespace plug
 
         try
         {
-            const auto bank = amp_ops->start_amp(names, effects_set);
+            const auto bank = amp_ops->start_amp(names);
             name = QString::fromStdString(std::get<0>(bank));
             amplifier_set = std::get<1>(bank);
+            effects_set = std::get<2>(bank);
         }
         catch (const com::CommunicationException& ex)
         {

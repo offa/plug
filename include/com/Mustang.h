@@ -45,7 +45,7 @@ namespace plug::com
         Mustang(Mustang&&) = default;
         ~Mustang();
 
-        MemoryBank start_amp(char list[][32] = nullptr, fx_pedal_settings* effects_set = nullptr);
+        MemoryBank start_amp(char list[][32] = nullptr);
         void stop_amp();
         void set_effect(fx_pedal_settings value);
         void set_amplifier(amp_settings value);
@@ -59,8 +59,8 @@ namespace plug::com
 
     private:
         /** @deprecated Will be removed in the future. */
-        MemoryBank decode_data(const std::array<Packet, 7>& data, fx_pedal_settings* effects_set);
-        MemoryBank loadInitialData(char list[][32], fx_pedal_settings* effects_set);
+        MemoryBank decode_data(const std::array<Packet, 7>& data);
+        MemoryBank loadInitialData(char list[][32]);
         std::array<Packet, 7> loadBankData(std::uint8_t slot);
 
         void initializeAmp();

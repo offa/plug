@@ -56,7 +56,7 @@ protected:
         EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(0));
         EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(0));
         EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
-        m->start_amp(nullptr, nullptr);
+        m->start_amp(nullptr);
     }
 
     void expectClose()
@@ -133,7 +133,7 @@ TEST_F(MustangTest, startInitializesUsb)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)));
 
-    m->start_amp(nullptr, nullptr);
+    m->start_amp(nullptr);
 
     ignoreClose();
 }
@@ -146,7 +146,7 @@ TEST_F(MustangTest, startHandlesErrorOnInitFailure)
     EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(usbSuccess));
     EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(usbError));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr), plug::com::CommunicationException);
+    EXPECT_THROW(m->start_amp(nullptr), plug::com::CommunicationException);
 
     ignoreClose();
 }
@@ -165,7 +165,7 @@ TEST_F(MustangTest, startDeterminesAmpType)
     EXPECT_CALL(*usbmock, claim_interface(_, 0));
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
 
-    m->start_amp(nullptr, nullptr);
+    m->start_amp(nullptr);
 
     ignoreClose();
 }
@@ -178,7 +178,7 @@ TEST_F(MustangTest, startFailsIfNoDeviceFound)
         .Times(AtLeast(1))
         .WillRepeatedly(Return(nullptr));
 
-    EXPECT_THROW(m->start_amp(nullptr, nullptr), plug::com::CommunicationException);
+    EXPECT_THROW(m->start_amp(nullptr), plug::com::CommunicationException);
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
@@ -229,7 +229,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
 
     char nameList[100][nameLength];
-    const auto bank = m->start_amp(nameList, nullptr);
+    const auto bank = m->start_amp(nameList);
 
     const auto name = std::get<0>(bank);
     EXPECT_THAT(name, StrEq(actualName));
@@ -263,40 +263,42 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     recvData[brightnessPos] = 1;
     auto extendedData = helper::createEmptyPacket();
     extendedData[usbGainPos] = 0x44;
-    const auto recvSize = recvData.size();
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .Times(2)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
 
     Sequence s;
 
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .Times(2)
         .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+
+    constexpr size_t maxToReceive{48};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(maxToReceive)
         .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(200)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .Times(5)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(recvData.cbegin(), recvData.cend()), SetArgPointee<4>(recvSize), Return(0)));
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+
+    const std::array<Packet, 7> data{{dummy, recvData, dummy, dummy, dummy, dummy, extendedData}};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(extendedData.cbegin(), extendedData.cend()), SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
+
     char nameList[100][32];
-    const auto bank = m->start_amp(nameList, nullptr);
+    const auto bank = m->start_amp(nameList);
     const auto settings = std::get<1>(bank);
     EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_60S));
     EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
@@ -368,8 +370,9 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
         .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
     char nameList[100][32];
-    std::array<fx_pedal_settings, 4> settings{};
-    m->start_amp(nameList, settings.data());
+    const auto bank = m->start_amp(nameList);
+    std::array<fx_pedal_settings, 4> settings = std::get<2>(bank);
+
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(10));
     EXPECT_THAT(settings[0].knob2, Eq(20));
@@ -443,7 +446,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     constexpr std::size_t numberOfNames{100};
     char names[numberOfNames][nameLength];
 
-    m->start_amp(names, nullptr);
+    m->start_amp(names);
     EXPECT_THAT(names[0], StrEq("abc"));
     EXPECT_THAT(names[1], StrEq("def"));
     EXPECT_THAT(names[2], StrEq("ghi"));
@@ -463,8 +466,8 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
         .Times(numOfCalls * 4)
         .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
 
-    m->start_amp(nullptr, nullptr);
-    m->start_amp(nullptr, nullptr);
+    m->start_amp(nullptr);
+    m->start_amp(nullptr);
 
     ignoreClose();
 }
