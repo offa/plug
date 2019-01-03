@@ -40,7 +40,7 @@ namespace plug
         Q_OBJECT
 
     public:
-        explicit Library(char names[100][32], QWidget* parent = nullptr);
+        explicit Library(const std::vector<std::string>& names, QWidget* parent = nullptr);
         Library(const Library&) = delete;
         ~Library() override;
 

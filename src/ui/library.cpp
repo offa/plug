@@ -26,7 +26,7 @@
 namespace plug
 {
 
-    Library::Library(char names[100][32], QWidget* parent)
+    Library::Library(const std::vector<std::string>& names, QWidget* parent)
         : QDialog(parent),
           ui(std::make_unique<Ui::Library>()),
           files(std::make_unique<QList<QFileInfo>>())
@@ -54,7 +54,7 @@ namespace plug
             {
                 break;
             }
-            ui->listWidget->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
+            ui->listWidget->addItem(QString("[%1] %2").arg(i + 1).arg(QString::fromStdString(names[i])));
         }
 
         connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(int)));

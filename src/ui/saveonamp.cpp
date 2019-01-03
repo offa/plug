@@ -59,7 +59,7 @@ namespace plug
         }
     }
 
-    void SaveOnAmp::load_names(char names[][32])
+    void SaveOnAmp::load_names(const std::vector<std::string>& names)
     {
         for (std::size_t i = 0; i < 100; ++i)
         {
@@ -67,7 +67,7 @@ namespace plug
             {
                 break;
             }
-            ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
+            ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(QString::fromStdString(names[i])));
         }
     }
 

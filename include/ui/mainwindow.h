@@ -81,7 +81,7 @@ namespace plug
         const std::unique_ptr<Ui::MainWindow> ui;
 
         QString current_name;
-        char names[100][32];
+        std::vector<std::string> presetNames;
         bool connected;
         const std::unique_ptr<com::Mustang> amp_ops;
         Amplifier* amp;

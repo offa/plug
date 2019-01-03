@@ -24,6 +24,7 @@
 #include "data_structs.h"
 #include "effects_enum.h"
 #include "com/Packet.h"
+#include <string>
 #include <string_view>
 #include <vector>
 #include <memory>
@@ -36,7 +37,7 @@ namespace plug::com
     class UsbComm;
 
     using MemoryBank = std::tuple<std::string, amp_settings, std::array<fx_pedal_settings, 4>>;
-
+    using InitalData = std::tuple<MemoryBank, std::vector<std::string>>;
 
     class Mustang
     {
@@ -45,7 +46,7 @@ namespace plug::com
         Mustang(Mustang&&) = default;
         ~Mustang();
 
-        MemoryBank start_amp(char list[][32] = nullptr);
+        InitalData start_amp();
         void stop_amp();
         void set_effect(fx_pedal_settings value);
         void set_amplifier(amp_settings value);
@@ -60,7 +61,7 @@ namespace plug::com
     private:
         /** @deprecated Will be removed in the future. */
         MemoryBank decode_data(const std::array<Packet, 7>& data);
-        MemoryBank loadInitialData(char list[][32]);
+        InitalData loadInitialData();
         std::array<Packet, 7> loadBankData(std::uint8_t slot);
 
         void initializeAmp();

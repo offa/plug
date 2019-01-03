@@ -40,7 +40,7 @@ namespace plug
     public:
         explicit QuickPresets(QWidget* parent = nullptr);
 
-        void load_names(char names[][32]);
+        void load_names(const std::vector<std::string>& names);
         void delete_items();
         void change_name(int, QString*);
 

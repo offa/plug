@@ -53,7 +53,7 @@ namespace plug::com
         this->stop_amp();
     }
 
-    MemoryBank Mustang::start_amp(char list[][32])
+    InitalData Mustang::start_amp()
     {
         if (comm->isOpen() == false)
         {
@@ -62,7 +62,7 @@ namespace plug::com
 
         initializeAmp();
 
-        return loadInitialData(list);
+        return loadInitialData();
     }
 
     void Mustang::stop_amp()
@@ -132,45 +132,44 @@ namespace plug::com
         sendCommand(serializeApplyCommand(effects[0]));
     }
 
-    MemoryBank Mustang::loadInitialData(char list[][32])
+    InitalData Mustang::loadInitialData()
     {
-        if (list != nullptr)
+        std::array<Packet, 296> recieved_data{{}};
+        std::size_t i{0};
+        std::size_t j{0};
+
+        const auto loadCommand = serializeLoadCommand();
+        auto recieved = sendPacket(loadCommand);
+
+        for (i = 0; recieved != 0; i++)
         {
-            std::array<Packet, 296> recieved_data{{}};
-            std::size_t i{0};
-            std::size_t j{0};
-
-            const auto loadCommand = serializeLoadCommand();
-            auto recieved = sendPacket(loadCommand);
-
-            for (i = 0; recieved != 0; i++)
-            {
-                const auto recvData = receivePacket();
-                recieved = recvData.size();
-                std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i].begin());
-            }
-
-            const std::size_t max_to_receive = (i > 143 ? 200 : 48);
-
-            if (list != nullptr)
-            {
-                for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
-                {
-                    std::copy_n(std::next(recieved_data[i].cbegin(), 16), 32, list[j]);
-                }
-            }
-
-            std::array<Packet, 7> data{{}};
-
-            for (i = max_to_receive, j = 0; j < 7; ++i, ++j)
-            {
-                std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
-            }
-
-            return decode_data(data);
+            const auto recvData = receivePacket();
+            recieved = recvData.size();
+            std::copy(recvData.cbegin(), recvData.cend(), recieved_data[i].begin());
         }
 
-        return {};
+        const std::size_t max_to_receive = (i > 143 ? 200 : 48);
+
+        std::vector<std::string> presetNames{};
+        presetNames.reserve(max_to_receive / 2);
+
+        for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
+        {
+            std::string presetName{std::next(recieved_data[i].cbegin(), 16), std::next(recieved_data[i].cbegin(), 16 + 32)};
+            const auto itr = std::find_if(presetName.cbegin(), presetName.cend(), [](const auto& c) { return c == '\0'; });
+
+            presetName.erase(itr, presetName.cend());
+            presetNames.push_back(presetName);
+        }
+
+        std::array<Packet, 7> data{{}};
+
+        for (i = max_to_receive, j = 0; j < 7; ++i, ++j)
+        {
+            std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
+        }
+
+        return {decode_data(data), presetNames};
     }
 
     std::array<Packet, 7> Mustang::loadBankData(std::uint8_t slot)

@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <vector>
 #include <memory>
 
 namespace Ui
@@ -41,7 +42,7 @@ namespace plug
         SaveOnAmp(const SaveOnAmp&) = delete;
         ~SaveOnAmp() override;
 
-        void load_names(char names[][32]);
+        void load_names(const std::vector<std::string>& names);
         void delete_items();
 
         SaveOnAmp& operator=(const SaveOnAmp&) = delete;

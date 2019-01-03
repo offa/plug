@@ -36,11 +36,10 @@ namespace plug
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
           ui(std::make_unique<Ui::MainWindow>()),
+          presetNames(100, ""),
           amp_ops(std::make_unique<com::Mustang>())
     {
         ui->setupUi(this);
-
-        memset(names, 0x00, 100 * 32);
 
         // load window size
         QSettings settings;
@@ -186,10 +185,11 @@ namespace plug
 
         try
         {
-            const auto bank = amp_ops->start_amp(names);
+            const auto [bank, presets] = amp_ops->start_amp();
             name = QString::fromStdString(std::get<0>(bank));
             amplifier_set = std::get<1>(bank);
             effects_set = std::get<2>(bank);
+            presetNames = presets;
         }
         catch (const com::CommunicationException& ex)
         {
@@ -197,9 +197,9 @@ namespace plug
             return;
         }
 
-        load->load_names(names);
-        save->load_names(names);
-        quickpres->load_names(names);
+        load->load_names(presetNames);
+        save->load_names(presetNames);
+        quickpres->load_names(presetNames);
 
         if (name[0] == 0x00)
         {
@@ -385,7 +385,7 @@ namespace plug
         }
 
         current_name = name;
-        memcpy(names[slot], name, 32);
+        presetNames[slot] = current_name.toStdString();
     }
 
     void MainWindow::load_from_amp(int slot)
@@ -700,7 +700,7 @@ namespace plug
 
         settings.setValue("Settings/popupChangedWindows", false);
 
-        library = std::make_unique<Library>(names, this);
+        library = std::make_unique<Library>(presetNames, this);
         effect1->close();
         effect2->close();
         effect3->close();

@@ -45,7 +45,7 @@ namespace plug
         connect(ui->comboBox_10, SIGNAL(activated(int)), this, SLOT(setDefaultPreset9(int)));
     }
 
-    void QuickPresets::load_names(char names[][32])
+    void QuickPresets::load_names(const std::vector<std::string>& names)
     {
         int i;
         QSettings settings;
@@ -53,17 +53,20 @@ namespace plug
         for (i = 0; i < 100; i++)
         {
             if (names[i][0] == 0x00)
+            {
                 break;
-            ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_2->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_3->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_4->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_5->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_6->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_7->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_8->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_9->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
-            ui->comboBox_10->addItem(QString("[%1] %2").arg(i + 1).arg(names[i]));
+            }
+            const QString name = QString::fromStdString(names[i]);
+            ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_2->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_3->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_4->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_5->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_6->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_7->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_8->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_9->addItem(QString("[%1] %2").arg(i + 1).arg(name));
+            ui->comboBox_10->addItem(QString("[%1] %2").arg(i + 1).arg(name));
         }
 
         ui->comboBox->addItem(tr("[Empty]"));
