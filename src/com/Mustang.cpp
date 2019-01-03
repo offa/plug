@@ -158,6 +158,7 @@ namespace plug::com
             }
 
             const std::size_t max_to_receive = (i > 143 ? 200 : 48);
+
             if (list != nullptr)
             {
                 for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
@@ -172,6 +173,7 @@ namespace plug::com
             {
                 std::copy(recieved_data[i].cbegin(), recieved_data[i].cend(), data[j].begin());
             }
+
             return decode_data(data, effects_set);
         }
 
