@@ -114,9 +114,9 @@ namespace plug::com
 
     MemoryBank Mustang::decode_data(const std::array<Packet, 7>& data)
     {
-        const std::string name = decodeNameFromData(data);
-        const amp_settings amp = decodeAmpFromData(data);
-        const std::array<fx_pedal_settings, 4> effects = decodeEffectsFromData(data);
+        const auto name = decodeNameFromData(data);
+        const auto amp = decodeAmpFromData(data);
+        const auto effects = decodeEffectsFromData(data);
 
         return {name, amp, effects};
     }
