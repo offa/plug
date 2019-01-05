@@ -329,6 +329,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_THAT(name, StrEq(actualName));
 
     ignoreClose();
+    static_cast<void>(presets);
 }
 
 TEST_F(MustangTest, startRequestsCurrentAmp)
@@ -412,6 +413,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_THAT(settings.usb_gain, Eq(extendedData[usbGainPos]));
 
     ignoreClose();
+    static_cast<void>(presets);
 }
 
 TEST_F(MustangTest, startRequestsCurrentEffects)
@@ -476,6 +478,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     EXPECT_THAT(settings[0].effect_num, Eq(effects::TRIANGLE_FLANGER));
 
     ignoreClose();
+    static_cast<void>(presets);
 }
 
 TEST_F(MustangTest, startRequestsAmpPresetList)
@@ -543,6 +546,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     EXPECT_THAT(presetList[2], StrEq("ghi"));
 
     ignoreClose();
+    static_cast<void>(bank);
 }
 
 TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
