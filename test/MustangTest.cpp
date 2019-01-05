@@ -212,17 +212,53 @@ TEST_F(MustangTest, startHandlesErrorOnInitFailure)
 
 TEST_F(MustangTest, startDeterminesAmpType)
 {
-    InSequence s;
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II)).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V)).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II_v2)).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V_v2)).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangMini)).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangFloor)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
-    EXPECT_CALL(*usbmock, claim_interface(_, 0));
+    Sequence initSeq;
+    EXPECT_CALL(*usbmock, init(nullptr)).InSequence(initSeq);
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II)).InSequence(initSeq).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V)).InSequence(initSeq).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II_v2)).InSequence(initSeq).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V_v2)).InSequence(initSeq).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangMini)).InSequence(initSeq).WillOnce(Return(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangFloor)).InSequence(initSeq).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).InSequence(initSeq);
+    EXPECT_CALL(*usbmock, claim_interface(_, 0)).InSequence(initSeq);
+
+
     EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
+        .Times(2)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+
+    Sequence s;
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(2)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+
+    constexpr size_t maxToReceive{48};
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(maxToReceive)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+    auto ampDummy = dummy;
+    ampDummy[ampPos] = 0x5e;
+
+    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+
 
     m->start_amp();
 
