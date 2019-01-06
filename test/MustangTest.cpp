@@ -76,9 +76,6 @@ protected:
             .InSequence(s)
             .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-        auto ampDummy = dummy;
-        ampDummy[ampPos] = 0x5e;
-
         const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
         EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
             .InSequence(s)
@@ -140,6 +137,7 @@ protected:
     mock::UsbMock* usbmock = nullptr;
     libusb_device_handle handle{};
     const Packet dummy = helper::createEmptyPacket();
+    const Packet ampDummy = []() { auto p = helper::createEmptyPacket(); p[ampPos] = 0x5e; return p; }();
     const Packet initCmd = helper::createInitCmdPacket();
     static inline constexpr int usbSuccess{LIBUSB_SUCCESS};
     static inline constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
@@ -177,9 +175,6 @@ TEST_F(MustangTest, startInitializesUsb)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
         .Times(maxToReceive)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
-    auto ampDummy = dummy;
-    ampDummy[ampPos] = 0x5e;
 
     const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
@@ -244,9 +239,6 @@ TEST_F(MustangTest, startDeterminesAmpType)
         .InSequence(s)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-    auto ampDummy = dummy;
-    ampDummy[ampPos] = 0x5e;
-
     const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .InSequence(s)
@@ -302,9 +294,6 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
         .Times(maxToReceive)
         .InSequence(s)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
-    auto ampDummy = dummy;
-    ampDummy[ampPos] = 0x5e;
 
     const std::string actualName{"abc"};
     auto nameDummy = dummy;
@@ -449,9 +438,6 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
         .InSequence(s)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-    auto ampDummy = dummy;
-    ampDummy[ampPos] = 0x5e;
-
     const std::array<Packet, 7> data{{dummy, ampDummy, recvData0, recvData1, recvData2, recvData3, dummy}};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .InSequence(s)
@@ -522,9 +508,6 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
         .InSequence(s)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
-    auto ampDummy = dummy;
-    ampDummy[ampPos] = 0x5e;
-
     const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
         .InSequence(s)
@@ -574,9 +557,6 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
         .Times(maxToReceive)
         .InSequence(s)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
-    auto ampDummy = dummy;
-    ampDummy[ampPos] = 0x5e;
 
     const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
@@ -672,9 +652,6 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
         .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
 
-    auto ampDummy = helper::createEmptyPacket();
-    ampDummy[ampPos] = 0x5e;
-
     const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
     expectReceiveBankData(&data);
 
@@ -685,9 +662,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
     auto recvData = helper::createEmptyNamedPacket("abc");
     const auto recvSize = recvData.size();
-
-    auto ampDummy = helper::createEmptyPacket();
-    ampDummy[ampPos] = 0x5e;
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
@@ -761,9 +735,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     const auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
     const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
     const auto recvSize = recvData0.size();
-
-    auto ampDummy = helper::createEmptyPacket();
-    ampDummy[ampPos] = 0x5e;
 
     InSequence s;
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
