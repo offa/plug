@@ -296,8 +296,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
         .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
     const std::string actualName{"abc"};
-    auto nameDummy = dummy;
-    std::copy(actualName.cbegin(), actualName.cend(), std::next(nameDummy.begin(), 16));
+    const auto nameDummy = helper::createEmptyNamedPacket(actualName);
 
     const std::array<Packet, 7> data{{nameDummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
     EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
