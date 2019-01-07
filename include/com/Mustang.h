@@ -59,7 +59,6 @@ namespace plug::com
 
 
     private:
-        /** @deprecated Will be removed in the future. */
         MemoryBank decode_data(const std::array<Packet, 7>& data);
         InitalData loadInitialData();
         std::array<Packet, 7> loadBankData(std::uint8_t slot);
