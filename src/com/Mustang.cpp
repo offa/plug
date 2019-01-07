@@ -146,10 +146,8 @@ namespace plug::com
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
         std::vector<std::string> presetNames{};
         presetNames.reserve(max_to_receive / 2);
-        std::size_t i{0};
-        std::size_t j{0};
 
-        for (i = 0, j = 0; i < max_to_receive; i += 2, ++j)
+        for (std::size_t i = 0; i < max_to_receive; i += 2)
         {
             std::string presetName{std::next(recieved_data[i].cbegin(), 16), std::next(recieved_data[i].cbegin(), 16 + 32)};
             const auto itr = std::find_if(presetName.cbegin(), presetName.cend(), [](const auto& c) { return c == '\0'; });
