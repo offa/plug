@@ -72,6 +72,28 @@ protected:
         package[2][EFFECT] = effectId;
         return package;
     };
+
+    constexpr Packet presetNameEmptyPacket() const
+    {
+        Packet data{};
+        data[0] = 0x1c;
+        data[1] = 0x01;
+        data[2] = 0x04;
+        return data;
+    }
+
+    Packet presetNamePacket(std::string_view name) const
+    {
+        Packet data{};
+        data[0] = 0x1c;
+        data[1] = 0x01;
+        data[2] = 0x04;
+        data[4] = 0x01;
+
+        std::copy(name.cbegin(), name.cend(), std::next(data.begin(), 16));
+        return data;
+    }
+
 };
 
 TEST_F(PacketSerializerTest, serializeInitCommand)
@@ -786,6 +808,65 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketLimitsInputEffects)
 
     const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2, effect3});
     EXPECT_THAT(packet, SizeIs(1));
+}
+
+TEST_F(PacketSerializerTest, decodePresetListFromData)
+{
+    const auto emptyData = presetNameEmptyPacket();
+    const std::string name1{"abcdefg"};
+    const std::string name2{"xyz"};
+    const auto presetPacket1 = presetNamePacket(name1);
+    const auto presetPacket2 = presetNamePacket(name2);
+
+    std::vector<Packet> data{presetPacket1, emptyData, presetPacket2, emptyData};
+
+    const auto result = decodePresetListFromData(data);
+    EXPECT_THAT(result, SizeIs(2));
+    EXPECT_THAT(result[0], StrEq(name1));
+    EXPECT_THAT(result[1], StrEq(name2));
+}
+
+TEST_F(PacketSerializerTest, decodePresetListLimitsToMaxReceiveSize)
+{
+    constexpr std::size_t threshold{143};
+    const auto emptyData = presetNameEmptyPacket();
+    const auto presetPacket = presetNamePacket("abc");
+    const std::vector<Packet> names((threshold / 2), presetPacket);
+    std::vector<Packet> dataReduced;
+
+    std::for_each(names.cbegin(), names.cend(), [&dataReduced, &emptyData](const auto& n) {
+        dataReduced.push_back(n);
+        dataReduced.push_back(emptyData);
+    });
+    std::vector<Packet> dataFull = dataReduced;
+    dataFull.insert(dataFull.end(), dataReduced.cbegin(), dataReduced.cend());
+
+    EXPECT_THAT(dataFull.size(), Eq(2*dataReduced.size()));
+
+    const auto resultReduced = decodePresetListFromData(dataReduced);
+    EXPECT_THAT(resultReduced, SizeIs(24));
+
+    const auto resultFull = decodePresetListFromData(dataFull);
+    EXPECT_THAT(resultFull, SizeIs(100));
+}
+
+TEST_F(PacketSerializerTest, decodePresetListLimitsNameToLength)
+{
+    const auto emptyData = presetNameEmptyPacket();
+    constexpr std::size_t limit{32};
+    const std::string name(limit + 10, 'x');
+    const auto presetPacket = presetNamePacket(name);
+    std::vector<Packet> data{presetPacket, emptyData};
+
+    const auto result = decodePresetListFromData(data);
+    EXPECT_THAT(result[0], SizeIs(limit));
+    EXPECT_THAT(result[0], Not(Contains('\0')));
+}
+
+TEST_F(PacketSerializerTest, decodePresetListIsSafeToEmptyData)
+{
+    const auto result = decodePresetListFromData({});
+    EXPECT_THAT(result, SizeIs(0));
 }
 
 TEST_F(PacketSerializerTest, decodeNameFromData)

@@ -22,6 +22,7 @@
 #include "com/PacketSerializer.h"
 #include "com/IdLookup.h"
 #include "effects_enum.h"
+#include <algorithm>
 
 namespace plug::com
 {
@@ -420,6 +421,24 @@ namespace plug::com
             effects_set_out[j].position = (data[i][FXSLOT] > 0x03 ? Position::effectsLoop : Position::input);
             effects_set_out[j].effect_num = lookupEffectById(data[i][EFFECT]);
         }
+    }
+
+    std::vector<std::string> decodePresetListFromData(const std::vector<Packet>& data)
+    {
+        const auto max_to_receive = std::min<std::size_t>(data.size(), (data.size() > 143 ? 200 : 48));
+        std::vector<std::string> presetNames;
+        presetNames.reserve(max_to_receive);
+
+        for (std::size_t i = 0; i < max_to_receive; i += 2)
+        {
+            std::string presetName{std::next(data[i].cbegin(), 16), std::next(data[i].cbegin(), 16 + 32)};
+            const auto itr = std::find_if(presetName.cbegin(), presetName.cend(), [](const auto& c) { return c == '\0'; });
+
+            presetName.erase(itr, presetName.cend());
+            presetNames.push_back(presetName);
+        }
+
+        return presetNames;
     }
 
     Packet serializeAmpSettings(const amp_settings& value)

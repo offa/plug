@@ -144,21 +144,10 @@ namespace plug::com
         }
 
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
-        std::vector<std::string> presetNames{};
-        presetNames.reserve(max_to_receive / 2);
-
-        for (std::size_t i = 0; i < max_to_receive; i += 2)
-        {
-            std::string presetName{std::next(recieved_data[i].cbegin(), 16), std::next(recieved_data[i].cbegin(), 16 + 32)};
-            const auto itr = std::find_if(presetName.cbegin(), presetName.cend(), [](const auto& c) { return c == '\0'; });
-
-            presetName.erase(itr, presetName.cend());
-            presetNames.push_back(presetName);
-        }
+        auto presetNames = decodePresetListFromData(recieved_data);
 
         std::array<Packet, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), max_to_receive), std::next(recieved_data.cbegin(), max_to_receive + 7), presetData.begin());
-
 
         return {decode_data(presetData), presetNames};
     }
