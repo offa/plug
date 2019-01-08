@@ -60,7 +60,7 @@ namespace plug::com
 
     private:
         MemoryBank decode_data(const std::array<Packet, 7>& data);
-        InitalData loadInitialData();
+        InitalData loadData();
         std::array<Packet, 7> loadBankData(std::uint8_t slot);
 
         void initializeAmp();

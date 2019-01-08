@@ -62,7 +62,7 @@ namespace plug::com
 
         initializeAmp();
 
-        return loadInitialData();
+        return loadData();
     }
 
     void Mustang::stop_amp()
@@ -127,7 +127,7 @@ namespace plug::com
         sendCommand(serializeApplyCommand(effects[0]));
     }
 
-    InitalData Mustang::loadInitialData()
+    InitalData Mustang::loadData()
     {
         std::vector<Packet> recieved_data;
 
