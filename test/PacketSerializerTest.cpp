@@ -93,7 +93,6 @@ protected:
         std::copy(name.cbegin(), name.cend(), std::next(data.begin(), 16));
         return data;
     }
-
 };
 
 TEST_F(PacketSerializerTest, serializeInitCommand)
@@ -841,7 +840,7 @@ TEST_F(PacketSerializerTest, decodePresetListLimitsToMaxReceiveSize)
     std::vector<Packet> dataFull = dataReduced;
     dataFull.insert(dataFull.end(), dataReduced.cbegin(), dataReduced.cend());
 
-    EXPECT_THAT(dataFull.size(), Eq(2*dataReduced.size()));
+    EXPECT_THAT(dataFull.size(), Eq(2 * dataReduced.size()));
 
     const auto resultReduced = decodePresetListFromData(dataReduced);
     EXPECT_THAT(resultReduced, SizeIs(24));

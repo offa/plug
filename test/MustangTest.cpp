@@ -531,6 +531,50 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     static_cast<void>(bank);
 }
 
+TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
+{
+    EXPECT_CALL(*usbmock, init(nullptr));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
+    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
+        .Times(2)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
+        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+
+    Sequence s;
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(2)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+
+    constexpr size_t maxToReceive{200};
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
+        .Times(maxToReceive)
+        .InSequence(s)
+        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
+        .InSequence(s)
+        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
+        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+
+    m->start_amp();
+
+    ignoreClose();
+}
+
 TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
 {
     EXPECT_CALL(*usbmock, init(_));
@@ -548,7 +592,6 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
         .InSequence(s)
         .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
 
 
     constexpr size_t maxToReceive{48};

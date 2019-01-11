@@ -134,7 +134,7 @@ namespace plug::com
         const auto loadCommand = serializeLoadCommand();
         auto recieved = sendPacket(loadCommand);
 
-        while( recieved != 0 )
+        while (recieved != 0)
         {
             const auto recvData = receivePacket();
             recieved = recvData.size();
