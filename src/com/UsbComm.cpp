@@ -44,6 +44,10 @@ namespace plug::com
     {
     }
 
+    UsbComm::~UsbComm()
+    {
+    }
+
     void UsbComm::open(std::uint16_t vid, std::uint16_t pid)
     {
         openFirst(vid, {pid});

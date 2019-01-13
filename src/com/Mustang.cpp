@@ -20,7 +20,6 @@
  */
 
 #include "com/Mustang.h"
-#include "com/UsbComm.h"
 #include "com/IdLookup.h"
 #include "com/PacketSerializer.h"
 #include "com/MustangConstants.h"
@@ -43,8 +42,8 @@ namespace plug::com
         inline constexpr std::uint8_t endpointRecv{0x81};
     }
 
-    Mustang::Mustang()
-        : comm(std::make_unique<UsbComm>())
+    Mustang::Mustang(std::shared_ptr<Connection> connection)
+        : comm(connection)
     {
     }
 

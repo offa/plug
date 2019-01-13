@@ -23,6 +23,7 @@
 
 #include "data_structs.h"
 #include "effects_enum.h"
+#include "com/Connection.h"
 #include "com/Packet.h"
 #include <string>
 #include <string_view>
@@ -34,15 +35,13 @@
 
 namespace plug::com
 {
-    class UsbComm;
-
     using MemoryBank = std::tuple<std::string, amp_settings, std::array<fx_pedal_settings, 4>>;
     using InitalData = std::tuple<MemoryBank, std::vector<std::string>>;
 
     class Mustang
     {
     public:
-        Mustang();
+        Mustang(std::shared_ptr<Connection> connection);
         Mustang(Mustang&&) = default;
         ~Mustang();
 
@@ -71,6 +70,6 @@ namespace plug::com
         void sendApplyCommand();
 
 
-        const std::unique_ptr<UsbComm> comm;
+        const std::shared_ptr<Connection> comm;
     };
 }

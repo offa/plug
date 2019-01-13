@@ -19,6 +19,7 @@
  */
 
 #include "com/Mustang.h"
+#include "com/UsbComm.h"
 #include "com/CommunicationException.h"
 #include "mocks/LibUsbMocks.h"
 #include "helper/PacketConstants.h"
@@ -40,7 +41,7 @@ class MustangTest : public testing::Test
 protected:
     void SetUp() override
     {
-        m = std::make_unique<com::Mustang>();
+        m = std::make_unique<com::Mustang>(std::make_unique<com::UsbComm>());
         usbmock = mock::resetUsbMock();
     }
 

@@ -20,34 +20,33 @@
 
 #pragma once
 
-#include "com/Connection.h"
-
-struct libusb_device_handle;
-
+#include <vector>
+#include <initializer_list>
+#include <cstdint>
 
 namespace plug::com
 {
 
-    class UsbComm : public Connection
+    class Connection
     {
     public:
-        UsbComm();
-        virtual ~UsbComm();
+        virtual ~Connection() = default;
 
-        void open(std::uint16_t vid, std::uint16_t pid) override;
-        void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids) override;
-        void close() override;
+        virtual void open(std::uint16_t vid, std::uint16_t pid) = 0;
+        virtual void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids) = 0;
+        virtual void close() = 0;
 
-        bool isOpen() const override;
+        virtual bool isOpen() const = 0;
 
-        std::vector<std::uint8_t> interruptReceive(std::uint8_t endpoint, std::size_t recvSize) override;
+        template <class Container>
+        std::size_t interruptWrite(std::uint8_t endpoint, Container c)
+        {
+            return interruptWriteImpl(endpoint, c.data(), c.size());
+        }
+
+        virtual std::vector<std::uint8_t> interruptReceive(std::uint8_t endpoint, std::size_t recvSize) = 0;
 
     private:
-        std::size_t interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size) override;
-
-        void initInterface();
-
-
-        libusb_device_handle* handle;
+        virtual std::size_t interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size) = 0;
     };
 }
