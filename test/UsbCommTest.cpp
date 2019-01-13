@@ -144,6 +144,15 @@ TEST_F(UsbCommTest, openFirstThrowsIfOpenFails)
     EXPECT_THROW(comm->openFirst(vid, {pid}), CommunicationException);
 }
 
+TEST_F(UsbCommTest, openFirstThrowsIfNoDeviceFound)
+{
+    InSequence s;
+    EXPECT_CALL(*usbmock, init(_));
+    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).Times(2).WillRepeatedly(Return(nullptr));
+
+    EXPECT_THROW(comm->openFirst(vid, {pid, pid + 1}), CommunicationException);
+}
+
 TEST_F(UsbCommTest, openFirstThrowsOnEmptyPidList)
 {
     EXPECT_CALL(*usbmock, init(_));

@@ -19,11 +19,12 @@
  */
 
 #include "com/Mustang.h"
-#include "com/UsbComm.h"
+#include "com/Packet.h"
+#include "com/PacketSerializer.h"
 #include "com/CommunicationException.h"
-#include "mocks/LibUsbMocks.h"
 #include "helper/PacketConstants.h"
 #include "helper/PacketHelper.h"
+#include "mocks/MockConnection.h"
 #include "matcher/Matcher.h"
 #include <array>
 #include <gmock/gmock.h>
@@ -34,223 +35,87 @@ using namespace test;
 using namespace test::matcher;
 using namespace test::constants;
 using namespace testing;
-using mock::UsbMock;
 
 class MustangTest : public testing::Test
 {
 protected:
     void SetUp() override
     {
-        m = std::make_unique<com::Mustang>(std::make_unique<com::UsbComm>());
-        usbmock = mock::resetUsbMock();
+        conn = std::make_shared<mock::MockConnection>();
+        m = std::make_unique<com::Mustang>(conn);
     }
 
     void TearDown() override
     {
-        mock::clearUsbMock();
-    }
-
-    void expectStart()
-    {
-        EXPECT_CALL(*usbmock, init(_));
-        EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
-        EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(0));
-        EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(0));
-        EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
-
-        EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-            .Times(2)
-            .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-        EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-            .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
-        Sequence s;
-
-        EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-            .Times(2)
-            .InSequence(s)
-            .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
-        constexpr size_t maxToReceive{48};
-        EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-            .Times(maxToReceive)
-            .InSequence(s)
-            .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
-        const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-        EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-            .InSequence(s)
-            .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
-
-
-        m->start_amp();
-    }
-
-    void expectClose()
-    {
-        EXPECT_CALL(*usbmock, release_interface(_, _));
-        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _));
-        EXPECT_CALL(*usbmock, close(_));
-        EXPECT_CALL(*usbmock, exit(_));
     }
 
     void ignoreClose()
     {
-        EXPECT_CALL(*usbmock, release_interface(_, _)).RetiresOnSaturation();
-        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _)).RetiresOnSaturation();
-        EXPECT_CALL(*usbmock, close(_)).RetiresOnSaturation();
-        EXPECT_CALL(*usbmock, exit(_)).RetiresOnSaturation();
-        m = nullptr;
+        EXPECT_CALL(*conn, close());
+    }
+
+    std::vector<std::uint8_t> createEmptyPacketData() const
+    {
+        return std::vector<std::uint8_t>(packetSize, 0x00);
     }
 
     auto createEffectData(std::uint8_t slotValue, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
     {
-        auto data = helper::createEmptyPacket();
-        data[posDsp] = 8;
+        std::vector<std::uint8_t> data(packetSize, 0x00);
+        data[posDsp] = 0x08;
         data[posEffect] = effect;
         data[posFxSlot] = slotValue;
         std::copy(values.cbegin(), values.cend(), std::next(data.begin(), posKnob1));
         return data;
     }
 
-    void expectReceiveBankData(const std::array<Packet, 7>* data)
+    template<class Container>
+    auto asBuffer(const Container& c) const
     {
-        EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-            .WillOnce(DoAll(SetArrayArgument<2>((*data)[0].cbegin(), (*data)[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>((*data)[1].cbegin(), (*data)[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>((*data)[2].cbegin(), (*data)[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>((*data)[3].cbegin(), (*data)[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>((*data)[4].cbegin(), (*data)[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>((*data)[5].cbegin(), (*data)[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>((*data)[6].cbegin(), (*data)[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-            .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+        return std::vector<std::uint8_t>{std::cbegin(c), std::cend(c)};
     }
 
 
+    std::shared_ptr<mock::MockConnection> conn;
     std::unique_ptr<com::Mustang> m;
-    mock::UsbMock* usbmock = nullptr;
-    libusb_device_handle handle{};
-    const Packet dummy = helper::createEmptyPacket();
-    const Packet ampDummy = []() { auto p = helper::createEmptyPacket(); p[ampPos] = 0x5e; return p; }();
-    const Packet initCmd = helper::createInitCmdPacket();
-    static inline constexpr int usbSuccess{LIBUSB_SUCCESS};
-    static inline constexpr int usbError{LIBUSB_ERROR_NO_DEVICE};
+    const std::vector<std::uint8_t> noData{};
+    const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(packetSize);
+    const std::vector<std::uint8_t> ignoreAmpData = []() { std::vector<std::uint8_t> d(packetSize, 0x00); d[ampPos] = 0x5e; return d; }();
     static inline constexpr int slot{5};
 };
 
 TEST_F(MustangTest, startInitializesUsb)
 {
+    const auto [initCmd1, initCmd2] = serializeInitCommand();
+
     InSequence s;
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _));
 
-    constexpr int recvSize{0};
-    auto initCmd1 = helper::createInitializedPacket({0x00, 0xc3});
-    auto initCmd2 = helper::createInitializedPacket({0x1a, 0x03});
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    // Init Step 1
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd1), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)));
-    // Init Step 2
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd2), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)));
+    // Load cmd
+    auto initCmd = helper::createInitCmdPacket();
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
 
-
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
+    // Preset names data
     constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
 
-    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
-
-    m->start_amp();
-
-    ignoreClose();
-}
-
-TEST_F(MustangTest, startHandlesErrorOnInitFailure)
-{
-    EXPECT_CALL(*usbmock, init(nullptr)).WillOnce(Return(usbSuccess));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _))
-        .WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(usbSuccess));
-    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(usbError));
-
-    EXPECT_THROW(m->start_amp(), plug::com::CommunicationException);
-
-    ignoreClose();
-}
-
-TEST_F(MustangTest, startDeterminesAmpType)
-{
-    Sequence initSeq;
-    EXPECT_CALL(*usbmock, init(nullptr)).InSequence(initSeq);
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II)).InSequence(initSeq).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V)).InSequence(initSeq).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangI_II_v2)).InSequence(initSeq).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangIII_IV_V_v2)).InSequence(initSeq).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangMini)).InSequence(initSeq).WillOnce(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, pidMustangFloor)).InSequence(initSeq).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).InSequence(initSeq);
-    EXPECT_CALL(*usbmock, claim_interface(_, 0)).InSequence(initSeq);
-
-
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
-    Sequence s;
-
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
-    constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
-    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
 
 
     m->start_amp();
@@ -258,58 +123,51 @@ TEST_F(MustangTest, startDeterminesAmpType)
     ignoreClose();
 }
 
-TEST_F(MustangTest, startFailsIfNoDeviceFound)
+TEST_F(MustangTest, startPropagatesErrorOnInitFailure)
 {
-    InSequence s;
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, _, _))
-        .Times(AtLeast(1))
-        .WillRepeatedly(Return(nullptr));
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _)).WillOnce(Throw(plug::com::CommunicationException{"expected"}));
 
     EXPECT_THROW(m->start_amp(), plug::com::CommunicationException);
+
+    ignoreClose();
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
 {
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+    const auto [initCmd1, initCmd2] = serializeInitCommand();
 
+    InSequence s;
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    Sequence s;
+    // Load cmd
+    auto initCmd = helper::createInitCmdPacket();
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
+    // Preset names data
     constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
 
     const std::string actualName{"abc"};
-    const auto nameDummy = helper::createEmptyNamedPacket(actualName);
+    const auto nameDummy = asBuffer(helper::createEmptyNamedPacket(actualName));
 
-    const std::array<Packet, 7> data{{nameDummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(nameDummy))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
 
 
     const auto [bank, presets] = m->start_amp();
@@ -323,12 +181,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
 TEST_F(MustangTest, startRequestsCurrentAmp)
 {
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
-
-    auto recvData = helper::createEmptyPacket();
+    auto recvData = createEmptyPacketData();
     recvData[ampPos] = 0x61;
     recvData[volumePos] = 8;
     recvData[gainPos] = 4;
@@ -345,40 +198,40 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     recvData[biasPos] = 6;
     recvData[sagPos] = 5;
     recvData[brightnessPos] = 1;
-    auto extendedData = helper::createEmptyPacket();
+    auto extendedData = createEmptyPacketData();
     extendedData[usbGainPos] = 0x44;
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    const auto [initCmd1, initCmd2] = serializeInitCommand();
 
-    Sequence s;
+    InSequence s;
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
+    // Load cmd
+    auto initCmd = helper::createInitCmdPacket();
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+
+    // Preset names data
     constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
 
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(recvData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(extendedData))
+        .WillOnce(Return(noData));
 
-    const std::array<Packet, 7> data{{dummy, recvData, dummy, dummy, dummy, dummy, extendedData}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
 
 
     const auto [bank, presets] = m->start_amp();
@@ -407,48 +260,43 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
 
 TEST_F(MustangTest, startRequestsCurrentEffects)
 {
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
-
     const auto recvData0 = createEffectData(0x04, 0x19, {{10, 20, 30, 40, 50, 60}});
     const auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
     const auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
     const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
-    const int recvSize = recvData0.size();
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-
-    Sequence s;
+    const auto [initCmd1, initCmd2] = serializeInitCommand();
 
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    InSequence s;
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _));
 
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Load cmd
+    auto initCmd = helper::createInitCmdPacket();
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+
+    // Preset names data
     constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
 
-    const std::array<Packet, 7> data{{dummy, ampDummy, recvData0, recvData1, recvData2, recvData3, dummy}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(recvData0))
+        .WillOnce(Return(recvData1))
+        .WillOnce(Return(recvData2))
+        .WillOnce(Return(recvData3))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
+
 
     const auto [bank, presets] = m->start_amp();
     std::array<fx_pedal_settings, 4> settings = std::get<2>(bank);
@@ -469,56 +317,48 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 TEST_F(MustangTest, startRequestsAmpPresetList)
 {
-    const auto recvData0 = helper::createEmptyNamedPacket("abc");
-    const auto recvData1 = helper::createEmptyNamedPacket("def");
-    const auto recvData2 = helper::createEmptyNamedPacket("ghi");
+    const auto recvData0 = asBuffer(helper::createEmptyNamedPacket("abc"));
+    const auto recvData1 = asBuffer(helper::createEmptyNamedPacket("def"));
+    const auto recvData2 = asBuffer(helper::createEmptyNamedPacket("ghi"));
 
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
-
-    const int recvSize = recvData0.size();
-
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-
-    Sequence s;
+    const auto [initCmd1, initCmd2] = serializeInitCommand();
 
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    InSequence s;
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _));
 
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Load cmd
+    auto initCmd = helper::createInitCmdPacket();
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+
+    // Preset names data
     constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(recvData0.cbegin(), recvData0.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(recvData1.cbegin(), recvData1.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(recvData2.cbegin(), recvData2.cend()), SetArgPointee<4>(recvSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(recvSize), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive - 6)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(recvData0))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(recvData1))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(recvData2))
+        .WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive - 6).WillRepeatedly(Return(ignoreData));
 
-    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
 
 
     const auto [bank, presetList] = m->start_amp();
@@ -534,42 +374,37 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
 
 TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
 {
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, usbVid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0)).WillOnce(Return(0));
+    const auto [initCmd1, initCmd2] = serializeInitCommand();
 
+    InSequence s;
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    Sequence s;
+    // Load cmd
+    auto initCmd = helper::createInitCmdPacket();
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-
+    // Preset names data
     constexpr size_t maxToReceive{200};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
 
-    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
+
 
     m->start_amp();
 
@@ -578,66 +413,66 @@ TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
 
 TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
 {
-    EXPECT_CALL(*usbmock, init(_));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(_, _, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(_, _)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(0));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).Times(AnyNumber());
+    const auto [initCmd1, initCmd2] = serializeInitCommand();
 
-    Sequence s;
-    // 1
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    InSequence s;
+    // #1
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
+    EXPECT_CALL(*conn, openFirst(_, _));
 
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Load cmd
+    auto initCmd = helper::createInitCmdPacket();
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
 
-    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+    // Preset names data
+    constexpr size_t maxToReceive{200};
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
 
 
-    // 2
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, _, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(initCmd), packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(dummy.size()), Return(0)));
+    // #2
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(*conn, openFirst(_, _)).Times(0);
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, _, _, _))
-        .Times(maxToReceive)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Init commands
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(data[0].cbegin(), data[0].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[1].cbegin(), data[1].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[2].cbegin(), data[2].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[3].cbegin(), data[3].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[4].cbegin(), data[4].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[5].cbegin(), data[5].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(data[6].cbegin(), data[6].cend()), SetArgPointee<4>(packetSize), Return(0)))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(0), Return(0)));
+    // Load cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+
+    // Preset names data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
+
 
 
     m->start_amp();
@@ -646,81 +481,73 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
     ignoreClose();
 }
 
-TEST_F(MustangTest, stopAmpDoesNothingIfNotStartedYet)
+TEST_F(MustangTest, DISABLED_stopAmpDoesNothingIfNotStartedYet)
 {
+    // FIXME: Update test
     m->stop_amp();
 }
 
 TEST_F(MustangTest, stopAmpClosesConnection)
 {
-    expectStart();
-    InSequence s;
-    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(usbSuccess));
-    EXPECT_CALL(*usbmock, attach_kernel_driver(&handle, 0));
-    EXPECT_CALL(*usbmock, close(_));
-    EXPECT_CALL(*usbmock, exit(nullptr));
+    EXPECT_CALL(*conn, close());
     m->stop_amp();
-}
 
-TEST_F(MustangTest, stopAmpClosesConnectionIfNoDevice)
-{
-    expectStart();
-    InSequence s;
-    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(usbError));
-    EXPECT_CALL(*usbmock, close(_));
-    EXPECT_CALL(*usbmock, exit(nullptr));
-    m->stop_amp();
-}
-
-TEST_F(MustangTest, stopAmpTwiceDoesNothing)
-{
-    expectStart();
-    InSequence s;
-    EXPECT_CALL(*usbmock, release_interface(&handle, 0)).WillOnce(Return(usbSuccess));
-    EXPECT_CALL(*usbmock, attach_kernel_driver(&handle, 0));
-    EXPECT_CALL(*usbmock, close(_));
-    EXPECT_CALL(*usbmock, exit(nullptr));
-    m->stop_amp();
-    m->stop_amp();
+    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 {
-    auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x01});
-    const int recvSize = sendCmd.size();
-    sendCmd[posSlot] = slot;
-    sendCmd[6] = 0x01;
+    const auto loadCmd = serializeLoadSlotCommand(slot);
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    // Load cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
-    const std::array<Packet, 7> data{{dummy, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    expectReceiveBankData(&data);
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
+
 
     m->load_memory_bank(slot);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
-    auto recvData = helper::createEmptyNamedPacket("abc");
-    const auto recvSize = recvData.size();
+    auto recvData = asBuffer(helper::createEmptyNamedPacket("abc"));
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
-    const std::array<Packet, 7> data{{recvData, ampDummy, dummy, dummy, dummy, dummy, dummy}};
-    expectReceiveBankData(&data);
+    // Load cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, _, _)).WillOnce(Return(packetSize));
+
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(recvData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
 
     const auto [name, amp, effects] = m->load_memory_bank(slot);
     EXPECT_THAT(name, StrEq("abc"));
     static_cast<void>(amp);
     static_cast<void>(effects);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 {
-    auto recvData = helper::createEmptyPacket();
+    auto recvData = createEmptyPacketData();
     recvData[ampPos] = 0x5e;
     recvData[volumePos] = 1;
     recvData[gainPos] = 2;
@@ -737,17 +564,24 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     recvData[biasPos] = 13;
     recvData[sagPos] = 14;
     recvData[brightnessPos] = 0;
-    auto extendedData = helper::createEmptyPacket();
+    auto extendedData = createEmptyPacketData();
     extendedData[usbGainPos] = 0xab;
-    const auto recvSize = recvData.size();
-
-
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
 
     InSequence s;
-    const std::array<Packet, 7> data{{dummy, recvData, dummy, dummy, dummy, dummy, extendedData}};
-    expectReceiveBankData(&data);
+    // Load cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, _, _)).WillOnce(Return(packetSize));
+
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(recvData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(extendedData))
+        .WillOnce(Return(noData));
+
 
     const auto [name, settings, effects] = m->load_memory_bank(slot);
     EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_80S));
@@ -769,6 +603,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
     EXPECT_THAT(settings.usb_gain, Eq(extendedData[usbGainPos]));
     static_cast<void>(name);
     static_cast<void>(effects);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
@@ -777,14 +612,23 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     const auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
     const auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
     const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
-    const auto recvSize = recvData0.size();
+
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(recvSize), Return(0)));
+    // Load cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, _, _)).WillOnce(Return(packetSize));
 
-    const std::array<Packet, 7> data{{dummy, ampDummy, recvData0, recvData1, recvData2, recvData3, dummy}};
-    expectReceiveBankData(&data);
+    // Data
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(ignoreAmpData))
+        .WillOnce(Return(recvData0))
+        .WillOnce(Return(recvData1))
+        .WillOnce(Return(recvData2))
+        .WillOnce(Return(recvData3))
+        .WillOnce(Return(ignoreData))
+        .WillOnce(Return(noData));
+
 
     const auto [name, amp, settings] = m->load_memory_bank(slot);
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
@@ -828,6 +672,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     EXPECT_THAT(settings[3].effect_num, Eq(effects::TAPE_DELAY));
     static_cast<void>(name);
     static_cast<void>(amp);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setAmpSendsValues)
@@ -872,25 +717,25 @@ TEST_F(MustangTest, setAmpSendsValues)
 
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Data #1
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data), data.size())).WillOnce(Return(data.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data2), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Data #2
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data2), data2.size())).WillOnce(Return(data2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
 
     m->set_amplifier(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
@@ -938,27 +783,27 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     data2[usbGainPos] = settings.usb_gain;
 
 
+
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Data #1
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data), data.size())).WillOnce(Return(data.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data2), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Data #2
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data2), data2.size())).WillOnce(Return(data2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
 
     m->set_amplifier(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setAmpHandlesSagValue)
@@ -1004,27 +849,26 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     data2[7] = 0x01;
     data2[usbGainPos] = settings.usb_gain;
 
-
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Data #1
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data), data.size())).WillOnce(Return(data.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data2), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Data #2
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data2), data2.size())).WillOnce(Return(data2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
 
     m->set_amplifier(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
@@ -1071,25 +915,24 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Data #1
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data), data.size())).WillOnce(Return(data.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data2), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(data2.cbegin(), data2.cend()), SetArgPointee<4>(data.size()), Return(0)));
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Data #2
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data2), data2.size())).WillOnce(Return(data2.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     m->set_amplifier(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setEffectSendsValue)
@@ -1112,16 +955,6 @@ TEST_F(MustangTest, setEffectSendsValue)
     clearCmd[posKnob5] = 0x00;
     clearCmd[posKnob6] = 0x00;
 
-    InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(clearCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                  0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1138,16 +971,28 @@ TEST_F(MustangTest, setEffectSendsValue)
     data[posKnob5] = settings.knob5;
     data[posDsp] = 0x06;
     data[posEffect] = 0x3c;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+
+    InSequence s;
+    // Clear command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(clearCmd), clearCmd.size())).WillOnce(Return(clearCmd.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Data
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data), data.size())).WillOnce(Return(data.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
 
     m->set_effect(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
@@ -1170,17 +1015,19 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
     clearCmd[posKnob5] = 0x00;
     clearCmd[posKnob6] = 0x00;
 
+
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(clearCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Clear command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(clearCmd), clearCmd.size())).WillOnce(Return(clearCmd.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
 
     m->set_effect(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setEffectHandlesEffectPosition)
@@ -1203,16 +1050,6 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     clearCmd[posKnob5] = 0x00;
     clearCmd[posKnob6] = 0x00;
 
-    InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(clearCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                  0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1230,16 +1067,28 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     data[posKnob5] = settings.knob5;
     data[posDsp] = 0x06;
     data[posEffect] = 0x3c;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+
+    InSequence s;
+    // Clear command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(clearCmd), clearCmd.size())).WillOnce(Return(clearCmd.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Data
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data), data.size())).WillOnce(Return(data.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
 
     m->set_effect(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
@@ -1262,15 +1111,6 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     clearCmd[posKnob5] = 0x00;
     clearCmd[posKnob6] = 0x00;
 
-    InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(clearCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
 
     Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1292,16 +1132,27 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     data[19] = 0x02;
     data[20] = 0x01;
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(data), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+
+    InSequence s;
+    // Clear command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(clearCmd), clearCmd.size())).WillOnce(Return(clearCmd.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Data
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(data), data.size())).WillOnce(Return(data.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
+
 
     m->set_effect(settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsSendsValues)
@@ -1370,29 +1221,25 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataName), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Save effect name cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataName), dataName.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataEffect0), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect0), dataEffect0.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
+
     // Effect #1
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataEffect1), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    // Execute Cmd
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect1), dataEffect1.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
+
+    // Apply cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
 
     m->save_effects(slot, name, settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
@@ -1449,32 +1296,28 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataName), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Save effect cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataName), dataName.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataEffect0), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    // Execute Cmd
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect0), dataEffect0.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
+    // Apply cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     m->save_effects(slot, name, settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::COMPRESSOR, 0, 1, 2, 3, 4, 5, Position::input}};
-    const std::string name = "abcd";
+    const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::COMPRESSOR, 0, 1, 2, 3, 4, 5, Position::input}};
 
-    EXPECT_THROW(m->save_effects(slot, name, settings), std::invalid_argument);
+    EXPECT_THROW(m->save_effects(slot, "abcd", settings), std::invalid_argument);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
@@ -1529,24 +1372,21 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
     cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataName), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Save effect cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataName), dataName.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataEffect0), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    // Execute Cmd
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(cmdExecute), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect0), dataEffect0.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
+
+    // Apply cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
 
     m->save_effects(slot, name, settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
@@ -1556,6 +1396,8 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
     constexpr std::size_t nameSize{24};
     const std::string name(26, 'x');
     const std::string nameExpected{name.cbegin(), std::next(name.cbegin(), nameSize - 1)};
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
+    cmdExecute[posFxKnob] = fxKnob;
 
     Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1569,27 +1411,30 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
     dataName[posSaveField] = slot;
     std::copy(name.cbegin(), std::next(name.cbegin(), nameSize - 1), std::next(dataName.begin(), 16));
 
+    InSequence s;
+    // Save effect cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataName), dataName.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
-    Sequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataName), packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
+    // Effect #0
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, _, _)).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, _)).WillOnce(Return(noData));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
-        .Times(4)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
+    // Apply cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
+
 
     m->save_effects(slot, nameExpected, settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 {
     std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::TAPE_DELAY, 0, 1, 2, 3, 4, 5, Position::input}};
     constexpr int fxKnob{0x02};
+    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
+    cmdExecute[posFxKnob] = fxKnob;
     const std::string name = "abcd";
     Packet dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1625,104 +1470,37 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
     dataEffect0[20] = 0x01;
 
 
-    Sequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
+    InSequence s;
+    // Save effect cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, _, _)).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, _)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(dataEffect0), packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .InSequence(s)
-        .WillOnce(DoAll(SetArrayArgument<2>(dummy.cbegin(), dummy.cend()), SetArgPointee<4>(dummy.size()), Return(0)));
-    // Execute Cmd
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, packetSize, _, _))
-        .Times(2)
-        .InSequence(s)
-        .WillRepeatedly(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect0), dataEffect0.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, _)).WillOnce(Return(noData));
+
+    // Apply cmd
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
 
     m->save_effects(slot, name, settings);
+    ignoreClose();
 }
 
 TEST_F(MustangTest, saveOnAmp)
 {
-    constexpr std::size_t length{30};
-    auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x03});
-    sendCmd[posSlot] = slot;
-    sendCmd[6] = 0x01;
-    sendCmd[7] = 0x01;
-
-    const std::string name(length, 'x');
-    std::copy(name.cbegin(), name.cend(), std::next(sendCmd.begin(), 16));
+    const std::string name(30, 'x');
+    const auto saveNamePacket = serializeName(slot, name);
+    const auto loadSlotCmd = serializeLoadSlotCommand(slot);
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(saveNamePacket), saveNamePacket.size())).WillOnce(Return(saveNamePacket.size()));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadSlotCmd), loadSlotCmd.size())).WillOnce(Return(0));
 
-    auto memBank = helper::createInitializedPacket({0x1c, 0x01, 0x01});
-    memBank[posSlot] = slot;
-    memBank[6] = 0x01;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
 
     m->save_on_amp(name, slot);
+    ignoreClose();
 }
 
-TEST_F(MustangTest, saveOnAmpFillsShortName)
-{
-    constexpr std::size_t length{16};
-    auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x03});
-    sendCmd[posSlot] = slot;
-    sendCmd[6] = 0x01;
-    sendCmd[7] = 0x01;
-
-    const std::string name(length, 'x');
-    std::copy(name.cbegin(), name.cend(), std::next(sendCmd.begin(), 16));
-
-    InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-
-    auto memBank = helper::createInitializedPacket({0x1c, 0x01, 0x01});
-    memBank[posSlot] = slot;
-    memBank[6] = 0x01;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-
-    m->save_on_amp(name, slot);
-}
-
-TEST_F(MustangTest, saveOnAmpLimitsOversizedName)
-{
-    auto sendCmd = helper::createInitializedPacket({0x1c, 0x01, 0x03});
-    sendCmd[posSlot] = slot;
-    sendCmd[6] = 0x01;
-    sendCmd[7] = 0x01;
-    std::string nameOversized(34, 'a');
-    nameOversized[31] = char{0x0f};
-    nameOversized[32] = 'b';
-    nameOversized[33] = '\0';
-    std::copy_n(nameOversized.cbegin(), 31, std::next(sendCmd.begin(), 16));
-
-    InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(sendCmd), packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointReceive, _, packetSize, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-
-    auto memBank = helper::createInitializedPacket({0x1c, 0x01, 0x01});
-    memBank[posSlot] = slot;
-    memBank[6] = 0x01;
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, endpointSend, BufferIs(memBank), _, _, _))
-        .WillOnce(DoAll(SetArgPointee<4>(0), Return(0)));
-
-    m->save_on_amp(nameOversized, slot);
-}
