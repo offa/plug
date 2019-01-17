@@ -81,6 +81,7 @@ protected:
     const std::vector<std::uint8_t> noData{};
     const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(packetSize);
     const std::vector<std::uint8_t> ignoreAmpData = []() { std::vector<std::uint8_t> d(packetSize, 0x00); d[ampPos] = 0x5e; return d; }();
+    const Packet loadCmd = serializeLoadCommand();
     static inline constexpr int slot{5};
 };
 
@@ -99,8 +100,7 @@ TEST_F(MustangTest, startInitializesUsb)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    auto initCmd = helper::createInitCmdPacket();
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     constexpr size_t maxToReceive{48};
@@ -148,8 +148,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    auto initCmd = helper::createInitCmdPacket();
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     constexpr size_t maxToReceive{48};
@@ -214,8 +213,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    auto initCmd = helper::createInitCmdPacket();
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     constexpr size_t maxToReceive{48};
@@ -279,8 +277,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    auto initCmd = helper::createInitCmdPacket();
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     constexpr size_t maxToReceive{48};
@@ -334,8 +331,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    auto initCmd = helper::createInitCmdPacket();
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     constexpr size_t maxToReceive{48};
@@ -386,8 +382,7 @@ TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    auto initCmd = helper::createInitCmdPacket();
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     constexpr size_t maxToReceive{200};
@@ -426,8 +421,7 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    auto initCmd = helper::createInitCmdPacket();
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     constexpr size_t maxToReceive{200};
@@ -456,7 +450,7 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd), initCmd.size())).WillOnce(Return(initCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
