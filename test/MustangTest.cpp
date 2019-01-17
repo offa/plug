@@ -156,7 +156,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
 
     const std::string actualName{"abc"};
-    const auto nameDummy = asBuffer(helper::createEmptyNamedPacket(actualName));
+    const auto nameDummy = asBuffer(serializeName(0, actualName));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -317,11 +317,10 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 TEST_F(MustangTest, startRequestsAmpPresetList)
 {
-    const auto recvData0 = asBuffer(helper::createEmptyNamedPacket("abc"));
-    const auto recvData1 = asBuffer(helper::createEmptyNamedPacket("def"));
-    const auto recvData2 = asBuffer(helper::createEmptyNamedPacket("ghi"));
-
     const auto [initCmd1, initCmd2] = serializeInitCommand();
+    const auto recvData0 = asBuffer(serializeName(0, "abc"));
+    const auto recvData1 = asBuffer(serializeName(0, "def"));
+    const auto recvData2 = asBuffer(serializeName(0, "ghi"));
 
 
     InSequence s;
@@ -483,7 +482,7 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
 
 TEST_F(MustangTest, DISABLED_stopAmpDoesNothingIfNotStartedYet)
 {
-    // FIXME: Update test
+    // FIXME: Update test (#152)
     m->stop_amp();
 }
 
@@ -521,7 +520,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
-    auto recvData = asBuffer(helper::createEmptyNamedPacket("abc"));
+    const auto recvData = asBuffer(serializeName(0, "abc"));
 
     InSequence s;
     // Load cmd
