@@ -155,11 +155,11 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
 
     const std::string actualName{"abc"};
-    const auto nameDummy = asBuffer(serializeName(0, actualName));
+    const auto nameData = asBuffer(serializeName(0, actualName));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
-        .WillOnce(Return(nameDummy))
+        .WillOnce(Return(nameData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(ignoreData))
