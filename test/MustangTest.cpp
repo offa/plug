@@ -490,11 +490,11 @@ TEST_F(MustangTest, stopAmpClosesConnection)
 
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 {
-    const auto loadCmd = serializeLoadSlotCommand(slot);
+    const auto loadSlotCmd = serializeLoadSlotCommand(slot);
 
     InSequence s;
     // Load cmd
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadSlotCmd), loadSlotCmd.size())).WillOnce(Return(loadSlotCmd.size()));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
