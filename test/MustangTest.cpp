@@ -542,25 +542,13 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 {
-    auto recvData = createEmptyPacketData();
-    recvData[ampPos] = 0x5e;
-    recvData[volumePos] = 1;
-    recvData[gainPos] = 2;
-    recvData[treblePos] = 3;
-    recvData[middlePos] = 4;
-    recvData[bassPos] = 5;
-    recvData[cabinetPos] = 6;
-    recvData[noiseGatePos] = 7;
-    recvData[thresholdPos] = 8;
-    recvData[masterVolPos] = 9;
-    recvData[gain2Pos] = 10;
-    recvData[presencePos] = 11;
-    recvData[depthPos] = 12;
-    recvData[biasPos] = 13;
-    recvData[sagPos] = 14;
-    recvData[brightnessPos] = 0;
-    auto extendedData = createEmptyPacketData();
-    extendedData[usbGainPos] = 0xab;
+
+    const amp_settings as{amps::BRITISH_80S, 2, 1, 3, 4, 5,
+                            cabinets::cab4x12M, 0, 9, 10, 11,
+                            0, 0x80, 13, 1, false, 0xab};
+
+    const auto recvData = asBuffer(serializeAmpSettings(as));
+    const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(as));
 
     InSequence s;
     // Load cmd
@@ -579,23 +567,23 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 
 
     const auto [name, settings, effects] = m->load_memory_bank(slot);
-    EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_80S));
-    EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
-    EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
-    EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
-    EXPECT_THAT(settings.middle, Eq(recvData[middlePos]));
-    EXPECT_THAT(settings.bass, Eq(recvData[bassPos]));
-    EXPECT_THAT(settings.cabinet, Eq(cabinets::cab4x12M));
-    EXPECT_THAT(settings.noise_gate, Eq(recvData[noiseGatePos]));
-    EXPECT_THAT(settings.threshold, Eq(recvData[thresholdPos]));
-    EXPECT_THAT(settings.master_vol, Eq(recvData[masterVolPos]));
-    EXPECT_THAT(settings.gain2, Eq(recvData[gain2Pos]));
-    EXPECT_THAT(settings.presence, Eq(recvData[presencePos]));
-    EXPECT_THAT(settings.depth, Eq(recvData[depthPos]));
-    EXPECT_THAT(settings.bias, Eq(recvData[biasPos]));
-    EXPECT_THAT(settings.sag, Eq(recvData[sagPos]));
-    EXPECT_THAT(settings.brightness, Eq(recvData[brightnessPos]));
-    EXPECT_THAT(settings.usb_gain, Eq(extendedData[usbGainPos]));
+    EXPECT_THAT(settings.amp_num, Eq(as.amp_num));
+    EXPECT_THAT(settings.volume, Eq(as.volume));
+    EXPECT_THAT(settings.gain, Eq(as.gain));
+    EXPECT_THAT(settings.treble, Eq(as.treble));
+    EXPECT_THAT(settings.middle, Eq(as.middle));
+    EXPECT_THAT(settings.bass, Eq(as.bass));
+    EXPECT_THAT(settings.cabinet, Eq(as.cabinet));
+    EXPECT_THAT(settings.noise_gate, Eq(as.noise_gate));
+    EXPECT_THAT(settings.threshold, Eq(as.threshold));
+    EXPECT_THAT(settings.master_vol, Eq(as.master_vol));
+    EXPECT_THAT(settings.gain2, Eq(as.gain2));
+    EXPECT_THAT(settings.presence, Eq(as.presence));
+    EXPECT_THAT(settings.depth, Eq(as.depth));
+    EXPECT_THAT(settings.bias, Eq(as.bias));
+    EXPECT_THAT(settings.sag, Eq(as.sag));
+    EXPECT_THAT(settings.brightness, Eq(as.brightness));
+    EXPECT_THAT(settings.usb_gain, Eq(as.usb_gain));
     static_cast<void>(name);
     static_cast<void>(effects);
     ignoreClose();
@@ -676,39 +664,8 @@ TEST_F(MustangTest, setAmpSendsValues)
                                 cabinets::cab4x12G, 3, 5, 3, 2, 1,
                                 4, 1, 5, true, 4};
 
-    Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
-                 0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
-                 0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    data[posDsp] = 0x05;
-    data[gainPos] = settings.gain;
-    data[volumePos] = settings.volume;
-    data[treblePos] = settings.treble;
-    data[middlePos] = settings.middle;
-    data[bassPos] = settings.bass;
-    data[cabinetPos] = value(settings.cabinet);
-    data[noiseGatePos] = settings.noise_gate;
-    data[masterVolPos] = settings.master_vol;
-    data[gain2Pos] = settings.gain2;
-    data[presencePos] = settings.presence;
-    data[biasPos] = settings.bias;
-    data[sagPos] = 0x01;
-    data[brightnessPos] = 1;
-    data[ampPos] = 0x79;
-    data[44] = 0x0b;
-    data[45] = 0x0b;
-    data[46] = 0x0b;
-    data[50] = 0x0b;
-    data[54] = 0x7c;
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
-    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
-    data2[6] = 0x01;
-    data2[7] = 0x01;
-    data2[usbGainPos] = settings.usb_gain;
+    const auto data = serializeAmpSettings(settings);
+    const auto data2 = serializeAmpSettingsUsbGain(settings);
 
 
     InSequence s;
@@ -717,7 +674,7 @@ TEST_F(MustangTest, setAmpSendsValues)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Data #2
@@ -725,7 +682,7 @@ TEST_F(MustangTest, setAmpSendsValues)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
 
@@ -741,41 +698,8 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
                                 cabinets::cab57DLX, limitValue, 5, 3, 2,
                                 outOfRange, 4, 1, 5, true, 4};
 
-    Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
-                 0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
-                 0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    data[posDsp] = 0x05;
-    data[gainPos] = settings.gain;
-    data[volumePos] = settings.volume;
-    data[treblePos] = settings.treble;
-    data[middlePos] = settings.middle;
-    data[bassPos] = settings.bass;
-    data[cabinetPos] = value(settings.cabinet);
-    data[noiseGatePos] = settings.noise_gate;
-    data[thresholdPos] = 0x00;
-    data[depthPos] = settings.depth;
-    data[masterVolPos] = settings.master_vol;
-    data[gain2Pos] = settings.gain2;
-    data[presencePos] = settings.presence;
-    data[biasPos] = settings.bias;
-    data[sagPos] = 0x01;
-    data[brightnessPos] = 1;
-    data[ampPos] = 0x72;
-    data[44] = 0x06;
-    data[45] = 0x06;
-    data[46] = 0x06;
-    data[50] = 0x06;
-    data[54] = 0x79;
-    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
-    data2[6] = 0x01;
-    data2[7] = 0x01;
-    data2[usbGainPos] = settings.usb_gain;
-
+    const auto data = serializeAmpSettings(settings);
+    const auto data2 = serializeAmpSettingsUsbGain(settings);
 
 
     InSequence s;
@@ -807,40 +731,9 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
                                 cabinets::cab57DLX, 5, 5,
                                 3, 2, 7, 4, 1, valueInRange, true, 4};
 
-    Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
-                 0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
-                 0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    data[posDsp] = 0x05;
-    data[gainPos] = settings.gain;
-    data[volumePos] = settings.volume;
-    data[treblePos] = settings.treble;
-    data[middlePos] = settings.middle;
-    data[bassPos] = settings.bass;
-    data[cabinetPos] = value(settings.cabinet);
-    data[noiseGatePos] = settings.noise_gate;
-    data[thresholdPos] = settings.threshold;
-    data[depthPos] = settings.depth;
-    data[masterVolPos] = settings.master_vol;
-    data[gain2Pos] = settings.gain2;
-    data[presencePos] = settings.presence;
-    data[biasPos] = settings.bias;
-    data[sagPos] = settings.sag;
-    data[brightnessPos] = 1;
-    data[ampPos] = 0x72;
-    data[44] = 0x06;
-    data[45] = 0x06;
-    data[46] = 0x06;
-    data[50] = 0x06;
-    data[54] = 0x79;
-    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
-    data2[6] = 0x01;
-    data2[7] = 0x01;
-    data2[usbGainPos] = settings.usb_gain;
+    const auto data = serializeAmpSettings(settings);
+    const auto data2 = serializeAmpSettingsUsbGain(settings);
+
 
     InSequence s;
     // Data #1
@@ -867,43 +760,12 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
 TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 {
     constexpr int outOfRange{0x06};
-    constexpr int expectedValue{0x00};
     const amp_settings settings{amps::BRITISH_60S, 8, 9, 1, 2, 3,
                                 cabinets::cab57DLX, outOfRange, 5,
                                 3, 2, 7, 4, 1, 5, true, 4};
 
-    Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                 0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
-                 0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
-                 0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    data[posDsp] = 0x05;
-    data[gainPos] = settings.gain;
-    data[volumePos] = settings.volume;
-    data[treblePos] = settings.treble;
-    data[middlePos] = settings.middle;
-    data[bassPos] = settings.bass;
-    data[cabinetPos] = value(settings.cabinet);
-    data[noiseGatePos] = expectedValue;
-    data[masterVolPos] = settings.master_vol;
-    data[gain2Pos] = settings.gain2;
-    data[presencePos] = settings.presence;
-    data[biasPos] = settings.bias;
-    data[sagPos] = 0x01;
-    data[brightnessPos] = 1;
-    data[ampPos] = 0x61;
-    data[44] = 0x07;
-    data[45] = 0x07;
-    data[46] = 0x07;
-    data[50] = 0x07;
-    data[54] = 0x5e;
-    auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
-    data2[6] = 0x01;
-    data2[7] = 0x01;
-    data2[usbGainPos] = settings.usb_gain;
+    const auto data = serializeAmpSettings(settings);
+    const auto data2 = serializeAmpSettingsUsbGain(settings);
 
 
     InSequence s;
