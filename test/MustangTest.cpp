@@ -1144,68 +1144,15 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 
 TEST_F(MustangTest, saveEffectsSendsValues)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::MONO_DELAY, 0, 1, 2, 3, 4, 5, Position::input},
-                                            fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop}};
-    constexpr int fxKnob{0x02};
-    constexpr int postAmpOffset{4};
+    const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::MONO_DELAY, 0, 1, 2, 3, 4, 5, Position::input},
+                                                fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop}};
     const std::string name = "abcd";
-    Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    Packet dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    dataName[posFxKnob] = fxKnob;
-    dataName[posSaveField] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), 4), std::next(dataName.begin(), 16));
+    const auto dataName = serializeSaveEffectName(slot, name, settings);
+    const auto cmdExecute = serializeApplyCommand(settings[0]);
+    const auto packets = serializeSaveEffectPacket(slot, settings);
+    const auto dataEffect0 = packets[0];
+    const auto dataEffect1 = packets[1];
 
-    dataValues[posSaveField] = slot;
-    dataValues[1] = 0x03;
-    dataValues[6] = 0x00;
-
-    std::fill(std::next(dataValues.begin(), 16), dataValues.end(), 0x00);
-    dataValues[19] = 0x00;
-    dataValues[20] = 0x08;
-    dataValues[21] = 0x01;
-    dataValues[posKnob6] = 0x00;
-
-    auto dataEffect0 = dataValues;
-    dataEffect0[posFxKnob] = fxKnob;
-    dataEffect0[posFxSlot] = settings[0].fx_slot;
-    dataEffect0[posKnob1] = settings[0].knob1;
-    dataEffect0[posKnob2] = settings[0].knob2;
-    dataEffect0[posKnob3] = settings[0].knob3;
-    dataEffect0[posKnob4] = settings[0].knob4;
-    dataEffect0[posKnob5] = settings[0].knob5;
-    dataEffect0[posDsp] = 0x08;
-    dataEffect0[posEffect] = 0x16;
-    dataEffect0[19] = 0x02;
-    dataEffect0[20] = 0x01;
-    auto dataEffect1 = dataValues;
-    dataEffect1[posFxKnob] = fxKnob;
-    dataEffect1[posFxSlot] = settings[1].fx_slot + postAmpOffset;
-    dataEffect1[posKnob1] = settings[1].knob1;
-    dataEffect1[posKnob2] = settings[1].knob2;
-    dataEffect1[posKnob3] = settings[1].knob3;
-    dataEffect1[posKnob4] = settings[1].knob4;
-    dataEffect1[posKnob5] = settings[1].knob5;
-    dataEffect1[posDsp] = 0x07;
-    dataEffect1[posEffect] = 0x18;
-    dataEffect1[19] = 0x01;
-    dataEffect1[20] = 0x01;
-
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
-    cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
     // Save effect name cmd
@@ -1231,56 +1178,15 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::MONO_DELAY, 0, 1, 2, 3, 4, 5, Position::input},
-                                            fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop},
-                                            fx_pedal_settings{3, effects::SINE_FLANGER, 1, 2, 2, 1, 0, 4, Position::effectsLoop}};
-    constexpr int fxKnob{0x02};
+    const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::MONO_DELAY, 0, 1, 2, 3, 4, 5, Position::input},
+                                                fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop},
+                                                fx_pedal_settings{3, effects::SINE_FLANGER, 1, 2, 2, 1, 0, 4, Position::effectsLoop}};
     const std::string name = "abcd";
-    Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    Packet dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    dataName[posFxKnob] = fxKnob;
-    dataName[posSaveField] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), 4), std::next(dataName.begin(), 16));
+    const auto dataName = serializeSaveEffectName(slot, name, settings);
+    const auto cmdExecute = serializeApplyCommand(settings[0]);
+    const auto packets = serializeSaveEffectPacket(slot, settings);
+    const auto dataEffect0 = packets[0];
 
-    dataValues[posSaveField] = slot;
-    dataValues[1] = 0x03;
-    dataValues[6] = 0x00;
-
-    std::fill(std::next(dataValues.begin(), 16), dataValues.end(), 0x00);
-    dataValues[19] = 0x00;
-    dataValues[20] = 0x08;
-    dataValues[21] = 0x01;
-    dataValues[posKnob6] = 0x00;
-
-    auto dataEffect0 = dataValues;
-    dataEffect0[posFxKnob] = fxKnob;
-    dataEffect0[posFxSlot] = settings[0].fx_slot;
-    dataEffect0[posKnob1] = settings[0].knob1;
-    dataEffect0[posKnob2] = settings[0].knob2;
-    dataEffect0[posKnob3] = settings[0].knob3;
-    dataEffect0[posKnob4] = settings[0].knob4;
-    dataEffect0[posKnob5] = settings[0].knob5;
-    dataEffect0[posDsp] = 0x08;
-    dataEffect0[posEffect] = 0x16;
-    dataEffect0[19] = 0x02;
-    dataEffect0[20] = 0x01;
-
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
-    cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
     // Save effect cmd
@@ -1309,54 +1215,13 @@ TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::SINE_CHORUS, 0, 1, 2, 3, 4, 5, Position::input}};
-    constexpr int fxKnob{0x01};
+    const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::SINE_CHORUS, 0, 1, 2, 3, 4, 5, Position::input}};
     const std::string name = "abcd";
-    Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    Packet dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    dataName[posFxKnob] = fxKnob;
-    dataName[posSaveField] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), 4), std::next(dataName.begin(), 16));
+    const auto dataName = serializeSaveEffectName(slot, name, settings);
+    const auto cmdExecute = serializeApplyCommand(settings[0]);
+    const auto packets = serializeSaveEffectPacket(slot, settings);
+    const auto dataEffect0 = packets[0];
 
-    dataValues[posSaveField] = slot;
-    dataValues[1] = 0x03;
-    dataValues[6] = 0x00;
-
-    std::fill(std::next(dataValues.begin(), 16), dataValues.end(), 0x00);
-    dataValues[19] = 0x00;
-    dataValues[20] = 0x08;
-    dataValues[21] = 0x01;
-    dataValues[posKnob6] = 0x00;
-
-    auto dataEffect0 = dataValues;
-    dataEffect0[posFxKnob] = fxKnob;
-    dataEffect0[posFxSlot] = settings[0].fx_slot;
-    dataEffect0[posKnob1] = settings[0].knob1;
-    dataEffect0[posKnob2] = settings[0].knob2;
-    dataEffect0[posKnob3] = settings[0].knob3;
-    dataEffect0[posKnob4] = settings[0].knob4;
-    dataEffect0[posKnob5] = settings[0].knob5;
-    dataEffect0[posDsp] = 0x07;
-    dataEffect0[posEffect] = 0x12;
-    dataEffect0[19] = 0x01;
-    dataEffect0[20] = 0x01;
-
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
-    cmdExecute[posFxKnob] = fxKnob;
 
     InSequence s;
     // Save effect cmd
@@ -1378,25 +1243,13 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithDifferentFxKnobs)
 
 TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::SINE_CHORUS, 0, 1, 2, 3, 4, 5, Position::input}};
-    constexpr int fxKnob{0x01};
+    const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::SINE_CHORUS, 0, 1, 2, 3, 4, 5, Position::input}};
     constexpr std::size_t nameSize{24};
     const std::string name(26, 'x');
-    const std::string nameExpected{name.cbegin(), std::next(name.cbegin(), nameSize - 1)};
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
-    cmdExecute[posFxKnob] = fxKnob;
+    const std::string nameExpected{name.cbegin(), std::next(name.cbegin(), nameSize)};
+    const auto cmdExecute = serializeApplyCommand(settings[0]);
+    const auto dataName = serializeSaveEffectName(slot, name, settings);
 
-    Packet dataName{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    dataName[posFxKnob] = fxKnob;
-    dataName[posSaveField] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), nameSize - 1), std::next(dataName.begin(), 16));
 
     InSequence s;
     // Save effect cmd
@@ -1418,43 +1271,10 @@ TEST_F(MustangTest, saveEffectsEnsuresNameStringFormat)
 
 TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
 {
-    std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::TAPE_DELAY, 0, 1, 2, 3, 4, 5, Position::input}};
-    constexpr int fxKnob{0x02};
-    auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03, 0x00});
-    cmdExecute[posFxKnob] = fxKnob;
-    const std::string name = "abcd";
-    Packet dataValues{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-
-    dataValues[posSaveField] = slot;
-    dataValues[1] = 0x03;
-    dataValues[6] = 0x00;
-
-    std::fill(std::next(dataValues.begin(), 16), dataValues.end(), 0x00);
-    dataValues[19] = 0x00;
-    dataValues[20] = 0x08;
-    dataValues[21] = 0x01;
-    dataValues[posKnob6] = 0x00;
-
-    auto dataEffect0 = dataValues;
-    dataEffect0[posFxKnob] = fxKnob;
-    dataEffect0[posFxSlot] = settings[0].fx_slot;
-    dataEffect0[posKnob1] = settings[0].knob1;
-    dataEffect0[posKnob2] = settings[0].knob2;
-    dataEffect0[posKnob3] = settings[0].knob3;
-    dataEffect0[posKnob4] = settings[0].knob4;
-    dataEffect0[posKnob5] = settings[0].knob5;
-    dataEffect0[posKnob6] = settings[0].knob6;
-    dataEffect0[posDsp] = 0x08;
-    dataEffect0[posEffect] = 0x2b;
-    dataEffect0[19] = 0x02;
-    dataEffect0[20] = 0x01;
+    const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::TAPE_DELAY, 0, 1, 2, 3, 4, 5, Position::input}};
+    const auto cmdExecute = serializeApplyCommand(settings[0]);
+    const auto packets = serializeSaveEffectPacket(slot, settings);
+    const auto dataEffect0 = packets[0];
 
 
     InSequence s;
@@ -1471,7 +1291,7 @@ TEST_F(MustangTest, saveEffectsHandlesEffectsWithMoreControls)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
 
-    m->save_effects(slot, name, settings);
+    m->save_effects(slot, "abcd", settings);
     ignoreClose();
 }
 
