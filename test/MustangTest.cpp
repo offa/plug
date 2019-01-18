@@ -82,6 +82,7 @@ protected:
     const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(packetSize);
     const std::vector<std::uint8_t> ignoreAmpData = []() { std::vector<std::uint8_t> d(packetSize, 0x00); d[ampPos] = 0x5e; return d; }();
     const Packet loadCmd = serializeLoadCommand();
+    const Packet applyCmd = serializeApplyCommand();
     static inline constexpr int slot{5};
 };
 
@@ -769,7 +770,6 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    const auto cmdExecute = helper::createInitializedPacket({0x01c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -783,7 +783,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Data #2
@@ -791,7 +791,7 @@ TEST_F(MustangTest, setAmpHandlesNoiseGateAndOutOfRangeThreshold)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
 
@@ -836,7 +836,6 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     data[46] = 0x06;
     data[50] = 0x06;
     data[54] = 0x79;
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -848,7 +847,7 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Data #2
@@ -856,7 +855,7 @@ TEST_F(MustangTest, setAmpHandlesSagValue)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
 
@@ -900,7 +899,6 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     data[46] = 0x07;
     data[50] = 0x07;
     data[54] = 0x5e;
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     auto data2 = helper::createInitializedPacket({0x1c, 0x03, 0x0d});
     data2[6] = 0x01;
     data2[7] = 0x01;
@@ -913,7 +911,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Data #2
@@ -921,7 +919,7 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     m->set_amplifier(settings);
@@ -931,7 +929,6 @@ TEST_F(MustangTest, setAmpHandlesOutOfRangeNoiseGate)
 TEST_F(MustangTest, setEffectSendsValue)
 {
     const fx_pedal_settings settings{3, effects::OVERDRIVE, 8, 7, 6, 5, 4, 3, Position::input};
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -972,7 +969,7 @@ TEST_F(MustangTest, setEffectSendsValue)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Data
@@ -980,7 +977,7 @@ TEST_F(MustangTest, setEffectSendsValue)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
 
@@ -991,7 +988,6 @@ TEST_F(MustangTest, setEffectSendsValue)
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 {
     const fx_pedal_settings settings{2, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1015,7 +1011,7 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
 
@@ -1026,7 +1022,6 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 TEST_F(MustangTest, setEffectHandlesEffectPosition)
 {
     const fx_pedal_settings settings{2, effects::OVERDRIVE, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1068,7 +1063,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Data
@@ -1076,7 +1071,7 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
 
@@ -1087,7 +1082,6 @@ TEST_F(MustangTest, setEffectHandlesEffectPosition)
 TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
 {
     const fx_pedal_settings settings{3, effects::STEREO_TAPE_DELAY, 1, 1, 1, 1, 1, 7, Position::input};
-    const auto cmdExecute = helper::createInitializedPacket({0x1c, 0x03});
     Packet clearCmd{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -1132,7 +1126,7 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Data
@@ -1140,7 +1134,7 @@ TEST_F(MustangTest, setEffectHandlesEffectsWithMoreControls)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
     // Apply command
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(cmdExecute.size()));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
 
 
