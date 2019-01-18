@@ -23,7 +23,6 @@
 #include "com/PacketSerializer.h"
 #include "com/CommunicationException.h"
 #include "helper/PacketConstants.h"
-#include "helper/PacketHelper.h"
 #include "mocks/MockConnection.h"
 #include "matcher/Matcher.h"
 #include <array>

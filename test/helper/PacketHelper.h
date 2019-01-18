@@ -25,6 +25,7 @@
 
 namespace test::helper
 {
+    [[deprecated("will be removed in the future")]]
     inline plug::com::Packet createEmptyPacket()
     {
         plug::com::Packet data{{0}};
@@ -32,6 +33,7 @@ namespace test::helper
         return data;
     }
 
+    [[deprecated("will be removed in the future")]]
     inline plug::com::Packet createInitCmdPacket()
     {
         auto data = createEmptyPacket();
@@ -40,6 +42,7 @@ namespace test::helper
         return data;
     }
 
+    [[deprecated("will be removed in the future")]]
     inline plug::com::Packet createInitializedPacket(std::initializer_list<std::uint8_t> init)
     {
         auto data = createEmptyPacket();
@@ -47,6 +50,7 @@ namespace test::helper
         return data;
     }
 
+    [[deprecated("will be removed in the future")]]
     inline plug::com::Packet createEmptyNamedPacket(const std::string_view name)
     {
         constexpr std::size_t nameFieldOffset{16};
