@@ -79,7 +79,7 @@ protected:
     std::unique_ptr<com::Mustang> m;
     const std::vector<std::uint8_t> noData{};
     const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(packetSize);
-    const std::vector<std::uint8_t> ignoreAmpData = []() { std::vector<std::uint8_t> d(packetSize, 0x00); d[ampPos] = 0x5e; return d; }();
+    const std::vector<std::uint8_t> ignoreAmpData = [] { std::vector<std::uint8_t> d(packetSize, 0x00); d[ampPos] = 0x5e; return d; }();
     const Packet loadCmd = serializeLoadCommand();
     const Packet applyCmd = serializeApplyCommand();
     const Packet clearCmd = serializeClearEffectSettings();
