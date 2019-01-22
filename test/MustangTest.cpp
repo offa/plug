@@ -221,23 +221,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
 
     const auto [bank, presets] = m->start_amp();
     const auto settings = std::get<1>(bank);
-    EXPECT_THAT(settings.amp_num, amp.amp_num);
-    EXPECT_THAT(settings.volume, amp.volume);
-    EXPECT_THAT(settings.gain, amp.gain);
-    EXPECT_THAT(settings.treble, amp.treble);
-    EXPECT_THAT(settings.middle, amp.middle);
-    EXPECT_THAT(settings.bass, amp.bass);
-    EXPECT_THAT(settings.cabinet, amp.cabinet);
-    EXPECT_THAT(settings.noise_gate, amp.noise_gate);
-    EXPECT_THAT(settings.threshold, amp.threshold);
-    EXPECT_THAT(settings.master_vol, amp.master_vol);
-    EXPECT_THAT(settings.gain2, amp.gain2);
-    EXPECT_THAT(settings.presence, amp.presence);
-    EXPECT_THAT(settings.depth, amp.depth);
-    EXPECT_THAT(settings.bias, amp.bias);
-    EXPECT_THAT(settings.sag, amp.sag);
-    EXPECT_THAT(settings.brightness, amp.brightness);
-    EXPECT_THAT(settings.usb_gain, amp.usb_gain);
+    EXPECT_THAT(settings, AmpIs(amp));
 
     ignoreClose();
     static_cast<void>(presets);
@@ -547,23 +531,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 
 
     const auto [name, settings, effects] = m->load_memory_bank(slot);
-    EXPECT_THAT(settings.amp_num, Eq(as.amp_num));
-    EXPECT_THAT(settings.volume, Eq(as.volume));
-    EXPECT_THAT(settings.gain, Eq(as.gain));
-    EXPECT_THAT(settings.treble, Eq(as.treble));
-    EXPECT_THAT(settings.middle, Eq(as.middle));
-    EXPECT_THAT(settings.bass, Eq(as.bass));
-    EXPECT_THAT(settings.cabinet, Eq(as.cabinet));
-    EXPECT_THAT(settings.noise_gate, Eq(as.noise_gate));
-    EXPECT_THAT(settings.threshold, Eq(as.threshold));
-    EXPECT_THAT(settings.master_vol, Eq(as.master_vol));
-    EXPECT_THAT(settings.gain2, Eq(as.gain2));
-    EXPECT_THAT(settings.presence, Eq(as.presence));
-    EXPECT_THAT(settings.depth, Eq(as.depth));
-    EXPECT_THAT(settings.bias, Eq(as.bias));
-    EXPECT_THAT(settings.sag, Eq(as.sag));
-    EXPECT_THAT(settings.brightness, Eq(as.brightness));
-    EXPECT_THAT(settings.usb_gain, Eq(as.usb_gain));
+    EXPECT_THAT(settings, AmpIs(as));
+
     static_cast<void>(name);
     static_cast<void>(effects);
     ignoreClose();

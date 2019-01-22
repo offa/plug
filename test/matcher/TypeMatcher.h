@@ -33,6 +33,15 @@ namespace test::matcher
                         arg.knob4, arg.knob5, arg.knob6, arg.position);
     }
 
+    MATCHER_P(AmpIs, value, "")
+    {
+        return std::tie(value.amp_num, value.volume, value.gain, value.treble, value.middle, value.bass,
+                        value.cabinet, value.noise_gate, value.threshold, value.master_vol, value.gain2,
+                        value.presence, value.depth, value.bias, value.sag, value.brightness, value.usb_gain)
+        == std::tie(arg.amp_num, arg.volume, arg.gain, arg.treble, arg.middle, arg.bass,
+                    arg.cabinet, arg.noise_gate, arg.threshold, arg.master_vol, arg.gain2,
+                    arg.presence, arg.depth, arg.bias, arg.sag, arg.brightness, arg.usb_gain);
+    }
 }
 
 
@@ -48,6 +57,29 @@ namespace plug
                             << ", " << std::to_string(e.knob5) << ", " << std::to_string(e.knob6) << ")"
             << ", position: " << std::to_string(static_cast<int>(e.position)) << "]";
     }
+
+
+    inline void PrintTo(const amp_settings& a, std::ostream* os)
+    {
+        *os << "[amp.num: " << std::to_string(static_cast<int>(a.amp_num))
+            << ", volume: " << std::to_string(a.volume)
+            << ", gain: " << std::to_string(a.gain)
+            << ", treble: " << std::to_string(a.treble)
+            << ", middle: " << std::to_string(a.middle)
+            << ", bass: " << std::to_string(a.bass)
+            << ", cabinet: " << std::to_string(static_cast<int>(a.cabinet))
+            << ", noise_gate: " << std::to_string(a.noise_gate)
+            << ", threshold: " << std::to_string(a.threshold)
+            << ", master_vol: " << std::to_string(a.master_vol)
+            << ", gain2: " << std::to_string(a.gain2)
+            << ", presence: " << std::to_string(a.presence)
+            << ", depth: " << std::to_string(a.depth)
+            << ", bias: " << std::to_string(a.bias)
+            << ", sag: " << std::to_string(a.sag)
+            << ", brightness: " << std::to_string(a.brightness)
+            << ", usb_gain: " << std::to_string(a.usb_gain) << "]";
+    }
+
 }
 
 
