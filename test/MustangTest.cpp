@@ -181,26 +181,11 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
 TEST_F(MustangTest, startRequestsCurrentAmp)
 {
-    auto recvData = createEmptyPacketData();
-    recvData[ampPos] = 0x61;
-    recvData[volumePos] = 8;
-    recvData[gainPos] = 4;
-    recvData[treblePos] = 5;
-    recvData[middlePos] = 9;
-    recvData[bassPos] = 1;
-    recvData[cabinetPos] = 2;
-    recvData[noiseGatePos] = 5;
-    recvData[thresholdPos] = 4;
-    recvData[masterVolPos] = 3;
-    recvData[gain2Pos] = 4;
-    recvData[presencePos] = 7;
-    recvData[depthPos] = 2;
-    recvData[biasPos] = 6;
-    recvData[sagPos] = 5;
-    recvData[brightnessPos] = 1;
-    auto extendedData = createEmptyPacketData();
-    extendedData[usbGainPos] = 0x44;
-
+    const amp_settings amp{amps::BRITISH_60S, 4, 8, 5, 9, 1,
+                        cabinets::cabBSSMN, 5, 3, 4, 7, 4, 2, 6, 1,
+                        true, 17};
+    const auto recvData = asBuffer(serializeAmpSettings(amp));
+    const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(amp));
     const auto [initCmd1, initCmd2] = serializeInitCommand();
 
     InSequence s;
@@ -235,23 +220,23 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
 
     const auto [bank, presets] = m->start_amp();
     const auto settings = std::get<1>(bank);
-    EXPECT_THAT(settings.amp_num, Eq(amps::BRITISH_60S));
-    EXPECT_THAT(settings.volume, Eq(recvData[volumePos]));
-    EXPECT_THAT(settings.gain, Eq(recvData[gainPos]));
-    EXPECT_THAT(settings.treble, Eq(recvData[treblePos]));
-    EXPECT_THAT(settings.middle, Eq(recvData[middlePos]));
-    EXPECT_THAT(settings.bass, Eq(recvData[bassPos]));
-    EXPECT_THAT(settings.cabinet, Eq(cabinets::cabBSSMN));
-    EXPECT_THAT(settings.noise_gate, Eq(recvData[noiseGatePos]));
-    EXPECT_THAT(settings.threshold, Eq(recvData[thresholdPos]));
-    EXPECT_THAT(settings.master_vol, Eq(recvData[masterVolPos]));
-    EXPECT_THAT(settings.gain2, Eq(recvData[gain2Pos]));
-    EXPECT_THAT(settings.presence, Eq(recvData[presencePos]));
-    EXPECT_THAT(settings.depth, Eq(recvData[depthPos]));
-    EXPECT_THAT(settings.bias, Eq(recvData[biasPos]));
-    EXPECT_THAT(settings.sag, Eq(recvData[sagPos]));
-    EXPECT_THAT(settings.brightness, Eq(recvData[brightnessPos]));
-    EXPECT_THAT(settings.usb_gain, Eq(extendedData[usbGainPos]));
+    EXPECT_THAT(settings.amp_num, amp.amp_num);
+    EXPECT_THAT(settings.volume, amp.volume);
+    EXPECT_THAT(settings.gain, amp.gain);
+    EXPECT_THAT(settings.treble, amp.treble);
+    EXPECT_THAT(settings.middle, amp.middle);
+    EXPECT_THAT(settings.bass, amp.bass);
+    EXPECT_THAT(settings.cabinet, amp.cabinet);
+    EXPECT_THAT(settings.noise_gate, amp.noise_gate);
+    EXPECT_THAT(settings.threshold, amp.threshold);
+    EXPECT_THAT(settings.master_vol, amp.master_vol);
+    EXPECT_THAT(settings.gain2, amp.gain2);
+    EXPECT_THAT(settings.presence, amp.presence);
+    EXPECT_THAT(settings.depth, amp.depth);
+    EXPECT_THAT(settings.bias, amp.bias);
+    EXPECT_THAT(settings.sag, amp.sag);
+    EXPECT_THAT(settings.brightness, amp.brightness);
+    EXPECT_THAT(settings.usb_gain, amp.usb_gain);
 
     ignoreClose();
     static_cast<void>(presets);
@@ -297,7 +282,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 
     const auto [bank, presets] = m->start_amp();
-    std::array<fx_pedal_settings, 4> settings = std::get<2>(bank);
+    const std::array<fx_pedal_settings, 4> settings = std::get<2>(bank);
 
     EXPECT_THAT(settings[0].fx_slot, Eq(0));
     EXPECT_THAT(settings[0].knob1, Eq(10));
