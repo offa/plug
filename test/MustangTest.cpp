@@ -25,6 +25,7 @@
 #include "helper/PacketConstants.h"
 #include "mocks/MockConnection.h"
 #include "matcher/Matcher.h"
+#include "matcher/TypeMatcher.h"
 #include <array>
 #include <gmock/gmock.h>
 
@@ -287,15 +288,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     const auto [bank, presets] = m->start_amp();
     const std::array<fx_pedal_settings, 4> settings = std::get<2>(bank);
 
-    EXPECT_THAT(settings[0].fx_slot, Eq(e0.fx_slot));
-    EXPECT_THAT(settings[0].knob1, Eq(e0.knob1));
-    EXPECT_THAT(settings[0].knob2, Eq(e0.knob2));
-    EXPECT_THAT(settings[0].knob3, Eq(e0.knob3));
-    EXPECT_THAT(settings[0].knob4, Eq(e0.knob4));
-    EXPECT_THAT(settings[0].knob5, Eq(e0.knob5));
-    EXPECT_THAT(settings[0].knob6, Eq(e0.knob6));
-    EXPECT_THAT(settings[0].position, Eq(e0.position));
-    EXPECT_THAT(settings[0].effect_num, Eq(e0.effect_num));
+    EXPECT_THAT(settings[0], EffectIs(e0));
 
     ignoreClose();
     static_cast<void>(presets);
@@ -605,45 +598,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
 
     const auto [name, amp, settings] = m->load_memory_bank(slot);
-    EXPECT_THAT(settings[0].fx_slot, Eq(e0.fx_slot));
-    EXPECT_THAT(settings[0].knob1, Eq(e0.knob1));
-    EXPECT_THAT(settings[0].knob2, Eq(e0.knob2));
-    EXPECT_THAT(settings[0].knob3, Eq(e0.knob3));
-    EXPECT_THAT(settings[0].knob4, Eq(e0.knob4));
-    EXPECT_THAT(settings[0].knob5, Eq(e0.knob5));
-    EXPECT_THAT(settings[0].knob6, Eq(e0.knob6));
-    EXPECT_THAT(settings[0].position, Eq(e0.position));
-    EXPECT_THAT(settings[0].effect_num, Eq(e0.effect_num));
 
-    EXPECT_THAT(settings[1].fx_slot, Eq(e1.fx_slot));
-    EXPECT_THAT(settings[1].knob1, Eq(e1.knob1));
-    EXPECT_THAT(settings[1].knob2, Eq(e1.knob2));
-    EXPECT_THAT(settings[1].knob3, Eq(e1.knob3));
-    EXPECT_THAT(settings[1].knob4, Eq(e1.knob4));
-    EXPECT_THAT(settings[1].knob5, Eq(e1.knob5));
-    EXPECT_THAT(settings[1].knob6, Eq(e1.knob6));
-    EXPECT_THAT(settings[1].position, Eq(e1.position));
-    EXPECT_THAT(settings[1].effect_num, Eq(e1.effect_num));
-
-    EXPECT_THAT(settings[2].fx_slot, Eq(e2.fx_slot));
-    EXPECT_THAT(settings[2].knob1, Eq(e2.knob1));
-    EXPECT_THAT(settings[2].knob2, Eq(e2.knob2));
-    EXPECT_THAT(settings[2].knob3, Eq(e2.knob3));
-    EXPECT_THAT(settings[2].knob4, Eq(e2.knob4));
-    EXPECT_THAT(settings[2].knob5, Eq(e2.knob5));
-    EXPECT_THAT(settings[2].knob6, Eq(e2.knob6));
-    EXPECT_THAT(settings[2].position, Eq(e2.position));
-    EXPECT_THAT(settings[2].effect_num, Eq(e2.effect_num));
-
-    EXPECT_THAT(settings[3].fx_slot, Eq(e3.fx_slot));
-    EXPECT_THAT(settings[3].knob1, Eq(e3.knob1));
-    EXPECT_THAT(settings[3].knob2, Eq(e3.knob2));
-    EXPECT_THAT(settings[3].knob3, Eq(e3.knob3));
-    EXPECT_THAT(settings[3].knob4, Eq(e3.knob4));
-    EXPECT_THAT(settings[3].knob5, Eq(e3.knob5));
-    EXPECT_THAT(settings[3].knob6, Eq(e3.knob6));
-    EXPECT_THAT(settings[3].position, Eq(e3.position));
-    EXPECT_THAT(settings[3].effect_num, Eq(e3.effect_num));
+    EXPECT_THAT(settings, ElementsAre(EffectIs(e0), EffectIs(e1), EffectIs(e2), EffectIs(e3)));
 
     static_cast<void>(name);
     static_cast<void>(amp);
