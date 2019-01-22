@@ -578,10 +578,14 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 {
-    const auto recvData0 = createEffectData(0x04, 0x4f, {{11, 22, 33, 44, 55, 66}});
-    const auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
-    const auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
-    const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
+    const fx_pedal_settings e0{0x00, effects::TRIANGLE_FLANGER, 10, 20, 30, 40, 50, 0, Position::effectsLoop};
+    const fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 0, Position::input};
+    const fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+    const fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
+    const auto recvData0 = asBuffer(serializeEffectSettings(e0));
+    const auto recvData1 = asBuffer(serializeEffectSettings(e1));
+    const auto recvData2 = asBuffer(serializeEffectSettings(e2));
+    const auto recvData3 = asBuffer(serializeEffectSettings(e3));
 
 
     InSequence s;
@@ -601,45 +605,46 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
 
     const auto [name, amp, settings] = m->load_memory_bank(slot);
-    EXPECT_THAT(settings[0].fx_slot, Eq(0));
-    EXPECT_THAT(settings[0].knob1, Eq(11));
-    EXPECT_THAT(settings[0].knob2, Eq(22));
-    EXPECT_THAT(settings[0].knob3, Eq(33));
-    EXPECT_THAT(settings[0].knob4, Eq(44));
-    EXPECT_THAT(settings[0].knob5, Eq(55));
-    EXPECT_THAT(settings[0].knob6, Eq(66));
-    EXPECT_THAT(settings[0].position, Eq(Position::effectsLoop));
-    EXPECT_THAT(settings[0].effect_num, Eq(effects::PHASER));
+    EXPECT_THAT(settings[0].fx_slot, Eq(e0.fx_slot));
+    EXPECT_THAT(settings[0].knob1, Eq(e0.knob1));
+    EXPECT_THAT(settings[0].knob2, Eq(e0.knob2));
+    EXPECT_THAT(settings[0].knob3, Eq(e0.knob3));
+    EXPECT_THAT(settings[0].knob4, Eq(e0.knob4));
+    EXPECT_THAT(settings[0].knob5, Eq(e0.knob5));
+    EXPECT_THAT(settings[0].knob6, Eq(e0.knob6));
+    EXPECT_THAT(settings[0].position, Eq(e0.position));
+    EXPECT_THAT(settings[0].effect_num, Eq(e0.effect_num));
 
-    EXPECT_THAT(settings[1].fx_slot, Eq(1));
-    EXPECT_THAT(settings[1].knob1, Eq(0));
-    EXPECT_THAT(settings[1].knob2, Eq(0));
-    EXPECT_THAT(settings[1].knob3, Eq(0));
-    EXPECT_THAT(settings[1].knob4, Eq(1));
-    EXPECT_THAT(settings[1].knob5, Eq(1));
-    EXPECT_THAT(settings[1].knob6, Eq(1));
-    EXPECT_THAT(settings[1].position, Eq(Position::input));
-    EXPECT_THAT(settings[1].effect_num, Eq(effects::TRIANGLE_CHORUS));
+    EXPECT_THAT(settings[1].fx_slot, Eq(e1.fx_slot));
+    EXPECT_THAT(settings[1].knob1, Eq(e1.knob1));
+    EXPECT_THAT(settings[1].knob2, Eq(e1.knob2));
+    EXPECT_THAT(settings[1].knob3, Eq(e1.knob3));
+    EXPECT_THAT(settings[1].knob4, Eq(e1.knob4));
+    EXPECT_THAT(settings[1].knob5, Eq(e1.knob5));
+    EXPECT_THAT(settings[1].knob6, Eq(e1.knob6));
+    EXPECT_THAT(settings[1].position, Eq(e1.position));
+    EXPECT_THAT(settings[1].effect_num, Eq(e1.effect_num));
 
-    EXPECT_THAT(settings[2].fx_slot, Eq(2));
-    EXPECT_THAT(settings[2].knob1, Eq(0));
-    EXPECT_THAT(settings[2].knob2, Eq(0));
-    EXPECT_THAT(settings[2].knob3, Eq(0));
-    EXPECT_THAT(settings[2].knob4, Eq(0));
-    EXPECT_THAT(settings[2].knob5, Eq(0));
-    EXPECT_THAT(settings[2].knob6, Eq(0));
-    EXPECT_THAT(settings[2].position, Eq(Position::input));
-    EXPECT_THAT(settings[2].effect_num, Eq(effects::EMPTY));
+    EXPECT_THAT(settings[2].fx_slot, Eq(e2.fx_slot));
+    EXPECT_THAT(settings[2].knob1, Eq(e2.knob1));
+    EXPECT_THAT(settings[2].knob2, Eq(e2.knob2));
+    EXPECT_THAT(settings[2].knob3, Eq(e2.knob3));
+    EXPECT_THAT(settings[2].knob4, Eq(e2.knob4));
+    EXPECT_THAT(settings[2].knob5, Eq(e2.knob5));
+    EXPECT_THAT(settings[2].knob6, Eq(e2.knob6));
+    EXPECT_THAT(settings[2].position, Eq(e2.position));
+    EXPECT_THAT(settings[2].effect_num, Eq(e2.effect_num));
 
-    EXPECT_THAT(settings[3].fx_slot, Eq(3));
-    EXPECT_THAT(settings[3].knob1, Eq(1));
-    EXPECT_THAT(settings[3].knob2, Eq(2));
-    EXPECT_THAT(settings[3].knob3, Eq(3));
-    EXPECT_THAT(settings[3].knob4, Eq(4));
-    EXPECT_THAT(settings[3].knob5, Eq(5));
-    EXPECT_THAT(settings[3].knob6, Eq(6));
-    EXPECT_THAT(settings[3].position, Eq(Position::effectsLoop));
-    EXPECT_THAT(settings[3].effect_num, Eq(effects::TAPE_DELAY));
+    EXPECT_THAT(settings[3].fx_slot, Eq(e3.fx_slot));
+    EXPECT_THAT(settings[3].knob1, Eq(e3.knob1));
+    EXPECT_THAT(settings[3].knob2, Eq(e3.knob2));
+    EXPECT_THAT(settings[3].knob3, Eq(e3.knob3));
+    EXPECT_THAT(settings[3].knob4, Eq(e3.knob4));
+    EXPECT_THAT(settings[3].knob5, Eq(e3.knob5));
+    EXPECT_THAT(settings[3].knob6, Eq(e3.knob6));
+    EXPECT_THAT(settings[3].position, Eq(e3.position));
+    EXPECT_THAT(settings[3].effect_num, Eq(e3.effect_num));
+
     static_cast<void>(name);
     static_cast<void>(amp);
     ignoreClose();
