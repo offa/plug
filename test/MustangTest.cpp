@@ -59,16 +59,6 @@ protected:
         return std::vector<std::uint8_t>(packetSize, 0x00);
     }
 
-    auto createEffectData(std::uint8_t slotValue, std::uint8_t effect, std::array<std::uint8_t, 6> values) const
-    {
-        std::vector<std::uint8_t> data(packetSize, 0x00);
-        data[posDsp] = 0x08;
-        data[posEffect] = effect;
-        data[posFxSlot] = slotValue;
-        std::copy(values.cbegin(), values.cend(), std::next(data.begin(), posKnob1));
-        return data;
-    }
-
     template<class Container>
     auto asBuffer(const Container& c) const
     {
