@@ -244,11 +244,14 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
 
 TEST_F(MustangTest, startRequestsCurrentEffects)
 {
-    const auto recvData0 = createEffectData(0x04, 0x19, {{10, 20, 30, 40, 50, 60}});
-    const auto recvData1 = createEffectData(0x01, 0x13, {{0, 0, 0, 1, 1, 1}});
-    const auto recvData2 = createEffectData(0x02, 0x00, {{0, 0, 0, 0, 0, 0}});
-    const auto recvData3 = createEffectData(0x07, 0x2b, {{1, 2, 3, 4, 5, 6}});
-
+    const fx_pedal_settings e0{0x00, effects::TRIANGLE_FLANGER, 10, 20, 30, 40, 50, 0, Position::effectsLoop};
+    const fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 1, Position::input};
+    const fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+    const fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
+    const auto recvData0 = asBuffer(serializeEffectSettings(e0));
+    const auto recvData1 = asBuffer(serializeEffectSettings(e1));
+    const auto recvData2 = asBuffer(serializeEffectSettings(e2));
+    const auto recvData3 = asBuffer(serializeEffectSettings(e3));
     const auto [initCmd1, initCmd2] = serializeInitCommand();
 
 
@@ -284,15 +287,15 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     const auto [bank, presets] = m->start_amp();
     const std::array<fx_pedal_settings, 4> settings = std::get<2>(bank);
 
-    EXPECT_THAT(settings[0].fx_slot, Eq(0));
-    EXPECT_THAT(settings[0].knob1, Eq(10));
-    EXPECT_THAT(settings[0].knob2, Eq(20));
-    EXPECT_THAT(settings[0].knob3, Eq(30));
-    EXPECT_THAT(settings[0].knob4, Eq(40));
-    EXPECT_THAT(settings[0].knob5, Eq(50));
-    EXPECT_THAT(settings[0].knob6, Eq(60));
-    EXPECT_THAT(settings[0].position, Eq(Position::effectsLoop));
-    EXPECT_THAT(settings[0].effect_num, Eq(effects::TRIANGLE_FLANGER));
+    EXPECT_THAT(settings[0].fx_slot, Eq(e0.fx_slot));
+    EXPECT_THAT(settings[0].knob1, Eq(e0.knob1));
+    EXPECT_THAT(settings[0].knob2, Eq(e0.knob2));
+    EXPECT_THAT(settings[0].knob3, Eq(e0.knob3));
+    EXPECT_THAT(settings[0].knob4, Eq(e0.knob4));
+    EXPECT_THAT(settings[0].knob5, Eq(e0.knob5));
+    EXPECT_THAT(settings[0].knob6, Eq(e0.knob6));
+    EXPECT_THAT(settings[0].position, Eq(e0.position));
+    EXPECT_THAT(settings[0].effect_num, Eq(e0.effect_num));
 
     ignoreClose();
     static_cast<void>(presets);
