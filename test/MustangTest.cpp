@@ -74,6 +74,8 @@ protected:
     const Packet loadCmd = serializeLoadCommand();
     const Packet applyCmd = serializeApplyCommand();
     const Packet clearCmd = serializeClearEffectSettings();
+    static inline constexpr std::size_t presetPacketCountShort{48};
+    static inline constexpr std::size_t presetPacketCountFull{200};
     static inline constexpr int slot{5};
 };
 
@@ -95,8 +97,7 @@ TEST_F(MustangTest, startInitializesUsb)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -143,8 +144,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
 
     const std::string actualName{"abc"};
     const auto nameData = asBuffer(serializeName(0, actualName));
@@ -172,9 +172,9 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
 TEST_F(MustangTest, startRequestsCurrentAmp)
 {
-    const amp_settings amp{amps::BRITISH_60S, 4, 8, 5, 9, 1,
-                        cabinets::cabBSSMN, 5, 3, 4, 7, 4, 2, 6, 1,
-                        true, 17};
+    constexpr amp_settings amp{amps::BRITISH_60S, 4, 8, 5, 9, 1,
+                            cabinets::cabBSSMN, 5, 3, 4, 7, 4, 2, 6, 1,
+                            true, 17};
     const auto recvData = asBuffer(serializeAmpSettings(amp));
     const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(amp));
     const auto [initCmd1, initCmd2] = serializeInitCommand();
@@ -193,8 +193,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -208,7 +207,6 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
         .WillOnce(Return(noData));
 
 
-
     const auto [bank, presets] = m->start_amp();
     const auto settings = std::get<1>(bank);
     EXPECT_THAT(settings, AmpIs(amp));
@@ -219,10 +217,10 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
 
 TEST_F(MustangTest, startRequestsCurrentEffects)
 {
-    const fx_pedal_settings e0{0x00, effects::TRIANGLE_FLANGER, 10, 20, 30, 40, 50, 0, Position::effectsLoop};
-    const fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 1, Position::input};
-    const fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
-    const fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
+    constexpr fx_pedal_settings e0{0x00, effects::TRIANGLE_FLANGER, 10, 20, 30, 40, 50, 0, Position::effectsLoop};
+    constexpr fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 1, Position::input};
+    constexpr fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+    constexpr fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
     const auto recvData0 = asBuffer(serializeEffectSettings(e0));
     const auto recvData1 = asBuffer(serializeEffectSettings(e1));
     const auto recvData2 = asBuffer(serializeEffectSettings(e2));
@@ -244,8 +242,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    constexpr size_t maxToReceive{48};
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -290,7 +287,6 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    constexpr size_t maxToReceive{48};
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
         .WillOnce(Return(recvData0))
         .WillOnce(Return(ignoreData))
@@ -298,7 +294,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(recvData2))
         .WillOnce(Return(ignoreData));
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive - 6).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountShort - 6).WillRepeatedly(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -314,7 +310,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
 
     const auto [bank, presetList] = m->start_amp();
 
-    EXPECT_THAT(presetList.size(), Eq(maxToReceive / 2));
+    EXPECT_THAT(presetList.size(), Eq(presetPacketCountShort / 2));
     EXPECT_THAT(presetList[0], StrEq("abc"));
     EXPECT_THAT(presetList[1], StrEq("def"));
     EXPECT_THAT(presetList[2], StrEq("ghi"));
@@ -341,8 +337,7 @@ TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    constexpr size_t maxToReceive{200};
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -380,8 +375,7 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    constexpr size_t maxToReceive{200};
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -409,7 +403,7 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(maxToReceive).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
@@ -497,7 +491,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 {
 
-    const amp_settings as{amps::BRITISH_80S, 2, 1, 3, 4, 5,
+    constexpr amp_settings as{amps::BRITISH_80S, 2, 1, 3, 4, 5,
                             cabinets::cab4x12M, 0, 9, 10, 11,
                             0, 0x80, 13, 1, false, 0xab};
 
@@ -530,10 +524,10 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 {
-    const fx_pedal_settings e0{0x00, effects::TRIANGLE_FLANGER, 10, 20, 30, 40, 50, 0, Position::effectsLoop};
-    const fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 0, Position::input};
-    const fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
-    const fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
+    constexpr fx_pedal_settings e0{0x00, effects::TRIANGLE_FLANGER, 10, 20, 30, 40, 50, 0, Position::effectsLoop};
+    constexpr fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 0, Position::input};
+    constexpr fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+    constexpr fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
     const auto recvData0 = asBuffer(serializeEffectSettings(e0));
     const auto recvData1 = asBuffer(serializeEffectSettings(e1));
     const auto recvData2 = asBuffer(serializeEffectSettings(e2));
@@ -567,9 +561,9 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
 TEST_F(MustangTest, setAmpSendsValues)
 {
-    const amp_settings settings{amps::BRITISH_70S, 8, 9, 1, 2, 3,
-                                cabinets::cab4x12G, 3, 5, 3, 2, 1,
-                                4, 1, 5, true, 4};
+    constexpr amp_settings settings{amps::BRITISH_70S, 8, 9, 1, 2, 3,
+                                    cabinets::cab4x12G, 3, 5, 3, 2, 1,
+                                    4, 1, 5, true, 4};
 
     const auto data = serializeAmpSettings(settings);
     const auto data2 = serializeAmpSettingsUsbGain(settings);
@@ -599,7 +593,7 @@ TEST_F(MustangTest, setAmpSendsValues)
 
 TEST_F(MustangTest, setEffectSendsValue)
 {
-    const fx_pedal_settings settings{3, effects::OVERDRIVE, 8, 7, 6, 5, 4, 3, Position::input};
+    constexpr fx_pedal_settings settings{3, effects::OVERDRIVE, 8, 7, 6, 5, 4, 3, Position::input};
     const auto data = serializeEffectSettings(settings);
 
 
@@ -627,7 +621,7 @@ TEST_F(MustangTest, setEffectSendsValue)
 
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 {
-    const fx_pedal_settings settings{2, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+    constexpr fx_pedal_settings settings{2, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
 
 
     InSequence s;
@@ -652,8 +646,6 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     const auto dataName = serializeSaveEffectName(slot, name, settings);
     const auto cmdExecute = serializeApplyCommand(settings[0]);
     const auto packets = serializeSaveEffectPacket(slot, settings);
-    const auto dataEffect0 = packets[0];
-    const auto dataEffect1 = packets[1];
 
 
     InSequence s;
@@ -662,11 +654,11 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect0), dataEffect0.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(packets[0]), packets[0].size())).WillOnce(Return(0));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Effect #1
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect1), dataEffect1.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(packets[1]), packets[1].size())).WillOnce(Return(0));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Apply cmd
@@ -687,7 +679,6 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     const auto dataName = serializeSaveEffectName(slot, name, settings);
     const auto cmdExecute = serializeApplyCommand(settings[0]);
     const auto packets = serializeSaveEffectPacket(slot, settings);
-    const auto dataEffect0 = packets[0];
 
 
     InSequence s;
@@ -696,7 +687,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(dataEffect0), dataEffect0.size())).WillOnce(Return(0));
+    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(packets[0]), packets[0].size())).WillOnce(Return(0));
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     // Apply cmd
