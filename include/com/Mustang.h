@@ -41,7 +41,7 @@ namespace plug::com
     class Mustang
     {
     public:
-        Mustang(std::shared_ptr<Connection> connection);
+        explicit Mustang(std::shared_ptr<Connection> connection);
         Mustang(Mustang&&) = default;
         ~Mustang();
 
