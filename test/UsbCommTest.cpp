@@ -44,7 +44,7 @@ protected:
     void TearDown() override
     {
         ignoreClose();
-        comm = nullptr;
+        comm.reset();
         mock::clearUsbMock();
     }
 
