@@ -40,4 +40,3 @@ namespace mock
         MOCK_METHOD3(interruptWriteImpl, std::size_t(std::uint8_t, std::uint8_t*, std::size_t));
     };
 }
-

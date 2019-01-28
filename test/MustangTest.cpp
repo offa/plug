@@ -54,7 +54,7 @@ protected:
         return std::vector<std::uint8_t>(packetSize, 0x00);
     }
 
-    template<class Container>
+    template <class Container>
     auto asBuffer(const Container& c) const
     {
         return std::vector<std::uint8_t>{std::cbegin(c), std::cend(c)};
@@ -163,8 +163,8 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 TEST_F(MustangTest, startRequestsCurrentAmp)
 {
     constexpr amp_settings amp{amps::BRITISH_60S, 4, 8, 5, 9, 1,
-                            cabinets::cabBSSMN, 5, 3, 4, 7, 4, 2, 6, 1,
-                            true, 17};
+                               cabinets::cabBSSMN, 5, 3, 4, 7, 4, 2, 6, 1,
+                               true, 17};
     const auto recvData = asBuffer(serializeAmpSettings(amp));
     const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(amp));
     const auto [initCmd1, initCmd2] = serializeInitCommand();
@@ -402,7 +402,6 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
         .WillOnce(Return(noData));
 
 
-
     m->start_amp();
     m->start_amp();
 }
@@ -465,8 +464,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 {
 
     constexpr amp_settings as{amps::BRITISH_80S, 2, 1, 3, 4, 5,
-                            cabinets::cab4x12M, 0, 9, 10, 11,
-                            0, 0x80, 13, 1, false, 0xab};
+                              cabinets::cab4x12M, 0, 9, 10, 11,
+                              0, 0x80, 13, 1, false, 0xab};
 
     const auto recvData = asBuffer(serializeAmpSettings(as));
     const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(as));
@@ -609,7 +608,7 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 TEST_F(MustangTest, saveEffectsSendsValues)
 {
     const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::MONO_DELAY, 0, 1, 2, 3, 4, 5, Position::input},
-                                                fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop}};
+                                                  fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop}};
     const std::string name = "abcd";
     const auto dataName = serializeSaveEffectName(slot, name, settings);
     const auto cmdExecute = serializeApplyCommand(settings[0]);
@@ -640,8 +639,8 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
 {
     const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::MONO_DELAY, 0, 1, 2, 3, 4, 5, Position::input},
-                                                fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop},
-                                                fx_pedal_settings{3, effects::SINE_FLANGER, 1, 2, 2, 1, 0, 4, Position::effectsLoop}};
+                                                  fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop},
+                                                  fx_pedal_settings{3, effects::SINE_FLANGER, 1, 2, 2, 1, 0, 4, Position::effectsLoop}};
     const std::string name = "abcd";
     const auto dataName = serializeSaveEffectName(slot, name, settings);
     const auto cmdExecute = serializeApplyCommand(settings[0]);
@@ -685,4 +684,3 @@ TEST_F(MustangTest, saveOnAmp)
 
     m->save_on_amp(name, slot);
 }
-

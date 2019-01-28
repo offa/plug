@@ -28,8 +28,8 @@ namespace test::matcher
     MATCHER_P(EffectIs, value, "")
     {
         return std::tie(value.fx_slot, value.effect_num, value.knob1, value.knob2, value.knob3,
-                        value.knob4, value.knob5, value.knob6, value.position)
-            == std::tie(arg.fx_slot, arg.effect_num, arg.knob1, arg.knob2, arg.knob3,
+                        value.knob4, value.knob5, value.knob6, value.position) ==
+               std::tie(arg.fx_slot, arg.effect_num, arg.knob1, arg.knob2, arg.knob3,
                         arg.knob4, arg.knob5, arg.knob6, arg.position);
     }
 
@@ -37,10 +37,10 @@ namespace test::matcher
     {
         return std::tie(value.amp_num, value.volume, value.gain, value.treble, value.middle, value.bass,
                         value.cabinet, value.noise_gate, value.threshold, value.master_vol, value.gain2,
-                        value.presence, value.depth, value.bias, value.sag, value.brightness, value.usb_gain)
-        == std::tie(arg.amp_num, arg.volume, arg.gain, arg.treble, arg.middle, arg.bass,
-                    arg.cabinet, arg.noise_gate, arg.threshold, arg.master_vol, arg.gain2,
-                    arg.presence, arg.depth, arg.bias, arg.sag, arg.brightness, arg.usb_gain);
+                        value.presence, value.depth, value.bias, value.sag, value.brightness, value.usb_gain) ==
+               std::tie(arg.amp_num, arg.volume, arg.gain, arg.treble, arg.middle, arg.bass,
+                        arg.cabinet, arg.noise_gate, arg.threshold, arg.master_vol, arg.gain2,
+                        arg.presence, arg.depth, arg.bias, arg.sag, arg.brightness, arg.usb_gain);
     }
 }
 
@@ -53,8 +53,8 @@ namespace plug
         *os << "[slot: " + std::to_string(e.fx_slot)
             << ", effect: " << std::to_string(static_cast<int>(e.effect_num))
             << ", knobs: (" << std::to_string(e.knob1) << ", " << std::to_string(e.knob2)
-                            << ", " << std::to_string(e.knob3) << ", " << std::to_string(e.knob4)
-                            << ", " << std::to_string(e.knob5) << ", " << std::to_string(e.knob6) << ")"
+            << ", " << std::to_string(e.knob3) << ", " << std::to_string(e.knob4)
+            << ", " << std::to_string(e.knob5) << ", " << std::to_string(e.knob6) << ")"
             << ", position: " << std::to_string(static_cast<int>(e.position)) << "]";
     }
 
@@ -81,5 +81,3 @@ namespace plug
     }
 
 }
-
-
