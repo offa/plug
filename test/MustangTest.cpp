@@ -153,9 +153,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
 
     const auto [bank, presets] = m->start_amp();
-
-    const auto name = std::get<0>(bank);
-    EXPECT_THAT(name, StrEq(actualName));
+    EXPECT_THAT(std::get<0>(bank), StrEq(actualName));
 
     static_cast<void>(presets);
 }
