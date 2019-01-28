@@ -407,12 +407,6 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
     m->start_amp();
 }
 
-TEST_F(MustangTest, DISABLED_stopAmpDoesNothingIfNotStartedYet)
-{
-    // FIXME: Update test (#152)
-    m->stop_amp();
-}
-
 TEST_F(MustangTest, stopAmpClosesConnection)
 {
     EXPECT_CALL(*conn, close());
