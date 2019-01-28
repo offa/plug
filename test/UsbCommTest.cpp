@@ -223,6 +223,22 @@ TEST_F(UsbCommTest, closeDoesNothingIfNotOpenYet)
     EXPECT_THAT(comm->isOpen(), Eq(false));
 }
 
+TEST_F(UsbCommTest, closeClosesConnectionOnlyOnce)
+{
+    setupHandle();
+
+    InSequence s;
+    EXPECT_CALL(*usbmock, release_interface(&handle, 0));
+    EXPECT_CALL(*usbmock, attach_kernel_driver(&handle, 0));
+    EXPECT_CALL(*usbmock, close(&handle));
+    EXPECT_CALL(*usbmock, exit(nullptr));
+
+    comm->close();
+    EXPECT_THAT(comm->isOpen(), Eq(false));
+    comm->close();
+    EXPECT_THAT(comm->isOpen(), Eq(false));
+}
+
 TEST_F(UsbCommTest, closeDoesNotReattachDriverIfNoDevice)
 {
     setupHandle();
