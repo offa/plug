@@ -49,7 +49,6 @@ namespace plug::com
 
     Mustang::~Mustang()
     {
-        this->stop_amp();
     }
 
     InitalData Mustang::start_amp()

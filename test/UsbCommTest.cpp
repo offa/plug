@@ -37,12 +37,14 @@ class UsbCommTest : public testing::Test
 protected:
     void SetUp() override
     {
-        comm = std::make_unique<UsbComm>();
         usbmock = mock::resetUsbMock();
+        comm = std::make_unique<UsbComm>();
     }
 
     void TearDown() override
     {
+        ignoreClose();
+        comm = nullptr;
         mock::clearUsbMock();
     }
 
@@ -53,6 +55,14 @@ protected:
         EXPECT_CALL(*usbmock, kernel_driver_active(_, _));
         EXPECT_CALL(*usbmock, claim_interface(_, _));
         comm->open(0, 0);
+    }
+
+    void ignoreClose()
+    {
+        EXPECT_CALL(*usbmock, release_interface(_, _)).Times(AnyNumber());
+        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _)).Times(AnyNumber());
+        EXPECT_CALL(*usbmock, close(_)).Times(AnyNumber());
+        EXPECT_CALL(*usbmock, exit(_)).Times(AnyNumber());
     }
 
     std::unique_ptr<UsbComm> comm;

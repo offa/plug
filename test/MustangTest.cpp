@@ -49,11 +49,6 @@ protected:
     {
     }
 
-    void ignoreClose()
-    {
-        EXPECT_CALL(*conn, close());
-    }
-
     std::vector<std::uint8_t> createEmptyPacketData() const
     {
         return std::vector<std::uint8_t>(packetSize, 0x00);
@@ -112,8 +107,6 @@ TEST_F(MustangTest, startInitializesUsb)
 
 
     m->start_amp();
-
-    ignoreClose();
 }
 
 TEST_F(MustangTest, startPropagatesErrorOnInitFailure)
@@ -122,8 +115,6 @@ TEST_F(MustangTest, startPropagatesErrorOnInitFailure)
     EXPECT_CALL(*conn, openFirst(_, _)).WillOnce(Throw(plug::com::CommunicationException{"expected"}));
 
     EXPECT_THROW(m->start_amp(), plug::com::CommunicationException);
-
-    ignoreClose();
 }
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
@@ -166,7 +157,6 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     const auto name = std::get<0>(bank);
     EXPECT_THAT(name, StrEq(actualName));
 
-    ignoreClose();
     static_cast<void>(presets);
 }
 
@@ -211,7 +201,6 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     const auto settings = std::get<1>(bank);
     EXPECT_THAT(settings, AmpIs(amp));
 
-    ignoreClose();
     static_cast<void>(presets);
 }
 
@@ -261,7 +250,6 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
     EXPECT_THAT(settings[0], EffectIs(e0));
 
-    ignoreClose();
     static_cast<void>(presets);
 }
 
@@ -315,7 +303,6 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     EXPECT_THAT(presetList[1], StrEq("def"));
     EXPECT_THAT(presetList[2], StrEq("ghi"));
 
-    ignoreClose();
     static_cast<void>(bank);
 }
 
@@ -352,8 +339,6 @@ TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
 
 
     m->start_amp();
-
-    ignoreClose();
 }
 
 TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
@@ -420,8 +405,6 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
 
     m->start_amp();
     m->start_amp();
-
-    ignoreClose();
 }
 
 TEST_F(MustangTest, DISABLED_stopAmpDoesNothingIfNotStartedYet)
@@ -434,8 +417,6 @@ TEST_F(MustangTest, stopAmpClosesConnection)
 {
     EXPECT_CALL(*conn, close());
     m->stop_amp();
-
-    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
@@ -459,7 +440,6 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 
 
     m->load_memory_bank(slot);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
@@ -485,7 +465,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
     EXPECT_THAT(name, StrEq("abc"));
     static_cast<void>(amp);
     static_cast<void>(effects);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
@@ -519,7 +498,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 
     static_cast<void>(name);
     static_cast<void>(effects);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
@@ -556,7 +534,6 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
     static_cast<void>(name);
     static_cast<void>(amp);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, setAmpSendsValues)
@@ -588,7 +565,6 @@ TEST_F(MustangTest, setAmpSendsValues)
 
 
     m->set_amplifier(settings);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, setEffectSendsValue)
@@ -616,7 +592,6 @@ TEST_F(MustangTest, setEffectSendsValue)
 
 
     m->set_effect(settings);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
@@ -635,7 +610,6 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 
 
     m->set_effect(settings);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsSendsValues)
@@ -667,7 +641,6 @@ TEST_F(MustangTest, saveEffectsSendsValues)
 
 
     m->save_effects(slot, name, settings);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
@@ -695,7 +668,6 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(noData));
 
     m->save_effects(slot, name, settings);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
@@ -703,7 +675,6 @@ TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
     const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::COMPRESSOR, 0, 1, 2, 3, 4, 5, Position::input}};
 
     EXPECT_THROW(m->save_effects(slot, "abcd", settings), std::invalid_argument);
-    ignoreClose();
 }
 
 TEST_F(MustangTest, saveOnAmp)
@@ -719,6 +690,5 @@ TEST_F(MustangTest, saveOnAmp)
 
 
     m->save_on_amp(name, slot);
-    ignoreClose();
 }
 
