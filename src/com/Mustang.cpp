@@ -45,10 +45,6 @@ namespace plug::com
     {
     }
 
-    Mustang::~Mustang()
-    {
-    }
-
     InitalData Mustang::start_amp()
     {
         if (comm->isOpen() == false)

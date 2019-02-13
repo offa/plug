@@ -43,7 +43,6 @@ namespace plug::com
     public:
         explicit Mustang(std::shared_ptr<Connection> connection);
         Mustang(Mustang&&) = default;
-        ~Mustang();
 
         InitalData start_amp();
         void stop_amp();
