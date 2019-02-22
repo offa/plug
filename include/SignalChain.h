@@ -79,6 +79,4 @@ namespace plug
         std::array<fx_pedal_settings, 4> effects_;
     };
 
-    using MemoryBank = SignalChain;
-
 }

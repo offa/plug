@@ -94,12 +94,12 @@ namespace plug::com
         loadBankData(slot);
     }
 
-    MemoryBank Mustang::load_memory_bank(std::uint8_t slot)
+    SignalChain Mustang::load_memory_bank(std::uint8_t slot)
     {
         return decode_data(loadBankData(slot));
     }
 
-    MemoryBank Mustang::decode_data(const std::array<Packet, 7>& data)
+    SignalChain Mustang::decode_data(const std::array<Packet, 7>& data)
     {
         const auto name = decodeNameFromData(data);
         const auto amp = decodeAmpFromData(data);

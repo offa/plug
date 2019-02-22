@@ -31,7 +31,7 @@
 
 namespace plug::com
 {
-    using InitalData = std::tuple<MemoryBank, std::vector<std::string>>;
+    using InitalData = std::tuple<SignalChain, std::vector<std::string>>;
 
     class Mustang
     {
@@ -44,7 +44,7 @@ namespace plug::com
         void set_effect(fx_pedal_settings value);
         void set_amplifier(amp_settings value);
         void save_on_amp(std::string_view name, std::uint8_t slot);
-        MemoryBank load_memory_bank(std::uint8_t slot);
+        SignalChain load_memory_bank(std::uint8_t slot);
         void save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
 
 
@@ -52,7 +52,7 @@ namespace plug::com
 
 
     private:
-        MemoryBank decode_data(const std::array<Packet, 7>& data);
+        SignalChain decode_data(const std::array<Packet, 7>& data);
         InitalData loadData();
         std::array<Packet, 7> loadBankData(std::uint8_t slot);
 
