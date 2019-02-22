@@ -152,8 +152,8 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
         .WillOnce(Return(noData));
 
 
-    const auto [bank, presets] = m->start_amp();
-    EXPECT_THAT(std::get<0>(bank), StrEq(actualName));
+    const auto [signalChain, presets] = m->start_amp();
+    EXPECT_THAT(signalChain.name(), StrEq(actualName));
 
     static_cast<void>(presets);
 }
@@ -195,9 +195,8 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
         .WillOnce(Return(noData));
 
 
-    const auto [bank, presets] = m->start_amp();
-    const auto settings = std::get<1>(bank);
-    EXPECT_THAT(settings, AmpIs(amp));
+    const auto [signalChain, presets] = m->start_amp();
+    EXPECT_THAT(signalChain.amp(), AmpIs(amp));
 
     static_cast<void>(presets);
 }
@@ -243,10 +242,9 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
         .WillOnce(Return(noData));
 
 
-    const auto [bank, presets] = m->start_amp();
-    const std::array<fx_pedal_settings, 4> settings = std::get<2>(bank);
+    const auto [signalChain, presets] = m->start_amp();
 
-    EXPECT_THAT(settings[0], EffectIs(e0));
+    EXPECT_THAT(signalChain.effects()[0], EffectIs(e0));
 
     static_cast<void>(presets);
 }
@@ -294,14 +292,14 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
         .WillOnce(Return(noData));
 
 
-    const auto [bank, presetList] = m->start_amp();
+    const auto [signalChain, presetList] = m->start_amp();
 
     EXPECT_THAT(presetList.size(), Eq(presetPacketCountShort / 2));
     EXPECT_THAT(presetList[0], StrEq("abc"));
     EXPECT_THAT(presetList[1], StrEq("def"));
     EXPECT_THAT(presetList[2], StrEq("ghi"));
 
-    static_cast<void>(bank);
+    static_cast<void>(signalChain);
 }
 
 TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
@@ -452,10 +450,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(noData));
 
-    const auto [name, amp, effects] = m->load_memory_bank(slot);
-    EXPECT_THAT(name, StrEq("abc"));
-    static_cast<void>(amp);
-    static_cast<void>(effects);
+    const auto signalChain = m->load_memory_bank(slot);
+    EXPECT_THAT(signalChain.name(), StrEq("abc"));
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
@@ -484,11 +480,8 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
         .WillOnce(Return(noData));
 
 
-    const auto [name, settings, effects] = m->load_memory_bank(slot);
-    EXPECT_THAT(settings, AmpIs(as));
-
-    static_cast<void>(name);
-    static_cast<void>(effects);
+    const auto signalChain = m->load_memory_bank(slot);
+    EXPECT_THAT(signalChain.amp(), AmpIs(as));
 }
 
 TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
@@ -519,12 +512,9 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
         .WillOnce(Return(noData));
 
 
-    const auto [name, amp, settings] = m->load_memory_bank(slot);
+    const auto signalChain = m->load_memory_bank(slot);
 
-    EXPECT_THAT(settings, ElementsAre(EffectIs(e0), EffectIs(e1), EffectIs(e2), EffectIs(e3)));
-
-    static_cast<void>(name);
-    static_cast<void>(amp);
+    EXPECT_THAT(signalChain.effects(), ElementsAre(EffectIs(e0), EffectIs(e1), EffectIs(e2), EffectIs(e3)));
 }
 
 TEST_F(MustangTest, setAmpSendsValues)

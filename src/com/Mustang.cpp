@@ -105,7 +105,7 @@ namespace plug::com
         const auto amp = decodeAmpFromData(data);
         const auto effects = decodeEffectsFromData(data);
 
-        return {name, amp, effects};
+        return SignalChain{name, amp, effects};
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)

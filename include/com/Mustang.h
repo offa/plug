@@ -21,21 +21,16 @@
 
 #pragma once
 
-#include "data_structs.h"
-#include "effects_enum.h"
+#include "SignalChain.h"
 #include "com/Connection.h"
 #include "com/Packet.h"
-#include <string>
 #include <string_view>
 #include <vector>
 #include <memory>
 #include <cstdint>
-#include <array>
-#include <tuple>
 
 namespace plug::com
 {
-    using MemoryBank = std::tuple<std::string, amp_settings, std::array<fx_pedal_settings, 4>>;
     using InitalData = std::tuple<MemoryBank, std::vector<std::string>>;
 
     class Mustang

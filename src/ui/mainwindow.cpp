@@ -186,10 +186,10 @@ namespace plug
 
         try
         {
-            const auto [bank, presets] = amp_ops->start_amp();
-            name = QString::fromStdString(std::get<0>(bank));
-            amplifier_set = std::get<1>(bank);
-            effects_set = std::get<2>(bank);
+            const auto [signalChain, presets] = amp_ops->start_amp();
+            name = QString::fromStdString(signalChain.name());
+            amplifier_set = signalChain.amp();
+            effects_set = signalChain.effects();
             presetNames = presets;
         }
         catch (const com::CommunicationException& ex)
@@ -397,8 +397,8 @@ namespace plug
         }
 
         QSettings settings;
-        const auto [name, ampSettings, effects_set] = amp_ops->load_memory_bank(static_cast<std::uint8_t>(slot));
-        const QString bankName = QString::fromStdString(name);
+        const auto signalChain = amp_ops->load_memory_bank(static_cast<std::uint8_t>(slot));
+        const QString bankName = QString::fromStdString(signalChain.name());
 
 
         if (bankName.isEmpty())
@@ -414,12 +414,13 @@ namespace plug
 
         current_name = bankName;
 
-        amp->load(ampSettings);
+        amp->load(signalChain.amp());
         if (settings.value("Settings/popupChangedWindows").toBool())
         {
             amp->show();
         }
 
+        const auto effects_set = signalChain.effects();
         for (std::size_t i = 0; i < 4; i++)
         {
             switch (effects_set[i].fx_slot)
