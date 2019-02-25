@@ -24,7 +24,8 @@
 
 namespace plug::com
 {
-    namespace {
+    namespace
+    {
         inline constexpr std::initializer_list<std::uint16_t> pids{
             SMALL_AMPS_USB_PID,
             BIG_AMPS_USB_PID,
@@ -41,4 +42,3 @@ namespace plug::com
         return conn;
     }
 }
-

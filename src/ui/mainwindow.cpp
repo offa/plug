@@ -21,7 +21,7 @@
 
 #include "ui/mainwindow.h"
 #include "com/Mustang.h"
-#include "com/UsbComm.h"
+#include "com/ConnectionFactory.h"
 #include "com/CommunicationException.h"
 #include "com/MustangUpdater.h"
 #include "ui_defaulteffects.h"
@@ -38,7 +38,7 @@ namespace plug
         : QMainWindow(parent),
           ui(std::make_unique<Ui::MainWindow>()),
           presetNames(100, ""),
-          amp_ops(std::make_unique<com::Mustang>(std::make_shared<com::UsbComm>()))
+          amp_ops(std::make_unique<com::Mustang>(com::createUsbConnection()))
     {
         ui->setupUi(this);
 
