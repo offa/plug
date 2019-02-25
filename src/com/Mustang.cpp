@@ -21,21 +21,13 @@
 
 #include "com/Mustang.h"
 #include "com/PacketSerializer.h"
+#include "com/CommunicationException.h"
 #include <algorithm>
 
 namespace plug::com
 {
     namespace
     {
-        inline constexpr std::initializer_list<std::uint16_t> pids{
-            SMALL_AMPS_USB_PID,
-            BIG_AMPS_USB_PID,
-            SMALL_AMPS_V2_USB_PID,
-            BIG_AMPS_V2_USB_PID,
-            MINI_USB_PID,
-            FLOOR_USB_PID};
-
-
         inline constexpr std::uint8_t endpointSend{0x01};
         inline constexpr std::uint8_t endpointRecv{0x81};
     }
@@ -49,7 +41,7 @@ namespace plug::com
     {
         if (comm->isOpen() == false)
         {
-            comm->openFirst(USB_VID, pids);
+            throw CommunicationException{"Device not connected"};
         }
 
         initializeAmp();

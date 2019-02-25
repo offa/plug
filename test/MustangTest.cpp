@@ -74,13 +74,12 @@ protected:
     static inline constexpr int slot{5};
 };
 
-TEST_F(MustangTest, startInitializesUsb)
+TEST_F(MustangTest, startInitializesDevice)
 {
     const auto [initCmd1, initCmd2] = serializeInitCommand();
 
     InSequence s;
-    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _));
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
 
     // Init commands
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
@@ -109,11 +108,9 @@ TEST_F(MustangTest, startInitializesUsb)
     m->start_amp();
 }
 
-TEST_F(MustangTest, startPropagatesErrorOnInitFailure)
+TEST_F(MustangTest, startThrowsIfConnectionNotReady)
 {
     EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _)).WillOnce(Throw(plug::com::CommunicationException{"expected"}));
-
     EXPECT_THROW(m->start_amp(), plug::com::CommunicationException);
 }
 
@@ -122,8 +119,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     const auto [initCmd1, initCmd2] = serializeInitCommand();
 
     InSequence s;
-    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _));
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
 
     // Init commands
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
@@ -168,8 +164,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     const auto [initCmd1, initCmd2] = serializeInitCommand();
 
     InSequence s;
-    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _));
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
 
     // Init commands
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
@@ -215,8 +210,7 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 
     InSequence s;
-    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _));
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
 
     // Init commands
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
@@ -258,8 +252,7 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
 
 
     InSequence s;
-    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _));
+    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
 
     // Init commands
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
@@ -307,72 +300,7 @@ TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
     const auto [initCmd1, initCmd2] = serializeInitCommand();
 
     InSequence s;
-    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _));
-
-    // Init commands
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
-
-    // Load cmd
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
-
-    // Preset names data
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
-
-    // Data
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreAmpData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(noData));
-
-
-    m->start_amp();
-}
-
-TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
-{
-    const auto [initCmd1, initCmd2] = serializeInitCommand();
-
-    InSequence s;
-    // #1
-    EXPECT_CALL(*conn, isOpen()).WillOnce(Return(false));
-    EXPECT_CALL(*conn, openFirst(_, _));
-
-    // Init commands
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).WillOnce(Return(ignoreData));
-
-    // Load cmd
-    EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
-
-    // Preset names data
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
-
-    // Data
-    EXPECT_CALL(*conn, interruptReceive(endpointReceive, packetSize))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreAmpData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(ignoreData))
-        .WillOnce(Return(noData));
-
-
-    // #2
     EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
-    EXPECT_CALL(*conn, openFirst(_, _)).Times(0);
 
     // Init commands
     EXPECT_CALL(*conn, interruptWriteImpl(endpointSend, BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
@@ -398,7 +326,6 @@ TEST_F(MustangTest, startDoesNotInitializeUsbIfCalledMultipleTimes)
         .WillOnce(Return(noData));
 
 
-    m->start_amp();
     m->start_amp();
 }
 
