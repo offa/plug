@@ -35,7 +35,7 @@ namespace plug::com
         virtual ~UsbComm();
 
         void open(std::uint16_t vid, std::uint16_t pid) override;
-        void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids) override;
+        void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids);
         void close() override;
 
         bool isOpen() const override;
