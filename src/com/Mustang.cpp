@@ -26,12 +26,6 @@
 
 namespace plug::com
 {
-    namespace
-    {
-        inline constexpr std::uint8_t endpointSend{0x01};
-        inline constexpr std::uint8_t endpointRecv{0x81};
-    }
-
     Mustang::Mustang(std::shared_ptr<Connection> connection)
         : comm(connection)
     {
@@ -164,12 +158,12 @@ namespace plug::com
 
     std::size_t Mustang::sendPacket(const Packet& packet)
     {
-        return comm->send(endpointSend, packet);
+        return comm->send(packet);
     }
 
     std::vector<std::uint8_t> Mustang::receivePacket()
     {
-        return comm->receive(endpointRecv, packetSize);
+        return comm->receive(packetSize);
     }
 
     void Mustang::sendCommand(const Packet& packet)

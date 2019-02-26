@@ -28,7 +28,12 @@ namespace plug::com
 {
     namespace
     {
+
         constexpr std::chrono::milliseconds timeout{500};
+
+        inline constexpr std::uint8_t endpointSend{0x01};
+        inline constexpr std::uint8_t endpointRecv{0x81};
+
 
         void checked(int rtnValue, const std::string& msg)
         {
@@ -91,11 +96,11 @@ namespace plug::com
         return (handle != nullptr);
     }
 
-    std::vector<std::uint8_t> UsbComm::receive(std::uint8_t endpoint, std::size_t recvSize)
+    std::vector<std::uint8_t> UsbComm::receive(std::size_t recvSize)
     {
         int actualTransfered{0};
         std::vector<std::uint8_t> buffer(recvSize);
-        const auto rtn = libusb_interrupt_transfer(handle, endpoint, buffer.data(), static_cast<int>(buffer.size()), &actualTransfered, timeout.count());
+        const auto rtn = libusb_interrupt_transfer(handle, endpointRecv, buffer.data(), static_cast<int>(buffer.size()), &actualTransfered, timeout.count());
 
         if (rtn != LIBUSB_ERROR_TIMEOUT)
         {
@@ -107,10 +112,10 @@ namespace plug::com
         return buffer;
     }
 
-    std::size_t UsbComm::sendImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size)
+    std::size_t UsbComm::sendImpl(std::uint8_t* data, std::size_t size)
     {
         int actualTransfered{0};
-        const auto rtn = libusb_interrupt_transfer(handle, endpoint, data, static_cast<int>(size), &actualTransfered, timeout.count());
+        const auto rtn = libusb_interrupt_transfer(handle, endpointSend, data, static_cast<int>(size), &actualTransfered, timeout.count());
         checked(rtn, "Interrupt write failed");
 
         return static_cast<std::size_t>(actualTransfered);

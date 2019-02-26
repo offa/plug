@@ -39,14 +39,14 @@ namespace plug::com
         virtual bool isOpen() const = 0;
 
         template <class Container>
-        std::size_t send(std::uint8_t endpoint, Container c)
+        std::size_t send(Container c)
         {
-            return sendImpl(endpoint, c.data(), c.size());
+            return sendImpl(c.data(), c.size());
         }
 
-        virtual std::vector<std::uint8_t> receive(std::uint8_t endpoint, std::size_t recvSize) = 0;
+        virtual std::vector<std::uint8_t> receive(std::size_t recvSize) = 0;
 
     private:
-        virtual std::size_t sendImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size) = 0;
+        virtual std::size_t sendImpl(std::uint8_t* data, std::size_t size) = 0;
     };
 }

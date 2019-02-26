@@ -70,6 +70,8 @@ protected:
     libusb_device_handle handle{};
     static inline constexpr std::uint16_t vid{7};
     static inline constexpr std::uint16_t pid{9};
+    static inline constexpr std::uint8_t endpointSend{0x01};
+    static inline constexpr std::uint8_t endpointRecv{0x81};
     static inline constexpr int failed{LIBUSB_ERROR_NO_DEVICE};
     static inline constexpr int errorTimeout{LIBUSB_ERROR_TIMEOUT};
     static inline constexpr std::uint16_t timeout{500};
@@ -256,13 +258,12 @@ TEST_F(UsbCommTest, interruptWriteTransfersDataVector)
     setupHandle();
 
     const std::vector<std::uint8_t> data{0, 1, 2, 3, 4, 5, 6};
-    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
 
-    const auto n = comm->send(endpoint, data);
+    const auto n = comm->send(data);
     EXPECT_THAT(n, Eq(data.size()));
 }
 
@@ -271,13 +272,12 @@ TEST_F(UsbCommTest, interruptWriteTransfersDataArray)
     setupHandle();
 
     const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
-    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
 
-    const auto n = comm->send(endpoint, data);
+    const auto n = comm->send(data);
     EXPECT_THAT(n, Eq(data.size()));
 }
 
@@ -286,13 +286,12 @@ TEST_F(UsbCommTest, interruptWriteDoesNothingOnEmptyData)
     setupHandle();
 
     const std::array<std::uint8_t, 4> data{};
-    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
 
-    const auto n = comm->send(endpoint, data);
+    const auto n = comm->send(data);
     EXPECT_THAT(n, Eq(data.size()));
 }
 
@@ -302,13 +301,12 @@ TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransfer)
 
     const std::vector<std::uint8_t> data{0, 1, 2, 3, 4, 5, 6};
     const std::vector<std::uint8_t> partial(data.cbegin(), std::next(data.cbegin(), 4));
-    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(partial.size()), Return(0)));
 
-    const auto n = comm->send(endpoint, data);
+    const auto n = comm->send(data);
     EXPECT_THAT(n, Eq(partial.size()));
 }
 
@@ -317,13 +315,12 @@ TEST_F(UsbCommTest, interruptWriteThrowsOnTransferError)
     setupHandle();
 
     const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
-    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointSend, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(failed)));
 
-    EXPECT_THROW(comm->send(endpoint, data), CommunicationException);
+    EXPECT_THROW(comm->send(data), CommunicationException);
 }
 
 TEST_F(UsbCommTest, interruptReadReceivesData)
@@ -332,13 +329,12 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
 
     const std::vector<std::uint8_t> data{0, 1, 2, 3, 4, 5, 6};
     const std::size_t readSize = data.size();
-    constexpr std::uint8_t endpoint{0x01};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointRecv, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(0)));
 
-    const auto buffer = comm->receive(endpoint, readSize);
+    const auto buffer = comm->receive(readSize);
     EXPECT_THAT(buffer, ContainerEq(data));
 }
 
@@ -348,13 +344,12 @@ TEST_F(UsbCommTest, interruptReadReturnsEmptyContainerIfReceiveSizeIsEmpty)
 
     const std::vector<std::uint8_t> data{};
     const std::size_t readSize = data.size();
-    constexpr std::uint8_t endpoint{0x01};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointRecv, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(0)));
 
-    const auto buffer = comm->receive(endpoint, 0);
+    const auto buffer = comm->receive(0);
     EXPECT_THAT(buffer, IsEmpty());
 }
 
@@ -366,13 +361,12 @@ TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialTransfer)
     const std::vector<std::uint8_t> expected{0, 1, 2, 3};
     const std::size_t readSize = data.size();
     constexpr std::size_t actualSize{4};
-    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointRecv, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), std::next(data.cbegin(), actualSize)), SetArgPointee<4>(actualSize), Return(0)));
 
-    const auto buffer = comm->receive(endpoint, readSize);
+    const auto buffer = comm->receive(readSize);
     EXPECT_THAT(buffer, ContainerEq(expected));
 }
 
@@ -381,13 +375,12 @@ TEST_F(UsbCommTest, interruptReceiveThrowsOnTransferError)
     setupHandle();
 
     const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
-    constexpr std::uint8_t endpoint{0x81};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointRecv, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(failed)));
 
-    EXPECT_THROW(comm->receive(endpoint, data.size()), CommunicationException);
+    EXPECT_THROW(comm->receive(data.size()), CommunicationException);
 }
 
 TEST_F(UsbCommTest, interruptReceiveAcceptsTimeoutAndReturnsEmpty)
@@ -395,13 +388,12 @@ TEST_F(UsbCommTest, interruptReceiveAcceptsTimeoutAndReturnsEmpty)
     setupHandle();
 
     const std::array<std::uint8_t, 4> data{{0, 1, 2, 3}};
-    constexpr std::uint8_t endpoint{0x81};
     constexpr std::size_t readSize{0};
 
     InSequence s;
-    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
+    EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpointRecv, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(errorTimeout)));
 
-    const auto buffer = comm->receive(endpoint, data.size());
+    const auto buffer = comm->receive(data.size());
     EXPECT_THAT(buffer, IsEmpty());
 }
