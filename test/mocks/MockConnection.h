@@ -36,7 +36,7 @@ namespace mock
         MOCK_METHOD2(openFirst, void(std::uint16_t, std::initializer_list<std::uint16_t>));
         MOCK_METHOD0(close, void());
         MOCK_CONST_METHOD0(isOpen, bool());
-        MOCK_METHOD2(interruptReceive, std::vector<std::uint8_t>(std::uint8_t, std::size_t));
-        MOCK_METHOD3(interruptWriteImpl, std::size_t(std::uint8_t, std::uint8_t*, std::size_t));
+        MOCK_METHOD2(receive, std::vector<std::uint8_t>(std::uint8_t, std::size_t));
+        MOCK_METHOD3(sendImpl, std::size_t(std::uint8_t, std::uint8_t*, std::size_t));
     };
 }

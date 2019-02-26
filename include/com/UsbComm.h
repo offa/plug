@@ -40,10 +40,10 @@ namespace plug::com
 
         bool isOpen() const override;
 
-        std::vector<std::uint8_t> interruptReceive(std::uint8_t endpoint, std::size_t recvSize) override;
+        std::vector<std::uint8_t> receive(std::uint8_t endpoint, std::size_t recvSize) override;
 
     private:
-        std::size_t interruptWriteImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size) override;
+        std::size_t sendImpl(std::uint8_t endpoint, std::uint8_t* data, std::size_t size) override;
 
         void initInterface();
 

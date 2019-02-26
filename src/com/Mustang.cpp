@@ -164,12 +164,12 @@ namespace plug::com
 
     std::size_t Mustang::sendPacket(const Packet& packet)
     {
-        return comm->interruptWrite(endpointSend, packet);
+        return comm->send(endpointSend, packet);
     }
 
     std::vector<std::uint8_t> Mustang::receivePacket()
     {
-        return comm->interruptReceive(endpointRecv, packetSize);
+        return comm->receive(endpointRecv, packetSize);
     }
 
     void Mustang::sendCommand(const Packet& packet)

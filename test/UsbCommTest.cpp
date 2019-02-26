@@ -262,7 +262,7 @@ TEST_F(UsbCommTest, interruptWriteTransfersDataVector)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
 
-    const auto n = comm->interruptWrite(endpoint, data);
+    const auto n = comm->send(endpoint, data);
     EXPECT_THAT(n, Eq(data.size()));
 }
 
@@ -277,7 +277,7 @@ TEST_F(UsbCommTest, interruptWriteTransfersDataArray)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
 
-    const auto n = comm->interruptWrite(endpoint, data);
+    const auto n = comm->send(endpoint, data);
     EXPECT_THAT(n, Eq(data.size()));
 }
 
@@ -292,7 +292,7 @@ TEST_F(UsbCommTest, interruptWriteDoesNothingOnEmptyData)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(0)));
 
-    const auto n = comm->interruptWrite(endpoint, data);
+    const auto n = comm->send(endpoint, data);
     EXPECT_THAT(n, Eq(data.size()));
 }
 
@@ -308,7 +308,7 @@ TEST_F(UsbCommTest, interruptWriteReturnsActualWrittenOnPartialTransfer)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(partial.size()), Return(0)));
 
-    const auto n = comm->interruptWrite(endpoint, data);
+    const auto n = comm->send(endpoint, data);
     EXPECT_THAT(n, Eq(partial.size()));
 }
 
@@ -323,7 +323,7 @@ TEST_F(UsbCommTest, interruptWriteThrowsOnTransferError)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, BufferIs(data), data.size(), _, timeout))
         .WillOnce(DoAll(SetArgPointee<4>(data.size()), Return(failed)));
 
-    EXPECT_THROW(comm->interruptWrite(endpoint, data), CommunicationException);
+    EXPECT_THROW(comm->send(endpoint, data), CommunicationException);
 }
 
 TEST_F(UsbCommTest, interruptReadReceivesData)
@@ -338,7 +338,7 @@ TEST_F(UsbCommTest, interruptReadReceivesData)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(0)));
 
-    const auto buffer = comm->interruptReceive(endpoint, readSize);
+    const auto buffer = comm->receive(endpoint, readSize);
     EXPECT_THAT(buffer, ContainerEq(data));
 }
 
@@ -354,7 +354,7 @@ TEST_F(UsbCommTest, interruptReadReturnsEmptyContainerIfReceiveSizeIsEmpty)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(0)));
 
-    const auto buffer = comm->interruptReceive(endpoint, 0);
+    const auto buffer = comm->receive(endpoint, 0);
     EXPECT_THAT(buffer, IsEmpty());
 }
 
@@ -372,7 +372,7 @@ TEST_F(UsbCommTest, interruptReadResizesBufferOnPartialTransfer)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), std::next(data.cbegin(), actualSize)), SetArgPointee<4>(actualSize), Return(0)));
 
-    const auto buffer = comm->interruptReceive(endpoint, readSize);
+    const auto buffer = comm->receive(endpoint, readSize);
     EXPECT_THAT(buffer, ContainerEq(expected));
 }
 
@@ -387,7 +387,7 @@ TEST_F(UsbCommTest, interruptReceiveThrowsOnTransferError)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(data.size()), Return(failed)));
 
-    EXPECT_THROW(comm->interruptReceive(endpoint, data.size()), CommunicationException);
+    EXPECT_THROW(comm->receive(endpoint, data.size()), CommunicationException);
 }
 
 TEST_F(UsbCommTest, interruptReceiveAcceptsTimeoutAndReturnsEmpty)
@@ -402,6 +402,6 @@ TEST_F(UsbCommTest, interruptReceiveAcceptsTimeoutAndReturnsEmpty)
     EXPECT_CALL(*usbmock, interrupt_transfer(&handle, endpoint, _, data.size(), _, timeout))
         .WillOnce(DoAll(SetArrayArgument<2>(data.cbegin(), data.cend()), SetArgPointee<4>(readSize), Return(errorTimeout)));
 
-    const auto buffer = comm->interruptReceive(endpoint, data.size());
+    const auto buffer = comm->receive(endpoint, data.size());
     EXPECT_THAT(buffer, IsEmpty());
 }
