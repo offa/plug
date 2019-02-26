@@ -21,6 +21,7 @@
 #pragma once
 
 #include "com/Connection.h"
+#include <initializer_list>
 
 struct libusb_device_handle;
 
