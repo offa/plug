@@ -34,10 +34,10 @@ namespace plug::com
         UsbComm();
         virtual ~UsbComm();
 
-        void open(std::uint16_t vid, std::uint16_t pid) override;
+        void open(std::uint16_t vid, std::uint16_t pid);
         void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids);
-        void close() override;
 
+        void close() override;
         bool isOpen() const override;
 
         std::vector<std::uint8_t> receive(std::size_t recvSize) override;

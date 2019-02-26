@@ -32,9 +32,7 @@ namespace plug::com
     public:
         virtual ~Connection() = default;
 
-        virtual void open(std::uint16_t vid, std::uint16_t pid) = 0;
         virtual void close() = 0;
-
         virtual bool isOpen() const = 0;
 
         template <class Container>
