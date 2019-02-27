@@ -27,13 +27,13 @@
 namespace plug::com
 {
     Mustang::Mustang(std::shared_ptr<Connection> connection)
-        : comm(connection)
+        : conn(connection)
     {
     }
 
     InitalData Mustang::start_amp()
     {
-        if (comm->isOpen() == false)
+        if (conn->isOpen() == false)
         {
             throw CommunicationException{"Device not connected"};
         }
@@ -45,7 +45,7 @@ namespace plug::com
 
     void Mustang::stop_amp()
     {
-        comm->close();
+        conn->close();
     }
 
     void Mustang::set_effect(fx_pedal_settings value)
@@ -158,12 +158,12 @@ namespace plug::com
 
     std::size_t Mustang::sendPacket(const Packet& packet)
     {
-        return comm->send(packet);
+        return conn->send(packet);
     }
 
     std::vector<std::uint8_t> Mustang::receivePacket()
     {
-        return comm->receive(packetSize);
+        return conn->receive(packetSize);
     }
 
     void Mustang::sendCommand(const Packet& packet)

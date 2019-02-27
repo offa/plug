@@ -64,6 +64,6 @@ namespace plug::com
         void sendApplyCommand();
 
 
-        const std::shared_ptr<Connection> comm;
+        const std::shared_ptr<Connection> conn;
     };
 }
