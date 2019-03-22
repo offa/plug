@@ -37,7 +37,7 @@ namespace plug::com
     {
     public:
         explicit Mustang(std::shared_ptr<Connection> connection);
-        Mustang(Mustang&&) = default;
+        Mustang(const Mustang&) = delete;
 
         InitalData start_amp();
         void stop_amp();
@@ -48,7 +48,7 @@ namespace plug::com
         void save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
 
 
-        Mustang& operator=(Mustang&&) = default;
+        Mustang& operator=(const Mustang&) = delete;
 
 
     private:
