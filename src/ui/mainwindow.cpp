@@ -202,7 +202,7 @@ namespace plug
         save->load_names(presetNames);
         quickpres->load_names(presetNames);
 
-        if (name[0] == 0x00)
+        if (name.isEmpty() == true)
         {
             setWindowTitle(QString(tr("PLUG: NONE")));
             setAccessibleName(QString(tr("Main window: NONE")));
