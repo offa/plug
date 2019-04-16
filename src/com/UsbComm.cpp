@@ -29,7 +29,7 @@ namespace plug::com
     namespace
     {
 
-        constexpr std::chrono::milliseconds timeout{500};
+        inline constexpr std::chrono::milliseconds timeout{500};
 
         inline constexpr std::uint8_t endpointSend{0x01};
         inline constexpr std::uint8_t endpointRecv{0x81};
