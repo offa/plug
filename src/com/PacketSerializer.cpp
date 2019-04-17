@@ -618,9 +618,9 @@ namespace plug::com
         data[7] = 0x01;
 
         constexpr std::size_t nameLength{31};
-        std::string sizedName{name};
-        sizedName.resize(nameLength, '\0');
-        std::copy(sizedName.cbegin(), sizedName.cend(), std::next(data.data(), NAME));
+        const auto length = std::min(nameLength, name.size());
+        std::copy(name.cbegin(), std::next(name.cbegin(), length), std::next(data.begin(), NAME));
+
         return data;
     }
 
@@ -948,9 +948,8 @@ namespace plug::com
         packet[SAVE_SLOT] = slot;
 
         constexpr std::size_t nameLength{24};
-        std::string sizedName{name};
-        sizedName.resize(nameLength, '\0');
-        std::copy(sizedName.cbegin(), sizedName.cend(), std::next(packet.begin(), NAME));
+        const auto length = std::min(nameLength, name.size());
+        std::copy(name.cbegin(), std::next(name.cbegin(), length), std::next(packet.begin(), NAME));
 
         return packet;
     }
