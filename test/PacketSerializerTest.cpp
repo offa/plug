@@ -779,7 +779,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSetsEffectValues)
 {
     constexpr std::uint8_t slot{9};
 
-    auto createEffect = [](effects e) {
+    constexpr auto createEffect = [](effects e) {
         return fx_pedal_settings{slot, e, 1, 2, 3, 4, 5, 6, Position::input};
     };
 
