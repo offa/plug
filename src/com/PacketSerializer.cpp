@@ -595,8 +595,7 @@ namespace plug::com
 
     Packet serializeAmpSettingsUsbGain(const amp_settings& value)
     {
-        Packet packet{{0}};
-        packet.fill(0x00);
+        Packet packet{};
         packet[0] = 0x1c;
         packet[1] = 0x03;
         packet[2] = 0x0d;
@@ -608,8 +607,7 @@ namespace plug::com
 
     Packet serializeName(std::uint8_t slot, std::string_view name)
     {
-        Packet data;
-        data.fill(0x00);
+        Packet data{};
         data[0] = 0x1c;
         data[1] = 0x01;
         data[2] = 0x03;
