@@ -37,6 +37,18 @@ namespace plug::com
             return 0x02;
         }
 
+        constexpr std::uint8_t getSlot(const fx_pedal_settings& effect)
+        {
+            if( effect.position == Position::effectsLoop )
+            {
+                constexpr std::uint8_t fxLoopOffset{4};
+                return effect.fx_slot + fxLoopOffset;
+            }
+            return effect.fx_slot;
+        }
+
+
+
         constexpr bool hasExtraKnob(effects e)
         {
             switch (e)
@@ -103,15 +115,7 @@ namespace plug::com
             packet[20] = 0x08;
             packet[21] = 0x01;
             packet[KNOB6] = 0x00;
-
-            if (effects[i].position == Position::effectsLoop)
-            {
-                packet[FXSLOT] = effects[i].fx_slot + 4;
-            }
-            else
-            {
-                packet[FXSLOT] = effects[i].fx_slot;
-            }
+            packet[FXSLOT] = getSlot(effects[i]);
             packet[KNOB1] = effects[i].knob1;
             packet[KNOB2] = effects[i].knob2;
             packet[KNOB3] = effects[i].knob3;
@@ -631,9 +635,7 @@ namespace plug::com
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-        const std::uint8_t slot = (value.position == Position::effectsLoop ? (value.fx_slot + 4) : value.fx_slot);
-
-        data[FXSLOT] = slot;
+        data[FXSLOT] = getSlot(value);
         data[KNOB1] = value.knob1;
         data[KNOB2] = value.knob2;
         data[KNOB3] = value.knob3;
