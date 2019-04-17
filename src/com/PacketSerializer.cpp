@@ -373,7 +373,7 @@ namespace plug::com
         settings.depth = data[1][DEPTH];
         settings.bias = data[1][BIAS];
         settings.sag = data[1][SAG];
-        settings.brightness = (data[1][BRIGHTNESS] != 0u);
+        settings.brightness = data[1][BRIGHTNESS];
         settings.usb_gain = data[6][USB_GAIN];
         return settings;
     }
@@ -500,7 +500,7 @@ namespace plug::com
             packet[SAG] = value.sag;
         }
 
-        packet[BRIGHTNESS] = value.brightness ? 1 : 0;
+        packet[BRIGHTNESS] = value.brightness;
 
         switch (value.amp_num)
         {
