@@ -775,6 +775,48 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
     EXPECT_THAT(packet, SizeIs(2));
 }
 
+TEST_F(PacketSerializerTest, serializeSaveEffectPacketSetsEffectValues)
+{
+    constexpr std::uint8_t slot{9};
+
+    auto createEffect = [](effects e) {
+        return fx_pedal_settings{slot, e, 1, 2, 3, 4, 5, 6, Position::input};
+    };
+
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SINE_CHORUS)})[0], EffectDataIs(0x07, 0x12, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::TRIANGLE_CHORUS)})[0], EffectDataIs(0x07, 0x13, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SINE_FLANGER)})[0], EffectDataIs(0x07, 0x18, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::TRIANGLE_FLANGER)})[0], EffectDataIs(0x07, 0x19, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::VIBRATONE)})[0], EffectDataIs(0x07, 0x2d, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::VINTAGE_TREMOLO)})[0], EffectDataIs(0x07, 0x40, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SINE_TREMOLO)})[0], EffectDataIs(0x07, 0x41, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::RING_MODULATOR)})[0], EffectDataIs(0x07, 0x22, 0x01, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::STEP_FILTER)})[0], EffectDataIs(0x07, 0x29, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::PHASER)})[0], EffectDataIs(0x07, 0x4f, 0x01, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::PITCH_SHIFTER)})[0], EffectDataIs(0x07, 0x1f, 0x01, 0x08));
+
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::MONO_DELAY)})[0], EffectDataIs(0x08, 0x16, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::MONO_ECHO_FILTER)})[0], EffectDataIs(0x08, 0x43, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::STEREO_ECHO_FILTER)})[0], EffectDataIs(0x08, 0x48, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::MULTITAP_DELAY)})[0], EffectDataIs(0x08, 0x44, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::PING_PONG_DELAY)})[0], EffectDataIs(0x08, 0x45, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::DUCKING_DELAY)})[0], EffectDataIs(0x08, 0x15, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::REVERSE_DELAY)})[0], EffectDataIs(0x08, 0x46, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::TAPE_DELAY)})[0], EffectDataIs(0x08, 0x2b, 0x02, 0x01));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::STEREO_TAPE_DELAY)})[0], EffectDataIs(0x08, 0x2a, 0x02, 0x01));
+
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SMALL_HALL_REVERB)})[0], EffectDataIs(0x09, 0x24, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::LARGE_HALL_REVERB)})[0], EffectDataIs(0x09, 0x3a, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SMALL_ROOM_REVERB)})[0], EffectDataIs(0x09, 0x26, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::LARGE_ROOM_REVERB)})[0], EffectDataIs(0x09, 0x3b, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SMALL_PLATE_REVERB)})[0], EffectDataIs(0x09, 0x4e, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::LARGE_PLATE_REVERB)})[0], EffectDataIs(0x09, 0x4b, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::AMBIENT_REVERB)})[0], EffectDataIs(0x09, 0x4c, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::ARENA_REVERB)})[0], EffectDataIs(0x09, 0x4d, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::FENDER_63_SPRING_REVERB)})[0], EffectDataIs(0x09, 0x21, 0x00, 0x08));
+    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::FENDER_65_SPRING_REVERB)})[0], EffectDataIs(0x09, 0x0b, 0x00, 0x08));
+}
+
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffectsData)
 {
     constexpr std::uint8_t slot{9};
