@@ -71,7 +71,9 @@ namespace plug::com
             {
                 return 1;
             }
-            if ((effects[0].effect_num >= effects::SINE_CHORUS) && (effects[0].effect_num <= effects::PITCH_SHIFTER))
+            const auto effect = effects[0].effect_num;
+
+            if ((effect >= effects::SINE_CHORUS) && (effect <= effects::PITCH_SHIFTER))
             {
                 return 1;
             }
@@ -89,7 +91,7 @@ namespace plug::com
                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-            std::size_t repeat = getSaveEffectsRepeats(effects);
+            const std::size_t repeat = getSaveEffectsRepeats(effects);
 
             for (std::size_t i = 0; i < repeat; ++i)
             {
