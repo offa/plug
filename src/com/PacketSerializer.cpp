@@ -677,10 +677,7 @@ namespace plug::com
                 data[DSP] = 0x06;
                 data[EFFECT] = 0x88;
                 data[19] = 0x08;
-                if (data[KNOB1] > 0x03)
-                {
-                    data[KNOB1] = 0x03;
-                }
+                data[KNOB1] = std::min<std::uint8_t>(data[KNOB1], 0x03);
                 data[KNOB2] = 0x00;
                 data[KNOB3] = 0x00;
                 data[KNOB4] = 0x00;
@@ -745,10 +742,7 @@ namespace plug::com
                 data[DSP] = 0x07;
                 data[EFFECT] = 0x22;
                 data[19] = 0x01;
-                if (data[KNOB4] > 0x01)
-                {
-                    data[KNOB4] = 0x01;
-                }
+                data[KNOB4] = std::min<std::uint8_t>(data[KNOB4], 0x01);
                 break;
 
             case effects::STEP_FILTER:
@@ -763,10 +757,7 @@ namespace plug::com
                 data[EFFECT] = 0x4f;
                 data[19] = 0x01;
                 data[20] = 0x01;
-                if (data[KNOB5] > 0x01)
-                {
-                    data[KNOB5] = 0x01;
-                }
+                data[KNOB5] = std::min<std::uint8_t>(data[KNOB5], 0x01);
                 break;
 
             case effects::PITCH_SHIFTER:
@@ -801,10 +792,7 @@ namespace plug::com
                 data[EFFECT] = 0x44;
                 data[19] = 0x02;
                 data[20] = 0x01;
-                if (data[KNOB5] > 0x03)
-                {
-                    data[KNOB5] = 0x03;
-                }
+                data[KNOB5] = std::min<std::uint8_t>(data[KNOB5], 0x03);
                 break;
 
             case effects::PING_PONG_DELAY:
