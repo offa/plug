@@ -464,16 +464,7 @@ namespace plug::com
         packet[MIDDLE] = value.middle;
         packet[BASS] = value.bass;
         packet[CABINET] = plug::value(value.cabinet);
-
-        if (value.noise_gate > 0x05)
-        {
-            packet[NOISE_GATE] = 0x00;
-        }
-        else
-        {
-            packet[NOISE_GATE] = value.noise_gate;
-        }
-
+        packet[NOISE_GATE] = std::min<std::uint8_t>(value.noise_gate, 0x05);
         packet[MASTER_VOL] = value.master_vol;
         packet[GAIN2] = value.gain2;
         packet[PRESENCE] = value.presence;
