@@ -471,15 +471,7 @@ namespace plug::com
 
         if (value.noise_gate == 0x05)
         {
-            if (value.threshold > 0x09)
-            {
-                packet[THRESHOLD] = 0x00;
-            }
-            else
-            {
-                packet[THRESHOLD] = value.threshold;
-            }
-
+            packet[THRESHOLD] = std::min<uint8_t>(value.threshold, 0x09);
             packet[DEPTH] = value.depth;
         }
         packet[BIAS] = value.bias;

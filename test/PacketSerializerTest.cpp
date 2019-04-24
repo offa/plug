@@ -369,7 +369,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, 0, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
-    EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
+    EXPECT_THAT(packet[THRESHOLD], Eq(0x09));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
