@@ -183,7 +183,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
     expected[THRESHOLD] = 0;
     expected[DEPTH] = 0x80;
     expected[BIAS] = 7;
-    expected[SAG] = 1;
+    expected[SAG] = 0x02;
     expected[BRIGHTNESS] = 1;
     expected[AMPLIFIER] = 0x6d;
     expected[44] = 0x08;
@@ -309,7 +309,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagData)
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0x03, false, 0};
 
     const auto packet = serializeAmpSettings(settings);
-    EXPECT_THAT(packet[SAG], Eq(0x01));
+    EXPECT_THAT(packet[SAG], Eq(0x02));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)

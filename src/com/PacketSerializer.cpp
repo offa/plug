@@ -492,16 +492,7 @@ namespace plug::com
             packet[DEPTH] = value.depth;
         }
         packet[BIAS] = value.bias;
-
-        if (value.sag > 0x02)
-        {
-            packet[SAG] = 0x01;
-        }
-        else
-        {
-            packet[SAG] = value.sag;
-        }
-
+        packet[SAG] = std::min<std::uint8_t>(value.sag, 0x02);
         packet[BRIGHTNESS] = value.brightness;
 
         switch (value.amp_num)
