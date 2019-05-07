@@ -11,6 +11,12 @@ stages:
 # -----------------------------------------
 # --- CI Builds
 # -----------------------------------------
+gcc-9:
+  image: ${DOCKER_IMG}/gcc-9:latest
+  stage: build
+  script:
+    - script/ci_build.sh -asan -ubsan
+
 gcc-8:
   image: ${DOCKER_IMG}/gcc-8:latest
   stage: build
@@ -70,6 +76,11 @@ coverage:
     - schedules
     - web
     - /^docker-.*$/
+
+build-ci-gcc-9:
+  <<: *build_ci_definition
+  script:
+    - script/image_build.sh gcc-9
 
 build-ci-gcc-8:
   <<: *build_ci_definition
