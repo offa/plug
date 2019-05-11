@@ -3,20 +3,20 @@
 set -ex
 
 
-BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
+BUILD_ARGS=("-DCMAKE_BUILD_TYPE=Debug")
 COVERAGE=false
 
 for arg in "$@"
 do
     case "${arg}" in
         -asan)
-            BUILD_ARGS="${BUILD_ARGS} -DSANITIZER_ASAN=ON"
+            BUILD_ARGS+=("-DSANITIZER_ASAN=ON")
             ;;
         -ubsan)
-            BUILD_ARGS="${BUILD_ARGS} -DSANITIZER_UBSAN=ON"
+            BUILD_ARGS+=("-DSANITIZER_UBSAN=ON")
             ;;
         -cov)
-            BUILD_ARGS="${BUILD_ARGS} -DCOVERAGE=ON"
+            BUILD_ARGS+=("-DCOVERAGE=ON")
             COVERAGE=true;
             ;;
     esac
@@ -32,7 +32,7 @@ then
 fi
 
 mkdir -p build && cd build
-cmake ${BUILD_ARGS} ..
+cmake "${BUILD_ARGS[@]}" ..
 make
 make unittest
 
