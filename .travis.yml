@@ -19,7 +19,7 @@ matrix:
     - env: COMPILER=clang-7 ANALYSE="-asan" # UBSan disabled, see #129
     - env: COMPILER=clang-6 ANALYSE="-asan -ubsan"
     - env: COMPILER=clang-5 ANALYSE="-asan -ubsan"
-    - env: COMPILER=gcc-8 ANALYSE="-cov"
+    # - env: COMPILER=gcc-8 ANALYSE="-cov" # See #172
 
 
 before_install:

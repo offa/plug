@@ -53,11 +53,11 @@ clang-5:
   script:
     - script/ci_build.sh -asan -ubsan
 
-coverage:
-  image: ${DOCKER_IMG}/gcc-8:latest
-  stage: build
-  script:
-    - script/ci_build.sh -cov
+ #coverage: # See #172
+ #  image: ${DOCKER_IMG}/gcc-8:latest
+ #  stage: build
+ #  script:
+ #    - script/ci_build.sh -cov
 
 
 # -----------------------------------------
