@@ -24,10 +24,6 @@ done
 
 
 
-## Move to dockerfile
-apt-get install -y --no-install-recommends libjson-perl
-
-
 if [[ "${CXX}" == clang* ]]
 then
     export CXXFLAGS="-stdlib=libc++"
