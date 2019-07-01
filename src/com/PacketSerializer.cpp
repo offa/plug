@@ -338,23 +338,13 @@ namespace plug::com
 
     std::string decodeNameFromData(const std::array<Packet, 7>& data)
     {
+        constexpr std::size_t nameOffset{16};
         constexpr std::size_t nameLength{32};
-        std::string name(nameLength, '\0');
-        std::size_t length{0};
+        const auto& p = data[0];
+        const auto start = std::next(p.cbegin(), nameOffset);
+        const auto itr = std::find(start, std::next(p.cbegin(), nameOffset + nameLength), '\0');
 
-        for (std::size_t i = 0, j = 16; data[0][j] != 0x00; ++i, ++j)
-        {
-            name[i] = static_cast<char>(data[0][j]);
-            ++length;
-
-            if (length > nameLength)
-            {
-                break;
-            }
-        }
-
-        name.resize(std::min(length, nameLength));
-        return name;
+        return std::string{start, itr};
     }
 
     amp_settings decodeAmpFromData(const std::array<Packet, 7>& data)
