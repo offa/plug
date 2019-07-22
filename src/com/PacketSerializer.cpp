@@ -28,6 +28,12 @@ namespace plug::com
 {
     namespace
     {
+        template <class T, T upperBound>
+        constexpr const T& inRange(const T& value)
+        {
+            return std::clamp(value, T{0}, upperBound);
+        }
+
         constexpr std::uint8_t getFxKnob(const fx_pedal_settings& effect)
         {
             if ((effect.effect_num >= effects::SINE_CHORUS) && (effect.effect_num <= effects::PITCH_SHIFTER))
@@ -454,18 +460,18 @@ namespace plug::com
         packet[MIDDLE] = value.middle;
         packet[BASS] = value.bass;
         packet[CABINET] = plug::value(value.cabinet);
-        packet[NOISE_GATE] = std::min<std::uint8_t>(value.noise_gate, 0x05);
+        packet[NOISE_GATE] = inRange<std::uint8_t, 0x05>(value.noise_gate);
         packet[MASTER_VOL] = value.master_vol;
         packet[GAIN2] = value.gain2;
         packet[PRESENCE] = value.presence;
 
         if (value.noise_gate == 0x05)
         {
-            packet[THRESHOLD] = std::min<uint8_t>(value.threshold, 0x09);
+            packet[THRESHOLD] = inRange<uint8_t, 0x09>(value.threshold);
             packet[DEPTH] = value.depth;
         }
         packet[BIAS] = value.bias;
-        packet[SAG] = std::min<std::uint8_t>(value.sag, 0x02);
+        packet[SAG] = inRange<std::uint8_t, 0x02>(value.sag);
         packet[BRIGHTNESS] = value.brightness;
 
         switch (value.amp_num)
@@ -643,7 +649,7 @@ namespace plug::com
                 data[DSP] = 0x06;
                 data[EFFECT] = 0x88;
                 data[19] = 0x08;
-                data[KNOB1] = std::min<std::uint8_t>(value.knob1, 0x03);
+                data[KNOB1] = inRange<std::uint8_t, 0x03>(value.knob1);
                 data[KNOB2] = 0x00;
                 data[KNOB3] = 0x00;
                 data[KNOB4] = 0x00;
@@ -708,7 +714,7 @@ namespace plug::com
                 data[DSP] = 0x07;
                 data[EFFECT] = 0x22;
                 data[19] = 0x01;
-                data[KNOB4] = std::min<std::uint8_t>(value.knob4, 0x01);
+                data[KNOB4] = inRange<std::uint8_t, 0x01>(value.knob4);
                 break;
 
             case effects::STEP_FILTER:
@@ -723,7 +729,7 @@ namespace plug::com
                 data[EFFECT] = 0x4f;
                 data[19] = 0x01;
                 data[20] = 0x01;
-                data[KNOB5] = std::min<std::uint8_t>(value.knob5, 0x01);
+                data[KNOB5] = inRange<std::uint8_t, 0x01>(value.knob5);
                 break;
 
             case effects::PITCH_SHIFTER:
@@ -758,7 +764,7 @@ namespace plug::com
                 data[EFFECT] = 0x44;
                 data[19] = 0x02;
                 data[20] = 0x01;
-                data[KNOB5] = std::min<std::uint8_t>(value.knob5, 0x03);
+                data[KNOB5] = inRange<std::uint8_t, 0x03>(value.knob5);
                 break;
 
             case effects::PING_PONG_DELAY:
