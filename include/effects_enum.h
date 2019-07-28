@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace plug
 {
 
@@ -110,16 +112,16 @@ namespace plug
     // Helper functions - for compatibility only.
     constexpr auto value(amps a)
     {
-        return static_cast<unsigned char>(a);
+        return static_cast<std::uint8_t>(a);
     }
 
     constexpr auto value(effects e)
     {
-        return static_cast<unsigned char>(e);
+        return static_cast<std::uint8_t>(e);
     }
 
     constexpr auto value(cabinets c)
     {
-        return static_cast<unsigned char>(c);
+        return static_cast<std::uint8_t>(c);
     }
 }
