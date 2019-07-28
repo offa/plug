@@ -191,10 +191,7 @@ namespace plug::com
                     packet[DSP] = 0x07;
                     packet[EFFECT] = 0x22;
                     packet[19] = 0x01;
-                    if (packet[KNOB4] > 0x01)
-                    {
-                        packet[KNOB4] = 0x01;
-                    }
+                    packet[KNOB4] = clampToRange<std::uint8_t, 0x01>(packet[KNOB4]);
                     break;
 
                 case effects::STEP_FILTER:
@@ -209,10 +206,7 @@ namespace plug::com
                     packet[EFFECT] = 0x4f;
                     packet[19] = 0x01;
                     packet[20] = 0x01;
-                    if (packet[KNOB5] > 0x01)
-                    {
-                        packet[KNOB5] = 0x01;
-                    }
+                    packet[KNOB5] = clampToRange<std::uint8_t, 0x01>(packet[KNOB5]);
                     break;
 
                 case effects::PITCH_SHIFTER:
