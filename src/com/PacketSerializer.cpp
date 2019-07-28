@@ -387,30 +387,7 @@ namespace plug::com
     {
         for (std::size_t i = 2; i < 6; ++i)
         {
-            std::size_t j{0};
-
-            switch (data[i][FXSLOT])
-            {
-                case 0x00:
-                case 0x04:
-                    j = 0;
-                    break;
-
-                case 0x01:
-                case 0x05:
-                    j = 1;
-                    break;
-
-                case 0x02:
-                case 0x06:
-                    j = 2;
-                    break;
-
-                case 0x03:
-                case 0x07:
-                    j = 3;
-                    break;
-            }
+            const std::size_t j = data[i][FXSLOT] % 4;
 
             effects_set_out[j].fx_slot = static_cast<std::uint8_t>(j);
             effects_set_out[j].knob1 = data[i][KNOB1];
