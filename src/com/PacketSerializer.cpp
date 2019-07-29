@@ -373,26 +373,22 @@ namespace plug::com
     std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data)
     {
         std::array<fx_pedal_settings, 4> effects{{}};
-        decodeEffectsFromData(data, effects.data());
-        return effects;
-    }
 
-    void decodeEffectsFromData(const std::array<Packet, 7>& data, fx_pedal_settings* const& effects_set_out)
-    {
         for (std::size_t i = 2; i < 6; ++i)
         {
             const std::size_t j = data[i][FXSLOT] % 4;
-
-            effects_set_out[j].fx_slot = static_cast<std::uint8_t>(j);
-            effects_set_out[j].knob1 = data[i][KNOB1];
-            effects_set_out[j].knob2 = data[i][KNOB2];
-            effects_set_out[j].knob3 = data[i][KNOB3];
-            effects_set_out[j].knob4 = data[i][KNOB4];
-            effects_set_out[j].knob5 = data[i][KNOB5];
-            effects_set_out[j].knob6 = data[i][KNOB6];
-            effects_set_out[j].position = (data[i][FXSLOT] > 0x03 ? Position::effectsLoop : Position::input);
-            effects_set_out[j].effect_num = lookupEffectById(data[i][EFFECT]);
+            effects[j].fx_slot = static_cast<std::uint8_t>(j);
+            effects[j].knob1 = data[i][KNOB1];
+            effects[j].knob2 = data[i][KNOB2];
+            effects[j].knob3 = data[i][KNOB3];
+            effects[j].knob4 = data[i][KNOB4];
+            effects[j].knob5 = data[i][KNOB5];
+            effects[j].knob6 = data[i][KNOB6];
+            effects[j].position = (data[i][FXSLOT] > 0x03 ? Position::effectsLoop : Position::input);
+            effects[j].effect_num = lookupEffectById(data[i][EFFECT]);
         }
+
+        return effects;
     }
 
     std::vector<std::string> decodePresetListFromData(const std::vector<Packet>& data)

@@ -36,7 +36,6 @@ namespace plug::com
     amp_settings decodeAmpFromData(const std::array<Packet, 7>& data);
 
     std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data);
-    void decodeEffectsFromData(const std::array<Packet, 7>& data, fx_pedal_settings* const& effects_set_out);
     std::vector<std::string> decodePresetListFromData(const std::vector<Packet>& data);
 
     Packet serializeAmpSettings(const amp_settings& value);
