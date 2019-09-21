@@ -29,6 +29,12 @@ gcc-7:
   script:
     - script/ci_build.sh -asan -ubsan
 
+clang-9:
+  image: ${DOCKER_IMG}/clang-9:latest
+  stage: build
+  script:
+    - script/ci_build.sh -asan -ubsan
+
 clang-8:
   image: ${DOCKER_IMG}/clang-8:latest
   stage: build
@@ -91,6 +97,11 @@ build-ci-gcc-7:
   <<: *build_ci_definition
   script:
     - script/image_build.sh gcc-7
+
+build-ci-clang-9:
+  <<: *build_ci_definition
+  script:
+    - script/image_build.sh clang-9
 
 build-ci-clang-8:
   <<: *build_ci_definition
