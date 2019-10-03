@@ -19,6 +19,7 @@
  */
 
 #include "com/Mustang.h"
+#include "com/ConnectionFactory.h"
 #include "version.h"
 #include <iostream>
 
@@ -26,8 +27,8 @@ int main()
 {
     std::cout << " === Plug v" << plug::version() << " - Integrationtest ===\n\n";
 
-    plug::com::Mustang m{};
-    m.start_amp(nullptr, nullptr, nullptr, nullptr);
+    plug::com::Mustang m{plug::com::createUsbConnection()};
+    const auto initialData = m.start_amp();
 
     return 0;
 }
