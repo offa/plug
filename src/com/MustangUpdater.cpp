@@ -22,6 +22,7 @@
 #include "com/MustangUpdater.h"
 #include "com/MustangConstants.h"
 #include "com/Mustang.h"
+#include "com/Packet.h"
 #include <chrono>
 #include <cstdio>
 #include <cstring>

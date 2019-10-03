@@ -22,10 +22,59 @@
 #include "com/Mustang.h"
 #include "com/PacketSerializer.h"
 #include "com/CommunicationException.h"
+#include "com/Packet.h"
 #include <algorithm>
 
 namespace plug::com
 {
+    SignalChain decode_data(const std::array<Packet, 7>& data)
+    {
+        const auto name = decodeNameFromData(data);
+        const auto amp = decodeAmpFromData(data);
+        const auto effects = decodeEffectsFromData(data);
+
+        return SignalChain{name, amp, effects};
+    }
+
+    std::vector<std::uint8_t> receivePacket(Connection& conn)
+    {
+        return conn.receive(packetSize);
+    }
+
+
+    void sendCommand(Connection& conn, const Packet& packet)
+    {
+        conn.send(packet);
+        receivePacket(conn);
+    }
+
+    void sendApplyCommand(Connection& conn)
+    {
+        sendCommand(conn, serializeApplyCommand());
+    }
+
+    std::array<Packet, 7> loadBankData(Connection& conn, std::uint8_t slot)
+    {
+        std::array<Packet, 7> data{{}};
+
+        const auto loadCommand = serializeLoadSlotCommand(slot);
+        auto n = conn.send(loadCommand);
+
+        for (std::size_t i = 0; n != 0; ++i)
+        {
+            const auto recvData = receivePacket(conn);
+            n = recvData.size();
+
+            if (i < 7)
+            {
+                std::copy(recvData.cbegin(), recvData.cend(), data[i].begin());
+            }
+        }
+        return data;
+    }
+
+
+
     Mustang::Mustang(std::shared_ptr<Connection> connection)
         : conn(connection)
     {
@@ -51,58 +100,49 @@ namespace plug::com
     void Mustang::set_effect(fx_pedal_settings value)
     {
         const auto clearEffectPacket = serializeClearEffectSettings();
-        sendCommand(clearEffectPacket);
-        sendApplyCommand();
+        sendCommand(*conn, clearEffectPacket);
+        sendApplyCommand(*conn);
 
         if (value.effect_num != effects::EMPTY)
         {
             const auto settingsPacket = serializeEffectSettings(value);
-            sendCommand(settingsPacket);
-            sendApplyCommand();
+            sendCommand(*conn, settingsPacket);
+            sendApplyCommand(*conn);
         }
     }
 
     void Mustang::set_amplifier(amp_settings value)
     {
         const auto settingsPacket = serializeAmpSettings(value);
-        sendCommand(settingsPacket);
-        sendApplyCommand();
+        sendCommand(*conn, settingsPacket);
+        sendApplyCommand(*conn);
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
-        sendCommand(settingsGainPacket);
-        sendApplyCommand();
+        sendCommand(*conn, settingsGainPacket);
+        sendApplyCommand(*conn);
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
         const auto data = serializeName(slot, name);
-        sendCommand(data);
-        loadBankData(slot);
+        sendCommand(*conn, data);
+        loadBankData(*conn, slot);
     }
 
     SignalChain Mustang::load_memory_bank(std::uint8_t slot)
     {
-        return decode_data(loadBankData(slot));
-    }
-
-    SignalChain Mustang::decode_data(const std::array<Packet, 7>& data)
-    {
-        const auto name = decodeNameFromData(data);
-        const auto amp = decodeAmpFromData(data);
-        const auto effects = decodeEffectsFromData(data);
-
-        return SignalChain{name, amp, effects};
+        return decode_data(loadBankData(*conn, slot));
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         const auto saveNamePacket = serializeSaveEffectName(slot, name, effects);
-        sendCommand(saveNamePacket);
+        sendCommand(*conn, saveNamePacket);
 
         const auto packets = serializeSaveEffectPacket(slot, effects);
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(p); });
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p); });
 
-        sendCommand(serializeApplyCommand(effects[0]));
+        sendCommand(*conn, serializeApplyCommand(effects[0]));
     }
 
     InitalData Mustang::loadData()
@@ -110,11 +150,11 @@ namespace plug::com
         std::vector<Packet> recieved_data;
 
         const auto loadCommand = serializeLoadCommand();
-        auto recieved = sendPacket(loadCommand);
+        auto recieved = conn->send(loadCommand);
 
         while (recieved != 0)
         {
-            const auto recvData = receivePacket();
+            const auto recvData = receivePacket(*conn);
             recieved = recvData.size();
             Packet p{};
             std::copy(recvData.cbegin(), recvData.cend(), p.begin());
@@ -130,50 +170,9 @@ namespace plug::com
         return {decode_data(presetData), presetNames};
     }
 
-    std::array<Packet, 7> Mustang::loadBankData(std::uint8_t slot)
-    {
-        std::array<Packet, 7> data{{}};
-
-        const auto loadCommand = serializeLoadSlotCommand(slot);
-        auto n = sendPacket(loadCommand);
-
-        for (std::size_t i = 0; n != 0; ++i)
-        {
-            const auto recvData = receivePacket();
-            n = recvData.size();
-
-            if (i < 7)
-            {
-                std::copy(recvData.cbegin(), recvData.cend(), data[i].begin());
-            }
-        }
-        return data;
-    }
-
     void Mustang::initializeAmp()
     {
         const auto packets = serializeInitCommand();
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(p); });
-    }
-
-    std::size_t Mustang::sendPacket(const Packet& packet)
-    {
-        return conn->send(packet);
-    }
-
-    std::vector<std::uint8_t> Mustang::receivePacket()
-    {
-        return conn->receive(packetSize);
-    }
-
-    void Mustang::sendCommand(const Packet& packet)
-    {
-        sendPacket(packet);
-        receivePacket();
-    }
-
-    void Mustang::sendApplyCommand()
-    {
-        sendCommand(serializeApplyCommand());
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p); });
     }
 }

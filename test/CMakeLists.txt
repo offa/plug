@@ -15,6 +15,7 @@ add_subdirectory(mocks)
 add_executable(MustangTest
                 MustangTest.cpp
                 PacketSerializerTest.cpp
+                PacketTest.cpp
                 )
 add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest PRIVATE
