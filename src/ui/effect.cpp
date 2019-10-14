@@ -22,6 +22,8 @@
 #include "ui/effect.h"
 #include "ui/mainwindow.h"
 #include "ui_effect.h"
+#include <QShortcut>
+#include <QSettings>
 
 namespace plug
 {

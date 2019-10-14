@@ -24,8 +24,6 @@
 #include "data_structs.h"
 #include "effects_enum.h"
 #include <QMainWindow>
-#include <QSettings>
-#include <QShortcut>
 #include <memory>
 
 namespace Ui
