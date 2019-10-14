@@ -3,7 +3,7 @@
 set -ex
 
 
-BUILD_ARGS=("-DCMAKE_BUILD_TYPE=Debug")
+BUILD_ARGS=("-DCMAKE_BUILD_TYPE=Release")
 COVERAGE=false
 
 for arg in "$@"
