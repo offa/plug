@@ -22,6 +22,7 @@
 #include "ui/loadfromamp.h"
 #include "ui/mainwindow.h"
 #include "ui_loadfromamp.h"
+#include <QSettings>
 
 namespace plug
 {

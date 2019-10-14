@@ -22,9 +22,8 @@
 #pragma once
 
 #include <QDialog>
-#include <QDir>
-#include <QFileDialog>
 #include <QResizeEvent>
+#include <QFileInfoList>
 #include <memory>
 
 namespace Ui

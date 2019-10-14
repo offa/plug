@@ -22,6 +22,7 @@
 #include "ui/save_effects.h"
 #include "ui/mainwindow.h"
 #include "ui_save_effects.h"
+#include <QSettings>
 
 namespace plug
 {

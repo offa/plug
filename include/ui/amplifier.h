@@ -21,16 +21,19 @@
 
 #pragma once
 
-#include "amp_advanced.h"
 #include "data_structs.h"
 #include "effects_enum.h"
 #include <QMainWindow>
-#include <QSettings>
-#include <QShortcut>
+#include <memory>
 
 namespace Ui
 {
     class Amplifier;
+}
+
+namespace plug
+{
+    class Amp_Advanced;
 }
 
 namespace plug

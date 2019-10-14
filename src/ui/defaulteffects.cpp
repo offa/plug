@@ -22,6 +22,7 @@
 #include "ui/defaulteffects.h"
 #include "ui/mainwindow.h"
 #include "ui_defaulteffects.h"
+#include <QSettings>
 #include <array>
 
 namespace plug

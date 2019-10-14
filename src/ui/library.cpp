@@ -22,6 +22,9 @@
 #include "ui/library.h"
 #include "ui/mainwindow.h"
 #include "ui_library.h"
+#include <QDir>
+#include <QFileDialog>
+#include <QSettings>
 
 namespace plug
 {

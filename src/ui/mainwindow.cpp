@@ -20,6 +20,17 @@
  */
 
 #include "ui/mainwindow.h"
+#include "ui/amplifier.h"
+#include "ui/defaulteffects.h"
+#include "ui/effect.h"
+#include "ui/library.h"
+#include "ui/loadfromamp.h"
+#include "ui/loadfromfile.h"
+#include "ui/quickpresets.h"
+#include "ui/save_effects.h"
+#include "ui/saveonamp.h"
+#include "ui/savetofile.h"
+#include "ui/settings.h"
 #include "com/Mustang.h"
 #include "com/ConnectionFactory.h"
 #include "com/CommunicationException.h"

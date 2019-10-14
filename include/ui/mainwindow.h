@@ -21,18 +21,7 @@
 
 #pragma once
 
-#include "amplifier.h"
 #include "data_structs.h"
-#include "defaulteffects.h"
-#include "effect.h"
-#include "library.h"
-#include "loadfromamp.h"
-#include "loadfromfile.h"
-#include "quickpresets.h"
-#include "save_effects.h"
-#include "saveonamp.h"
-#include "savetofile.h"
-#include "settings.h"
 #include <QMainWindow>
 #include <memory>
 
@@ -40,9 +29,24 @@ namespace Ui
 {
     class MainWindow;
 }
-namespace plug::com
+
+namespace plug
 {
-    class Mustang;
+    class Effect;
+    class Amplifier;
+    class SaveEffects;
+    class SaveToFile;
+    class SaveOnAmp;
+    class LoadFromAmp;
+    class Settings;
+    class Library;
+    class DefaultEffects;
+    class QuickPresets;
+
+    namespace com
+    {
+        class Mustang;
+    }
 }
 
 

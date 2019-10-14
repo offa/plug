@@ -22,6 +22,9 @@
 #include "ui/amplifier.h"
 #include "ui/mainwindow.h"
 #include "ui_amplifier.h"
+#include "ui/amp_advanced.h"
+#include <QSettings>
+#include <QShortcut>
 
 namespace plug
 {
