@@ -29,7 +29,7 @@ namespace plug::com
     namespace
     {
         template <class T, T upperBound>
-        constexpr const T& clampToRange(const T& value)
+        constexpr T clampToRange(T value)
         {
             return std::clamp(value, T{0}, upperBound);
         }
