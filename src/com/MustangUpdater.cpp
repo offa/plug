@@ -123,7 +123,7 @@ namespace plug::com
         array[1] = 0x03;
         array[2] = 0x01;
         array[3] = 0x06;
-        fread(array + 4, 1, 11, file);
+        [[maybe_unused]] const auto n = fread(array + 4, 1, 11, file);
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
         libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
         usleep(10000);
