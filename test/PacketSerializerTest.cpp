@@ -40,7 +40,7 @@ protected:
     {
     }
 
-    const std::array<Packet, 7> filledPackage(std::uint8_t value) const
+    std::array<Packet, 7> filledPackage(std::uint8_t value) const
     {
         Packet packet{};
         std::fill(packet.begin(), packet.end(), value);
