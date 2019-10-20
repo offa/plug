@@ -1571,14 +1571,6 @@ namespace plug
                     break;
 
                 case effects::WAH:
-                    ui->dial->setValue(0xff);
-                    ui->dial_2->setValue(0x80);
-                    ui->dial_3->setValue(0x00);
-                    ui->dial_4->setValue(0xff);
-                    ui->dial_5->setValue(0x00);
-                    ui->dial_6->setValue(0x00);
-                    break;
-
                 case effects::TOUCH_WAH:
                     ui->dial->setValue(0xff);
                     ui->dial_2->setValue(0x80);
@@ -1689,14 +1681,6 @@ namespace plug
                     break;
 
                 case effects::RING_MODULATOR:
-                    ui->dial->setValue(0xff);
-                    ui->dial_2->setValue(0x80);
-                    ui->dial_3->setValue(0x80);
-                    ui->dial_4->setValue(0x80);
-                    ui->dial_5->setValue(0x80);
-                    ui->dial_6->setValue(0x00);
-                    break;
-
                 case effects::STEP_FILTER:
                     ui->dial->setValue(0xff);
                     ui->dial_2->setValue(0x80);
@@ -1762,14 +1746,6 @@ namespace plug
                     break;
 
                 case effects::REVERSE_DELAY:
-                    ui->dial->setValue(0xff);
-                    ui->dial_2->setValue(0x80);
-                    ui->dial_3->setValue(0x80);
-                    ui->dial_4->setValue(0x80);
-                    ui->dial_5->setValue(0x80);
-                    ui->dial_6->setValue(0x00);
-                    break;
-
                 case effects::PING_PONG_DELAY:
                     ui->dial->setValue(0xff);
                     ui->dial_2->setValue(0x80);
@@ -1826,23 +1802,7 @@ namespace plug
                     break;
 
                 case effects::SMALL_ROOM_REVERB:
-                    ui->dial->setValue(0x80);
-                    ui->dial_2->setValue(0x80);
-                    ui->dial_3->setValue(0x80);
-                    ui->dial_4->setValue(0x80);
-                    ui->dial_5->setValue(0x80);
-                    ui->dial_6->setValue(0x00);
-                    break;
-
                 case effects::LARGE_ROOM_REVERB:
-                    ui->dial->setValue(0x80);
-                    ui->dial_2->setValue(0x80);
-                    ui->dial_3->setValue(0x80);
-                    ui->dial_4->setValue(0x80);
-                    ui->dial_5->setValue(0x80);
-                    ui->dial_6->setValue(0x00);
-                    break;
-
                 case effects::SMALL_PLATE_REVERB:
                     ui->dial->setValue(0x80);
                     ui->dial_2->setValue(0x80);
@@ -1862,14 +1822,6 @@ namespace plug
                     break;
 
                 case effects::AMBIENT_REVERB:
-                    ui->dial->setValue(0xff);
-                    ui->dial_2->setValue(0x80);
-                    ui->dial_3->setValue(0x80);
-                    ui->dial_4->setValue(0x80);
-                    ui->dial_5->setValue(0x80);
-                    ui->dial_6->setValue(0x00);
-                    break;
-
                 case effects::ARENA_REVERB:
                     ui->dial->setValue(0xff);
                     ui->dial_2->setValue(0x80);
