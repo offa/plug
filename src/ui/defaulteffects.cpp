@@ -38,7 +38,7 @@ namespace plug
             QString spinBoxDescription;
         };
 
-        void setTexts(const Ui::DefaultEffects* ui, UIText e1, UIText e2, UIText e3, UIText e4, UIText e5, UIText e6)
+        void setTexts(const Ui::DefaultEffects* ui, const UIText& e1, const UIText& e2, const UIText& e3, const UIText& e4, const UIText& e5, const UIText& e6)
         {
             ui->label->setText(e1.label);
             ui->dial->setAccessibleName(e1.dialName);
