@@ -434,7 +434,7 @@ TEST_F(PacketSerializerTest, serializeNameTerminatesWithZero)
 TEST_F(PacketSerializerTest, serializeNameLimitsToLength)
 {
     constexpr std::size_t maxSize{32};
-    const std::string name('x', maxSize + 3);
+    const std::string name(maxSize + 3, 'x');
     constexpr std::size_t slot{3};
 
     Packet expected{};
