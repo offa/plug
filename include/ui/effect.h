@@ -49,6 +49,8 @@ namespace plug
         Effect& operator=(const Effect&) = delete;
 
     private:
+        void setTitleTexts(int slot, QString name);
+
         const std::unique_ptr<Ui::Effect> ui;
         std::uint8_t fx_slot;
         effects effect_num;

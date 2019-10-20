@@ -77,6 +77,7 @@ namespace plug
             ui->spinBox_6->setAccessibleDescription(e6.spinBoxDescription);
         }
 
+
     }
 
 
@@ -371,193 +372,155 @@ namespace plug
         switch (static_cast<effects>(value))
         {
             case effects::EMPTY:
-                setWindowTitle(tr("FX%1: EMPTY").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: EMPTY").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "EMPTY");
                 break;
 
             case effects::OVERDRIVE:
-                setWindowTitle(tr("FX%1: Overdrive").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Overdrive").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Overdrive");
                 break;
 
             case effects::WAH:
-                setWindowTitle(tr("FX%1: Wah").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Wah").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Wah");
                 break;
 
             case effects::TOUCH_WAH:
-                setWindowTitle(tr("FX%1: Touch Wah").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Touch Wah").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Touch Wah");
                 break;
 
             case effects::FUZZ:
-                setWindowTitle(tr("FX%1: Fuzz").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Fuzz").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Fuzz");
                 break;
 
             case effects::FUZZ_TOUCH_WAH:
-                setWindowTitle(tr("FX%1: Fuzz Touch Wah").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Fuzz Touch Wah").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Fuzz Touch Wah");
                 break;
 
             case effects::SIMPLE_COMP:
-                setWindowTitle(tr("FX%1: Simple Compressor").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Simple Compressor").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Simple Compressor");
                 break;
 
             case effects::COMPRESSOR:
-                setWindowTitle(tr("FX%1: Compressor").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Compressor").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Compressor");
                 break;
 
             case effects::SINE_CHORUS:
-                setWindowTitle(tr("FX%1: Sine Chorus").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Sine Chorus").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Sine Chorus");
                 break;
 
             case effects::TRIANGLE_CHORUS:
-                setWindowTitle(tr("FX%1: Triangle Chorus").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Triangle Chorus").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Triangle Chorus");
                 break;
 
             case effects::SINE_FLANGER:
-                setWindowTitle(tr("FX%1: Sine Flanger").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Sine Flanger").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Sine Flanger");
                 break;
 
             case effects::TRIANGLE_FLANGER:
-                setWindowTitle(tr("FX%1: Triangle Flanger").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Triangle Flanger").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Triangle Flanger");
                 break;
 
             case effects::VIBRATONE:
-                setWindowTitle(tr("FX%1: Vibratone").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Vibratone").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Vibratone");
                 break;
 
             case effects::VINTAGE_TREMOLO:
-                setWindowTitle(tr("FX%1: Vintage Tremolo").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Vintage Tremolo").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Vintage Tremolo");
                 break;
 
             case effects::SINE_TREMOLO:
-                setWindowTitle(tr("FX%1: Sine Tremolo").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Sine Tremolo").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Sine Tremolo");
                 break;
 
             case effects::RING_MODULATOR:
-                setWindowTitle(tr("FX%1: Ring Modulator").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Ring Modulator").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Ring Modulator");
                 break;
 
             case effects::STEP_FILTER:
-                setWindowTitle(tr("FX%1: Step Filter").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Step Filter").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Step Filter");
                 break;
 
             case effects::PHASER:
-                setWindowTitle(tr("FX%1: Phaser").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Phaser").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Phaser");
                 break;
 
             case effects::PITCH_SHIFTER:
-                setWindowTitle(tr("FX%1: Pitch Shifter").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Pitch Shifter").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Pitch Shifter");
                 break;
 
             case effects::MONO_DELAY:
-                setWindowTitle(tr("FX%1: Mono Delay").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Mono Delay").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Mono Delay");
                 break;
 
             case effects::MONO_ECHO_FILTER:
-                setWindowTitle(tr("FX%1: Mono Echo Filter").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Mono Echo Filter").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Mono Echo Filter");
                 break;
 
             case effects::STEREO_ECHO_FILTER:
-                setWindowTitle(tr("FX%1: Stereo Echo Filter").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Stereo Echo Filter").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Stereo Echo Filter");
                 break;
 
             case effects::MULTITAP_DELAY:
-                setWindowTitle(tr("FX%1: Multitap Delay").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Multitap Delay").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Multitap Delay");
                 break;
 
             case effects::PING_PONG_DELAY:
-                setWindowTitle(tr("FX%1: Ping-Pong Delay").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Ping-Pong Delay").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Ping-Pong Delay");
                 break;
 
             case effects::DUCKING_DELAY:
-                setWindowTitle(tr("FX%1: Ducking Delay").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Ducking Delay").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Ducking Delay");
                 break;
 
             case effects::REVERSE_DELAY:
-                setWindowTitle(tr("FX%1: Reverse Delay").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Reverse Delay").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Reverse Delay");
                 break;
 
             case effects::TAPE_DELAY:
-                setWindowTitle(tr("FX%1: Tape Delay").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Tape Delay").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Tape Delay");
                 break;
 
             case effects::STEREO_TAPE_DELAY:
-                setWindowTitle(tr("FX%1: Stereo Tape Delay").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Stereo Tape Delay").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Stereo Tape Delay");
                 break;
 
             case effects::SMALL_HALL_REVERB:
-                setWindowTitle(tr("FX%1: Small Hall Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Small Hall Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Small Hall Reverb");
                 break;
 
             case effects::LARGE_HALL_REVERB:
-                setWindowTitle(tr("FX%1: Large Hall Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Large Hall Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Large Hall Reverb");
                 break;
 
             case effects::SMALL_ROOM_REVERB:
-                setWindowTitle(tr("FX%1: Small Room Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Small Room Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Small Room Reverb");
                 break;
 
             case effects::LARGE_ROOM_REVERB:
-                setWindowTitle(tr("FX%1: Large Room Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Large Room Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Large Room Reverb");
                 break;
 
             case effects::SMALL_PLATE_REVERB:
-                setWindowTitle(tr("FX%1: Small Plate Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Small Plate Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Small Plate Reverb");
                 break;
 
             case effects::LARGE_PLATE_REVERB:
-                setWindowTitle(tr("FX%1: Large Plate Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Large Plate Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Large Plate Reverb");
                 break;
 
             case effects::AMBIENT_REVERB:
-                setWindowTitle(tr("FX%1: Ambient Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Ambient Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Ambient Reverb");
                 break;
 
             case effects::ARENA_REVERB:
-                setWindowTitle(tr("FX%1: Arena Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Arena Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Arena Reverb");
                 break;
 
             case effects::FENDER_63_SPRING_REVERB:
-                setWindowTitle(tr("FX%1: Fender '63 Spring Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Fender '63 Spring Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Fender '63 Spring Reverb");
                 break;
 
             case effects::FENDER_65_SPRING_REVERB:
-                setWindowTitle(tr("FX%1: Fender '65 Spring Reverb").arg(fx_slot + 1));
-                setAccessibleName(tr("Effect's %1 window: Fender '65 Spring Reverb").arg(fx_slot + 1));
+                setTitleTexts(fx_slot + 1, "Fender '65 Spring Reverb");
                 break;
         }
 
@@ -2105,6 +2068,13 @@ namespace plug
         show();
         activateWindow();
     }
+
+    void Effect::setTitleTexts(int slot, QString name)
+    {
+        setWindowTitle(tr("FX%1: %2").arg(slot + 1).arg(name));
+        setAccessibleName(tr("Effect's %1 window: %2").arg(fx_slot + 1).arg(name));
+    }
+
 }
 
 #include "ui/moc_effect.moc"
