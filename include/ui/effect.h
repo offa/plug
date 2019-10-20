@@ -49,7 +49,7 @@ namespace plug
         Effect& operator=(const Effect&) = delete;
 
     private:
-        void setTitleTexts(int slot, QString name);
+        void setTitleTexts(int slot, const QString& name);
 
         const std::unique_ptr<Ui::Effect> ui;
         std::uint8_t fx_slot;

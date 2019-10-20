@@ -77,7 +77,6 @@ namespace plug
             ui->spinBox_6->setAccessibleDescription(e6.spinBoxDescription);
         }
 
-
     }
 
 
@@ -2069,7 +2068,7 @@ namespace plug
         activateWindow();
     }
 
-    void Effect::setTitleTexts(int slot, QString name)
+    void Effect::setTitleTexts(int slot, const QString& name)
     {
         setWindowTitle(tr("FX%1: %2").arg(slot + 1).arg(name));
         setAccessibleName(tr("Effect's %1 window: %2").arg(fx_slot + 1).arg(name));
