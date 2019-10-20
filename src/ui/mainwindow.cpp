@@ -44,6 +44,27 @@
 
 namespace plug
 {
+    namespace
+    {
+    constexpr int check_fx_family(effects value)
+    {
+        if (value == effects::EMPTY)
+            return 0;
+        if ((value >= effects::OVERDRIVE) && (value <= effects::COMPRESSOR))
+            return 1;
+        if ((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER))
+            return 2;
+        if ((value >= effects::MONO_DELAY) && (value <= effects::STEREO_TAPE_DELAY))
+            return 3;
+        if ((value >= effects::SMALL_HALL_REVERB) && (value <= effects::FENDER_65_SPRING_REVERB))
+            return 4;
+
+        return 0;
+    }
+
+
+    }
+
 
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
@@ -774,7 +795,7 @@ namespace plug
 
     void MainWindow::empty_other(int value, Effect* caller)
     {
-        int fx_family = check_fx_family(static_cast<effects>(value));
+        const int fx_family = check_fx_family(static_cast<effects>(value));
         fx_pedal_settings settings{};
 
         if (caller != effect1)
@@ -816,22 +837,6 @@ namespace plug
                 effect4->send_fx();
             }
         }
-    }
-
-    int MainWindow::check_fx_family(effects value) const
-    {
-        if (value == effects::EMPTY)
-            return 0;
-        if ((value >= effects::OVERDRIVE) && (value <= effects::COMPRESSOR))
-            return 1;
-        if ((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER))
-            return 2;
-        if ((value >= effects::MONO_DELAY) && (value <= effects::STEREO_TAPE_DELAY))
-            return 3;
-        if ((value >= effects::SMALL_HALL_REVERB) && (value <= effects::FENDER_65_SPRING_REVERB))
-            return 4;
-
-        return 0;
     }
 
     void MainWindow::load_presets0()
