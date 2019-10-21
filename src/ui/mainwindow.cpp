@@ -63,7 +63,6 @@ namespace plug
             return 0;
         }
 
-
     }
 
 
@@ -71,7 +70,7 @@ namespace plug
         : QMainWindow(parent),
           ui(std::make_unique<Ui::MainWindow>()),
           presetNames(100, ""),
-          amp_ops(std::make_unique<com::Mustang>(com::createUsbConnection()))
+          amp_ops(nullptr)
     {
         ui->setupUi(this);
 
@@ -219,6 +218,7 @@ namespace plug
 
         try
         {
+            amp_ops = std::make_unique<com::Mustang>(com::createUsbConnection());
             const auto [signalChain, presets] = amp_ops->start_amp();
             name = QString::fromStdString(signalChain.name());
             amplifier_set = signalChain.amp();

@@ -87,7 +87,7 @@ namespace plug
         QString current_name;
         std::vector<std::string> presetNames;
         bool connected;
-        const std::unique_ptr<com::Mustang> amp_ops;
+        std::unique_ptr<com::Mustang> amp_ops;
         Amplifier* amp;
         Effect* effect1;
         Effect* effect2;
