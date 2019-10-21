@@ -904,17 +904,27 @@ namespace plug::com
         return loadCommand;
     }
 
-    Packet serializeApplyCommand()
+    v2::Packet<v2::EmptyPayload> serializeApplyCommand()
     {
-        Packet applyCommand{};
-        applyCommand[0] = 0x1c;
-        applyCommand[1] = 0x03;
+        using v2::EmptyPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
+
+        Header h{};
+        h.setStage(Stage::ready);
+        h.setType(Type::data);
+        h.setDSP(DSP::none);
+        v2::Packet<EmptyPayload> applyCommand{};
+        applyCommand.setHeader(h);
+        applyCommand.setPayload(EmptyPayload{});
         return applyCommand;
     }
 
     Packet serializeApplyCommand(fx_pedal_settings effect)
     {
-        auto applyCommand = serializeApplyCommand();
+        auto applyCommand = serializeApplyCommand().getBytes();
         applyCommand[FXKNOB] = getFxKnob(effect);
         return applyCommand;
     }

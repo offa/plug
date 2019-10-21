@@ -67,7 +67,7 @@ protected:
     const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(packetSize);
     const std::vector<std::uint8_t> ignoreAmpData = [] { std::vector<std::uint8_t> d(packetSize, 0x00); d[ampPos] = 0x5e; return d; }();
     const Packet loadCmd = serializeLoadCommand();
-    const Packet applyCmd = serializeApplyCommand();
+    const Packet applyCmd = serializeApplyCommand().getBytes();
     const Packet clearCmd = serializeClearEffectSettings();
     static inline constexpr std::size_t presetPacketCountShort{48};
     static inline constexpr std::size_t presetPacketCountFull{200};

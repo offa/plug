@@ -50,7 +50,7 @@ namespace plug::com
 
     void sendApplyCommand(Connection& conn)
     {
-        sendCommand(conn, serializeApplyCommand());
+        sendCommand(conn, serializeApplyCommand().getBytes());
     }
 
     std::array<Packet, 7> loadBankData(Connection& conn, std::uint8_t slot)

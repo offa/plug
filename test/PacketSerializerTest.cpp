@@ -116,7 +116,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommand)
     expected[1] = 0x03;
 
     const auto packet = serializeApplyCommand();
-    EXPECT_THAT(packet, ContainerEq(expected));
+    EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
 }
 
 TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
