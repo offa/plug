@@ -224,7 +224,7 @@ namespace plug
             effects_set = signalChain.effects();
             presetNames = presets;
         }
-        catch (const com::CommunicationException& ex)
+        catch (const std::exception& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
@@ -335,7 +335,7 @@ namespace plug
 
             connected = false;
         }
-        catch (com::CommunicationException& ex)
+        catch (const std::exception& ex)
         {
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
         }
