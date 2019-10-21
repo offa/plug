@@ -41,6 +41,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QShortcut>
+#include <QDebug>
 
 namespace plug
 {
@@ -226,6 +227,7 @@ namespace plug
         }
         catch (const std::exception& ex)
         {
+            qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
         }
@@ -337,7 +339,9 @@ namespace plug
         }
         catch (const std::exception& ex)
         {
+            qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+            return;
         }
     }
 
@@ -359,6 +363,7 @@ namespace plug
             }
             catch (const std::exception& ex)
             {
+                qWarning() << "ERROR: " << ex.what();
                 ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
                 return;
             }
@@ -408,6 +413,7 @@ namespace plug
         }
         catch (const std::exception& ex)
         {
+            qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
         }
@@ -426,6 +432,7 @@ namespace plug
         }
         catch (const std::exception& ex)
         {
+            qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
         }
@@ -523,6 +530,7 @@ namespace plug
         }
         catch (const std::exception& ex)
         {
+            qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
         }
@@ -595,6 +603,7 @@ namespace plug
         }
         catch (const std::exception& ex)
         {
+            qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
             return;
         }
