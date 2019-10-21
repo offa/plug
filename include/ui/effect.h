@@ -50,6 +50,7 @@ namespace plug
 
     private:
         void setTitleTexts(int slot, const QString& name);
+        void setDialValues(int d1, int d2, int d3, int d4, int d5, int d6);
 
         const std::unique_ptr<Ui::Effect> ui;
         std::uint8_t fx_slot;
