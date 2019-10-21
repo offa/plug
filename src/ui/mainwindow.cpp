@@ -353,7 +353,15 @@ namespace plug
 
         if (!settings.value("Settings/oneSetToSetThemAll").toBool())
         {
-            amp_ops->set_effect(pedal);
+            try
+            {
+                amp_ops->set_effect(pedal);
+            }
+            catch (const std::exception& ex)
+            {
+                ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+                return;
+            }
         }
         amp->send_amp();
     }
@@ -368,33 +376,41 @@ namespace plug
 
         QSettings settings;
 
-        if (settings.value("Settings/oneSetToSetThemAll").toBool())
+        try
         {
-            fx_pedal_settings pedal{};
+            if (settings.value("Settings/oneSetToSetThemAll").toBool())
+            {
+                fx_pedal_settings pedal{};
 
-            if (effect1->get_changed())
-            {
-                effect1->get_settings(pedal);
-                amp_ops->set_effect(pedal);
+                if (effect1->get_changed())
+                {
+                    effect1->get_settings(pedal);
+                    amp_ops->set_effect(pedal);
+                }
+                if (effect2->get_changed())
+                {
+                    effect2->get_settings(pedal);
+                    amp_ops->set_effect(pedal);
+                }
+                if (effect3->get_changed())
+                {
+                    effect3->get_settings(pedal);
+                    amp_ops->set_effect(pedal);
+                }
+                if (effect4->get_changed())
+                {
+                    effect4->get_settings(pedal);
+                    amp_ops->set_effect(pedal);
+                }
             }
-            if (effect2->get_changed())
-            {
-                effect2->get_settings(pedal);
-                amp_ops->set_effect(pedal);
-            }
-            if (effect3->get_changed())
-            {
-                effect3->get_settings(pedal);
-                amp_ops->set_effect(pedal);
-            }
-            if (effect4->get_changed())
-            {
-                effect4->get_settings(pedal);
-                amp_ops->set_effect(pedal);
-            }
+
+            amp_ops->set_amplifier(amp_settings);
         }
-
-        amp_ops->set_amplifier(amp_settings);
+        catch (const std::exception& ex)
+        {
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+            return;
+        }
     }
 
     void MainWindow::save_on_amp(char* name, int slot)
@@ -404,7 +420,15 @@ namespace plug
             return;
         }
 
-        amp_ops->save_on_amp(name, static_cast<std::uint8_t>(slot));
+        try
+        {
+            amp_ops->save_on_amp(name, static_cast<std::uint8_t>(slot));
+        }
+        catch (const std::exception& ex)
+        {
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+            return;
+        }
 
         if (name[0] == 0x00)
         {
@@ -429,70 +453,78 @@ namespace plug
         }
 
         QSettings settings;
-        const auto signalChain = amp_ops->load_memory_bank(static_cast<std::uint8_t>(slot));
-        const QString bankName = QString::fromStdString(signalChain.name());
-
-
-        if (bankName.isEmpty())
+        try
         {
-            setWindowTitle(QString(tr("PLUG: NONE")));
-            setAccessibleName(QString(tr("Main window: NONE")));
-        }
-        else
-        {
-            setWindowTitle(QString(tr("PLUG: %1")).arg(bankName));
-            setAccessibleName(QString(tr("Main window: %1")).arg(bankName));
-        }
+            const auto signalChain = amp_ops->load_memory_bank(static_cast<std::uint8_t>(slot));
+            const QString bankName = QString::fromStdString(signalChain.name());
 
-        current_name = bankName;
 
-        amp->load(signalChain.amp());
-        if (settings.value("Settings/popupChangedWindows").toBool())
-        {
-            amp->show();
-        }
-
-        const auto effects_set = signalChain.effects();
-        for (std::size_t i = 0; i < 4; i++)
-        {
-            switch (effects_set[i].fx_slot)
+            if (bankName.isEmpty())
             {
-                case 0x00:
-                case 0x04:
-                    effect1->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect1->show();
-                    break;
-
-                case 0x01:
-                case 0x05:
-                    effect2->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect2->show();
-                    break;
-
-                case 0x02:
-                case 0x06:
-                    effect3->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect3->show();
-                    break;
-
-                case 0x03:
-                case 0x07:
-                    effect4->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                    {
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                        {
-                            effect4->show();
-                        }
-                    }
-                    break;
+                setWindowTitle(QString(tr("PLUG: NONE")));
+                setAccessibleName(QString(tr("Main window: NONE")));
             }
+            else
+            {
+                setWindowTitle(QString(tr("PLUG: %1")).arg(bankName));
+                setAccessibleName(QString(tr("Main window: %1")).arg(bankName));
+            }
+
+            current_name = bankName;
+
+            amp->load(signalChain.amp());
+            if (settings.value("Settings/popupChangedWindows").toBool())
+            {
+                amp->show();
+            }
+
+            const auto effects_set = signalChain.effects();
+            for (std::size_t i = 0; i < 4; i++)
+            {
+                switch (effects_set[i].fx_slot)
+                {
+                    case 0x00:
+                    case 0x04:
+                        effect1->load(effects_set[i]);
+                        if (effects_set[i].effect_num != effects::EMPTY)
+                            if (settings.value("Settings/popupChangedWindows").toBool())
+                                effect1->show();
+                        break;
+
+                    case 0x01:
+                    case 0x05:
+                        effect2->load(effects_set[i]);
+                        if (effects_set[i].effect_num != effects::EMPTY)
+                            if (settings.value("Settings/popupChangedWindows").toBool())
+                                effect2->show();
+                        break;
+
+                    case 0x02:
+                    case 0x06:
+                        effect3->load(effects_set[i]);
+                        if (effects_set[i].effect_num != effects::EMPTY)
+                            if (settings.value("Settings/popupChangedWindows").toBool())
+                                effect3->show();
+                        break;
+
+                    case 0x03:
+                    case 0x07:
+                        effect4->load(effects_set[i]);
+                        if (effects_set[i].effect_num != effects::EMPTY)
+                        {
+                            if (settings.value("Settings/popupChangedWindows").toBool())
+                            {
+                                effect4->show();
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        catch (const std::exception& ex)
+        {
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+            return;
         }
     }
 
@@ -557,7 +589,15 @@ namespace plug
             set_effect(effects[1]);
         }
 
-        amp_ops->save_effects(static_cast<std::uint8_t>(slot), name, effects);
+        try
+        {
+            amp_ops->save_effects(static_cast<std::uint8_t>(slot), name, effects);
+        }
+        catch (const std::exception& ex)
+        {
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+            return;
+        }
     }
 
     void MainWindow::loadfile(QString filename)
