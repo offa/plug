@@ -896,11 +896,21 @@ namespace plug::com
         return loadCommand;
     }
 
-    Packet serializeLoadCommand()
+    v2::Packet<v2::EmptyPayload> serializeLoadCommand()
     {
-        Packet loadCommand{};
-        loadCommand[0] = 0xff;
-        loadCommand[1] = 0xc1;
+        using v2::EmptyPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
+
+        Header h{};
+        h.setStage(Stage::unknown);
+        h.setType(Type::load);
+        h.setDSP(DSP::none);
+        v2::Packet<EmptyPayload> loadCommand{};
+        loadCommand.setHeader(h);
+        loadCommand.setPayload(EmptyPayload{});
         return loadCommand;
     }
 

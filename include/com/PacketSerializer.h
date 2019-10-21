@@ -47,7 +47,7 @@ namespace plug::com
     std::vector<Packet> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects);
 
     Packet serializeLoadSlotCommand(std::uint8_t slot);
-    Packet serializeLoadCommand();
+    v2::Packet<v2::EmptyPayload> serializeLoadCommand();
     v2::Packet<v2::EmptyPayload> serializeApplyCommand();
     Packet serializeApplyCommand(fx_pedal_settings effect);
 

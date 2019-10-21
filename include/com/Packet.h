@@ -48,15 +48,16 @@ namespace v2
         operation,
         data,
         init0,
-        init1
-
+        init1,
+        load
     };
 
     enum class Stage
     {
         init0,
         init1,
-        ready
+        ready,
+        unknown
     };
 
     class Header
@@ -96,6 +97,8 @@ namespace v2
                         return 0xc3;
                     case Type::init1:
                         return 0x03;
+                    case Type::load:
+                        return 0xc1;
                     default:
                         return 0xff;
                 }

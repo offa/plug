@@ -150,7 +150,7 @@ namespace plug::com
         std::vector<Packet> recieved_data;
 
         const auto loadCommand = serializeLoadCommand();
-        auto recieved = conn->send(loadCommand);
+        auto recieved = conn->send(loadCommand.getBytes());
 
         while (recieved != 0)
         {

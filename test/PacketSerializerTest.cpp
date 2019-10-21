@@ -139,7 +139,7 @@ TEST_F(PacketSerializerTest, serializeLoadCommand)
     expected[1] = 0xc1;
 
     const auto packet = serializeLoadCommand();
-    EXPECT_THAT(packet, ContainerEq(expected));
+    EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
 }
 
 TEST_F(PacketSerializerTest, serializeLoadSlotCommand)

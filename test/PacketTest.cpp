@@ -100,6 +100,8 @@ TEST_F(PacketTest, headerStage)
     EXPECT_THAT(h.getBytes()[0], Eq(0x1a));
     h.setStage(Stage::ready);
     EXPECT_THAT(h.getBytes()[0], Eq(0x1c));
+    h.setStage(Stage::unknown);
+    EXPECT_THAT(h.getBytes()[0], Eq(0xff));
 }
 
 TEST_F(PacketTest, headerType)
@@ -113,6 +115,8 @@ TEST_F(PacketTest, headerType)
     EXPECT_THAT(h.getBytes()[1], Eq(0xc3));
     h.setType(Type::init1);
     EXPECT_THAT(h.getBytes()[1], Eq(0x03));
+    h.setType(Type::load);
+    EXPECT_THAT(h.getBytes()[1], Eq(0xc1));
 }
 
 TEST_F(PacketTest, headerDsp)
