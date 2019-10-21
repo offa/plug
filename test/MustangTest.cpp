@@ -76,7 +76,9 @@ protected:
 
 TEST_F(MustangTest, startInitializesDevice)
 {
-    const auto [initCmd1, initCmd2] = serializeInitCommand();
+    const auto [initPacket1, initPacket2] = serializeInitCommand();
+    const auto initCmd1 = initPacket1.getBytes();
+    const auto initCmd2 = initPacket2.getBytes();
 
     InSequence s;
     EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
@@ -116,7 +118,9 @@ TEST_F(MustangTest, startThrowsIfConnectionNotReady)
 
 TEST_F(MustangTest, startRequestsCurrentPresetName)
 {
-    const auto [initCmd1, initCmd2] = serializeInitCommand();
+    const auto [initPacket1, initPacket2] = serializeInitCommand();
+    const auto initCmd1 = initPacket1.getBytes();
+    const auto initCmd2 = initPacket2.getBytes();
 
     InSequence s;
     EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
@@ -161,7 +165,9 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
                                true, 17};
     const auto recvData = asBuffer(serializeAmpSettings(amp));
     const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(amp));
-    const auto [initCmd1, initCmd2] = serializeInitCommand();
+    const auto [initPacket1, initPacket2] = serializeInitCommand();
+    const auto initCmd1 = initPacket1.getBytes();
+    const auto initCmd2 = initPacket2.getBytes();
 
     InSequence s;
     EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));
@@ -206,7 +212,9 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     const auto recvData1 = asBuffer(serializeEffectSettings(e1));
     const auto recvData2 = asBuffer(serializeEffectSettings(e2));
     const auto recvData3 = asBuffer(serializeEffectSettings(e3));
-    const auto [initCmd1, initCmd2] = serializeInitCommand();
+    const auto [initPacket1, initPacket2] = serializeInitCommand();
+    const auto initCmd1 = initPacket1.getBytes();
+    const auto initCmd2 = initPacket2.getBytes();
 
 
     InSequence s;
@@ -245,7 +253,9 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
 TEST_F(MustangTest, startRequestsAmpPresetList)
 {
-    const auto [initCmd1, initCmd2] = serializeInitCommand();
+    const auto [initPacket1, initPacket2] = serializeInitCommand();
+    const auto initCmd1 = initPacket1.getBytes();
+    const auto initCmd2 = initPacket2.getBytes();
     const auto recvData0 = asBuffer(serializeName(0, "abc"));
     const auto recvData1 = asBuffer(serializeName(0, "def"));
     const auto recvData2 = asBuffer(serializeName(0, "ghi"));
@@ -297,7 +307,9 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
 
 TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
 {
-    const auto [initCmd1, initCmd2] = serializeInitCommand();
+    const auto [initPacket1, initPacket2] = serializeInitCommand();
+    const auto initCmd1 = initPacket1.getBytes();
+    const auto initCmd2 = initPacket2.getBytes();
 
     InSequence s;
     EXPECT_CALL(*conn, isOpen()).WillOnce(Return(true));

@@ -173,6 +173,6 @@ namespace plug::com
     void Mustang::initializeAmp()
     {
         const auto packets = serializeInitCommand();
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p); });
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p.getBytes()); });
     }
 }

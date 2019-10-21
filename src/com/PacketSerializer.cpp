@@ -919,15 +919,30 @@ namespace plug::com
         return applyCommand;
     }
 
-    std::array<Packet, 2> serializeInitCommand()
+    std::array<v2::Packet<v2::EmptyPayload>, 2> serializeInitCommand()
     {
-        Packet packet1{};
-        packet1[1] = 0xc3;
+        using v2::EmptyPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
 
-        Packet packet2{};
-        packet2[0] = 0x1a;
-        packet2[1] = 0x03;
+        Header h0{};
+        h0.setStage(Stage::init0);
+        h0.setType(Type::init0);
+        h0.setDSP(DSP::none);
+        v2::Packet<EmptyPayload> p0{};
+        p0.setHeader(h0);
+        p0.setPayload(EmptyPayload{});
 
-        return {{packet1, packet2}};
+        Header h1{};
+        h1.setStage(Stage::init1);
+        h1.setType(Type::init1);
+        h1.setDSP(DSP::none);
+        v2::Packet<EmptyPayload> p1{};
+        p1.setHeader(h1);
+        p1.setPayload(EmptyPayload{});
+
+        return {{p0, p1}};
     }
 }

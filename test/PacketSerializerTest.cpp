@@ -105,8 +105,8 @@ TEST_F(PacketSerializerTest, serializeInitCommand)
 
     const auto packets = serializeInitCommand();
     EXPECT_THAT(packets, SizeIs(2));
-    EXPECT_THAT(packets[0], ContainerEq(packet1));
-    EXPECT_THAT(packets[1], ContainerEq(packet2));
+    EXPECT_THAT(packets[0].getBytes(), ContainerEq(packet1));
+    EXPECT_THAT(packets[1].getBytes(), ContainerEq(packet2));
 }
 
 TEST_F(PacketSerializerTest, serializeApplyCommand)
