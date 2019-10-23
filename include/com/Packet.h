@@ -168,7 +168,7 @@ namespace v2
     class NamePayload
     {
     public:
-        void setName(const std::string& name)
+        void setName(std::string_view name)
         {
             constexpr std::size_t nameLength{32};
             const auto n = std::min(name.length(), nameLength);

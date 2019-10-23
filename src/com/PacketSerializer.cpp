@@ -543,21 +543,28 @@ namespace plug::com
         return packet;
     }
 
-    Packet serializeName(std::uint8_t slot, std::string_view name)
+    v2::Packet<v2::NamePayload> serializeName(std::uint8_t slot, std::string_view name)
     {
-        Packet data{};
-        data[0] = 0x1c;
-        data[1] = 0x01;
-        data[2] = 0x03;
-        data[SAVE_SLOT] = slot;
-        data[6] = 0x01;
-        data[7] = 0x01;
+        using v2::NamePayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
 
-        constexpr std::size_t nameLength{31};
-        const auto length = std::min(nameLength, name.size());
-        std::copy(name.cbegin(), std::next(name.cbegin(), length), std::next(data.begin(), NAME));
+        NamePayload payload{};
+        payload.setName(name);
 
-        return data;
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::operation);
+        header.setDSP(DSP::opSave);
+        header.setSlot(slot);
+        header.setUnknown(0x01, 0x01);
+
+        v2::Packet<NamePayload> packet{};
+        packet.setHeader(header);
+        packet.setPayload(payload);
+        return packet;
     }
 
     Packet serializeEffectSettings(const fx_pedal_settings& value)

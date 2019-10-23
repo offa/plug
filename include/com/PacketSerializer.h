@@ -40,7 +40,7 @@ namespace plug::com
 
     Packet serializeAmpSettings(const amp_settings& value);
     Packet serializeAmpSettingsUsbGain(const amp_settings& value);
-    Packet serializeName(std::uint8_t slot, std::string_view name);
+    v2::Packet<v2::NamePayload> serializeName(std::uint8_t slot, std::string_view name);
     Packet serializeEffectSettings(const fx_pedal_settings& value);
     Packet serializeClearEffectSettings();
     Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);

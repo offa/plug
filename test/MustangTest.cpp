@@ -138,7 +138,7 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
     EXPECT_CALL(*conn, receive(packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
 
     const std::string actualName{"abc"};
-    const auto nameData = asBuffer(serializeName(0, actualName));
+    const auto nameData = asBuffer(serializeName(0, actualName).getBytes());
 
     // Data
     EXPECT_CALL(*conn, receive(packetSize))
@@ -256,9 +256,9 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
     const auto [initPacket1, initPacket2] = serializeInitCommand();
     const auto initCmd1 = initPacket1.getBytes();
     const auto initCmd2 = initPacket2.getBytes();
-    const auto recvData0 = asBuffer(serializeName(0, "abc"));
-    const auto recvData1 = asBuffer(serializeName(0, "def"));
-    const auto recvData2 = asBuffer(serializeName(0, "ghi"));
+    const auto recvData0 = asBuffer(serializeName(0, "abc").getBytes());
+    const auto recvData1 = asBuffer(serializeName(0, "def").getBytes());
+    const auto recvData2 = asBuffer(serializeName(0, "ghi").getBytes());
 
 
     InSequence s;
@@ -372,7 +372,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 
 TEST_F(MustangTest, loadMemoryBankReceivesName)
 {
-    const auto recvData = asBuffer(serializeName(0, "abc"));
+    const auto recvData = asBuffer(serializeName(0, "abc").getBytes());
 
     InSequence s;
     // Load cmd
@@ -600,7 +600,7 @@ TEST_F(MustangTest, saveEffectsDoesNothingOnInvalidEffect)
 TEST_F(MustangTest, saveOnAmp)
 {
     const std::string name(30, 'x');
-    const auto saveNamePacket = serializeName(slot, name);
+    const auto saveNamePacket = serializeName(slot, name).getBytes();
     const auto loadSlotCmd = serializeLoadSlotCommand(slot).getBytes();
 
     InSequence s;

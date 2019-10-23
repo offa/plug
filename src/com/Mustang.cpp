@@ -124,7 +124,7 @@ namespace plug::com
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
-        const auto data = serializeName(slot, name);
+        const auto data = serializeName(slot, name).getBytes();
         sendCommand(*conn, data);
         loadBankData(*conn, slot);
     }
