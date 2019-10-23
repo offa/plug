@@ -153,7 +153,7 @@ TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
     expected[6] = 0x01;
 
     const auto packet = serializeLoadSlotCommand(slot);
-    EXPECT_THAT(packet, ContainerEq(expected));
+    EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)

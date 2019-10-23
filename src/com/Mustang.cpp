@@ -58,7 +58,7 @@ namespace plug::com
         std::array<Packet, 7> data{{}};
 
         const auto loadCommand = serializeLoadSlotCommand(slot);
-        auto n = conn.send(loadCommand);
+        auto n = conn.send(loadCommand.getBytes());
 
         for (std::size_t i = 0; n != 0; ++i)
         {

@@ -349,7 +349,7 @@ TEST_F(MustangTest, stopAmpClosesConnection)
 
 TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
 {
-    const auto loadSlotCmd = serializeLoadSlotCommand(slot);
+    const auto loadSlotCmd = serializeLoadSlotCommand(slot).getBytes();
 
     InSequence s;
     // Load cmd
@@ -601,7 +601,7 @@ TEST_F(MustangTest, saveOnAmp)
 {
     const std::string name(30, 'x');
     const auto saveNamePacket = serializeName(slot, name);
-    const auto loadSlotCmd = serializeLoadSlotCommand(slot);
+    const auto loadSlotCmd = serializeLoadSlotCommand(slot).getBytes();
 
     InSequence s;
     EXPECT_CALL(*conn, sendImpl(BufferIs(saveNamePacket), saveNamePacket.size())).WillOnce(Return(saveNamePacket.size()));

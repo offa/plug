@@ -885,14 +885,24 @@ namespace plug::com
         return packets;
     }
 
-    Packet serializeLoadSlotCommand(std::uint8_t slot)
+    v2::Packet<v2::EmptyPayload> serializeLoadSlotCommand(std::uint8_t slot)
     {
-        Packet loadCommand{};
-        loadCommand[0] = 0x1c;
-        loadCommand[1] = 0x01;
-        loadCommand[2] = 0x01;
-        loadCommand[SAVE_SLOT] = slot;
-        loadCommand[6] = 0x01;
+        using v2::EmptyPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
+
+        Header h{};
+        h.setStage(Stage::ready);
+        h.setType(Type::operation);
+        h.setDSP(DSP::opSelectMemBank);
+        h.setSlot(slot);
+        h.setUnknown(0x01, 0x00);
+
+        v2::Packet<EmptyPayload> loadCommand{};
+        loadCommand.setHeader(h);
+        loadCommand.setPayload(EmptyPayload{});
         return loadCommand;
     }
 
