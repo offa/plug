@@ -49,7 +49,7 @@ namespace plug::com
     v2::Packet<v2::EmptyPayload> serializeLoadSlotCommand(std::uint8_t slot);
     v2::Packet<v2::EmptyPayload> serializeLoadCommand();
     v2::Packet<v2::EmptyPayload> serializeApplyCommand();
-    Packet serializeApplyCommand(fx_pedal_settings effect);
+    v2::Packet<v2::EmptyPayload> serializeApplyCommand(fx_pedal_settings effect);
 
     std::array<v2::Packet<v2::EmptyPayload>, 2> serializeInitCommand();
 

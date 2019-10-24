@@ -137,10 +137,11 @@ namespace v2
             bytes[4] = slot;
         }
 
-        void setUnknown(std::uint8_t value0, std::uint8_t value1)
+        void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)
         {
-            bytes[6] = value0;
-            bytes[7] = value1;
+            bytes[3] = value0;
+            bytes[6] = value1;
+            bytes[7] = value2;
         }
 
         std::array<std::uint8_t, sizeHeader> getBytes() const

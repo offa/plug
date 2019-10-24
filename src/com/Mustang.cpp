@@ -142,7 +142,7 @@ namespace plug::com
         const auto packets = serializeSaveEffectPacket(slot, effects);
         std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p); });
 
-        sendCommand(*conn, serializeApplyCommand(effects[0]));
+        sendCommand(*conn, serializeApplyCommand(effects[0]).getBytes());
     }
 
     InitalData Mustang::loadData()

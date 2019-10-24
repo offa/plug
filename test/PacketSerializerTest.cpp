@@ -129,7 +129,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
     expected[FXKNOB] = fxKnob;
 
     const auto packet = serializeApplyCommand(effect);
-    EXPECT_THAT(packet, ContainerEq(expected));
+    EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
 }
 
 TEST_F(PacketSerializerTest, serializeLoadCommand)

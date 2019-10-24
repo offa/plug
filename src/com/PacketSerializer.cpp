@@ -559,7 +559,7 @@ namespace plug::com
         header.setType(Type::operation);
         header.setDSP(DSP::opSave);
         header.setSlot(slot);
-        header.setUnknown(0x01, 0x01);
+        header.setUnknown(0x00, 0x01, 0x01);
 
         v2::Packet<NamePayload> packet{};
         packet.setHeader(header);
@@ -905,7 +905,7 @@ namespace plug::com
         h.setType(Type::operation);
         h.setDSP(DSP::opSelectMemBank);
         h.setSlot(slot);
-        h.setUnknown(0x01, 0x00);
+        h.setUnknown(0x00, 0x01, 0x00);
 
         v2::Packet<EmptyPayload> loadCommand{};
         loadCommand.setHeader(h);
@@ -949,10 +949,12 @@ namespace plug::com
         return applyCommand;
     }
 
-    Packet serializeApplyCommand(fx_pedal_settings effect)
+    v2::Packet<v2::EmptyPayload> serializeApplyCommand(fx_pedal_settings effect)
     {
-        auto applyCommand = serializeApplyCommand().getBytes();
-        applyCommand[FXKNOB] = getFxKnob(effect);
+        auto applyCommand = serializeApplyCommand();
+        auto header = applyCommand.getHeader();
+        header.setUnknown(getFxKnob(effect), 0x00, 0x00);
+        applyCommand.setHeader(header);
         return applyCommand;
     }
 

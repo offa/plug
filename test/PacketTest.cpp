@@ -84,11 +84,13 @@ TEST_F(PacketTest, headerFixedFields)
 TEST_F(PacketTest, headerUnknownSpecificFields)
 {
     Header h{};
+    EXPECT_THAT(h.getBytes()[3], Eq(0x00));
     EXPECT_THAT(h.getBytes()[6], Eq(0x00));
     EXPECT_THAT(h.getBytes()[7], Eq(0x00));
-    h.setUnknown(0x01, 0x01);
+    h.setUnknown(0x02, 0x01, 0x03);
+    EXPECT_THAT(h.getBytes()[3], Eq(0x02));
     EXPECT_THAT(h.getBytes()[6], Eq(0x01));
-    EXPECT_THAT(h.getBytes()[7], Eq(0x01));
+    EXPECT_THAT(h.getBytes()[7], Eq(0x03));
 }
 
 TEST_F(PacketTest, headerStage)
