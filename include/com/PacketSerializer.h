@@ -39,7 +39,7 @@ namespace plug::com
     std::vector<std::string> decodePresetListFromData(const std::vector<Packet>& data);
 
     Packet serializeAmpSettings(const amp_settings& value);
-    Packet serializeAmpSettingsUsbGain(const amp_settings& value);
+    v2::Packet<v2::AmpPayload> serializeAmpSettingsUsbGain(const amp_settings& value);
     v2::Packet<v2::NamePayload> serializeName(std::uint8_t slot, std::string_view name);
     Packet serializeEffectSettings(const fx_pedal_settings& value);
     Packet serializeClearEffectSettings();

@@ -164,7 +164,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
                                cabinets::cabBSSMN, 5, 3, 4, 7, 4, 2, 6, 1,
                                true, 17};
     const auto recvData = asBuffer(serializeAmpSettings(amp));
-    const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(amp));
+    const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(amp).getBytes());
     const auto [initPacket1, initPacket2] = serializeInitCommand();
     const auto initCmd1 = initPacket1.getBytes();
     const auto initCmd2 = initPacket2.getBytes();
@@ -401,7 +401,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
                               0, 0x80, 13, 1, false, 0xab};
 
     const auto recvData = asBuffer(serializeAmpSettings(as));
-    const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(as));
+    const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(as).getBytes());
 
     InSequence s;
     // Load cmd
@@ -463,7 +463,7 @@ TEST_F(MustangTest, setAmpSendsValues)
                                     4, 1, 5, true, 4};
 
     const auto data = serializeAmpSettings(settings);
-    const auto data2 = serializeAmpSettingsUsbGain(settings);
+    const auto data2 = serializeAmpSettingsUsbGain(settings).getBytes();
 
 
     InSequence s;

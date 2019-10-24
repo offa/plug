@@ -118,7 +118,7 @@ namespace plug::com
         sendApplyCommand(*conn);
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
-        sendCommand(*conn, settingsGainPacket);
+        sendCommand(*conn, settingsGainPacket.getBytes());
         sendApplyCommand(*conn);
     }
 

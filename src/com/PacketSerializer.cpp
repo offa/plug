@@ -531,15 +531,26 @@ namespace plug::com
         return packet;
     }
 
-    Packet serializeAmpSettingsUsbGain(const amp_settings& value)
+    v2::Packet<v2::AmpPayload> serializeAmpSettingsUsbGain(const amp_settings& value)
     {
-        Packet packet{};
-        packet[0] = 0x1c;
-        packet[1] = 0x03;
-        packet[2] = 0x0d;
-        packet[6] = 0x01;
-        packet[7] = 0x01;
-        packet[USB_GAIN] = value.usb_gain;
+        using v2::AmpPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
+
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::data);
+        header.setDSP(DSP::usbGain);
+        header.setUnknown(0x00, 0x01, 0x01);
+
+        AmpPayload payload{};
+        payload.setUsbGain(value.usb_gain);
+
+        v2::Packet<AmpPayload> packet{};
+        packet.setHeader(header);
+        packet.setPayload(payload);
         return packet;
     }
 

@@ -128,6 +128,8 @@ TEST_F(PacketTest, headerDsp)
     EXPECT_THAT(h.getBytes()[2], Eq(0x00));
     h.setDSP(DSP::amp);
     EXPECT_THAT(h.getBytes()[2], Eq(0x05));
+    h.setDSP(DSP::usbGain);
+    EXPECT_THAT(h.getBytes()[2], Eq(0x0d));
     h.setDSP(DSP::effect0);
     EXPECT_THAT(h.getBytes()[2], Eq(0x06));
     h.setDSP(DSP::effect1);
@@ -291,6 +293,14 @@ TEST_F(PacketTest, ampPayloadSettings)
     EXPECT_THAT(p.getBytes()[36], Eq(0x09));
 }
 
+TEST_F(PacketTest, ampPayloadUsbSettings)
+{
+    AmpPayload p{};
+    p.setUsbGain(0x12);
+
+    EXPECT_THAT(p.getBytes()[0], Eq(0x12));
+}
+
 TEST_F(PacketTest, ampPayloadFixedFields)
 {
     constexpr std::uint8_t unknown{0x00};
@@ -307,8 +317,15 @@ TEST_F(PacketTest, ampPayloadFixedFields)
     EXPECT_THAT(bytes[29], Eq(unknown));
     EXPECT_THAT(bytes[30], Eq(unknown));
     EXPECT_THAT(bytes[34], Eq(unknown));
-    EXPECT_THAT(bytes[37], Eq(0x01));
     EXPECT_THAT(bytes[38], Eq(unknown));
     EXPECT_THAT(empty0, Each(0x00));
     EXPECT_THAT(empty1, Each(0x00));
 }
+
+TEST_F(PacketTest, ampPayloadUnknownSpecificFields)
+{
+    AmpPayload p{};
+    p.setUnknown(0x01);
+    EXPECT_THAT(p.getBytes()[37], Eq(0x01));
+}
+

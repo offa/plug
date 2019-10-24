@@ -35,6 +35,7 @@ namespace v2
     {
         none,
         amp,
+        usbGain,
         effect0,
         effect1,
         effect2,
@@ -114,6 +115,8 @@ namespace v2
                         return 0x00;
                     case DSP::amp:
                         return 0x05;
+                    case DSP::usbGain:
+                        return 0x0d;
                     case DSP::effect0:
                         return 0x06;
                     case DSP::effect1:
@@ -243,7 +246,6 @@ namespace v2
     public:
         AmpPayload()
         {
-            bytes[37] = 0x01;
         }
 
         void setModel(std::uint8_t value)
@@ -324,6 +326,16 @@ namespace v2
         void setBrightness(std::uint8_t value)
         {
             bytes[36] = value;
+        }
+
+        void setUnknown(std::uint8_t value)
+        {
+            bytes[37] = value;
+        }
+
+        void setUsbGain(std::uint8_t value)
+        {
+            bytes[0] = value;
         }
 
         std::array<std::uint8_t, sizePayload> getBytes() const
