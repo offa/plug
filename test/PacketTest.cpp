@@ -255,6 +255,16 @@ TEST_F(PacketTest, effectPayloadFixedFields)
     EXPECT_THAT(empty2, Each(0x00));
 }
 
+TEST_F(PacketTest, effectPayloadUnknownSpecificFields)
+{
+    EffectPayload p{};
+    p.setUnknown(0x11, 0x22, 0x33);
+
+    EXPECT_THAT(p.getBytes()[3], Eq(0x11));
+    EXPECT_THAT(p.getBytes()[4], Eq(0x22));
+    EXPECT_THAT(p.getBytes()[5], Eq(0x33));
+}
+
 TEST_F(PacketTest, ampPayloadSettings)
 {
     AmpPayload p{};

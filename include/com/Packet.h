@@ -231,6 +231,13 @@ namespace v2
             bytes[0] = model;
         }
 
+        void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)
+        {
+            bytes[3] = value0;
+            bytes[4] = value1;
+            bytes[5] = value2;
+        }
+
         std::array<std::uint8_t, sizePayload> getBytes() const
         {
             return bytes;

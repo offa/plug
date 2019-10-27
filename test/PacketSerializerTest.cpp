@@ -401,7 +401,7 @@ TEST_F(PacketSerializerTest, serializeClearEffectsSettingsData)
                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
     const auto packet = serializeClearEffectSettings();
-    EXPECT_THAT(packet, ContainerEq(expected));
+    EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
 }
 
 TEST_F(PacketSerializerTest, serializeNameData)

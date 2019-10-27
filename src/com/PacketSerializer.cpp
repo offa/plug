@@ -844,16 +844,26 @@ namespace plug::com
         return data;
     }
 
-    Packet serializeClearEffectSettings()
+    v2::Packet<v2::EffectPayload> serializeClearEffectSettings()
     {
-        return Packet{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+        using v2::EffectPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
+
+        Header h{};
+        h.setStage(Stage::ready);
+        h.setType(Type::data);
+        h.setDSP(DSP::none);
+        h.setUnknown(0x00, 0x01, 0x01);
+        EffectPayload payload{};
+        payload.setUnknown(0x00, 0x08, 0x01);
+
+        v2::Packet<EffectPayload> applyCommand{};
+        applyCommand.setHeader(h);
+        applyCommand.setPayload(payload);
+        return applyCommand;
     }
 
     Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
