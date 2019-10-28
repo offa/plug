@@ -14,6 +14,7 @@ IndentWidth: '4'
 Language: Cpp
 MaxEmptyLinesToKeep: '2'
 NamespaceIndentation: All
+NamespaceMacros: ['TEST_GROUP']
 PointerAlignment: Left
 SortIncludes: 'false'
 SpaceAfterCStyleCast: 'true'
