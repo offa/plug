@@ -409,125 +409,113 @@ namespace plug::com
         return presetNames;
     }
 
-    Packet serializeAmpSettings(const amp_settings& value)
+    v2::Packet<v2::AmpPayload> serializeAmpSettings(const amp_settings& value)
     {
-        Packet packet{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0xaa, 0xa2, 0x80, 0x63, 0x99, 0x80, 0xb0, 0x00,
-                       0x80, 0x80, 0x80, 0x80, 0x07, 0x07, 0x07, 0x05,
-                       0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+        using v2::AmpPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
 
-        packet[DSP] = 0x05;
-        packet[GAIN] = value.gain;
-        packet[VOLUME] = value.volume;
-        packet[TREBLE] = value.treble;
-        packet[MIDDLE] = value.middle;
-        packet[BASS] = value.bass;
-        packet[CABINET] = plug::value(value.cabinet);
-        packet[NOISE_GATE] = clampToRange<std::uint8_t, 0x05>(value.noise_gate);
-        packet[MASTER_VOL] = value.master_vol;
-        packet[GAIN2] = value.gain2;
-        packet[PRESENCE] = value.presence;
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::data);
+        header.setDSP(DSP::amp);
+        header.setUnknown(0x00, 0x01, 0x01);
 
-        if (value.noise_gate == 0x05)
+        AmpPayload payload{};
+        payload.setVolume(value.volume);
+        payload.setGain(value.gain);
+        payload.setGain2(value.gain2);
+        payload.setMasterVolume(value.master_vol);
+        payload.setTreble(value.treble);
+        payload.setMiddle(value.middle);
+        payload.setBass(value.bass);
+        payload.setPresence(value.presence);
+        payload.setBias(value.bias);
+        payload.setNoiseGate(clampToRange<std::uint8_t, 0x05>(value.noise_gate));
+        payload.setCabinet(plug::value(value.cabinet));
+        payload.setSag(clampToRange<std::uint8_t, 0x02>(value.sag));
+        payload.setBrightness(value.brightness);
+        payload.setUnknown(0x80, 0x80, 0x01);
+
+        if( value.noise_gate == 0x05 )
         {
-            packet[THRESHOLD] = clampToRange<uint8_t, 0x09>(value.threshold);
-            packet[DEPTH] = value.depth;
+            payload.setThreshold(clampToRange<uint8_t, 0x09>(value.threshold));
+            payload.setDepth(value.depth);
         }
-        packet[BIAS] = value.bias;
-        packet[SAG] = clampToRange<std::uint8_t, 0x02>(value.sag);
-        packet[BRIGHTNESS] = value.brightness;
+        else
+        {
+            payload.setDepth(0x80);
+        }
 
         switch (value.amp_num)
         {
             case amps::FENDER_57_DELUXE:
-                packet[AMPLIFIER] = 0x67;
-                packet[44] = packet[45] = packet[46] = 0x01;
-                packet[50] = 0x01;
-                packet[54] = 0x53;
+                payload.setModel(0x67);
+                payload.setUnknownAmpSpecific(0x01, 0x01, 0x01, 0x01, 0x53);
                 break;
 
             case amps::FENDER_59_BASSMAN:
-                packet[AMPLIFIER] = 0x64;
-                packet[44] = packet[45] = packet[46] = 0x02;
-                packet[50] = 0x02;
-                packet[54] = 0x67;
+                payload.setModel(0x64);
+                payload.setUnknownAmpSpecific(0x02, 0x02, 0x02, 0x02, 0x67);
                 break;
 
             case amps::FENDER_57_CHAMP:
-                packet[AMPLIFIER] = 0x7c;
-                packet[44] = packet[45] = packet[46] = 0x0c;
-                packet[50] = 0x0c;
-                packet[54] = 0x00;
+                payload.setModel(0x7c);
+                payload.setUnknownAmpSpecific(0x0c, 0x0c, 0x0c, 0x0c, 0x00);
                 break;
 
             case amps::FENDER_65_DELUXE_REVERB:
-                packet[AMPLIFIER] = 0x53;
-                packet[40] = packet[43] = 0x00;
-                packet[44] = packet[45] = packet[46] = 0x03;
-                packet[50] = 0x03;
-                packet[54] = 0x6a;
+                payload.setModel(0x53);
+                payload.setUnknownAmpSpecific(0x03, 0x03, 0x03, 0x03, 0x6a);
+                payload.setUnknown(0x00, 0x00, 0x01);
                 break;
 
             case amps::FENDER_65_PRINCETON:
-                packet[AMPLIFIER] = 0x6a;
-                packet[44] = packet[45] = packet[46] = 0x04;
-                packet[50] = 0x04;
-                packet[54] = 0x61;
+                payload.setModel(0x6a);
+                payload.setUnknownAmpSpecific(0x04, 0x04, 0x04, 0x04, 0x61);
                 break;
 
             case amps::FENDER_65_TWIN_REVERB:
-                packet[AMPLIFIER] = 0x75;
-                packet[44] = packet[45] = packet[46] = 0x05;
-                packet[50] = 0x05;
-                packet[54] = 0x72;
+                payload.setModel(0x75);
+                payload.setUnknownAmpSpecific(0x05, 0x05, 0x05, 0x05, 0x72);
                 break;
 
             case amps::FENDER_SUPER_SONIC:
-                packet[AMPLIFIER] = 0x72;
-                packet[44] = packet[45] = packet[46] = 0x06;
-                packet[50] = 0x06;
-                packet[54] = 0x79;
+                payload.setModel(0x72);
+                payload.setUnknownAmpSpecific(0x06, 0x06, 0x06, 0x06, 0x79);
                 break;
 
             case amps::BRITISH_60S:
-                packet[AMPLIFIER] = 0x61;
-                packet[44] = packet[45] = packet[46] = 0x07;
-                packet[50] = 0x07;
-                packet[54] = 0x5e;
+                payload.setModel(0x61);
+                payload.setUnknownAmpSpecific(0x07, 0x07, 0x07, 0x07, 0x5e);
                 break;
 
             case amps::BRITISH_70S:
-                packet[AMPLIFIER] = 0x79;
-                packet[44] = packet[45] = packet[46] = 0x0b;
-                packet[50] = 0x0b;
-                packet[54] = 0x7c;
+                payload.setModel(0x79);
+                payload.setUnknownAmpSpecific(0x0b, 0x0b, 0x0b, 0x0b, 0x7c);
                 break;
 
             case amps::BRITISH_80S:
-                packet[AMPLIFIER] = 0x5e;
-                packet[44] = packet[45] = packet[46] = 0x09;
-                packet[50] = 0x09;
-                packet[54] = 0x5d;
+                payload.setModel(0x5e);
+                payload.setUnknownAmpSpecific(0x09, 0x09, 0x09, 0x09, 0x5d);
                 break;
 
             case amps::AMERICAN_90S:
-                packet[AMPLIFIER] = 0x5d;
-                packet[44] = packet[45] = packet[46] = 0x0a;
-                packet[50] = 0x0a;
-                packet[54] = 0x6d;
+                payload.setModel(0x5d);
+                payload.setUnknownAmpSpecific(0x0a, 0x0a, 0x0a, 0x0a, 0x6d);
                 break;
 
             case amps::METAL_2000:
-                packet[AMPLIFIER] = 0x6d;
-                packet[44] = packet[45] = packet[46] = 0x08;
-                packet[50] = 0x08;
-                packet[54] = 0x75;
+                payload.setModel(0x6d);
+                payload.setUnknownAmpSpecific(0x08, 0x08, 0x08, 0x08, 0x75);
                 break;
         }
+
+        v2::Packet<AmpPayload> packet{};
+        packet.setHeader(header);
+        packet.setPayload(payload);
         return packet;
     }
 

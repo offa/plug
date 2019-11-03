@@ -114,7 +114,7 @@ namespace plug::com
     void Mustang::set_amplifier(amp_settings value)
     {
         const auto settingsPacket = serializeAmpSettings(value);
-        sendCommand(*conn, settingsPacket);
+        sendCommand(*conn, settingsPacket.getBytes());
         sendApplyCommand(*conn);
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);

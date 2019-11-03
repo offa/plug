@@ -192,7 +192,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
     expected[50] = 0x08;
     expected[54] = 0x75;
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
@@ -232,7 +232,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
     expected[50] = 0x07;
     expected[54] = 0x5e;
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
@@ -240,7 +240,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsDspData)
 {
     constexpr amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[DSP], Eq(0x05));
 }
 
@@ -248,7 +248,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
 {
     constexpr amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[GAIN], Eq(123));
     EXPECT_THAT(packet[GAIN2], Eq(15));
     EXPECT_THAT(packet[VOLUME], Eq(101));
@@ -269,18 +269,18 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
         return amp_settings{a, 0, 0, 0, 0, 0, cabinets::cab2x12C, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
     };
 
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_DELUXE)), AmpDataIs(0x67, 0x80, 0x01, 0x53));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_59_BASSMAN)), AmpDataIs(0x64, 0x80, 0x02, 0x67));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_CHAMP)), AmpDataIs(0x7c, 0x80, 0x0c, 0x00));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_DELUXE_REVERB)), AmpDataIs(0x53, 0x00, 0x03, 0x6a));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_PRINCETON)), AmpDataIs(0x6a, 0x80, 0x04, 0x61));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_TWIN_REVERB)), AmpDataIs(0x75, 0x80, 0x05, 0x72));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_SUPER_SONIC)), AmpDataIs(0x72, 0x80, 0x06, 0x79));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_60S)), AmpDataIs(0x61, 0x80, 0x07, 0x5e));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_70S)), AmpDataIs(0x79, 0x80, 0x0b, 0x7c));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_80S)), AmpDataIs(0x5e, 0x80, 0x09, 0x5d));
-    EXPECT_THAT(serializeAmpSettings(create(amps::AMERICAN_90S)), AmpDataIs(0x5d, 0x80, 0x0a, 0x6d));
-    EXPECT_THAT(serializeAmpSettings(create(amps::METAL_2000)), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_DELUXE)).getBytes(), AmpDataIs(0x67, 0x80, 0x01, 0x53));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_59_BASSMAN)).getBytes(), AmpDataIs(0x64, 0x80, 0x02, 0x67));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_CHAMP)).getBytes(), AmpDataIs(0x7c, 0x80, 0x0c, 0x00));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_DELUXE_REVERB)).getBytes(), AmpDataIs(0x53, 0x00, 0x03, 0x6a));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_PRINCETON)).getBytes(), AmpDataIs(0x6a, 0x80, 0x04, 0x61));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_TWIN_REVERB)).getBytes(), AmpDataIs(0x75, 0x80, 0x05, 0x72));
+    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_SUPER_SONIC)).getBytes(), AmpDataIs(0x72, 0x80, 0x06, 0x79));
+    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_60S)).getBytes(), AmpDataIs(0x61, 0x80, 0x07, 0x5e));
+    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_70S)).getBytes(), AmpDataIs(0x79, 0x80, 0x0b, 0x7c));
+    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_80S)).getBytes(), AmpDataIs(0x5e, 0x80, 0x09, 0x5d));
+    EXPECT_THAT(serializeAmpSettings(create(amps::AMERICAN_90S)).getBytes(), AmpDataIs(0x5d, 0x80, 0x0a, 0x6d));
+    EXPECT_THAT(serializeAmpSettings(create(amps::METAL_2000)).getBytes(), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
@@ -289,26 +289,26 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
         return amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
     };
 
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::OFF)), CabinetDataIs(0x00));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab57DLX)), CabinetDataIs(0x01));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabBSSMN)), CabinetDataIs(0x02));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65DLX)), CabinetDataIs(0x03));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65PRN)), CabinetDataIs(0x04));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabCHAMP)), CabinetDataIs(0x05));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12M)), CabinetDataIs(0x06));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab2x12C)), CabinetDataIs(0x07));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12G)), CabinetDataIs(0x08));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65TWN)), CabinetDataIs(0x09));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12V)), CabinetDataIs(0x0a));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS212)), CabinetDataIs(0x0b));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS112)), CabinetDataIs(0x0c));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::OFF)).getBytes(), CabinetDataIs(0x00));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab57DLX)).getBytes(), CabinetDataIs(0x01));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabBSSMN)).getBytes(), CabinetDataIs(0x02));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65DLX)).getBytes(), CabinetDataIs(0x03));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65PRN)).getBytes(), CabinetDataIs(0x04));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabCHAMP)).getBytes(), CabinetDataIs(0x05));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12M)).getBytes(), CabinetDataIs(0x06));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab2x12C)).getBytes(), CabinetDataIs(0x07));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12G)).getBytes(), CabinetDataIs(0x08));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65TWN)).getBytes(), CabinetDataIs(0x09));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12V)).getBytes(), CabinetDataIs(0x0a));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS212)).getBytes(), CabinetDataIs(0x0b));
+    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS112)).getBytes(), CabinetDataIs(0x0c));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagData)
 {
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0x03, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[SAG], Eq(0x02));
 }
 
@@ -316,7 +316,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)
 {
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, true, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[BRIGHTNESS], Eq(0x01));
 }
 
@@ -325,7 +325,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsNoiseGate)
     constexpr std::uint8_t value{0x04};
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[NOISE_GATE], Eq(value));
 }
 
@@ -334,7 +334,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsLimitsNoiseGate)
     constexpr std::uint8_t value{0x06};
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[NOISE_GATE], Eq(0x05));
 }
 
@@ -345,7 +345,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsThresholdAndDepthIfNoiseGat
     constexpr std::uint8_t depth{0x19};
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[THRESHOLD], Eq(threshold));
     EXPECT_THAT(packet[DEPTH], Eq(depth));
 }
@@ -357,7 +357,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsDoesNotSetThresholdAndDepthIfNo
     constexpr std::uint8_t depth{0x19};
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
     EXPECT_THAT(packet[DEPTH], Eq(0x80));
 }
@@ -368,7 +368,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
     constexpr std::uint8_t threshold{0x0a};
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, 0, 0, 0, false, 0};
 
-    const auto packet = serializeAmpSettings(settings);
+    const auto packet = serializeAmpSettings(settings).getBytes();
     EXPECT_THAT(packet[THRESHOLD], Eq(0x09));
 }
 

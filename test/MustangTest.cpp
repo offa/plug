@@ -163,7 +163,7 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
     constexpr amp_settings amp{amps::BRITISH_60S, 4, 8, 5, 9, 1,
                                cabinets::cabBSSMN, 5, 3, 4, 7, 4, 2, 6, 1,
                                true, 17};
-    const auto recvData = asBuffer(serializeAmpSettings(amp));
+    const auto recvData = asBuffer(serializeAmpSettings(amp).getBytes());
     const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(amp).getBytes());
     const auto [initPacket1, initPacket2] = serializeInitCommand();
     const auto initCmd1 = initPacket1.getBytes();
@@ -400,7 +400,7 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
                               cabinets::cab4x12M, 0, 9, 10, 11,
                               0, 0x80, 13, 1, false, 0xab};
 
-    const auto recvData = asBuffer(serializeAmpSettings(as));
+    const auto recvData = asBuffer(serializeAmpSettings(as).getBytes());
     const auto extendedData = asBuffer(serializeAmpSettingsUsbGain(as).getBytes());
 
     InSequence s;
@@ -462,7 +462,7 @@ TEST_F(MustangTest, setAmpSendsValues)
                                     cabinets::cab4x12G, 3, 5, 3, 2, 1,
                                     4, 1, 5, true, 4};
 
-    const auto data = serializeAmpSettings(settings);
+    const auto data = serializeAmpSettings(settings).getBytes();
     const auto data2 = serializeAmpSettingsUsbGain(settings).getBytes();
 
 

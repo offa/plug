@@ -335,7 +335,17 @@ TEST_F(PacketTest, ampPayloadFixedFields)
 TEST_F(PacketTest, ampPayloadUnknownSpecificFields)
 {
     AmpPayload p{};
-    p.setUnknown(0x01);
-    EXPECT_THAT(p.getBytes()[37], Eq(0x01));
+    p.setUnknown(0x01, 0x02, 0x03);
+    p.setUnknownAmpSpecific(0x21, 0x22, 0x23, 0x24, 0x25);
+
+    EXPECT_THAT(p.getBytes()[24], Eq(0x01));
+    EXPECT_THAT(p.getBytes()[27], Eq(0x02));
+    EXPECT_THAT(p.getBytes()[37], Eq(0x03));
+
+    EXPECT_THAT(p.getBytes()[28], Eq(0x21));
+    EXPECT_THAT(p.getBytes()[29], Eq(0x22));
+    EXPECT_THAT(p.getBytes()[30], Eq(0x23));
+    EXPECT_THAT(p.getBytes()[34], Eq(0x24));
+    EXPECT_THAT(p.getBytes()[38], Eq(0x25));
 }
 

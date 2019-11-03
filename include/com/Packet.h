@@ -335,9 +335,20 @@ namespace v2
             bytes[36] = value;
         }
 
-        void setUnknown(std::uint8_t value)
+        void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)
         {
-            bytes[37] = value;
+            bytes[24] = value0;
+            bytes[27] = value1;
+            bytes[37] = value2;
+        }
+
+        void setUnknownAmpSpecific(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2, std::uint8_t value3, std::uint8_t value4)
+        {
+            bytes[28] = value0;
+            bytes[29] = value1;
+            bytes[30] = value2;
+            bytes[34] = value3;
+            bytes[38] = value4;
         }
 
         void setUsbGain(std::uint8_t value)
