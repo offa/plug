@@ -41,6 +41,7 @@ namespace v2
         effect2,
         effect3,
         opSave,
+        opSaveEffectName,
         opSelectMemBank
     };
 
@@ -127,6 +128,8 @@ namespace v2
                         return 0x09;
                     case DSP::opSave:
                         return 0x03;
+                    case DSP::opSaveEffectName:
+                        return 0x04;
                     case DSP::opSelectMemBank:
                         return 0x01;
                     default:

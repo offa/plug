@@ -854,16 +854,13 @@ namespace plug::com
         return applyCommand;
     }
 
-    Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
+    v2::Packet<v2::NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
-        Packet packet{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+        using v2::NamePayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
 
         const std::size_t repeat = getSaveEffectsRepeats(effects);
 
@@ -875,13 +872,21 @@ namespace plug::com
             }
         }
 
-        packet[FXKNOB] = getFxKnob(effects[0]);
-        packet[SAVE_SLOT] = slot;
+
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::operation);
+        header.setDSP(DSP::opSaveEffectName);
+        header.setSlot(slot);
+        header.setUnknown(getFxKnob(effects[0]), 0x01, 0x01);
 
         constexpr std::size_t nameLength{24};
-        const auto length = std::min(nameLength, name.size());
-        std::copy(name.cbegin(), std::next(name.cbegin(), length), std::next(packet.begin(), NAME));
+        NamePayload payload{};
+        payload.setName(name.substr(0, nameLength));
 
+        v2::Packet<NamePayload> packet{};
+        packet.setHeader(header);
+        packet.setPayload(payload);
         return packet;
     }
 

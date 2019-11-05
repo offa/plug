@@ -140,6 +140,8 @@ TEST_F(PacketTest, headerDsp)
     EXPECT_THAT(h.getBytes()[2], Eq(0x09));
     h.setDSP(DSP::opSave);
     EXPECT_THAT(h.getBytes()[2], Eq(0x03));
+    h.setDSP(DSP::opSaveEffectName);
+    EXPECT_THAT(h.getBytes()[2], Eq(0x04));
     h.setDSP(DSP::opSelectMemBank);
     EXPECT_THAT(h.getBytes()[2], Eq(0x01));
 }

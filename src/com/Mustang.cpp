@@ -137,7 +137,7 @@ namespace plug::com
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         const auto saveNamePacket = serializeSaveEffectName(slot, name, effects);
-        sendCommand(*conn, saveNamePacket);
+        sendCommand(*conn, saveNamePacket.getBytes());
 
         const auto packets = serializeSaveEffectPacket(slot, effects);
         std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p); });

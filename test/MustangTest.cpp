@@ -537,7 +537,7 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     const std::vector<fx_pedal_settings> settings{fx_pedal_settings{1, effects::MONO_DELAY, 0, 1, 2, 3, 4, 5, Position::input},
                                                   fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop}};
     const std::string name = "abcd";
-    const auto dataName = serializeSaveEffectName(slot, name, settings);
+    const auto dataName = serializeSaveEffectName(slot, name, settings).getBytes();
     const auto cmdExecute = serializeApplyCommand(settings[0]).getBytes();
     const auto packets = serializeSaveEffectPacket(slot, settings);
 
@@ -569,7 +569,7 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
                                                   fx_pedal_settings{2, effects::SINE_FLANGER, 6, 7, 8, 0, 0, 0, Position::effectsLoop},
                                                   fx_pedal_settings{3, effects::SINE_FLANGER, 1, 2, 2, 1, 0, 4, Position::effectsLoop}};
     const std::string name = "abcd";
-    const auto dataName = serializeSaveEffectName(slot, name, settings);
+    const auto dataName = serializeSaveEffectName(slot, name, settings).getBytes();
     const auto cmdExecute = serializeApplyCommand(settings[0]).getBytes();
     const auto packets = serializeSaveEffectPacket(slot, settings);
 

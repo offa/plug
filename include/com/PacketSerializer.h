@@ -43,7 +43,7 @@ namespace plug::com
     v2::Packet<v2::NamePayload> serializeName(std::uint8_t slot, std::string_view name);
     Packet serializeEffectSettings(const fx_pedal_settings& value);
     v2::Packet<v2::EffectPayload> serializeClearEffectSettings();
-    Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
+    v2::Packet<v2::NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
     std::vector<Packet> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects);
 
     v2::Packet<v2::EmptyPayload> serializeLoadSlotCommand(std::uint8_t slot);
