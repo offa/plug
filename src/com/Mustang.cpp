@@ -106,7 +106,7 @@ namespace plug::com
         if (value.effect_num != effects::EMPTY)
         {
             const auto settingsPacket = serializeEffectSettings(value);
-            sendCommand(*conn, settingsPacket);
+            sendCommand(*conn, settingsPacket.getBytes());
             sendApplyCommand(*conn);
         }
     }

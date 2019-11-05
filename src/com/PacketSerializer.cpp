@@ -550,9 +550,6 @@ namespace plug::com
         using v2::DSP;
         using v2::Stage;
 
-        NamePayload payload{};
-        payload.setName(name);
-
         Header header{};
         header.setStage(Stage::ready);
         header.setType(Type::operation);
@@ -560,276 +557,268 @@ namespace plug::com
         header.setSlot(slot);
         header.setUnknown(0x00, 0x01, 0x01);
 
+        NamePayload payload{};
+        payload.setName(name);
+
         v2::Packet<NamePayload> packet{};
         packet.setHeader(header);
         packet.setPayload(payload);
         return packet;
     }
 
-    Packet serializeEffectSettings(const fx_pedal_settings& value)
+    v2::Packet<v2::EffectPayload> serializeEffectSettings(const fx_pedal_settings& value)
     {
-        Packet data{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+        using v2::EffectPayload;
+        using v2::Header;
+        using v2::Type;
+        using v2::DSP;
+        using v2::Stage;
 
-        data[FXSLOT] = getSlot(value);
-        data[KNOB1] = value.knob1;
-        data[KNOB2] = value.knob2;
-        data[KNOB3] = value.knob3;
-        data[KNOB4] = value.knob4;
-        data[KNOB5] = value.knob5;
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::data);
+        header.setUnknown(0x00, 0x01, 0x01);
+
+        EffectPayload payload{};
+        payload.setSlot(getSlot(value));
+        payload.setUnknown(0x00, 0x08, 0x01);
+        payload.setKnob1(value.knob1);
+        payload.setKnob2(value.knob2);
+        payload.setKnob3(value.knob3);
+        payload.setKnob4(value.knob4);
+        payload.setKnob5(value.knob5);
 
         if (hasExtraKnob(value.effect_num) == true)
         {
-            data[KNOB6] = value.knob6;
+            payload.setKnob6(value.knob6);
         }
 
         switch (value.effect_num)
         {
             case effects::OVERDRIVE:
-                data[DSP] = 0x06;
-                data[EFFECT] = 0x3c;
+                header.setDSP(DSP::effect0);
+                payload.setModel(0x3c);
                 break;
 
             case effects::WAH:
-                data[DSP] = 0x06;
-                data[EFFECT] = 0x49;
-                data[19] = 0x01;
+                header.setDSP(DSP::effect0);
+                payload.setModel(0x49);
+                payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::TOUCH_WAH:
-                data[DSP] = 0x06;
-                data[EFFECT] = 0x4a;
-                data[19] = 0x01;
+                header.setDSP(DSP::effect0);
+                payload.setModel(0x4a);
+                payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::FUZZ:
-                data[DSP] = 0x06;
-                data[EFFECT] = 0x1a;
+                header.setDSP(DSP::effect0);
+                payload.setModel(0x1a);
                 break;
 
             case effects::FUZZ_TOUCH_WAH:
-                data[DSP] = 0x06;
-                data[EFFECT] = 0x1c;
+                header.setDSP(DSP::effect0);
+                payload.setModel(0x1c);
                 break;
 
             case effects::SIMPLE_COMP:
-                data[DSP] = 0x06;
-                data[EFFECT] = 0x88;
-                data[19] = 0x08;
-                data[KNOB1] = clampToRange<std::uint8_t, 0x03>(value.knob1);
-                data[KNOB2] = 0x00;
-                data[KNOB3] = 0x00;
-                data[KNOB4] = 0x00;
-                data[KNOB5] = 0x00;
+                header.setDSP(DSP::effect0);
+                payload.setModel(0x88);
+                payload.setKnob1(clampToRange<std::uint8_t, 0x03>(value.knob1));
+                payload.setKnob2(0x00);
+                payload.setKnob3(0x00);
+                payload.setKnob4(0x00);
+                payload.setKnob5(0x00);
+                payload.setUnknown(0x08, 0x08, 0x01);
                 break;
 
             case effects::COMPRESSOR:
-                data[DSP] = 0x06;
-                data[EFFECT] = 0x07;
+                header.setDSP(DSP::effect0);
+                payload.setModel(0x07);
                 break;
 
             case effects::SINE_CHORUS:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x12;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x12);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::TRIANGLE_CHORUS:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x13;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x13);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::SINE_FLANGER:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x18;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x18);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::TRIANGLE_FLANGER:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x19;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x19);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::VIBRATONE:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x2d;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x2d);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::VINTAGE_TREMOLO:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x40;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x40);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::SINE_TREMOLO:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x41;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x41);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::RING_MODULATOR:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x22;
-                data[19] = 0x01;
-                data[KNOB4] = clampToRange<std::uint8_t, 0x01>(value.knob4);
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x22);
+                payload.setKnob4(clampToRange<std::uint8_t, 0x01>(value.knob4));
+                payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::STEP_FILTER:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x29;
-                data[19] = 0x01;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x29);
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::PHASER:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x4f;
-                data[19] = 0x01;
-                data[20] = 0x01;
-                data[KNOB5] = clampToRange<std::uint8_t, 0x01>(value.knob5);
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x4f);
+                payload.setKnob5(clampToRange<std::uint8_t, 0x01>(value.knob5));
+                payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::PITCH_SHIFTER:
-                data[DSP] = 0x07;
-                data[EFFECT] = 0x1f;
-                data[19] = 0x01;
+                header.setDSP(DSP::effect1);
+                payload.setModel(0x1f);
+                payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::MONO_DELAY:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x16;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x16);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::MONO_ECHO_FILTER:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x43;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x43);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::STEREO_ECHO_FILTER:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x48;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x48);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::MULTITAP_DELAY:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x44;
-                data[19] = 0x02;
-                data[20] = 0x01;
-                data[KNOB5] = clampToRange<std::uint8_t, 0x03>(value.knob5);
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x44);
+                payload.setKnob5(clampToRange<std::uint8_t, 0x03>(value.knob5));
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::PING_PONG_DELAY:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x45;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x45);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::DUCKING_DELAY:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x15;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x15);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::REVERSE_DELAY:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x46;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x46);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::TAPE_DELAY:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x2b;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x2b);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::STEREO_TAPE_DELAY:
-                data[DSP] = 0x08;
-                data[EFFECT] = 0x2a;
-                data[19] = 0x02;
-                data[20] = 0x01;
+                header.setDSP(DSP::effect2);
+                payload.setModel(0x2a);
+                payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::SMALL_HALL_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x24;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x24);
                 break;
 
             case effects::LARGE_HALL_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x3a;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x3a);
                 break;
 
             case effects::SMALL_ROOM_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x26;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x26);
                 break;
 
             case effects::LARGE_ROOM_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x3b;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x3b);
                 break;
 
             case effects::SMALL_PLATE_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x4e;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x4e);
                 break;
 
             case effects::LARGE_PLATE_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x4b;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x4b);
                 break;
 
             case effects::AMBIENT_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x4c;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x4c);
                 break;
 
             case effects::ARENA_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x4d;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x4d);
                 break;
 
             case effects::FENDER_63_SPRING_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x21;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x21);
                 break;
 
             case effects::FENDER_65_SPRING_REVERB:
-                data[DSP] = 0x09;
-                data[EFFECT] = 0x0b;
+                header.setDSP(DSP::effect3);
+                payload.setModel(0x0b);
                 break;
 
             default:
                 break;
         }
 
-        return data;
+        v2::Packet<EffectPayload> packet{};
+        packet.setHeader(header);
+        packet.setPayload(payload);
+        return packet;
     }
 
     v2::Packet<v2::EffectPayload> serializeClearEffectSettings()
@@ -871,7 +860,6 @@ namespace plug::com
                 throw std::invalid_argument{"Invalid effect"};
             }
         }
-
 
         Header header{};
         header.setStage(Stage::ready);

@@ -208,10 +208,10 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
     constexpr fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 1, Position::input};
     constexpr fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
     constexpr fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
-    const auto recvData0 = asBuffer(serializeEffectSettings(e0));
-    const auto recvData1 = asBuffer(serializeEffectSettings(e1));
-    const auto recvData2 = asBuffer(serializeEffectSettings(e2));
-    const auto recvData3 = asBuffer(serializeEffectSettings(e3));
+    const auto recvData0 = asBuffer(serializeEffectSettings(e0).getBytes());
+    const auto recvData1 = asBuffer(serializeEffectSettings(e1).getBytes());
+    const auto recvData2 = asBuffer(serializeEffectSettings(e2).getBytes());
+    const auto recvData3 = asBuffer(serializeEffectSettings(e3).getBytes());
     const auto [initPacket1, initPacket2] = serializeInitCommand();
     const auto initCmd1 = initPacket1.getBytes();
     const auto initCmd2 = initPacket2.getBytes();
@@ -429,10 +429,10 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
     constexpr fx_pedal_settings e1{0x01, effects::TRIANGLE_CHORUS, 0, 0, 0, 1, 1, 0, Position::input};
     constexpr fx_pedal_settings e2{0x02, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
     constexpr fx_pedal_settings e3{0x03, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::effectsLoop};
-    const auto recvData0 = asBuffer(serializeEffectSettings(e0));
-    const auto recvData1 = asBuffer(serializeEffectSettings(e1));
-    const auto recvData2 = asBuffer(serializeEffectSettings(e2));
-    const auto recvData3 = asBuffer(serializeEffectSettings(e3));
+    const auto recvData0 = asBuffer(serializeEffectSettings(e0).getBytes());
+    const auto recvData1 = asBuffer(serializeEffectSettings(e1).getBytes());
+    const auto recvData2 = asBuffer(serializeEffectSettings(e2).getBytes());
+    const auto recvData3 = asBuffer(serializeEffectSettings(e3).getBytes());
 
 
     InSequence s;
@@ -490,7 +490,7 @@ TEST_F(MustangTest, setAmpSendsValues)
 TEST_F(MustangTest, setEffectSendsValue)
 {
     constexpr fx_pedal_settings settings{3, effects::OVERDRIVE, 8, 7, 6, 5, 4, 3, Position::input};
-    const auto data = serializeEffectSettings(settings);
+    const auto data = serializeEffectSettings(settings).getBytes();
 
 
     InSequence s;
