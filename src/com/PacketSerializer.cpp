@@ -86,253 +86,6 @@ namespace plug::com
             return size;
         }
 
-        Packet serializeSaveEffectHeader(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects)
-        {
-            Packet packet{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-
-            const std::size_t repeat = getSaveEffectsRepeats(effects);
-
-            for (std::size_t i = 0; i < repeat; ++i)
-            {
-                if (effects[i].effect_num < effects::SINE_CHORUS)
-                {
-                    throw std::invalid_argument{"Invalid effect"};
-                }
-            }
-
-            packet[FXKNOB] = getFxKnob(effects[0]);
-            packet[SAVE_SLOT] = slot;
-            packet[1] = 0x03;
-            packet[6] = 0x00;
-            std::fill(std::next(packet.begin(), 16), std::prev(packet.end(), 16), 0x00);
-
-            return packet;
-        }
-
-        Packet serializeSaveEffectBody(Packet packet, const std::vector<fx_pedal_settings>& effects, std::size_t i)
-        {
-            packet[19] = 0x00;
-            packet[20] = 0x08;
-            packet[21] = 0x01;
-            packet[KNOB6] = 0x00;
-            packet[FXSLOT] = getSlot(effects[i]);
-            packet[KNOB1] = effects[i].knob1;
-            packet[KNOB2] = effects[i].knob2;
-            packet[KNOB3] = effects[i].knob3;
-            packet[KNOB4] = effects[i].knob4;
-            packet[KNOB5] = effects[i].knob5;
-
-            const auto effect = effects[i].effect_num;
-
-            if (hasExtraKnob(effect) == true)
-            {
-                packet[KNOB6] = effects[i].knob6;
-            }
-
-            switch (effect)
-            {
-                case effects::SINE_CHORUS:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x12;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::TRIANGLE_CHORUS:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x13;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::SINE_FLANGER:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x18;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::TRIANGLE_FLANGER:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x19;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::VIBRATONE:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x2d;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::VINTAGE_TREMOLO:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x40;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::SINE_TREMOLO:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x41;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::RING_MODULATOR:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x22;
-                    packet[19] = 0x01;
-                    packet[KNOB4] = clampToRange<std::uint8_t, 0x01>(packet[KNOB4]);
-                    break;
-
-                case effects::STEP_FILTER:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x29;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::PHASER:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x4f;
-                    packet[19] = 0x01;
-                    packet[20] = 0x01;
-                    packet[KNOB5] = clampToRange<std::uint8_t, 0x01>(packet[KNOB5]);
-                    break;
-
-                case effects::PITCH_SHIFTER:
-                    packet[DSP] = 0x07;
-                    packet[EFFECT] = 0x1f;
-                    packet[19] = 0x01;
-                    break;
-
-                case effects::MONO_DELAY:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x16;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::MONO_ECHO_FILTER:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x43;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::STEREO_ECHO_FILTER:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x48;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::MULTITAP_DELAY:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x44;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::PING_PONG_DELAY:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x45;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::DUCKING_DELAY:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x15;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::REVERSE_DELAY:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x46;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::TAPE_DELAY:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x2b;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::STEREO_TAPE_DELAY:
-                    packet[DSP] = 0x08;
-                    packet[EFFECT] = 0x2a;
-                    packet[19] = 0x02;
-                    packet[20] = 0x01;
-                    break;
-
-                case effects::SMALL_HALL_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x24;
-                    break;
-
-                case effects::LARGE_HALL_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x3a;
-                    break;
-
-                case effects::SMALL_ROOM_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x26;
-                    break;
-
-                case effects::LARGE_ROOM_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x3b;
-                    break;
-
-                case effects::SMALL_PLATE_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x4e;
-                    break;
-
-                case effects::LARGE_PLATE_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x4b;
-                    break;
-
-                case effects::AMBIENT_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x4c;
-                    break;
-
-                case effects::ARENA_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x4d;
-                    break;
-
-                case effects::FENDER_63_SPRING_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x21;
-                    break;
-
-                case effects::FENDER_65_SPRING_REVERB:
-                    packet[DSP] = 0x09;
-                    packet[EFFECT] = 0x0b;
-                    break;
-
-                default:
-                    break;
-            }
-            return packet;
-        }
     }
 
 
@@ -878,17 +631,31 @@ namespace plug::com
         return packet;
     }
 
-    std::vector<Packet> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects)
+    std::vector<v2::Packet<v2::EffectPayload>> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects)
     {
-        const std::size_t repeat = getSaveEffectsRepeats(effects);
+        using v2::EffectPayload;
 
-        const auto packet = serializeSaveEffectHeader(slot, effects);
-        std::vector<Packet> packets;
+        const auto fxKnob = getFxKnob(effects[0]);
+        const std::size_t repeat = getSaveEffectsRepeats(effects);
 
         for (std::size_t i = 0; i < repeat; ++i)
         {
-            const auto settingsPacket = serializeSaveEffectBody(packet, effects, i);
-            packets.push_back(settingsPacket);
+            if (effects[i].effect_num < effects::SINE_CHORUS)
+            {
+                throw std::invalid_argument{"Invalid effect"};
+            }
+        }
+
+        std::vector<v2::Packet<EffectPayload>> packets;
+
+        for( std::size_t i=0; i<repeat; ++i )
+        {
+            auto packet = serializeEffectSettings(effects[i]);
+            auto header = packet.getHeader();
+            header.setSlot(slot);
+            header.setUnknown(fxKnob, 0x00, 0x01);
+            packet.setHeader(header);
+            packets.push_back(packet);
         }
 
         return packets;

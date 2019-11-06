@@ -548,11 +548,13 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*conn, sendImpl(BufferIs(packets[0]), packets[0].size())).WillOnce(Return(0));
+    const auto effect0 = packets[0].getBytes();
+    EXPECT_CALL(*conn, sendImpl(BufferIs(effect0), effect0.size())).WillOnce(Return(0));
     EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
 
     // Effect #1
-    EXPECT_CALL(*conn, sendImpl(BufferIs(packets[1]), packets[1].size())).WillOnce(Return(0));
+    const auto effect1 = packets[1].getBytes();
+    EXPECT_CALL(*conn, sendImpl(BufferIs(effect1), effect1.size())).WillOnce(Return(0));
     EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
 
     // Apply cmd
@@ -580,7 +582,8 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
 
     // Effect #0
-    EXPECT_CALL(*conn, sendImpl(BufferIs(packets[0]), packets[0].size())).WillOnce(Return(0));
+    const auto effect0 = packets[0].getBytes();
+    EXPECT_CALL(*conn, sendImpl(BufferIs(effect0), effect0.size())).WillOnce(Return(0));
     EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
 
     // Apply cmd

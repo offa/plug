@@ -140,7 +140,7 @@ namespace plug::com
         sendCommand(*conn, saveNamePacket.getBytes());
 
         const auto packets = serializeSaveEffectPacket(slot, effects);
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p); });
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p.getBytes()); });
 
         sendCommand(*conn, serializeApplyCommand(effects[0]).getBytes());
     }
