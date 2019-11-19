@@ -91,13 +91,14 @@ namespace plug::com
 
     std::string decodeNameFromData(const std::array<Packet, 7>& data)
     {
-        constexpr std::size_t nameOffset{16};
-        constexpr std::size_t nameLength{32};
-        const auto& p = data[0];
-        const auto start = std::next(p.cbegin(), nameOffset);
-        const auto itr = std::find(start, std::next(p.cbegin(), nameOffset + nameLength), '\0');
+        using v2::NamePayload;
 
-        return std::string{start, itr};
+        std::array<std::uint8_t, 48> body{{}};
+        std::copy(std::next(data[0].cbegin(), 16), data[0].cend(), body.begin());
+
+        NamePayload payload;
+        payload.fromBytes(body);
+        return payload.getName();
     }
 
     amp_settings decodeAmpFromData(const std::array<Packet, 7>& data)

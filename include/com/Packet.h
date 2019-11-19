@@ -254,9 +254,23 @@ namespace v2
             std::copy_n(name.cbegin(), n, bytes.begin());
         }
 
+        std::string getName() const
+        {
+            constexpr std::size_t nameLength{32};
+            const auto end = std::find(bytes.cbegin(), bytes.cend(), '\0');
+            const auto maxEnd = std::next(bytes.cbegin(), nameLength);
+
+            return std::string(bytes.cbegin(), std::min(end, maxEnd));
+        }
+
         std::array<std::uint8_t, sizePayload> getBytes() const
         {
             return bytes;
+        }
+
+        void fromBytes(const std::array<std::uint8_t, sizePayload>& data)
+        {
+            bytes = data;
         }
 
     private:

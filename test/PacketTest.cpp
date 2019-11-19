@@ -316,6 +316,33 @@ TEST_F(PacketTest, namePayloadHasLimitedNameLength)
     EXPECT_THAT(p.getBytes(), ContainerEq(expected));
 }
 
+TEST_F(PacketTest, namePayloadFromData)
+{
+    const std::string name = "abc 123";
+    std::array<std::uint8_t, sizePayload> data{{}};
+    data.fill(0x00);
+    std::copy(name.cbegin(), name.cend(), data.begin());
+
+    NamePayload p{};
+    p.fromBytes(data);
+
+    EXPECT_THAT(p.getName(), Eq(name));
+}
+
+TEST_F(PacketTest, namePayloadFromDataLimitsLength)
+{
+    const std::string name = "00000000001111111111222222222233xxxxxxxx";
+    std::array<std::uint8_t, sizePayload> data{{}};
+    data.fill(0x00);
+    std::copy(name.cbegin(), name.cend(), data.begin());
+
+    NamePayload p{};
+    p.fromBytes(data);
+
+    EXPECT_THAT(p.getName().size(), Eq(32));
+    EXPECT_THAT(p.getName(), Eq("00000000001111111111222222222233"));
+}
+
 TEST_F(PacketTest, effectPayloadKnobs)
 {
     EffectPayload p{};
