@@ -87,6 +87,21 @@ namespace v2
             }();
         }
 
+        Stage getStage() const
+        {
+            switch(bytes[0])
+            {
+                case 0x00:
+                    return Stage::init0;
+                case 0x1a:
+                    return Stage::init1;
+                case 0x1c:
+                    return Stage::ready;
+                default:
+                    return Stage::unknown;
+            }
+        }
+
         void setType(Type type)
         {
             bytes[1] = [type]() -> std::uint8_t {
@@ -106,6 +121,23 @@ namespace v2
                         return 0xff;
                 }
             }();
+        }
+
+        Type getType() const
+        {
+            switch(bytes[1])
+            {
+                case 0x01:
+                    return Type::operation;
+                case 0x03:
+                    return Type::data; // Same value as Type::init1
+                case 0xc3:
+                    return Type::init0;
+                case 0xc1:
+                    return Type::load;
+                default:
+                    throw std::domain_error("Invalid Type: " + std::to_string(bytes[1]));
+            }
         }
 
         void setDSP(DSP dsp)
@@ -139,9 +171,43 @@ namespace v2
             }();
         }
 
+        DSP getDSP() const
+        {
+            switch(bytes[2])
+            {
+                    case 0x00:
+                        return DSP::none;
+                    case 0x05:
+                        return DSP::amp;
+                    case 0x0d:
+                        return DSP::usbGain;
+                    case 0x06:
+                        return DSP::effect0;
+                    case 0x07:
+                        return DSP::effect1;
+                    case 0x08:
+                        return DSP::effect2;
+                    case 0x09:
+                        return DSP::effect3;
+                    case 0x03:
+                        return DSP::opSave;
+                    case 0x04:
+                        return DSP::opSaveEffectName;
+                    case 0x01:
+                        return DSP::opSelectMemBank;
+                    default:
+                        throw std::domain_error("Invalid DSP: " + std::to_string(bytes[2]));
+            }
+        }
+
         void setSlot(std::uint8_t slot)
         {
             bytes[4] = slot;
+        }
+
+        std::uint8_t getSlot() const
+        {
+            return bytes[4];
         }
 
         void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)
@@ -154,6 +220,11 @@ namespace v2
         std::array<std::uint8_t, sizeHeader> getBytes() const
         {
             return bytes;
+        }
+
+        void fromBytes(const std::array<std::uint8_t, sizeHeader>& data)
+        {
+            bytes = data;
         }
 
     private:

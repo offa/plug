@@ -153,6 +153,127 @@ TEST_F(PacketTest, headerSlot)
     EXPECT_THAT(h.getBytes()[4], Eq(10));
 }
 
+TEST_F(PacketTest, headerFromData)
+{
+    std::array<std::uint8_t, 16> data{{}};
+    data[0] = 0x1a;
+    data[1] = 0x03;
+    data[2] = 0x09;
+    data[4] = 0xab;
+
+    Header header{};
+    header.fromBytes(data);
+    EXPECT_THAT(header.getStage(), Eq(Stage::init1));
+    EXPECT_THAT(header.getType(), Eq(Type::data));
+    EXPECT_THAT(header.getDSP(), Eq(DSP::effect3));
+    EXPECT_THAT(header.getSlot(), Eq(0xab));
+}
+
+TEST_F(PacketTest, headerStageFromData)
+{
+    std::array<std::uint8_t, 16> data{{}};
+    Header header{};
+
+    data[0] = 0x00;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getStage(), Eq(Stage::init0));
+    data[0] = 0x1a;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getStage(), Eq(Stage::init1));
+    data[0] = 0x1c;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getStage(), Eq(Stage::ready));
+    data[0] = 0x93;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getStage(), Eq(Stage::unknown));
+}
+
+TEST_F(PacketTest, headerTypeFromData)
+{
+    std::array<std::uint8_t, 16> data{{}};
+    Header header{};
+
+    data[1] = 0x01;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getType(), Eq(Type::operation));
+    data[1] = 0x03;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getType(), Eq(Type::data));
+    data[1] = 0xc3;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getType(), Eq(Type::init0));
+    data[1] = 0xc1;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getType(), Eq(Type::load));
+}
+
+TEST_F(PacketTest, headerTypeFromDataThrowsOnInvalidValue)
+{
+    std::array<std::uint8_t, 16> data{{}};
+    Header header{};
+
+    data[1] = 0x99;
+    header.fromBytes(data);
+    EXPECT_THROW(header.getType(), std::domain_error);
+}
+
+TEST_F(PacketTest, headerDSPFromData)
+{
+    std::array<std::uint8_t, 16> data{{}};
+    Header header{};
+
+    data[2] = 0x00;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::none));
+    data[2] = 0x05;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::amp));
+    data[2] = 0x0d;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::usbGain));
+    data[2] = 0x06;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::effect0));
+    data[2] = 0x07;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::effect1));
+    data[2] = 0x08;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::effect2));
+    data[2] = 0x09;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::effect3));
+    data[2] = 0x03;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::opSave));
+    data[2] = 0x04;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::opSaveEffectName));
+    data[2] = 0x01;
+    header.fromBytes(data);
+    EXPECT_THAT(header.getDSP(), Eq(DSP::opSelectMemBank));
+}
+
+TEST_F(PacketTest, headerDSPFromDataThrowsOnInvalidValue)
+{
+    std::array<std::uint8_t, 16> data{{}};
+    Header header{};
+
+    data[2] = 0x99;
+    header.fromBytes(data);
+    EXPECT_THROW(header.getDSP(), std::domain_error);
+}
+
+TEST_F(PacketTest, headerSlotFromData)
+{
+    std::array<std::uint8_t, 16> data{{}};
+    data[4] = 0x17;
+
+    Header header{};
+    header.fromBytes(data);
+    EXPECT_THAT(header.getSlot(), Eq(0x17));
+}
+
 TEST_F(PacketTest, emptyPayload)
 {
     EmptyPayload p{};
