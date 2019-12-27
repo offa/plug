@@ -32,7 +32,7 @@ namespace plug::com
         const auto name = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
         const auto amp = decodeAmpFromData(fromRawData<v2::AmpPayload>(data[1]), fromRawData<v2::AmpPayload>(data[6]));
         const auto effects = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
-                                                    fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
+                                                     fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
 
         return SignalChain{name, amp, effects};
     }
@@ -73,7 +73,6 @@ namespace plug::com
         }
         return data;
     }
-
 
 
     Mustang::Mustang(std::shared_ptr<Connection> connection)
@@ -165,8 +164,7 @@ namespace plug::com
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
         std::vector<v2::Packet<v2::NamePayload>> presetListData;
         presetListData.reserve(max_to_receive);
-        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p)
-        {
+        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p) {
             v2::Packet<v2::NamePayload> packet{};
             packet.fromBytes(p);
             return packet;

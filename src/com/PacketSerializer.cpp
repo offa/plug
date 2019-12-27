@@ -123,8 +123,7 @@ namespace plug::com
     {
         std::array<fx_pedal_settings, 4> effects{{}};
 
-        std::for_each(packet.cbegin(), packet.cend(), [&effects](const auto& p)
-        {
+        std::for_each(packet.cbegin(), packet.cend(), [&effects](const auto& p) {
             const auto payload = p.getPayload();
             const auto slot = payload.getSlot() % 4;
             effects[slot].fx_slot = slot;
@@ -158,10 +157,10 @@ namespace plug::com
     v2::Packet<v2::AmpPayload> serializeAmpSettings(const amp_settings& value)
     {
         using v2::AmpPayload;
-        using v2::Header;
-        using v2::Type;
         using v2::DSP;
+        using v2::Header;
         using v2::Stage;
+        using v2::Type;
 
         Header header{};
         header.setStage(Stage::ready);
@@ -185,7 +184,7 @@ namespace plug::com
         payload.setBrightness(value.brightness);
         payload.setUnknown(0x80, 0x80, 0x01);
 
-        if( value.noise_gate == 0x05 )
+        if (value.noise_gate == 0x05)
         {
             payload.setThreshold(clampToRange<uint8_t, 0x09>(value.threshold));
             payload.setDepth(value.depth);
@@ -268,10 +267,10 @@ namespace plug::com
     v2::Packet<v2::AmpPayload> serializeAmpSettingsUsbGain(const amp_settings& value)
     {
         using v2::AmpPayload;
-        using v2::Header;
-        using v2::Type;
         using v2::DSP;
+        using v2::Header;
         using v2::Stage;
+        using v2::Type;
 
         Header header{};
         header.setStage(Stage::ready);
@@ -290,11 +289,11 @@ namespace plug::com
 
     v2::Packet<v2::NamePayload> serializeName(std::uint8_t slot, std::string_view name)
     {
-        using v2::NamePayload;
-        using v2::Header;
-        using v2::Type;
         using v2::DSP;
+        using v2::Header;
+        using v2::NamePayload;
         using v2::Stage;
+        using v2::Type;
 
         Header header{};
         header.setStage(Stage::ready);
@@ -314,11 +313,11 @@ namespace plug::com
 
     v2::Packet<v2::EffectPayload> serializeEffectSettings(const fx_pedal_settings& value)
     {
+        using v2::DSP;
         using v2::EffectPayload;
         using v2::Header;
-        using v2::Type;
-        using v2::DSP;
         using v2::Stage;
+        using v2::Type;
 
         Header header{};
         header.setStage(Stage::ready);
@@ -569,11 +568,11 @@ namespace plug::com
 
     v2::Packet<v2::EffectPayload> serializeClearEffectSettings()
     {
+        using v2::DSP;
         using v2::EffectPayload;
         using v2::Header;
-        using v2::Type;
-        using v2::DSP;
         using v2::Stage;
+        using v2::Type;
 
         Header h{};
         h.setStage(Stage::ready);
@@ -591,11 +590,11 @@ namespace plug::com
 
     v2::Packet<v2::NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
-        using v2::NamePayload;
-        using v2::Header;
-        using v2::Type;
         using v2::DSP;
+        using v2::Header;
+        using v2::NamePayload;
         using v2::Stage;
+        using v2::Type;
 
         const std::size_t repeat = getSaveEffectsRepeats(effects);
 
@@ -641,7 +640,7 @@ namespace plug::com
 
         std::vector<v2::Packet<EffectPayload>> packets;
 
-        for( std::size_t i=0; i<repeat; ++i )
+        for (std::size_t i = 0; i < repeat; ++i)
         {
             auto packet = serializeEffectSettings(effects[i]);
             auto header = packet.getHeader();
@@ -656,11 +655,11 @@ namespace plug::com
 
     v2::Packet<v2::EmptyPayload> serializeLoadSlotCommand(std::uint8_t slot)
     {
+        using v2::DSP;
         using v2::EmptyPayload;
         using v2::Header;
-        using v2::Type;
-        using v2::DSP;
         using v2::Stage;
+        using v2::Type;
 
         Header h{};
         h.setStage(Stage::ready);
@@ -677,11 +676,11 @@ namespace plug::com
 
     v2::Packet<v2::EmptyPayload> serializeLoadCommand()
     {
+        using v2::DSP;
         using v2::EmptyPayload;
         using v2::Header;
-        using v2::Type;
-        using v2::DSP;
         using v2::Stage;
+        using v2::Type;
 
         Header h{};
         h.setStage(Stage::unknown);
@@ -695,11 +694,11 @@ namespace plug::com
 
     v2::Packet<v2::EmptyPayload> serializeApplyCommand()
     {
+        using v2::DSP;
         using v2::EmptyPayload;
         using v2::Header;
-        using v2::Type;
-        using v2::DSP;
         using v2::Stage;
+        using v2::Type;
 
         Header h{};
         h.setStage(Stage::ready);
@@ -722,11 +721,11 @@ namespace plug::com
 
     std::array<v2::Packet<v2::EmptyPayload>, 2> serializeInitCommand()
     {
+        using v2::DSP;
         using v2::EmptyPayload;
         using v2::Header;
-        using v2::Type;
-        using v2::DSP;
         using v2::Stage;
+        using v2::Type;
 
         Header h0{};
         h0.setStage(Stage::init0);

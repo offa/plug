@@ -32,7 +32,7 @@
 
 namespace plug::com
 {
-    template<class T>
+    template <class T>
     v2::Packet<T> fromRawData(const std::array<std::uint8_t, 64>& data)
     {
         v2::Packet<T> packet{};
