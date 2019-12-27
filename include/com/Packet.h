@@ -22,6 +22,7 @@
 
 #include <array>
 #include <algorithm>
+#include <string>
 #include <string_view>
 
 namespace plug::com
