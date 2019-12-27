@@ -141,19 +141,15 @@ namespace plug::com
         return effects;
     }
 
-    std::vector<std::string> decodePresetListFromData(const std::vector<Packet>& data)
+    std::vector<std::string> decodePresetListFromData(const std::vector<v2::Packet<v2::NamePayload>>& packets)
     {
-        const auto max_to_receive = std::min<std::size_t>(data.size(), (data.size() > 143 ? 200 : 48));
+        const auto max_to_receive = std::min<std::size_t>(packets.size(), (packets.size() > 143 ? 200 : 48));
         std::vector<std::string> presetNames;
         presetNames.reserve(max_to_receive);
 
         for (std::size_t i = 0; i < max_to_receive; i += 2)
         {
-            std::string presetName{std::next(data[i].cbegin(), 16), std::next(data[i].cbegin(), 16 + 32)};
-            const auto itr = std::find_if(presetName.cbegin(), presetName.cend(), [](const auto& c) { return c == '\0'; });
-
-            presetName.erase(itr, presetName.cend());
-            presetNames.push_back(presetName);
+            presetNames.push_back(packets[i].getPayload().getName());
         }
 
         return presetNames;

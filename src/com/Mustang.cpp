@@ -148,7 +148,7 @@ namespace plug::com
 
     InitalData Mustang::loadData()
     {
-        std::vector<Packet> recieved_data;
+        std::vector<std::array<std::uint8_t, 64>> recieved_data;
 
         const auto loadCommand = serializeLoadCommand();
         auto recieved = conn->send(loadCommand.getBytes());
@@ -163,7 +163,15 @@ namespace plug::com
         }
 
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
-        auto presetNames = decodePresetListFromData(recieved_data);
+        std::vector<v2::Packet<v2::NamePayload>> presetListData;
+        presetListData.reserve(max_to_receive);
+        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p)
+        {
+            v2::Packet<v2::NamePayload> packet{};
+            packet.fromBytes(p);
+            return packet;
+        });
+        auto presetNames = decodePresetListFromData(presetListData);
 
         std::array<Packet, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), max_to_receive), std::next(recieved_data.cbegin(), max_to_receive + 7), presetData.begin());
