@@ -607,7 +607,8 @@ namespace v2
     };
 
 
-    using PacketRawType = std::array<std::uint8_t, sizeTotal>;
+    constexpr std::size_t packetRawTypeSize = 64;
+    using PacketRawType = std::array<std::uint8_t, packetRawTypeSize>;
 
     template <class Payload>
     class Packet
@@ -666,6 +667,6 @@ namespace v2
 
 }
     constexpr std::size_t packetSize{64};
-    using Packet = std::array<std::uint8_t, packetSize>;
+    using Packet = std::array<std::uint8_t, v2::packetRawTypeSize>;
 
 }

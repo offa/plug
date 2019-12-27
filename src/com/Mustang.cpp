@@ -39,7 +39,7 @@ namespace plug::com
 
     std::vector<std::uint8_t> receivePacket(Connection& conn)
     {
-        return conn.receive(packetSize);
+        return conn.receive(v2::packetRawTypeSize);
     }
 
 

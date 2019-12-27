@@ -51,7 +51,7 @@ protected:
 
     std::vector<std::uint8_t> createEmptyPacketData() const
     {
-        return std::vector<std::uint8_t>(packetSize, 0x00);
+        return std::vector<std::uint8_t>(v2::packetRawTypeSize, 0x00);
     }
 
     template <class Container>
@@ -64,11 +64,11 @@ protected:
     std::shared_ptr<mock::MockConnection> conn;
     std::unique_ptr<com::Mustang> m;
     const std::vector<std::uint8_t> noData{};
-    const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(packetSize);
-    const std::vector<std::uint8_t> ignoreAmpData = [] { std::vector<std::uint8_t> d(packetSize, 0x00); d[ampPos] = 0x5e; return d; }();
-    const Packet loadCmd = serializeLoadCommand().getBytes();
-    const Packet applyCmd = serializeApplyCommand().getBytes();
-    const Packet clearCmd = serializeClearEffectSettings().getBytes();
+    const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(v2::packetRawTypeSize);
+    const std::vector<std::uint8_t> ignoreAmpData = [] { std::vector<std::uint8_t> d(v2::packetRawTypeSize, 0x00); d[ampPos] = 0x5e; return d; }();
+    const v2::PacketRawType loadCmd = serializeLoadCommand().getBytes();
+    const v2::PacketRawType applyCmd = serializeApplyCommand().getBytes();
+    const v2::PacketRawType clearCmd = serializeClearEffectSettings().getBytes();
     static inline constexpr std::size_t presetPacketCountShort{48};
     static inline constexpr std::size_t presetPacketCountFull{200};
     static inline constexpr int slot{5};
@@ -85,18 +85,18 @@ TEST_F(MustangTest, startInitializesDevice)
 
     // Init commands
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    EXPECT_CALL(*conn, receive(packetSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(ignoreData))
@@ -127,21 +127,21 @@ TEST_F(MustangTest, startRequestsCurrentPresetName)
 
     // Init commands
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    EXPECT_CALL(*conn, receive(packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
 
     const std::string actualName{"abc"};
     const auto nameData = asBuffer(serializeName(0, actualName).getBytes());
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(nameData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(ignoreData))
@@ -174,18 +174,18 @@ TEST_F(MustangTest, startRequestsCurrentAmp)
 
     // Init commands
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    EXPECT_CALL(*conn, receive(packetSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(recvData))
         .WillOnce(Return(ignoreData))
@@ -222,18 +222,18 @@ TEST_F(MustangTest, startRequestsCurrentEffects)
 
     // Init commands
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    EXPECT_CALL(*conn, receive(packetSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(recvData0))
@@ -266,25 +266,25 @@ TEST_F(MustangTest, startRequestsAmpPresetList)
 
     // Init commands
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(recvData0))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(recvData1))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(recvData2))
         .WillOnce(Return(ignoreData));
-    EXPECT_CALL(*conn, receive(packetSize)).Times(presetPacketCountShort - 6).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).Times(presetPacketCountShort - 6).WillRepeatedly(Return(ignoreData));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(ignoreData))
@@ -316,18 +316,18 @@ TEST_F(MustangTest, startUsesFullInitialTransmissionSizeIfOverThreshold)
 
     // Init commands
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd1), initCmd1.size())).WillOnce(Return(initCmd1.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
     EXPECT_CALL(*conn, sendImpl(BufferIs(initCmd2), initCmd2.size())).WillOnce(Return(initCmd2.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Load cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
     // Preset names data
-    EXPECT_CALL(*conn, receive(packetSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(ignoreData))
@@ -356,7 +356,7 @@ TEST_F(MustangTest, loadMemoryBankSendsBankSelectionCommandAndReceivesPacket)
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadSlotCmd), loadSlotCmd.size())).WillOnce(Return(loadSlotCmd.size()));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(ignoreData))
@@ -376,10 +376,10 @@ TEST_F(MustangTest, loadMemoryBankReceivesName)
 
     InSequence s;
     // Load cmd
-    EXPECT_CALL(*conn, sendImpl(_, _)).WillOnce(Return(packetSize));
+    EXPECT_CALL(*conn, sendImpl(_, _)).WillOnce(Return(v2::packetRawTypeSize));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(recvData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(ignoreData))
@@ -405,10 +405,10 @@ TEST_F(MustangTest, loadMemoryBankReceivesAmpValues)
 
     InSequence s;
     // Load cmd
-    EXPECT_CALL(*conn, sendImpl(_, _)).WillOnce(Return(packetSize));
+    EXPECT_CALL(*conn, sendImpl(_, _)).WillOnce(Return(v2::packetRawTypeSize));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(recvData))
         .WillOnce(Return(ignoreData))
@@ -437,10 +437,10 @@ TEST_F(MustangTest, loadMemoryBankReceivesEffectValues)
 
     InSequence s;
     // Load cmd
-    EXPECT_CALL(*conn, sendImpl(_, _)).WillOnce(Return(packetSize));
+    EXPECT_CALL(*conn, sendImpl(_, _)).WillOnce(Return(v2::packetRawTypeSize));
 
     // Data
-    EXPECT_CALL(*conn, receive(packetSize))
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize))
         .WillOnce(Return(ignoreData))
         .WillOnce(Return(ignoreAmpData))
         .WillOnce(Return(recvData0))
@@ -469,19 +469,19 @@ TEST_F(MustangTest, setAmpSendsValues)
     InSequence s;
     // Data #1
     EXPECT_CALL(*conn, sendImpl(BufferIs(data), data.size())).WillOnce(Return(data.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Apply command
     EXPECT_CALL(*conn, sendImpl(BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Data #2
     EXPECT_CALL(*conn, sendImpl(BufferIs(data2), data2.size())).WillOnce(Return(data2.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Apply command
     EXPECT_CALL(*conn, sendImpl(BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
 
     m->set_amplifier(settings);
@@ -496,19 +496,19 @@ TEST_F(MustangTest, setEffectSendsValue)
     InSequence s;
     // Clear command
     EXPECT_CALL(*conn, sendImpl(BufferIs(clearCmd), clearCmd.size())).WillOnce(Return(clearCmd.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Apply command
     EXPECT_CALL(*conn, sendImpl(BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Data
     EXPECT_CALL(*conn, sendImpl(BufferIs(data), data.size())).WillOnce(Return(data.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Apply command
     EXPECT_CALL(*conn, sendImpl(BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
 
     m->set_effect(settings);
@@ -522,11 +522,11 @@ TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
     InSequence s;
     // Clear command
     EXPECT_CALL(*conn, sendImpl(BufferIs(clearCmd), clearCmd.size())).WillOnce(Return(clearCmd.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Apply command
     EXPECT_CALL(*conn, sendImpl(BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(ignoreData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(ignoreData));
 
 
     m->set_effect(settings);
@@ -545,21 +545,21 @@ TEST_F(MustangTest, saveEffectsSendsValues)
     InSequence s;
     // Save effect name cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(dataName), dataName.size())).WillOnce(Return(0));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
 
     // Effect #0
     const auto effect0 = packets[0].getBytes();
     EXPECT_CALL(*conn, sendImpl(BufferIs(effect0), effect0.size())).WillOnce(Return(0));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
 
     // Effect #1
     const auto effect1 = packets[1].getBytes();
     EXPECT_CALL(*conn, sendImpl(BufferIs(effect1), effect1.size())).WillOnce(Return(0));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
 
     // Apply cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(0));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
 
 
     m->save_effects(slot, name, settings);
@@ -579,16 +579,16 @@ TEST_F(MustangTest, saveEffectsLimitsNumberOfValues)
     InSequence s;
     // Save effect cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(dataName), dataName.size())).WillOnce(Return(0));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
 
     // Effect #0
     const auto effect0 = packets[0].getBytes();
     EXPECT_CALL(*conn, sendImpl(BufferIs(effect0), effect0.size())).WillOnce(Return(0));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
 
     // Apply cmd
     EXPECT_CALL(*conn, sendImpl(BufferIs(cmdExecute), cmdExecute.size())).WillOnce(Return(0));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
 
     m->save_effects(slot, name, settings);
 }
@@ -608,7 +608,7 @@ TEST_F(MustangTest, saveOnAmp)
 
     InSequence s;
     EXPECT_CALL(*conn, sendImpl(BufferIs(saveNamePacket), saveNamePacket.size())).WillOnce(Return(saveNamePacket.size()));
-    EXPECT_CALL(*conn, receive(packetSize)).WillOnce(Return(noData));
+    EXPECT_CALL(*conn, receive(v2::packetRawTypeSize)).WillOnce(Return(noData));
     EXPECT_CALL(*conn, sendImpl(BufferIs(loadSlotCmd), loadSlotCmd.size())).WillOnce(Return(0));
 
     m->save_on_amp(name, slot);
