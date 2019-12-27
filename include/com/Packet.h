@@ -67,6 +67,9 @@ namespace v2
     class Header
     {
     public:
+        using RawType = std::array<std::uint8_t, sizeHeader>;
+
+
         Header()
         {
         }
@@ -218,36 +221,42 @@ namespace v2
             bytes[7] = value2;
         }
 
-        std::array<std::uint8_t, sizeHeader> getBytes() const
+        RawType getBytes() const
         {
             return bytes;
         }
 
-        void fromBytes(const std::array<std::uint8_t, sizeHeader>& data)
+        void fromBytes(const RawType& data)
         {
             bytes = data;
         }
 
     private:
-        std::array<std::uint8_t, sizeHeader> bytes{{}};
+        RawType bytes{{}};
     };
 
 
     class EmptyPayload
     {
     public:
-        std::array<std::uint8_t, sizePayload> getBytes() const
+        using RawType = std::array<std::uint8_t, sizePayload>;
+
+
+        RawType getBytes() const
         {
             return bytes;
         }
 
     private:
-        std::array<std::uint8_t, sizePayload> bytes{{}};
+        RawType bytes{{}};
     };
 
     class NamePayload
     {
     public:
+        using RawType = std::array<std::uint8_t, sizePayload>;
+
+
         void setName(std::string_view name)
         {
             constexpr std::size_t nameLength{32};
@@ -264,23 +273,26 @@ namespace v2
             return std::string(bytes.cbegin(), std::min(end, maxEnd));
         }
 
-        std::array<std::uint8_t, sizePayload> getBytes() const
+        RawType getBytes() const
         {
             return bytes;
         }
 
-        void fromBytes(const std::array<std::uint8_t, sizePayload>& data)
+        void fromBytes(const RawType& data)
         {
             bytes = data;
         }
 
     private:
-        std::array<std::uint8_t, sizePayload> bytes{{}};
+        RawType bytes{{}};
     };
 
     class EffectPayload
     {
     public:
+        using RawType = std::array<std::uint8_t, sizePayload>;
+
+
         void setKnob1(std::uint8_t value)
         {
             bytes[16] = value;
@@ -368,24 +380,27 @@ namespace v2
             bytes[5] = value2;
         }
 
-        std::array<std::uint8_t, sizePayload> getBytes() const
+        RawType getBytes() const
         {
             return bytes;
         }
 
-        void fromBytes(const std::array<std::uint8_t, sizePayload>& data)
+        void fromBytes(const RawType& data)
         {
             bytes = data;
         }
 
     private:
-        std::array<std::uint8_t, sizePayload> bytes{{}};
+        RawType bytes{{}};
     };
 
 
     class AmpPayload
     {
     public:
+        using RawType = std::array<std::uint8_t, sizePayload>;
+
+
         AmpPayload()
         {
         }
@@ -576,25 +591,31 @@ namespace v2
             return bytes[0];
         }
 
-        std::array<std::uint8_t, sizePayload> getBytes() const
+        RawType getBytes() const
         {
             return bytes;
         }
 
-        void fromBytes(const std::array<std::uint8_t, sizePayload>& data)
+        void fromBytes(const RawType& data)
         {
             bytes = data;
         }
 
 
     private:
-        std::array<std::uint8_t, sizePayload> bytes{{}};
+        RawType bytes{{}};
     };
+
+
+    using PacketRawType = std::array<std::uint8_t, sizeTotal>;
 
     template <class Payload>
     class Packet
     {
     public:
+        using RawType = PacketRawType;
+
+
         void setHeader(Header h)
         {
             header = h;
@@ -615,9 +636,9 @@ namespace v2
             return payload;
         }
 
-        std::array<std::uint8_t, sizeTotal> getBytes() const
+        RawType getBytes() const
         {
-            std::array<std::uint8_t, sizeTotal> bytes{{}};
+            RawType bytes{{}};
             const auto headerBytes = header.getBytes();
             const auto payloadBytes = payload.getBytes();
             const auto itr = std::copy(headerBytes.cbegin(), headerBytes.cend(), bytes.begin());
@@ -626,13 +647,13 @@ namespace v2
             return bytes;
         }
 
-        void fromBytes(const std::array<std::uint8_t, sizeTotal>& data)
+        void fromBytes(const RawType& data)
         {
-            std::array<std::uint8_t, sizeHeader> headerData{{}};
+            typename Header::RawType headerData{{}};
             std::copy(data.cbegin(), std::next(data.cbegin(), sizeHeader), headerData.begin());
             header.fromBytes(headerData);
 
-            std::array<std::uint8_t, sizePayload> payloadData{{}};
+            typename Payload::RawType payloadData{{}};
             std::copy(std::next(data.cbegin(), sizeHeader), data.cend(), payloadData.begin());
             payload.fromBytes(payloadData);
         }
