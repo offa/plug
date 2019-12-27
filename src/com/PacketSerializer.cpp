@@ -89,13 +89,9 @@ namespace plug::com
     }
 
 
-    std::string decodeNameFromData(const std::array<Packet, 7>& data)
+    std::string decodeNameFromData(const v2::Packet<v2::NamePayload>& data)
     {
-        using v2::NamePayload;
-        v2::Packet<NamePayload> packet{};
-        packet.fromBytes(data[0]);
-
-        return packet.getPayload().getName();
+        return data.getPayload().getName();
     }
 
     amp_settings decodeAmpFromData(const std::array<Packet, 7>& data)

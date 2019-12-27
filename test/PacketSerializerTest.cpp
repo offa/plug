@@ -917,7 +917,7 @@ TEST_F(PacketSerializerTest, decodeNameFromData)
     const auto nameEnd = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
     *nameEnd = '\0';
 
-    const auto result = decodeNameFromData(data);
+    const auto result = decodeNameFromData(adapt<v2::NamePayload>(data[0]));
     EXPECT_THAT(result, Eq(name));
 }
 
@@ -928,7 +928,7 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
     auto data = filledPackage(0xff);
     std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
 
-    const auto result = decodeNameFromData(data);
+    const auto result = decodeNameFromData(adapt<v2::NamePayload>(data[0]));
     EXPECT_THAT(result, Eq(name.substr(0, nameLength)));
     EXPECT_THAT(nameLength, Eq(result.size()));
 }

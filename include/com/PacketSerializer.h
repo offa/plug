@@ -32,7 +32,15 @@
 
 namespace plug::com
 {
-    std::string decodeNameFromData(const std::array<Packet, 7>& data);
+    template<class T>
+    v2::Packet<T> adapt(const std::array<std::uint8_t, 64>& data)
+    {
+        v2::Packet<T> packet{};
+        packet.fromBytes(data);
+        return packet;
+    }
+
+    std::string decodeNameFromData(const v2::Packet<v2::NamePayload>& data);
     amp_settings decodeAmpFromData(const std::array<Packet, 7>& data);
 
     std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data);

@@ -29,7 +29,7 @@ namespace plug::com
 {
     SignalChain decode_data(const std::array<Packet, 7>& data)
     {
-        const auto name = decodeNameFromData(data);
+        const auto name = decodeNameFromData(adapt<v2::NamePayload>(data[0]));
         const auto amp = decodeAmpFromData(data);
         const auto effects = decodeEffectsFromData(data);
 
