@@ -119,22 +119,24 @@ namespace plug::com
         return settings;
     }
 
-    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data)
+    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<v2::Packet<v2::EffectPayload>, 4>& packet)
     {
         std::array<fx_pedal_settings, 4> effects{{}};
 
-        for (std::size_t i = 2; i < 6; ++i)
+        for (std::size_t i = 0; i < 4; ++i)
         {
-            const std::size_t j = data[i][FXSLOT] % 4;
-            effects[j].fx_slot = static_cast<std::uint8_t>(j);
-            effects[j].knob1 = data[i][KNOB1];
-            effects[j].knob2 = data[i][KNOB2];
-            effects[j].knob3 = data[i][KNOB3];
-            effects[j].knob4 = data[i][KNOB4];
-            effects[j].knob5 = data[i][KNOB5];
-            effects[j].knob6 = data[i][KNOB6];
-            effects[j].position = (data[i][FXSLOT] > 0x03 ? Position::effectsLoop : Position::input);
-            effects[j].effect_num = lookupEffectById(data[i][EFFECT]);
+            const auto payload = packet[i].getPayload();
+
+            const auto slot = payload.getSlot() % 4;
+            effects[slot].fx_slot = slot;
+            effects[slot].knob1 = payload.getKnob1();
+            effects[slot].knob2 = payload.getKnob2();
+            effects[slot].knob3 = payload.getKnob3();
+            effects[slot].knob4 = payload.getKnob4();
+            effects[slot].knob5 = payload.getKnob5();
+            effects[slot].knob6 = payload.getKnob6();
+            effects[slot].position = (payload.getSlot() > 0x03 ? Position::effectsLoop : Position::input);
+            effects[slot].effect_num = lookupEffectById(payload.getModel());
         }
 
         return effects;

@@ -437,6 +437,31 @@ TEST_F(PacketTest, effectPayloadUnknownSpecificFields)
     EXPECT_THAT(p.getBytes()[5], Eq(0x33));
 }
 
+TEST_F(PacketTest, effectPayloadFromData)
+{
+    std::array<std::uint8_t, 48> data{{}};
+    data[0] = 8;
+    data[2] = 3;
+    data[16] = 11;
+    data[17] = 12;
+    data[18] = 13;
+    data[19] = 14;
+    data[20] = 15;
+    data[21] = 16;
+
+    EffectPayload p{};
+    p.fromBytes(data);
+
+    EXPECT_THAT(p.getModel(), Eq(8));
+    EXPECT_THAT(p.getSlot(), Eq(3));
+    EXPECT_THAT(p.getKnob1(), Eq(11));
+    EXPECT_THAT(p.getKnob2(), Eq(12));
+    EXPECT_THAT(p.getKnob3(), Eq(13));
+    EXPECT_THAT(p.getKnob4(), Eq(14));
+    EXPECT_THAT(p.getKnob5(), Eq(15));
+    EXPECT_THAT(p.getKnob6(), Eq(16));
+}
+
 TEST_F(PacketTest, ampPayloadSettings)
 {
     AmpPayload p{};

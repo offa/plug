@@ -285,9 +285,19 @@ namespace v2
             bytes[16] = value;
         }
 
+        std::uint8_t getKnob1() const
+        {
+            return bytes[16];
+        }
+
         void setKnob2(std::uint8_t value)
         {
             bytes[17] = value;
+        }
+
+        std::uint8_t getKnob2() const
+        {
+            return bytes[17];
         }
 
         void setKnob3(std::uint8_t value)
@@ -295,9 +305,19 @@ namespace v2
             bytes[18] = value;
         }
 
+        std::uint8_t getKnob3() const
+        {
+            return bytes[18];
+        }
+
         void setKnob4(std::uint8_t value)
         {
             bytes[19] = value;
+        }
+
+        std::uint8_t getKnob4() const
+        {
+            return bytes[19];
         }
 
         void setKnob5(std::uint8_t value)
@@ -305,9 +325,19 @@ namespace v2
             bytes[20] = value;
         }
 
+        std::uint8_t getKnob5() const
+        {
+            return bytes[20];
+        }
+
         void setKnob6(std::uint8_t value)
         {
             bytes[21] = value;
+        }
+
+        std::uint8_t getKnob6() const
+        {
+            return bytes[21];
         }
 
         void setSlot(std::uint8_t slot)
@@ -315,9 +345,19 @@ namespace v2
             bytes[2] = slot;
         }
 
+        std::uint8_t getSlot() const
+        {
+            return bytes[2];
+        }
+
         void setModel(std::uint8_t model)
         {
             bytes[0] = model;
+        }
+
+        std::uint8_t getModel() const
+        {
+            return bytes[0];
         }
 
         void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)
@@ -330,6 +370,11 @@ namespace v2
         std::array<std::uint8_t, sizePayload> getBytes() const
         {
             return bytes;
+        }
+
+        void fromBytes(const std::array<std::uint8_t, sizePayload>& data)
+        {
+            bytes = data;
         }
 
     private:

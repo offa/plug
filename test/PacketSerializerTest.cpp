@@ -71,12 +71,15 @@ protected:
         return packet;
     };
 
-    constexpr std::array<Packet, 7> effectPackage(std::uint8_t effectId) const
+    std::array<v2::Packet<v2::EffectPayload>, 4> effectPackage(std::uint8_t effectId) const
     {
-        std::array<Packet, 7> package{};
-        package[2][FXSLOT] = 0x01;
-        package[2][EFFECT] = effectId;
-        return package;
+        v2::EffectPayload payload{};
+        payload.setSlot(0x01);
+        payload.setModel(effectId);
+
+        v2::Packet<v2::EffectPayload> packet{};
+        packet.setPayload(payload);
+        return {packet, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload};
     };
 
     constexpr Packet presetNameEmptyPacket() const
@@ -100,7 +103,8 @@ protected:
         return data;
     }
 
-    const v2::Packet<v2::AmpPayload> emptyPayload{};
+    const v2::Packet<v2::EffectPayload> emptyEffectPayload{};
+    const v2::Packet<v2::AmpPayload> emptyAmpPayload{};
 };
 
 TEST_F(PacketSerializerTest, serializeInitCommand)
@@ -984,45 +988,45 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataAmps)
 {
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x67), emptyPayload).amp_num, Eq(amps::FENDER_57_DELUXE));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x64), emptyPayload).amp_num, Eq(amps::FENDER_59_BASSMAN));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x7c), emptyPayload).amp_num, Eq(amps::FENDER_57_CHAMP));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x53), emptyPayload).amp_num, Eq(amps::FENDER_65_DELUXE_REVERB));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6a), emptyPayload).amp_num, Eq(amps::FENDER_65_PRINCETON));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x75), emptyPayload).amp_num, Eq(amps::FENDER_65_TWIN_REVERB));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x72), emptyPayload).amp_num, Eq(amps::FENDER_SUPER_SONIC));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x61), emptyPayload).amp_num, Eq(amps::BRITISH_60S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x79), emptyPayload).amp_num, Eq(amps::BRITISH_70S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5e), emptyPayload).amp_num, Eq(amps::BRITISH_80S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5d), emptyPayload).amp_num, Eq(amps::AMERICAN_90S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6d), emptyPayload).amp_num, Eq(amps::METAL_2000));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x67), emptyAmpPayload).amp_num, Eq(amps::FENDER_57_DELUXE));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x64), emptyAmpPayload).amp_num, Eq(amps::FENDER_59_BASSMAN));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x7c), emptyAmpPayload).amp_num, Eq(amps::FENDER_57_CHAMP));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x53), emptyAmpPayload).amp_num, Eq(amps::FENDER_65_DELUXE_REVERB));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6a), emptyAmpPayload).amp_num, Eq(amps::FENDER_65_PRINCETON));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x75), emptyAmpPayload).amp_num, Eq(amps::FENDER_65_TWIN_REVERB));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x72), emptyAmpPayload).amp_num, Eq(amps::FENDER_SUPER_SONIC));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x61), emptyAmpPayload).amp_num, Eq(amps::BRITISH_60S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x79), emptyAmpPayload).amp_num, Eq(amps::BRITISH_70S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5e), emptyAmpPayload).amp_num, Eq(amps::BRITISH_80S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5d), emptyAmpPayload).amp_num, Eq(amps::AMERICAN_90S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6d), emptyAmpPayload).amp_num, Eq(amps::METAL_2000));
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidAmpId)
 {
-    EXPECT_THROW(decodeAmpFromData(ampPackage(0xf0), emptyPayload), std::invalid_argument);
+    EXPECT_THROW(decodeAmpFromData(ampPackage(0xf0), emptyAmpPayload), std::invalid_argument);
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataCabinets)
 {
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x00), emptyPayload).cabinet, Eq(cabinets::OFF));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x01), emptyPayload).cabinet, Eq(cabinets::cab57DLX));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x02), emptyPayload).cabinet, Eq(cabinets::cabBSSMN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x03), emptyPayload).cabinet, Eq(cabinets::cab65DLX));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x04), emptyPayload).cabinet, Eq(cabinets::cab65PRN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x05), emptyPayload).cabinet, Eq(cabinets::cabCHAMP));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x06), emptyPayload).cabinet, Eq(cabinets::cab4x12M));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x07), emptyPayload).cabinet, Eq(cabinets::cab2x12C));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x08), emptyPayload).cabinet, Eq(cabinets::cab4x12G));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x09), emptyPayload).cabinet, Eq(cabinets::cab65TWN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0a), emptyPayload).cabinet, Eq(cabinets::cab4x12V));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0b), emptyPayload).cabinet, Eq(cabinets::cabSS212));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0c), emptyPayload).cabinet, Eq(cabinets::cabSS112));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x00), emptyAmpPayload).cabinet, Eq(cabinets::OFF));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x01), emptyAmpPayload).cabinet, Eq(cabinets::cab57DLX));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x02), emptyAmpPayload).cabinet, Eq(cabinets::cabBSSMN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x03), emptyAmpPayload).cabinet, Eq(cabinets::cab65DLX));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x04), emptyAmpPayload).cabinet, Eq(cabinets::cab65PRN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x05), emptyAmpPayload).cabinet, Eq(cabinets::cabCHAMP));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x06), emptyAmpPayload).cabinet, Eq(cabinets::cab4x12M));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x07), emptyAmpPayload).cabinet, Eq(cabinets::cab2x12C));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x08), emptyAmpPayload).cabinet, Eq(cabinets::cab4x12G));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x09), emptyAmpPayload).cabinet, Eq(cabinets::cab65TWN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0a), emptyAmpPayload).cabinet, Eq(cabinets::cab4x12V));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0b), emptyAmpPayload).cabinet, Eq(cabinets::cabSS212));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0c), emptyAmpPayload).cabinet, Eq(cabinets::cabSS112));
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidCabinetId)
 {
-    EXPECT_THROW(decodeAmpFromData(cabinetPackage(0xe0), emptyPayload), std::invalid_argument);
+    EXPECT_THROW(decodeAmpFromData(cabinetPackage(0xe0), emptyAmpPayload), std::invalid_argument);
 }
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
@@ -1037,8 +1041,10 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
     data[KNOB5] = 0x55;
     data[KNOB6] = 0x66;
     data[EFFECT] = 0x49;
+    v2::Packet<v2::EffectPayload> payload{};
+    payload.fromBytes(data);
 
-    const auto result = decodeEffectsFromData(package);
+    const auto result = decodeEffectsFromData({payload, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload});
     EXPECT_THAT(result[1].fx_slot, Eq(0x01));
     EXPECT_THAT(result[1].knob1, Eq(0x11));
     EXPECT_THAT(result[1].knob2, Eq(0x22));
@@ -1094,13 +1100,14 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
 {
-    auto package = filledPackage(0x00);
-    package[2][FXSLOT] = 0x00;
-    package[3][FXSLOT] = 0x01;
-    package[4][FXSLOT] = 0x02;
-    package[5][FXSLOT] = 0x03;
+    auto data = filledPackage(0x00);
+    data[2][FXSLOT] = 0x00;
+    data[3][FXSLOT] = 0x01;
+    data[4][FXSLOT] = 0x02;
+    data[5][FXSLOT] = 0x03;
 
-    const auto result = decodeEffectsFromData(package);
+    const auto result = decodeEffectsFromData({adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
+                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::input));
     EXPECT_THAT(result[1].fx_slot, Eq(1));
@@ -1113,13 +1120,14 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
 {
-    auto package = filledPackage(0x00);
-    package[2][FXSLOT] = 0x04;
-    package[3][FXSLOT] = 0x05;
-    package[4][FXSLOT] = 0x06;
-    package[5][FXSLOT] = 0x07;
+    auto data = filledPackage(0x00);
+    data[2][FXSLOT] = 0x04;
+    data[3][FXSLOT] = 0x05;
+    data[4][FXSLOT] = 0x06;
+    data[5][FXSLOT] = 0x07;
 
-    const auto result = decodeEffectsFromData(package);
+    const auto result = decodeEffectsFromData({adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
+                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::effectsLoop));
     EXPECT_THAT(result[1].fx_slot, Eq(1));
