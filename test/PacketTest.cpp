@@ -45,6 +45,28 @@ TEST_F(PacketTest, packetFormat)
     EXPECT_THAT(p.getPayload().getBytes(), ContainerEq(pl.getBytes()));
 }
 
+TEST_F(PacketTest, packetFromData)
+{
+    Header h{};
+    h.setDSP(DSP::opSaveEffectName);
+    const auto headerBytes = h.getBytes();
+
+    const std::string name = "abcdefg";
+    NamePayload pl{};
+    pl.setName(name);
+    const auto payloadBytes = pl.getBytes();
+
+    std::array<std::uint8_t, 64> data{{}};
+    auto itr = std::copy(headerBytes.cbegin(), headerBytes.cend(), data.begin());
+    std::copy(payloadBytes.cbegin(), payloadBytes.cend(), itr);
+
+    Packet<NamePayload> p{};
+    p.fromBytes(data);
+
+    EXPECT_THAT(p.getHeader().getDSP(), Eq(DSP::opSaveEffectName));
+    EXPECT_THAT(p.getPayload().getName(), Eq(name));
+}
+
 TEST_F(PacketTest, packetBytes)
 {
     Header h{};

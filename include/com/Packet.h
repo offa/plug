@@ -489,6 +489,18 @@ namespace v2
             return bytes;
         }
 
+        void fromBytes(const std::array<std::uint8_t, sizeTotal>& data)
+        {
+            std::array<std::uint8_t, sizeHeader> headerData{{}};
+            std::copy(data.cbegin(), std::next(data.cbegin(), sizeHeader), headerData.begin());
+            header.fromBytes(headerData);
+
+            std::array<std::uint8_t, sizePayload> payloadData{{}};
+            std::copy(std::next(data.cbegin(), sizeHeader), data.cend(), payloadData.begin());
+            payload.fromBytes(payloadData);
+        }
+
+
     private:
         Header header;
         Payload payload;
