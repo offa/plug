@@ -666,7 +666,8 @@ namespace v2
     };
 
 }
+    [[deprecated]]
     constexpr std::size_t packetSize{64};
-    using Packet = std::array<std::uint8_t, v2::packetRawTypeSize>;
+    using Packet [[deprecated]] = std::array<std::uint8_t, v2::packetRawTypeSize>;
 
 }
