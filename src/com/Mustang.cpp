@@ -31,8 +31,8 @@ namespace plug::com
     {
         const auto name = decodeNameFromData(adapt<v2::NamePayload>(data[0]));
         const auto amp = decodeAmpFromData(adapt<v2::AmpPayload>(data[1]), adapt<v2::AmpPayload>(data[6]));
-        const auto effects = decodeEffectsFromData({adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
-                                                    adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])});
+        const auto effects = decodeEffectsFromData({{adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
+                                                    adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])}});
 
         return SignalChain{name, amp, effects};
     }

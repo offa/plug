@@ -79,7 +79,7 @@ protected:
 
         v2::Packet<v2::EffectPayload> packet{};
         packet.setPayload(payload);
-        return {packet, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload};
+        return {{packet, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}};
     };
 
     constexpr Packet presetNameEmptyPacket() const
@@ -1044,7 +1044,7 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
     v2::Packet<v2::EffectPayload> payload{};
     payload.fromBytes(data);
 
-    const auto result = decodeEffectsFromData({payload, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload});
+    const auto result = decodeEffectsFromData({{payload, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}});
     EXPECT_THAT(result[1].fx_slot, Eq(0x01));
     EXPECT_THAT(result[1].knob1, Eq(0x11));
     EXPECT_THAT(result[1].knob2, Eq(0x22));
@@ -1106,8 +1106,8 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
     data[4][FXSLOT] = 0x02;
     data[5][FXSLOT] = 0x03;
 
-    const auto result = decodeEffectsFromData({adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
-                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])});
+    const auto result = decodeEffectsFromData({{adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
+                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])}});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::input));
     EXPECT_THAT(result[1].fx_slot, Eq(1));
@@ -1126,8 +1126,8 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
     data[4][FXSLOT] = 0x06;
     data[5][FXSLOT] = 0x07;
 
-    const auto result = decodeEffectsFromData({adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
-                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])});
+    const auto result = decodeEffectsFromData({{adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
+                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])}});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::effectsLoop));
     EXPECT_THAT(result[1].fx_slot, Eq(1));
