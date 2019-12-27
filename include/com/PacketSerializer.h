@@ -40,8 +40,8 @@ namespace plug::com
         return packet;
     }
 
-    std::string decodeNameFromData(const v2::Packet<v2::NamePayload>& data);
-    amp_settings decodeAmpFromData(const std::array<Packet, 7>& data);
+    std::string decodeNameFromData(const v2::Packet<v2::NamePayload>& packet);
+    amp_settings decodeAmpFromData(const v2::Packet<v2::AmpPayload>& packet, const v2::Packet<v2::AmpPayload>& packetUsbGain);
 
     std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data);
     std::vector<std::string> decodePresetListFromData(const std::vector<Packet>& data);

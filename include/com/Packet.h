@@ -349,9 +349,19 @@ namespace v2
             bytes[0] = value;
         }
 
+        std::uint8_t getModel() const
+        {
+            return bytes[0];
+        }
+
         void setVolume(std::uint8_t value)
         {
             bytes[16] = value;
+        }
+
+        std::uint8_t getVolume() const
+        {
+            return bytes[16];
         }
 
         void setGain(std::uint8_t value)
@@ -359,9 +369,19 @@ namespace v2
             bytes[17] = value;
         }
 
+        std::uint8_t getGain() const
+        {
+            return bytes[17];
+        }
+
         void setGain2(std::uint8_t value)
         {
             bytes[18] = value;
+        }
+
+        std::uint8_t getGain2() const
+        {
+            return bytes[18];
         }
 
         void setMasterVolume(std::uint8_t value)
@@ -369,9 +389,19 @@ namespace v2
             bytes[19] = value;
         }
 
+        std::uint8_t getMasterVolume() const
+        {
+            return bytes[19];
+        }
+
         void setTreble(std::uint8_t value)
         {
             bytes[20] = value;
+        }
+
+        std::uint8_t getTreble() const
+        {
+            return bytes[20];
         }
 
         void setMiddle(std::uint8_t value)
@@ -379,9 +409,19 @@ namespace v2
             bytes[21] = value;
         }
 
+        std::uint8_t getMiddle() const
+        {
+            return bytes[21];
+        }
+
         void setBass(std::uint8_t value)
         {
             bytes[22] = value;
+        }
+
+        std::uint8_t getBass() const
+        {
+            return bytes[22];
         }
 
         void setPresence(std::uint8_t value)
@@ -389,9 +429,19 @@ namespace v2
             bytes[23] = value;
         }
 
+        std::uint8_t getPresence() const
+        {
+            return bytes[23];
+        }
+
         void setDepth(std::uint8_t value)
         {
             bytes[25] = value;
+        }
+
+        std::uint8_t getDepth() const
+        {
+            return bytes[25];
         }
 
         void setBias(std::uint8_t value)
@@ -399,9 +449,19 @@ namespace v2
             bytes[26] = value;
         }
 
+        std::uint8_t getBias() const
+        {
+            return bytes[26];
+        }
+
         void setNoiseGate(std::uint8_t value)
         {
             bytes[31] = value;
+        }
+
+        std::uint8_t getNoiseGate() const
+        {
+            return bytes[31];
         }
 
         void setThreshold(std::uint8_t value)
@@ -409,9 +469,19 @@ namespace v2
             bytes[32] = value;
         }
 
+        std::uint8_t getThreshold() const
+        {
+            return bytes[32];
+        }
+
         void setCabinet(std::uint8_t value)
         {
             bytes[33] = value;
+        }
+
+        std::uint8_t getCabinet() const
+        {
+            return bytes[33];
         }
 
         void setSag(std::uint8_t value)
@@ -419,9 +489,19 @@ namespace v2
             bytes[35] = value;
         }
 
+        std::uint8_t getSag() const
+        {
+            return bytes[35];
+        }
+
         void setBrightness(std::uint8_t value)
         {
             bytes[36] = value;
+        }
+
+        std::uint8_t getBrightness() const
+        {
+            return bytes[36];
         }
 
         void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)
@@ -445,10 +525,21 @@ namespace v2
             bytes[0] = value;
         }
 
+        std::uint8_t getUsbGain() const
+        {
+            return bytes[0];
+        }
+
         std::array<std::uint8_t, sizePayload> getBytes() const
         {
             return bytes;
         }
+
+        void fromBytes(const std::array<std::uint8_t, sizePayload>& data)
+        {
+            bytes = data;
+        }
+
 
     private:
         std::array<std::uint8_t, sizePayload> bytes{{}};

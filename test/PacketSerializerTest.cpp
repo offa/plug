@@ -49,20 +49,26 @@ protected:
         return data;
     };
 
-    constexpr std::array<Packet, 7> ampPackage(std::uint8_t ampId) const
+    v2::Packet<v2::AmpPayload> ampPackage(std::uint8_t ampId) const
     {
-        std::array<Packet, 7> data{};
-        data[1][AMPLIFIER] = ampId;
-        data[1][CABINET] = static_cast<std::uint8_t>(cabinets::OFF);
-        return data;
+        v2::AmpPayload payload{};
+        payload.setModel(ampId);
+        payload.setCabinet(static_cast<std::uint8_t>(cabinets::OFF));
+
+        v2::Packet<v2::AmpPayload> packet{};
+        packet.setPayload(payload);
+        return packet;
     };
 
-    constexpr std::array<Packet, 7> cabinetPackage(std::uint8_t cabinetId) const
+    v2::Packet<v2::AmpPayload> cabinetPackage(std::uint8_t cabinetId) const
     {
-        std::array<Packet, 7> data{};
-        data[1][AMPLIFIER] = 0x67;
-        data[1][CABINET] = cabinetId;
-        return data;
+        v2::AmpPayload payload{};
+        payload.setModel(0x67);
+        payload.setCabinet(cabinetId);
+
+        v2::Packet<v2::AmpPayload> packet{};
+        packet.setPayload(payload);
+        return packet;
     };
 
     constexpr std::array<Packet, 7> effectPackage(std::uint8_t effectId) const
@@ -93,6 +99,8 @@ protected:
         std::copy(name.cbegin(), name.cend(), std::next(data.begin(), 16));
         return data;
     }
+
+    const v2::Packet<v2::AmpPayload> emptyPayload{};
 };
 
 TEST_F(PacketSerializerTest, serializeInitCommand)
@@ -954,7 +962,7 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
     data[1][BRIGHTNESS] = 0x01;
     data[6][USB_GAIN] = 0xe1;
 
-    const auto result = decodeAmpFromData(data);
+    const auto result = decodeAmpFromData(adapt<v2::AmpPayload>(data[1]), adapt<v2::AmpPayload>(data[6]));
     EXPECT_THAT(result.amp_num, Eq(amps::BRITISH_80S));
     EXPECT_THAT(result.gain, Eq(0xaa));
     EXPECT_THAT(result.volume, Eq(0x10));
@@ -976,45 +984,45 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataAmps)
 {
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x67)).amp_num, Eq(amps::FENDER_57_DELUXE));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x64)).amp_num, Eq(amps::FENDER_59_BASSMAN));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x7c)).amp_num, Eq(amps::FENDER_57_CHAMP));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x53)).amp_num, Eq(amps::FENDER_65_DELUXE_REVERB));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6a)).amp_num, Eq(amps::FENDER_65_PRINCETON));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x75)).amp_num, Eq(amps::FENDER_65_TWIN_REVERB));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x72)).amp_num, Eq(amps::FENDER_SUPER_SONIC));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x61)).amp_num, Eq(amps::BRITISH_60S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x79)).amp_num, Eq(amps::BRITISH_70S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5e)).amp_num, Eq(amps::BRITISH_80S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5d)).amp_num, Eq(amps::AMERICAN_90S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6d)).amp_num, Eq(amps::METAL_2000));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x67), emptyPayload).amp_num, Eq(amps::FENDER_57_DELUXE));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x64), emptyPayload).amp_num, Eq(amps::FENDER_59_BASSMAN));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x7c), emptyPayload).amp_num, Eq(amps::FENDER_57_CHAMP));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x53), emptyPayload).amp_num, Eq(amps::FENDER_65_DELUXE_REVERB));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6a), emptyPayload).amp_num, Eq(amps::FENDER_65_PRINCETON));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x75), emptyPayload).amp_num, Eq(amps::FENDER_65_TWIN_REVERB));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x72), emptyPayload).amp_num, Eq(amps::FENDER_SUPER_SONIC));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x61), emptyPayload).amp_num, Eq(amps::BRITISH_60S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x79), emptyPayload).amp_num, Eq(amps::BRITISH_70S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5e), emptyPayload).amp_num, Eq(amps::BRITISH_80S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5d), emptyPayload).amp_num, Eq(amps::AMERICAN_90S));
+    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6d), emptyPayload).amp_num, Eq(amps::METAL_2000));
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidAmpId)
 {
-    EXPECT_THROW(decodeAmpFromData(ampPackage(0xf0)), std::invalid_argument);
+    EXPECT_THROW(decodeAmpFromData(ampPackage(0xf0), emptyPayload), std::invalid_argument);
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataCabinets)
 {
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x00)).cabinet, Eq(cabinets::OFF));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x01)).cabinet, Eq(cabinets::cab57DLX));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x02)).cabinet, Eq(cabinets::cabBSSMN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x03)).cabinet, Eq(cabinets::cab65DLX));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x04)).cabinet, Eq(cabinets::cab65PRN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x05)).cabinet, Eq(cabinets::cabCHAMP));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x06)).cabinet, Eq(cabinets::cab4x12M));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x07)).cabinet, Eq(cabinets::cab2x12C));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x08)).cabinet, Eq(cabinets::cab4x12G));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x09)).cabinet, Eq(cabinets::cab65TWN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0a)).cabinet, Eq(cabinets::cab4x12V));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0b)).cabinet, Eq(cabinets::cabSS212));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0c)).cabinet, Eq(cabinets::cabSS112));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x00), emptyPayload).cabinet, Eq(cabinets::OFF));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x01), emptyPayload).cabinet, Eq(cabinets::cab57DLX));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x02), emptyPayload).cabinet, Eq(cabinets::cabBSSMN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x03), emptyPayload).cabinet, Eq(cabinets::cab65DLX));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x04), emptyPayload).cabinet, Eq(cabinets::cab65PRN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x05), emptyPayload).cabinet, Eq(cabinets::cabCHAMP));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x06), emptyPayload).cabinet, Eq(cabinets::cab4x12M));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x07), emptyPayload).cabinet, Eq(cabinets::cab2x12C));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x08), emptyPayload).cabinet, Eq(cabinets::cab4x12G));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x09), emptyPayload).cabinet, Eq(cabinets::cab65TWN));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0a), emptyPayload).cabinet, Eq(cabinets::cab4x12V));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0b), emptyPayload).cabinet, Eq(cabinets::cabSS212));
+    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0c), emptyPayload).cabinet, Eq(cabinets::cabSS112));
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidCabinetId)
 {
-    EXPECT_THROW(decodeAmpFromData(cabinetPackage(0xe0)), std::invalid_argument);
+    EXPECT_THROW(decodeAmpFromData(cabinetPackage(0xe0), emptyPayload), std::invalid_argument);
 }
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)

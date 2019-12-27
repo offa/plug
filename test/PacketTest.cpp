@@ -521,3 +521,55 @@ TEST_F(PacketTest, ampPayloadUnknownSpecificFields)
     EXPECT_THAT(p.getBytes()[38], Eq(0x25));
 }
 
+TEST_F(PacketTest, ampPayloadFromData)
+{
+    std::array<std::uint8_t, sizePayload> data{{}};
+    data[0] = 0xab;
+    data[16] = 0xaa;
+    data[17] = 0x11;
+    data[18] = 0x22;
+    data[19] = 0x03;
+    data[20] = 0x1a;
+    data[21] = 0x1b;
+    data[22] = 0x1c;
+    data[23] = 0x1d;
+    data[25] = 0x21;
+    data[26] = 0x12;
+    data[31] = 0x05;
+    data[32] = 0x07;
+    data[33] = 0x06;
+    data[35] = 0x08;
+    data[36] = 0x09;
+
+    AmpPayload p{};
+    p.fromBytes(data);
+
+    EXPECT_THAT(p.getModel(), Eq(0xab));
+    EXPECT_THAT(p.getVolume(), Eq(0xaa));
+    EXPECT_THAT(p.getGain(), Eq(0x11));
+    EXPECT_THAT(p.getGain2(), Eq(0x22));
+    EXPECT_THAT(p.getMasterVolume(), Eq(0x03));
+    EXPECT_THAT(p.getTreble(), Eq(0x1a));
+    EXPECT_THAT(p.getMiddle(), Eq(0x1b));
+    EXPECT_THAT(p.getBass(), Eq(0x1c));
+    EXPECT_THAT(p.getPresence(), Eq(0x1d));
+    EXPECT_THAT(p.getDepth(), Eq(0x21));
+    EXPECT_THAT(p.getBias(), Eq(0x12));
+    EXPECT_THAT(p.getNoiseGate(), Eq(0x05));
+    EXPECT_THAT(p.getCabinet(), Eq(0x06));
+    EXPECT_THAT(p.getThreshold(), Eq(0x07));
+    EXPECT_THAT(p.getSag(), Eq(0x08));
+    EXPECT_THAT(p.getBrightness(), Eq(0x09));
+}
+
+
+TEST_F(PacketTest, ampPayloadUsbGainFromData)
+{
+    std::array<std::uint8_t, sizePayload> data{{}};
+    data[0] = 0x12;
+
+    AmpPayload p{};
+    p.fromBytes(data);
+
+    EXPECT_THAT(p.getUsbGain(), Eq(0x12));
+}

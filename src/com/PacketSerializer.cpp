@@ -89,31 +89,33 @@ namespace plug::com
     }
 
 
-    std::string decodeNameFromData(const v2::Packet<v2::NamePayload>& data)
+    std::string decodeNameFromData(const v2::Packet<v2::NamePayload>& packet)
     {
-        return data.getPayload().getName();
+        return packet.getPayload().getName();
     }
 
-    amp_settings decodeAmpFromData(const std::array<Packet, 7>& data)
+    amp_settings decodeAmpFromData(const v2::Packet<v2::AmpPayload>& packet, const v2::Packet<v2::AmpPayload>& packetUsbGain)
     {
+        const auto payload = packet.getPayload();
+
         amp_settings settings{};
-        settings.amp_num = lookupAmpById(data[1][AMPLIFIER]);
-        settings.gain = data[1][GAIN];
-        settings.volume = data[1][VOLUME];
-        settings.treble = data[1][TREBLE];
-        settings.middle = data[1][MIDDLE];
-        settings.bass = data[1][BASS];
-        settings.cabinet = lookupCabinetById(data[1][CABINET]);
-        settings.noise_gate = data[1][NOISE_GATE];
-        settings.master_vol = data[1][MASTER_VOL];
-        settings.gain2 = data[1][GAIN2];
-        settings.presence = data[1][PRESENCE];
-        settings.threshold = data[1][THRESHOLD];
-        settings.depth = data[1][DEPTH];
-        settings.bias = data[1][BIAS];
-        settings.sag = data[1][SAG];
-        settings.brightness = data[1][BRIGHTNESS];
-        settings.usb_gain = data[6][USB_GAIN];
+        settings.amp_num = lookupAmpById(payload.getModel());
+        settings.gain = payload.getGain();
+        settings.volume = payload.getVolume();
+        settings.treble = payload.getTreble();
+        settings.middle = payload.getMiddle();
+        settings.bass = payload.getBass();
+        settings.cabinet = lookupCabinetById(payload.getCabinet());
+        settings.noise_gate = payload.getNoiseGate();
+        settings.master_vol = payload.getMasterVolume();
+        settings.gain2 = payload.getGain2();
+        settings.presence = payload.getPresence();
+        settings.threshold = payload.getThreshold();
+        settings.depth = payload.getDepth();
+        settings.bias = payload.getBias();
+        settings.sag = payload.getSag();
+        settings.brightness = payload.getBrightness();
+        settings.usb_gain = packetUsbGain.getPayload().getUsbGain();
         return settings;
     }
 
