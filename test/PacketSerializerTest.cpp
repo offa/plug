@@ -926,7 +926,7 @@ TEST_F(PacketSerializerTest, decodeNameFromData)
     const auto nameEnd = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
     *nameEnd = '\0';
 
-    const auto result = decodeNameFromData(adapt<v2::NamePayload>(data[0]));
+    const auto result = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
     EXPECT_THAT(result, Eq(name));
 }
 
@@ -937,7 +937,7 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
     auto data = filledPackage(0xff);
     std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
 
-    const auto result = decodeNameFromData(adapt<v2::NamePayload>(data[0]));
+    const auto result = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
     EXPECT_THAT(result, Eq(name.substr(0, nameLength)));
     EXPECT_THAT(nameLength, Eq(result.size()));
 }
@@ -963,7 +963,7 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
     data[1][BRIGHTNESS] = 0x01;
     data[6][USB_GAIN] = 0xe1;
 
-    const auto result = decodeAmpFromData(adapt<v2::AmpPayload>(data[1]), adapt<v2::AmpPayload>(data[6]));
+    const auto result = decodeAmpFromData(fromRawData<v2::AmpPayload>(data[1]), fromRawData<v2::AmpPayload>(data[6]));
     EXPECT_THAT(result.amp_num, Eq(amps::BRITISH_80S));
     EXPECT_THAT(result.gain, Eq(0xaa));
     EXPECT_THAT(result.volume, Eq(0x10));
@@ -1103,8 +1103,8 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
     data[4][FXSLOT] = 0x02;
     data[5][FXSLOT] = 0x03;
 
-    const auto result = decodeEffectsFromData({{adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
-                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])}});
+    const auto result = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
+                                            fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::input));
     EXPECT_THAT(result[1].fx_slot, Eq(1));
@@ -1123,8 +1123,8 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
     data[4][FXSLOT] = 0x06;
     data[5][FXSLOT] = 0x07;
 
-    const auto result = decodeEffectsFromData({{adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
-                                            adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])}});
+    const auto result = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
+                                            fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::effectsLoop));
     EXPECT_THAT(result[1].fx_slot, Eq(1));

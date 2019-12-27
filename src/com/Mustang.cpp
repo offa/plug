@@ -29,10 +29,10 @@ namespace plug::com
 {
     SignalChain decode_data(const std::array<v2::PacketRawType, 7>& data)
     {
-        const auto name = decodeNameFromData(adapt<v2::NamePayload>(data[0]));
-        const auto amp = decodeAmpFromData(adapt<v2::AmpPayload>(data[1]), adapt<v2::AmpPayload>(data[6]));
-        const auto effects = decodeEffectsFromData({{adapt<v2::EffectPayload>(data[2]), adapt<v2::EffectPayload>(data[3]),
-                                                    adapt<v2::EffectPayload>(data[4]), adapt<v2::EffectPayload>(data[5])}});
+        const auto name = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
+        const auto amp = decodeAmpFromData(fromRawData<v2::AmpPayload>(data[1]), fromRawData<v2::AmpPayload>(data[6]));
+        const auto effects = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
+                                                    fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
 
         return SignalChain{name, amp, effects};
     }

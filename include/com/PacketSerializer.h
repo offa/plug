@@ -33,7 +33,7 @@
 namespace plug::com
 {
     template<class T>
-    v2::Packet<T> adapt(const std::array<std::uint8_t, 64>& data)
+    v2::Packet<T> fromRawData(const std::array<std::uint8_t, 64>& data)
     {
         v2::Packet<T> packet{};
         packet.fromBytes(data);
