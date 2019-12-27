@@ -123,10 +123,9 @@ namespace plug::com
     {
         std::array<fx_pedal_settings, 4> effects{{}};
 
-        for (std::size_t i = 0; i < 4; ++i)
+        std::for_each(packet.cbegin(), packet.cend(), [&effects](const auto& p)
         {
-            const auto payload = packet[i].getPayload();
-
+            const auto payload = p.getPayload();
             const auto slot = payload.getSlot() % 4;
             effects[slot].fx_slot = slot;
             effects[slot].knob1 = payload.getKnob1();
@@ -137,7 +136,7 @@ namespace plug::com
             effects[slot].knob6 = payload.getKnob6();
             effects[slot].position = (payload.getSlot() > 0x03 ? Position::effectsLoop : Position::input);
             effects[slot].effect_num = lookupEffectById(payload.getModel());
-        }
+        });
 
         return effects;
     }
