@@ -27,7 +27,7 @@
 
 namespace plug::com
 {
-    namespace v2
+    inline namespace v2
     {
         constexpr std::size_t sizeTotal{64};
         constexpr std::size_t sizeHeader{16};
