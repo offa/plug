@@ -29,9 +29,8 @@ namespace plug::com
 {
     inline namespace v2
     {
-        constexpr std::size_t sizeTotal{64};
         constexpr std::size_t sizeHeader{16};
-        constexpr std::size_t sizePayload{sizeTotal - sizeHeader};
+        constexpr std::size_t sizePayload{48};
 
         enum class DSP
         {
