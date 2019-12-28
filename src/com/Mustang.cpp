@@ -22,10 +22,59 @@
 #include "com/Mustang.h"
 #include "com/PacketSerializer.h"
 #include "com/CommunicationException.h"
+#include "com/Packet.h"
 #include <algorithm>
 
 namespace plug::com
 {
+    SignalChain decode_data(const std::array<v2::PacketRawType, 7>& data)
+    {
+        const auto name = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
+        const auto amp = decodeAmpFromData(fromRawData<v2::AmpPayload>(data[1]), fromRawData<v2::AmpPayload>(data[6]));
+        const auto effects = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
+                                                     fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
+
+        return SignalChain{name, amp, effects};
+    }
+
+    std::vector<std::uint8_t> receivePacket(Connection& conn)
+    {
+        return conn.receive(v2::packetRawTypeSize);
+    }
+
+
+    void sendCommand(Connection& conn, const v2::PacketRawType& packet)
+    {
+        conn.send(packet);
+        receivePacket(conn);
+    }
+
+    void sendApplyCommand(Connection& conn)
+    {
+        sendCommand(conn, serializeApplyCommand().getBytes());
+    }
+
+    std::array<v2::PacketRawType, 7> loadBankData(Connection& conn, std::uint8_t slot)
+    {
+        std::array<v2::PacketRawType, 7> data{{}};
+
+        const auto loadCommand = serializeLoadSlotCommand(slot);
+        auto n = conn.send(loadCommand.getBytes());
+
+        for (std::size_t i = 0; n != 0; ++i)
+        {
+            const auto recvData = receivePacket(conn);
+            n = recvData.size();
+
+            if (i < 7)
+            {
+                std::copy(recvData.cbegin(), recvData.cend(), data[i].begin());
+            }
+        }
+        return data;
+    }
+
+
     Mustang::Mustang(std::shared_ptr<Connection> connection)
         : conn(connection)
     {
@@ -51,129 +100,86 @@ namespace plug::com
     void Mustang::set_effect(fx_pedal_settings value)
     {
         const auto clearEffectPacket = serializeClearEffectSettings();
-        sendCommand(clearEffectPacket);
-        sendApplyCommand();
+        sendCommand(*conn, clearEffectPacket.getBytes());
+        sendApplyCommand(*conn);
 
         if (value.effect_num != effects::EMPTY)
         {
             const auto settingsPacket = serializeEffectSettings(value);
-            sendCommand(settingsPacket);
-            sendApplyCommand();
+            sendCommand(*conn, settingsPacket.getBytes());
+            sendApplyCommand(*conn);
         }
     }
 
     void Mustang::set_amplifier(amp_settings value)
     {
         const auto settingsPacket = serializeAmpSettings(value);
-        sendCommand(settingsPacket);
-        sendApplyCommand();
+        sendCommand(*conn, settingsPacket.getBytes());
+        sendApplyCommand(*conn);
 
         const auto settingsGainPacket = serializeAmpSettingsUsbGain(value);
-        sendCommand(settingsGainPacket);
-        sendApplyCommand();
+        sendCommand(*conn, settingsGainPacket.getBytes());
+        sendApplyCommand(*conn);
     }
 
     void Mustang::save_on_amp(std::string_view name, std::uint8_t slot)
     {
-        const auto data = serializeName(slot, name);
-        sendCommand(data);
-        loadBankData(slot);
+        const auto data = serializeName(slot, name).getBytes();
+        sendCommand(*conn, data);
+        loadBankData(*conn, slot);
     }
 
     SignalChain Mustang::load_memory_bank(std::uint8_t slot)
     {
-        return decode_data(loadBankData(slot));
-    }
-
-    SignalChain Mustang::decode_data(const std::array<Packet, 7>& data)
-    {
-        const auto name = decodeNameFromData(data);
-        const auto amp = decodeAmpFromData(data);
-        const auto effects = decodeEffectsFromData(data);
-
-        return SignalChain{name, amp, effects};
+        return decode_data(loadBankData(*conn, slot));
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         const auto saveNamePacket = serializeSaveEffectName(slot, name, effects);
-        sendCommand(saveNamePacket);
+        sendCommand(*conn, saveNamePacket.getBytes());
 
         const auto packets = serializeSaveEffectPacket(slot, effects);
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(p); });
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p.getBytes()); });
 
-        sendCommand(serializeApplyCommand(effects[0]));
+        sendCommand(*conn, serializeApplyCommand(effects[0]).getBytes());
     }
 
     InitalData Mustang::loadData()
     {
-        std::vector<Packet> recieved_data;
+        std::vector<std::array<std::uint8_t, 64>> recieved_data;
 
         const auto loadCommand = serializeLoadCommand();
-        auto recieved = sendPacket(loadCommand);
+        auto recieved = conn->send(loadCommand.getBytes());
 
         while (recieved != 0)
         {
-            const auto recvData = receivePacket();
+            const auto recvData = receivePacket(*conn);
             recieved = recvData.size();
-            Packet p{};
+            v2::PacketRawType p{};
             std::copy(recvData.cbegin(), recvData.cend(), p.begin());
             recieved_data.push_back(p);
         }
 
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
-        auto presetNames = decodePresetListFromData(recieved_data);
+        std::vector<v2::Packet<v2::NamePayload>> presetListData;
+        presetListData.reserve(max_to_receive);
+        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p) {
+            v2::Packet<v2::NamePayload> packet{};
+            packet.fromBytes(p);
+            return packet;
+        });
+        auto presetNames = decodePresetListFromData(presetListData);
 
-        std::array<Packet, 7> presetData{{}};
+        std::array<v2::PacketRawType, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), max_to_receive), std::next(recieved_data.cbegin(), max_to_receive + 7), presetData.begin());
 
         return {decode_data(presetData), presetNames};
     }
 
-    std::array<Packet, 7> Mustang::loadBankData(std::uint8_t slot)
-    {
-        std::array<Packet, 7> data{{}};
-
-        const auto loadCommand = serializeLoadSlotCommand(slot);
-        auto n = sendPacket(loadCommand);
-
-        for (std::size_t i = 0; n != 0; ++i)
-        {
-            const auto recvData = receivePacket();
-            n = recvData.size();
-
-            if (i < 7)
-            {
-                std::copy(recvData.cbegin(), recvData.cend(), data[i].begin());
-            }
-        }
-        return data;
-    }
-
     void Mustang::initializeAmp()
     {
         const auto packets = serializeInitCommand();
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(p); });
-    }
-
-    std::size_t Mustang::sendPacket(const Packet& packet)
-    {
-        return conn->send(packet);
-    }
-
-    std::vector<std::uint8_t> Mustang::receivePacket()
-    {
-        return conn->receive(packetSize);
-    }
-
-    void Mustang::sendCommand(const Packet& packet)
-    {
-        sendPacket(packet);
-        receivePacket();
-    }
-
-    void Mustang::sendApplyCommand()
-    {
-        sendCommand(serializeApplyCommand());
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p.getBytes()); });
     }
 }

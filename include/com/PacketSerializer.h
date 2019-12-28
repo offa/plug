@@ -32,25 +32,33 @@
 
 namespace plug::com
 {
-    std::string decodeNameFromData(const std::array<Packet, 7>& data);
-    amp_settings decodeAmpFromData(const std::array<Packet, 7>& data);
+    template <class T>
+    v2::Packet<T> fromRawData(const std::array<std::uint8_t, 64>& data)
+    {
+        v2::Packet<T> packet{};
+        packet.fromBytes(data);
+        return packet;
+    }
 
-    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet, 7>& data);
-    std::vector<std::string> decodePresetListFromData(const std::vector<Packet>& data);
+    std::string decodeNameFromData(const v2::Packet<v2::NamePayload>& packet);
+    amp_settings decodeAmpFromData(const v2::Packet<v2::AmpPayload>& packet, const v2::Packet<v2::AmpPayload>& packetUsbGain);
 
-    Packet serializeAmpSettings(const amp_settings& value);
-    Packet serializeAmpSettingsUsbGain(const amp_settings& value);
-    Packet serializeName(std::uint8_t slot, std::string_view name);
-    Packet serializeEffectSettings(const fx_pedal_settings& value);
-    Packet serializeClearEffectSettings();
-    Packet serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
-    std::vector<Packet> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects);
+    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<v2::Packet<v2::EffectPayload>, 4>& packet);
+    std::vector<std::string> decodePresetListFromData(const std::vector<v2::Packet<v2::NamePayload>>& packet);
 
-    Packet serializeLoadSlotCommand(std::uint8_t slot);
-    Packet serializeLoadCommand();
-    Packet serializeApplyCommand();
-    Packet serializeApplyCommand(fx_pedal_settings effect);
+    v2::Packet<v2::AmpPayload> serializeAmpSettings(const amp_settings& value);
+    v2::Packet<v2::AmpPayload> serializeAmpSettingsUsbGain(const amp_settings& value);
+    v2::Packet<v2::NamePayload> serializeName(std::uint8_t slot, std::string_view name);
+    v2::Packet<v2::EffectPayload> serializeEffectSettings(const fx_pedal_settings& value);
+    v2::Packet<v2::EffectPayload> serializeClearEffectSettings();
+    v2::Packet<v2::NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
+    std::vector<v2::Packet<v2::EffectPayload>> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects);
 
-    std::array<Packet, 2> serializeInitCommand();
+    v2::Packet<v2::EmptyPayload> serializeLoadSlotCommand(std::uint8_t slot);
+    v2::Packet<v2::EmptyPayload> serializeLoadCommand();
+    v2::Packet<v2::EmptyPayload> serializeApplyCommand();
+    v2::Packet<v2::EmptyPayload> serializeApplyCommand(fx_pedal_settings effect);
+
+    std::array<v2::Packet<v2::EmptyPayload>, 2> serializeInitCommand();
 
 }

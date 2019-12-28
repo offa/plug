@@ -23,7 +23,6 @@
 
 #include "SignalChain.h"
 #include "com/Connection.h"
-#include "com/Packet.h"
 #include <string_view>
 #include <vector>
 #include <memory>
@@ -52,17 +51,8 @@ namespace plug::com
 
 
     private:
-        SignalChain decode_data(const std::array<Packet, 7>& data);
         InitalData loadData();
-        std::array<Packet, 7> loadBankData(std::uint8_t slot);
-
         void initializeAmp();
-        std::size_t sendPacket(const Packet& packet);
-        std::vector<std::uint8_t> receivePacket();
-
-        void sendCommand(const Packet& packet);
-        void sendApplyCommand();
-
 
         const std::shared_ptr<Connection> conn;
     };

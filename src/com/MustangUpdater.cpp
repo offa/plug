@@ -22,6 +22,7 @@
 #include "com/MustangUpdater.h"
 #include "com/MustangConstants.h"
 #include "com/Mustang.h"
+#include "com/Packet.h"
 #include <chrono>
 #include <cstdio>
 #include <cstring>
@@ -51,13 +52,14 @@ namespace plug::com
 
 
         inline constexpr std::chrono::milliseconds timeout{500};
+        inline constexpr std::size_t sizeOfPacket = v2::packetRawTypeSize;
     }
 
 
     int updateFirmware(const char* filename)
     {
         int ret, recieved;
-        unsigned char array[packetSize], number = 0;
+        unsigned char array[sizeOfPacket], number = 0;
         FILE* file;
 
         // initialize libusb
@@ -118,27 +120,27 @@ namespace plug::com
         file = fopen(filename, "rb");
         // send date when firmware was created
         fseek(file, 0x1a, SEEK_SET);
-        memset(array, 0x00, packetSize);
+        memset(array, 0x00, sizeOfPacket);
         array[0] = 0x02;
         array[1] = 0x03;
         array[2] = 0x01;
         array[3] = 0x06;
         [[maybe_unused]] const auto n = fread(array + 4, 1, 11, file);
-        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
-        libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
+        ret = libusb_interrupt_transfer(amp_hand, 0x01, array, sizeOfPacket, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x81, array, sizeOfPacket, &recieved, timeout.count());
         usleep(10000);
 
         // send firmware
         fseek(file, 0x110, SEEK_SET);
         for (;;)
         {
-            memset(array, 0x00, packetSize);
+            memset(array, 0x00, sizeOfPacket);
             array[0] = array[1] = 0x03;
             array[2] = number;
             number++;
-            array[3] = static_cast<std::uint8_t>(fread(array + 4, 1, packetSize - 8, file));
-            ret = libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
-            libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
+            array[3] = static_cast<std::uint8_t>(fread(array + 4, 1, sizeOfPacket - 8, file));
+            ret = libusb_interrupt_transfer(amp_hand, 0x01, array, sizeOfPacket, &recieved, timeout.count());
+            libusb_interrupt_transfer(amp_hand, 0x81, array, sizeOfPacket, &recieved, timeout.count());
             usleep(10000);
 
             if (feof(file) != 0) // if reached end of the file
@@ -149,11 +151,11 @@ namespace plug::com
         fclose(file);
 
         // send "finished" packet
-        memset(array, 0x00, packetSize);
+        memset(array, 0x00, sizeOfPacket);
         array[0] = 0x04;
         array[1] = 0x03;
-        libusb_interrupt_transfer(amp_hand, 0x01, array, packetSize, &recieved, timeout.count());
-        libusb_interrupt_transfer(amp_hand, 0x81, array, packetSize, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x01, array, sizeOfPacket, &recieved, timeout.count());
+        libusb_interrupt_transfer(amp_hand, 0x81, array, sizeOfPacket, &recieved, timeout.count());
 
         closeUsb(amp_hand);
 
