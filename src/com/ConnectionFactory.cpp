@@ -44,8 +44,7 @@ namespace plug::com
             usbPID::miniAmps,
             usbPID::floorAmps,
             usbPID::smallAmpsV2,
-            usbPID::bigAmpsV2
-        };
+            usbPID::bigAmpsV2};
     }
 
     std::shared_ptr<Connection> createUsbConnection()
