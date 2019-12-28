@@ -28,15 +28,6 @@ namespace plug::com
 {
     namespace v1
     {
-    // amp's VID and PID
-    inline constexpr std::uint16_t USB_VID{0x1ed8};
-    inline constexpr std::uint16_t SMALL_AMPS_USB_PID{0x0004};    //Mustang I and II
-    inline constexpr std::uint16_t BIG_AMPS_USB_PID{0x0005};      //Mustang III, IV and V
-    inline constexpr std::uint16_t MINI_USB_PID{0x0010};          //Mustang Mini
-    inline constexpr std::uint16_t FLOOR_USB_PID{0x0012};         //Mustang Floor
-    inline constexpr std::uint16_t SMALL_AMPS_V2_USB_PID{0x0014}; //Mustang II (and I?) V2
-    inline constexpr std::uint16_t BIG_AMPS_V2_USB_PID{0x0016};   //Mustang III+ V2
-
     // amp's VID and PID while in update mode
     inline constexpr std::uint16_t USB_UPDATE_VID{0x1ed8};
     inline constexpr std::uint16_t SMALL_AMPS_USB_UPDATE_PID{0x0006};    //Mustang I and II
