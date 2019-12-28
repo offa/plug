@@ -27,18 +27,18 @@ namespace plug::com
     namespace
     {
         inline constexpr std::initializer_list<std::uint16_t> pids{
-            SMALL_AMPS_USB_PID,
-            BIG_AMPS_USB_PID,
-            SMALL_AMPS_V2_USB_PID,
-            BIG_AMPS_V2_USB_PID,
-            MINI_USB_PID,
-            FLOOR_USB_PID};
+            v1::SMALL_AMPS_USB_PID,
+            v1::BIG_AMPS_USB_PID,
+            v1::SMALL_AMPS_V2_USB_PID,
+            v1::BIG_AMPS_V2_USB_PID,
+            v1::MINI_USB_PID,
+            v1::FLOOR_USB_PID};
     }
 
     std::shared_ptr<Connection> createUsbConnection()
     {
         auto conn = std::make_shared<UsbComm>();
-        conn->openFirst(USB_VID, pids);
+        conn->openFirst(v1::USB_VID, pids);
         return conn;
     }
 }

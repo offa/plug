@@ -135,7 +135,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
     v2::PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x03;
-    expected[FXKNOB] = fxKnob;
+    expected[v1::FXKNOB] = fxKnob;
 
     const auto packet = serializeApplyCommand(effect);
     EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
@@ -158,7 +158,7 @@ TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
     expected[0] = 0x1c;
     expected[1] = 0x01;
     expected[2] = 0x01;
-    expected[SAVE_SLOT] = slot;
+    expected[v1::SAVE_SLOT] = slot;
     expected[6] = 0x01;
 
     const auto packet = serializeLoadSlotCommand(slot);
@@ -178,23 +178,23 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
                                 0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-    expected[DSP] = 0x05;
-    expected[GAIN] = 11;
-    expected[VOLUME] = 22;
-    expected[TREBLE] = 33;
-    expected[MIDDLE] = 44;
-    expected[BASS] = 55;
-    expected[CABINET] = 0x07;
-    expected[NOISE_GATE] = 1;
-    expected[MASTER_VOL] = 2;
-    expected[GAIN2] = 3;
-    expected[PRESENCE] = 4;
-    expected[THRESHOLD] = 0;
-    expected[DEPTH] = 0x80;
-    expected[BIAS] = 7;
-    expected[SAG] = 0x02;
-    expected[BRIGHTNESS] = 1;
-    expected[AMPLIFIER] = 0x6d;
+    expected[v1::DSP] = 0x05;
+    expected[v1::GAIN] = 11;
+    expected[v1::VOLUME] = 22;
+    expected[v1::TREBLE] = 33;
+    expected[v1::MIDDLE] = 44;
+    expected[v1::BASS] = 55;
+    expected[v1::CABINET] = 0x07;
+    expected[v1::NOISE_GATE] = 1;
+    expected[v1::MASTER_VOL] = 2;
+    expected[v1::GAIN2] = 3;
+    expected[v1::PRESENCE] = 4;
+    expected[v1::THRESHOLD] = 0;
+    expected[v1::DEPTH] = 0x80;
+    expected[v1::BIAS] = 7;
+    expected[v1::SAG] = 0x02;
+    expected[v1::BRIGHTNESS] = 1;
+    expected[v1::AMPLIFIER] = 0x6d;
     expected[44] = 0x08;
     expected[45] = 0x08;
     expected[46] = 0x08;
@@ -218,23 +218,23 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
                                 0x00, 0x07, 0x07, 0x01, 0x00, 0x01, 0x5e, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-    expected[DSP] = 0x05;
-    expected[GAIN] = 0;
-    expected[VOLUME] = 0;
-    expected[TREBLE] = 0;
-    expected[MIDDLE] = 0;
-    expected[BASS] = 0;
-    expected[CABINET] = 0x00;
-    expected[NOISE_GATE] = 0;
-    expected[MASTER_VOL] = 0;
-    expected[GAIN2] = 0;
-    expected[PRESENCE] = 0;
-    expected[THRESHOLD] = 0;
-    expected[DEPTH] = 0x80;
-    expected[BIAS] = 0;
-    expected[SAG] = 0;
-    expected[BRIGHTNESS] = 0;
-    expected[AMPLIFIER] = 0x61;
+    expected[v1::DSP] = 0x05;
+    expected[v1::GAIN] = 0;
+    expected[v1::VOLUME] = 0;
+    expected[v1::TREBLE] = 0;
+    expected[v1::MIDDLE] = 0;
+    expected[v1::BASS] = 0;
+    expected[v1::CABINET] = 0x00;
+    expected[v1::NOISE_GATE] = 0;
+    expected[v1::MASTER_VOL] = 0;
+    expected[v1::GAIN2] = 0;
+    expected[v1::PRESENCE] = 0;
+    expected[v1::THRESHOLD] = 0;
+    expected[v1::DEPTH] = 0x80;
+    expected[v1::BIAS] = 0;
+    expected[v1::SAG] = 0;
+    expected[v1::BRIGHTNESS] = 0;
+    expected[v1::AMPLIFIER] = 0x61;
     expected[44] = 0x07;
     expected[45] = 0x07;
     expected[46] = 0x07;
@@ -250,7 +250,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsDspData)
     constexpr amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[DSP], Eq(0x05));
+    EXPECT_THAT(packet[v1::DSP], Eq(0x05));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
@@ -258,18 +258,18 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
     constexpr amp_settings settings{amps::METAL_2000, 123, 101, 93, 30, 61, cabinets::cab2x12C, 3, 10, 15, 40, 0, 0, 100, 1, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[GAIN], Eq(123));
-    EXPECT_THAT(packet[GAIN2], Eq(15));
-    EXPECT_THAT(packet[VOLUME], Eq(101));
-    EXPECT_THAT(packet[TREBLE], Eq(93));
-    EXPECT_THAT(packet[MIDDLE], Eq(30));
-    EXPECT_THAT(packet[BASS], Eq(61));
-    EXPECT_THAT(packet[MASTER_VOL], Eq(10));
-    EXPECT_THAT(packet[PRESENCE], Eq(40));
-    EXPECT_THAT(packet[NOISE_GATE], Eq(3));
-    EXPECT_THAT(packet[BIAS], Eq(100));
-    EXPECT_THAT(packet[BRIGHTNESS], Eq(0));
-    EXPECT_THAT(packet[SAG], Eq(1));
+    EXPECT_THAT(packet[v1::GAIN], Eq(123));
+    EXPECT_THAT(packet[v1::GAIN2], Eq(15));
+    EXPECT_THAT(packet[v1::VOLUME], Eq(101));
+    EXPECT_THAT(packet[v1::TREBLE], Eq(93));
+    EXPECT_THAT(packet[v1::MIDDLE], Eq(30));
+    EXPECT_THAT(packet[v1::BASS], Eq(61));
+    EXPECT_THAT(packet[v1::MASTER_VOL], Eq(10));
+    EXPECT_THAT(packet[v1::PRESENCE], Eq(40));
+    EXPECT_THAT(packet[v1::NOISE_GATE], Eq(3));
+    EXPECT_THAT(packet[v1::BIAS], Eq(100));
+    EXPECT_THAT(packet[v1::BRIGHTNESS], Eq(0));
+    EXPECT_THAT(packet[v1::SAG], Eq(1));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
@@ -318,7 +318,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagData)
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0x03, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[SAG], Eq(0x02));
+    EXPECT_THAT(packet[v1::SAG], Eq(0x02));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)
@@ -326,7 +326,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsBrightnessData)
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, true, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[BRIGHTNESS], Eq(0x01));
+    EXPECT_THAT(packet[v1::BRIGHTNESS], Eq(0x01));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsNoiseGate)
@@ -335,7 +335,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsNoiseGate)
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[NOISE_GATE], Eq(value));
+    EXPECT_THAT(packet[v1::NOISE_GATE], Eq(value));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsLimitsNoiseGate)
@@ -344,7 +344,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsLimitsNoiseGate)
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, value, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[NOISE_GATE], Eq(0x05));
+    EXPECT_THAT(packet[v1::NOISE_GATE], Eq(0x05));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsThresholdAndDepthIfNoiseGateFull)
@@ -355,8 +355,8 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsThresholdAndDepthIfNoiseGat
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[THRESHOLD], Eq(threshold));
-    EXPECT_THAT(packet[DEPTH], Eq(depth));
+    EXPECT_THAT(packet[v1::THRESHOLD], Eq(threshold));
+    EXPECT_THAT(packet[v1::DEPTH], Eq(depth));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsDoesNotSetThresholdAndDepthIfNoiseGateIsNotFull)
@@ -367,8 +367,8 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsDoesNotSetThresholdAndDepthIfNo
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, depth, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[THRESHOLD], Eq(0x00));
-    EXPECT_THAT(packet[DEPTH], Eq(0x80));
+    EXPECT_THAT(packet[v1::THRESHOLD], Eq(0x00));
+    EXPECT_THAT(packet[v1::DEPTH], Eq(0x80));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
@@ -378,7 +378,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsLimitsThreshold)
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, noiseGate, 0, 0, 0, threshold, 0, 0, 0, false, 0};
 
     const auto packet = serializeAmpSettings(settings).getBytes();
-    EXPECT_THAT(packet[THRESHOLD], Eq(0x09));
+    EXPECT_THAT(packet[v1::THRESHOLD], Eq(0x09));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
@@ -392,7 +392,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
     expected[2] = 0x0d;
     expected[6] = 0x01;
     expected[7] = 0x01;
-    expected[USB_GAIN] = value;
+    expected[v1::USB_GAIN] = value;
 
     const auto packet = serializeAmpSettingsUsbGain(settings);
     EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
@@ -422,10 +422,10 @@ TEST_F(PacketSerializerTest, serializeNameData)
     expected[0] = 0x1c;
     expected[1] = 0x01;
     expected[2] = 0x03;
-    expected[SAVE_SLOT] = slot;
+    expected[v1::SAVE_SLOT] = slot;
     expected[6] = 0x01;
     expected[7] = 0x01;
-    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), NAME));
+    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), v1::NAME));
 
     const auto packet = serializeName(slot, name).getBytes();
     EXPECT_THAT(packet, ContainerEq(expected));
@@ -450,13 +450,13 @@ TEST_F(PacketSerializerTest, serializeNameLimitsToLength)
     expected[0] = 0x1c;
     expected[1] = 0x01;
     expected[2] = 0x03;
-    expected[SAVE_SLOT] = slot;
+    expected[v1::SAVE_SLOT] = slot;
     expected[6] = 0x01;
     expected[7] = 0x01;
-    std::copy(name.cbegin(), std::next(name.cbegin(), maxSize), std::next(expected.begin(), NAME));
+    std::copy(name.cbegin(), std::next(name.cbegin(), maxSize), std::next(expected.begin(), v1::NAME));
 
     const auto packet = serializeName(slot, name).getBytes();
-    EXPECT_THAT(packet[NAME + maxSize], Eq('\0'));
+    EXPECT_THAT(packet[v1::NAME + maxSize], Eq('\0'));
     EXPECT_THAT(packet, ContainerEq(expected));
 }
 
@@ -472,15 +472,15 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsData)
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    expected[FXSLOT] = 10;
-    expected[KNOB1] = 11;
-    expected[KNOB2] = 22;
-    expected[KNOB3] = 33;
-    expected[KNOB4] = 44;
-    expected[KNOB5] = 55;
-    expected[KNOB6] = 0x00;
-    expected[DSP] = 0x06;
-    expected[EFFECT] = 0x3c;
+    expected[v1::FXSLOT] = 10;
+    expected[v1::KNOB1] = 11;
+    expected[v1::KNOB2] = 22;
+    expected[v1::KNOB3] = 33;
+    expected[v1::KNOB4] = 44;
+    expected[v1::KNOB5] = 55;
+    expected[v1::KNOB6] = 0x00;
+    expected[v1::DSP] = 0x06;
+    expected[v1::EFFECT] = 0x3c;
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
@@ -492,7 +492,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSetsInputPosition)
     constexpr fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
 
     const auto packet = serializeEffectSettings(settings).getBytes();
-    EXPECT_THAT(packet[FXSLOT], Eq(value));
+    EXPECT_THAT(packet[v1::FXSLOT], Eq(value));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsEffectsSetsLoopPosition)
@@ -501,7 +501,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsEffectsSetsLoopPosition)
     constexpr fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
     const auto packet = serializeEffectSettings(settings).getBytes();
-    EXPECT_THAT(packet[FXSLOT], Eq(value + 4));
+    EXPECT_THAT(packet[v1::FXSLOT], Eq(value + 4));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNotRequired)
@@ -509,7 +509,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
     constexpr fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
     const auto packet = serializeEffectSettings(settings).getBytes();
-    EXPECT_THAT(packet[KNOB6], Eq(0x00));
+    EXPECT_THAT(packet[v1::KNOB6], Eq(0x00));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
@@ -518,10 +518,10 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired
         return fx_pedal_settings{100, e, 0, 0, 0, 0, 0, knob6, Position::input};
     };
 
-    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_ECHO_FILTER, 1)).getBytes()[KNOB6], Eq(1));
-    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_ECHO_FILTER, 2)).getBytes()[KNOB6], Eq(2));
-    EXPECT_THAT(serializeEffectSettings(create(effects::TAPE_DELAY, 3)).getBytes()[KNOB6], Eq(3));
-    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_TAPE_DELAY, 4)).getBytes()[KNOB6], Eq(4));
+    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_ECHO_FILTER, 1)).getBytes()[v1::KNOB6], Eq(1));
+    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_ECHO_FILTER, 2)).getBytes()[v1::KNOB6], Eq(2));
+    EXPECT_THAT(serializeEffectSettings(create(effects::TAPE_DELAY, 3)).getBytes()[v1::KNOB6], Eq(3));
+    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_TAPE_DELAY, 4)).getBytes()[v1::KNOB6], Eq(4));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
@@ -631,9 +631,9 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    expected[FXKNOB] = 0x01;
-    expected[SAVE_SLOT] = slot;
-    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), NAME));
+    expected[v1::FXKNOB] = 0x01;
+    expected[v1::SAVE_SLOT] = slot;
+    std::copy(name.cbegin(), name.cend(), std::next(expected.begin(), v1::NAME));
 
     const auto packet = serializeSaveEffectName(slot, name, {effect});
     EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
@@ -728,9 +728,9 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    expected[FXKNOB] = 0x01;
-    expected[SAVE_SLOT] = slot;
-    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), NAME));
+    expected[v1::FXKNOB] = 0x01;
+    expected[v1::SAVE_SLOT] = slot;
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), v1::NAME));
 
     const auto packet = serializeSaveEffectName(slot, name, {effect});
     EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
@@ -744,10 +744,10 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
     constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
     v2::PacketRawType expected{};
-    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), NAME));
+    std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), v1::NAME));
 
     const auto packet = serializeSaveEffectName(0, name, {effect}).getBytes();
-    EXPECT_THAT(packet[NAME + 24], Eq('\0'));
+    EXPECT_THAT(packet[v1::NAME + 24], Eq('\0'));
 }
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
@@ -756,8 +756,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
     constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
     v2::PacketRawType expected = serializeEffectSettings(effect).getBytes();
-    expected[FXKNOB] = 0x01;
-    expected[SAVE_SLOT] = slot;
+    expected[v1::FXKNOB] = 0x01;
+    expected[v1::SAVE_SLOT] = slot;
     expected[1] = 0x03;
     expected[6] = 0x00;
 
@@ -833,13 +833,13 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
     constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
     v2::PacketRawType expected1 = serializeEffectSettings(effect1).getBytes();
-    expected1[FXKNOB] = 0x02;
-    expected1[SAVE_SLOT] = slot;
+    expected1[v1::FXKNOB] = 0x02;
+    expected1[v1::SAVE_SLOT] = slot;
     expected1[1] = 0x03;
     expected1[6] = 0x00;
     v2::PacketRawType expected2 = serializeEffectSettings(effect2).getBytes();
-    expected2[FXKNOB] = 0x02;
-    expected2[SAVE_SLOT] = slot;
+    expected2[v1::FXKNOB] = 0x02;
+    expected2[v1::SAVE_SLOT] = slot;
     expected2[1] = 0x03;
     expected2[6] = 0x00;
 
@@ -945,23 +945,23 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
 TEST_F(PacketSerializerTest, decodeAmpFromData)
 {
     auto data = filledPackage(0xff);
-    data[1][AMPLIFIER] = 0x5e;
-    data[1][GAIN] = 0xaa;
-    data[1][VOLUME] = 0x10;
-    data[1][TREBLE] = 0x20;
-    data[1][MIDDLE] = 0x30;
-    data[1][BASS] = 0x40;
-    data[1][CABINET] = static_cast<std::uint8_t>(cabinets::cab65DLX);
-    data[1][NOISE_GATE] = 0x02;
-    data[1][MASTER_VOL] = 0x04;
-    data[1][GAIN2] = 0x05;
-    data[1][PRESENCE] = 0x15;
-    data[1][THRESHOLD] = 0x16;
-    data[1][DEPTH] = 0x21;
-    data[1][BIAS] = 0x19;
-    data[1][SAG] = 0x09;
-    data[1][BRIGHTNESS] = 0x01;
-    data[6][USB_GAIN] = 0xe1;
+    data[1][v1::AMPLIFIER] = 0x5e;
+    data[1][v1::GAIN] = 0xaa;
+    data[1][v1::VOLUME] = 0x10;
+    data[1][v1::TREBLE] = 0x20;
+    data[1][v1::MIDDLE] = 0x30;
+    data[1][v1::BASS] = 0x40;
+    data[1][v1::CABINET] = static_cast<std::uint8_t>(cabinets::cab65DLX);
+    data[1][v1::NOISE_GATE] = 0x02;
+    data[1][v1::MASTER_VOL] = 0x04;
+    data[1][v1::GAIN2] = 0x05;
+    data[1][v1::PRESENCE] = 0x15;
+    data[1][v1::THRESHOLD] = 0x16;
+    data[1][v1::DEPTH] = 0x21;
+    data[1][v1::BIAS] = 0x19;
+    data[1][v1::SAG] = 0x09;
+    data[1][v1::BRIGHTNESS] = 0x01;
+    data[6][v1::USB_GAIN] = 0xe1;
 
     const auto result = decodeAmpFromData(fromRawData<v2::AmpPayload>(data[1]), fromRawData<v2::AmpPayload>(data[6]));
     EXPECT_THAT(result.amp_num, Eq(amps::BRITISH_80S));
@@ -1030,14 +1030,14 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
 {
     auto package = filledPackage(0x00);
     auto& data = package[2];
-    data[FXSLOT] = 0x01;
-    data[KNOB1] = 0x11;
-    data[KNOB2] = 0x22;
-    data[KNOB3] = 0x33;
-    data[KNOB4] = 0x44;
-    data[KNOB5] = 0x55;
-    data[KNOB6] = 0x66;
-    data[EFFECT] = 0x49;
+    data[v1::FXSLOT] = 0x01;
+    data[v1::KNOB1] = 0x11;
+    data[v1::KNOB2] = 0x22;
+    data[v1::KNOB3] = 0x33;
+    data[v1::KNOB4] = 0x44;
+    data[v1::KNOB5] = 0x55;
+    data[v1::KNOB6] = 0x66;
+    data[v1::EFFECT] = 0x49;
     v2::Packet<v2::EffectPayload> payload{};
     payload.fromBytes(data);
 
@@ -1098,10 +1098,10 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
 {
     auto data = filledPackage(0x00);
-    data[2][FXSLOT] = 0x00;
-    data[3][FXSLOT] = 0x01;
-    data[4][FXSLOT] = 0x02;
-    data[5][FXSLOT] = 0x03;
+    data[2][v1::FXSLOT] = 0x00;
+    data[3][v1::FXSLOT] = 0x01;
+    data[4][v1::FXSLOT] = 0x02;
+    data[5][v1::FXSLOT] = 0x03;
 
     const auto result = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
                                                 fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
@@ -1118,10 +1118,10 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
 {
     auto data = filledPackage(0x00);
-    data[2][FXSLOT] = 0x04;
-    data[3][FXSLOT] = 0x05;
-    data[4][FXSLOT] = 0x06;
-    data[5][FXSLOT] = 0x07;
+    data[2][v1::FXSLOT] = 0x04;
+    data[3][v1::FXSLOT] = 0x05;
+    data[4][v1::FXSLOT] = 0x06;
+    data[5][v1::FXSLOT] = 0x07;
 
     const auto result = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
                                                 fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});

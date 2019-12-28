@@ -58,6 +58,7 @@ namespace plug::com
 
     int updateFirmware(const char* filename)
     {
+        using namespace v1;
         int ret, recieved;
         unsigned char array[sizeOfPacket], number = 0;
         FILE* file;
