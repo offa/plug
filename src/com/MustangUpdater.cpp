@@ -63,7 +63,7 @@ namespace plug::com
 
 
         inline constexpr std::chrono::milliseconds timeout{500};
-        inline constexpr std::size_t sizeOfPacket = v2::packetRawTypeSize;
+        inline constexpr std::size_t sizeOfPacket = packetRawTypeSize;
     }
 
 

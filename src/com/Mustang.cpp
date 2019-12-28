@@ -27,23 +27,23 @@
 
 namespace plug::com
 {
-    SignalChain decode_data(const std::array<v2::PacketRawType, 7>& data)
+    SignalChain decode_data(const std::array<PacketRawType, 7>& data)
     {
-        const auto name = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
-        const auto amp = decodeAmpFromData(fromRawData<v2::AmpPayload>(data[1]), fromRawData<v2::AmpPayload>(data[6]));
-        const auto effects = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
-                                                     fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
+        const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
+        const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
+        const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
+                                                     fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
 
         return SignalChain{name, amp, effects};
     }
 
     std::vector<std::uint8_t> receivePacket(Connection& conn)
     {
-        return conn.receive(v2::packetRawTypeSize);
+        return conn.receive(packetRawTypeSize);
     }
 
 
-    void sendCommand(Connection& conn, const v2::PacketRawType& packet)
+    void sendCommand(Connection& conn, const PacketRawType& packet)
     {
         conn.send(packet);
         receivePacket(conn);
@@ -54,9 +54,9 @@ namespace plug::com
         sendCommand(conn, serializeApplyCommand().getBytes());
     }
 
-    std::array<v2::PacketRawType, 7> loadBankData(Connection& conn, std::uint8_t slot)
+    std::array<PacketRawType, 7> loadBankData(Connection& conn, std::uint8_t slot)
     {
-        std::array<v2::PacketRawType, 7> data{{}};
+        std::array<PacketRawType, 7> data{{}};
 
         const auto loadCommand = serializeLoadSlotCommand(slot);
         auto n = conn.send(loadCommand.getBytes());
@@ -156,22 +156,22 @@ namespace plug::com
         {
             const auto recvData = receivePacket(*conn);
             recieved = recvData.size();
-            v2::PacketRawType p{};
+            PacketRawType p{};
             std::copy(recvData.cbegin(), recvData.cend(), p.begin());
             recieved_data.push_back(p);
         }
 
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
-        std::vector<v2::Packet<v2::NamePayload>> presetListData;
+        std::vector<Packet<NamePayload>> presetListData;
         presetListData.reserve(max_to_receive);
         std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p) {
-            v2::Packet<v2::NamePayload> packet{};
+            Packet<NamePayload> packet{};
             packet.fromBytes(p);
             return packet;
         });
         auto presetNames = decodePresetListFromData(presetListData);
 
-        std::array<v2::PacketRawType, 7> presetData{{}};
+        std::array<PacketRawType, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), max_to_receive), std::next(recieved_data.cbegin(), max_to_receive + 7), presetData.begin());
 
         return {decode_data(presetData), presetNames};

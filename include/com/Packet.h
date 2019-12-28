@@ -27,8 +27,6 @@
 
 namespace plug::com
 {
-    inline namespace v2
-    {
         constexpr std::size_t sizeHeader{16};
         constexpr std::size_t sizePayload{48};
 
@@ -664,7 +662,5 @@ namespace plug::com
             Header header;
             Payload payload;
         };
-
-    }
 
 }

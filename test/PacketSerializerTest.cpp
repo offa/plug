@@ -40,75 +40,75 @@ protected:
     {
     }
 
-    std::array<v2::PacketRawType, 7> filledPackage(std::uint8_t value) const
+    std::array<PacketRawType, 7> filledPackage(std::uint8_t value) const
     {
-        v2::PacketRawType packet{};
+        PacketRawType packet{};
         std::fill(packet.begin(), packet.end(), value);
-        std::array<v2::PacketRawType, 7> data{};
+        std::array<PacketRawType, 7> data{};
         std::fill(data.begin(), data.end(), packet);
         return data;
     };
 
-    v2::Packet<v2::AmpPayload> ampPackage(std::uint8_t ampId) const
+    Packet<AmpPayload> ampPackage(std::uint8_t ampId) const
     {
-        v2::AmpPayload payload{};
+        AmpPayload payload{};
         payload.setModel(ampId);
         payload.setCabinet(static_cast<std::uint8_t>(cabinets::OFF));
 
-        v2::Packet<v2::AmpPayload> packet{};
+        Packet<AmpPayload> packet{};
         packet.setPayload(payload);
         return packet;
     };
 
-    v2::Packet<v2::AmpPayload> cabinetPackage(std::uint8_t cabinetId) const
+    Packet<AmpPayload> cabinetPackage(std::uint8_t cabinetId) const
     {
-        v2::AmpPayload payload{};
+        AmpPayload payload{};
         payload.setModel(0x67);
         payload.setCabinet(cabinetId);
 
-        v2::Packet<v2::AmpPayload> packet{};
+        Packet<AmpPayload> packet{};
         packet.setPayload(payload);
         return packet;
     };
 
-    std::array<v2::Packet<v2::EffectPayload>, 4> effectPackage(std::uint8_t effectId) const
+    std::array<Packet<EffectPayload>, 4> effectPackage(std::uint8_t effectId) const
     {
-        v2::EffectPayload payload{};
+        EffectPayload payload{};
         payload.setSlot(0x01);
         payload.setModel(effectId);
 
-        v2::Packet<v2::EffectPayload> packet{};
+        Packet<EffectPayload> packet{};
         packet.setPayload(payload);
         return {{packet, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}};
     };
 
-    v2::Packet<v2::NamePayload> presetNameEmptyPacket() const
+    Packet<NamePayload> presetNameEmptyPacket() const
     {
-        v2::NamePayload payload{};
-        v2::Packet<v2::NamePayload> packet{};
+        NamePayload payload{};
+        Packet<NamePayload> packet{};
         packet.setPayload(payload);
         return packet;
     }
 
-    v2::Packet<v2::NamePayload> presetNamePacket(std::string_view name) const
+    Packet<NamePayload> presetNamePacket(std::string_view name) const
     {
-        v2::NamePayload payload{};
+        NamePayload payload{};
         payload.setName(name);
 
-        v2::Packet<v2::NamePayload> packet{};
+        Packet<NamePayload> packet{};
         packet.setPayload(payload);
         return packet;
     }
 
-    const v2::Packet<v2::EffectPayload> emptyEffectPayload{};
-    const v2::Packet<v2::AmpPayload> emptyAmpPayload{};
+    const Packet<EffectPayload> emptyEffectPayload{};
+    const Packet<AmpPayload> emptyAmpPayload{};
 };
 
 TEST_F(PacketSerializerTest, serializeInitCommand)
 {
-    v2::PacketRawType packet1{};
+    PacketRawType packet1{};
     packet1[1] = 0xc3;
-    v2::PacketRawType packet2{};
+    PacketRawType packet2{};
     packet2[0] = 0x1a;
     packet2[1] = 0x03;
 
@@ -120,7 +120,7 @@ TEST_F(PacketSerializerTest, serializeInitCommand)
 
 TEST_F(PacketSerializerTest, serializeApplyCommand)
 {
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x03;
 
@@ -132,7 +132,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
 {
     constexpr std::uint8_t fxKnob{0x02};
     const fx_pedal_settings effect{fxKnob, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x03;
     expected[v1::FXKNOB] = fxKnob;
@@ -143,7 +143,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
 
 TEST_F(PacketSerializerTest, serializeLoadCommand)
 {
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     expected[0] = 0xff;
     expected[1] = 0xc1;
 
@@ -154,7 +154,7 @@ TEST_F(PacketSerializerTest, serializeLoadCommand)
 TEST_F(PacketSerializerTest, serializeLoadSlotCommand)
 {
     constexpr std::uint8_t slot{15};
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x01;
     expected[2] = 0x01;
@@ -169,7 +169,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsSetsData)
 {
     constexpr amp_settings settings{amps::METAL_2000, 11, 22, 33, 44, 55, cabinets::cab2x12C, 1, 2, 3, 4, 5, 6, 7, 8, true, 0};
 
-    v2::PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+    PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -209,7 +209,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsWithEmptyData)
 {
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
 
-    v2::PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+    PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -386,7 +386,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
     constexpr std::size_t value{101};
     constexpr amp_settings settings{amps::BRITISH_60S, 0, 0, 0, 0, 0, cabinets::OFF, 0, 0, 0, 0, 0, 0, 0, 0, false, value};
 
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x03;
     expected[2] = 0x0d;
@@ -400,7 +400,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
 
 TEST_F(PacketSerializerTest, serializeClearEffectsSettingsData)
 {
-    const v2::PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+    const PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                       0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
                                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -418,7 +418,7 @@ TEST_F(PacketSerializerTest, serializeNameData)
     const std::string name{"name 123"};
     constexpr std::size_t slot{3};
 
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x01;
     expected[2] = 0x03;
@@ -446,7 +446,7 @@ TEST_F(PacketSerializerTest, serializeNameLimitsToLength)
     const std::string name(maxSize + 3, 'x');
     constexpr std::size_t slot{3};
 
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x01;
     expected[2] = 0x03;
@@ -464,7 +464,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsData)
 {
     constexpr fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
 
-    v2::PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
+    PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -623,7 +623,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
     const std::string name{"name 17"};
     constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
-    v2::PacketRawType expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+    PacketRawType expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -720,7 +720,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
     std::string name(nameLength + 5, 'x');
     constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
-    v2::PacketRawType expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
+    PacketRawType expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -743,7 +743,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
     std::string name(nameLength + 5, 'x');
     constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
-    v2::PacketRawType expected{};
+    PacketRawType expected{};
     std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), v1::NAME));
 
     const auto packet = serializeSaveEffectName(0, name, {effect}).getBytes();
@@ -755,7 +755,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
     constexpr std::uint8_t slot{8};
     constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
 
-    v2::PacketRawType expected = serializeEffectSettings(effect).getBytes();
+    PacketRawType expected = serializeEffectSettings(effect).getBytes();
     expected[v1::FXKNOB] = 0x01;
     expected[v1::SAVE_SLOT] = slot;
     expected[1] = 0x03;
@@ -832,12 +832,12 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
     constexpr fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
     constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
 
-    v2::PacketRawType expected1 = serializeEffectSettings(effect1).getBytes();
+    PacketRawType expected1 = serializeEffectSettings(effect1).getBytes();
     expected1[v1::FXKNOB] = 0x02;
     expected1[v1::SAVE_SLOT] = slot;
     expected1[1] = 0x03;
     expected1[6] = 0x00;
-    v2::PacketRawType expected2 = serializeEffectSettings(effect2).getBytes();
+    PacketRawType expected2 = serializeEffectSettings(effect2).getBytes();
     expected2[v1::FXKNOB] = 0x02;
     expected2[v1::SAVE_SLOT] = slot;
     expected2[1] = 0x03;
@@ -868,7 +868,7 @@ TEST_F(PacketSerializerTest, decodePresetListFromData)
     const auto presetPacket1 = presetNamePacket(name1);
     const auto presetPacket2 = presetNamePacket(name2);
 
-    std::vector<v2::Packet<v2::NamePayload>> data{presetPacket1, emptyData, presetPacket2, emptyData};
+    std::vector<Packet<NamePayload>> data{presetPacket1, emptyData, presetPacket2, emptyData};
 
     const auto result = decodePresetListFromData(data);
     EXPECT_THAT(result, SizeIs(2));
@@ -881,14 +881,14 @@ TEST_F(PacketSerializerTest, decodePresetListLimitsToMaxReceiveSize)
     constexpr std::size_t threshold{143};
     const auto emptyData = presetNameEmptyPacket();
     const auto presetPacket = presetNamePacket("abc");
-    const std::vector<v2::Packet<v2::NamePayload>> names((threshold / 2), presetPacket);
-    std::vector<v2::Packet<v2::NamePayload>> dataReduced;
+    const std::vector<Packet<NamePayload>> names((threshold / 2), presetPacket);
+    std::vector<Packet<NamePayload>> dataReduced;
 
     std::for_each(names.cbegin(), names.cend(), [&dataReduced, &emptyData](const auto& n) {
         dataReduced.push_back(n);
         dataReduced.push_back(emptyData);
     });
-    std::vector<v2::Packet<v2::NamePayload>> dataFull = dataReduced;
+    std::vector<Packet<NamePayload>> dataFull = dataReduced;
     dataFull.insert(dataFull.end(), dataReduced.cbegin(), dataReduced.cend());
 
     EXPECT_THAT(dataFull.size(), Eq(2 * dataReduced.size()));
@@ -906,7 +906,7 @@ TEST_F(PacketSerializerTest, decodePresetListLimitsNameToLength)
     constexpr std::size_t limit{32};
     const std::string name(limit + 10, 'x');
     const auto presetPacket = presetNamePacket(name);
-    std::vector<v2::Packet<v2::NamePayload>> data{presetPacket, emptyData};
+    std::vector<Packet<NamePayload>> data{presetPacket, emptyData};
 
     const auto result = decodePresetListFromData(data);
     EXPECT_THAT(result[0], SizeIs(limit));
@@ -926,7 +926,7 @@ TEST_F(PacketSerializerTest, decodeNameFromData)
     const auto nameEnd = std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
     *nameEnd = '\0';
 
-    const auto result = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
+    const auto result = decodeNameFromData(fromRawData<NamePayload>(data[0]));
     EXPECT_THAT(result, Eq(name));
 }
 
@@ -937,7 +937,7 @@ TEST_F(PacketSerializerTest, decodeNameFromDataLimitsToLength)
     auto data = filledPackage(0xff);
     std::copy(name.cbegin(), name.cend(), std::next(data[0].begin(), 16));
 
-    const auto result = decodeNameFromData(fromRawData<v2::NamePayload>(data[0]));
+    const auto result = decodeNameFromData(fromRawData<NamePayload>(data[0]));
     EXPECT_THAT(result, Eq(name.substr(0, nameLength)));
     EXPECT_THAT(nameLength, Eq(result.size()));
 }
@@ -963,7 +963,7 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
     data[1][v1::BRIGHTNESS] = 0x01;
     data[6][v1::USB_GAIN] = 0xe1;
 
-    const auto result = decodeAmpFromData(fromRawData<v2::AmpPayload>(data[1]), fromRawData<v2::AmpPayload>(data[6]));
+    const auto result = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
     EXPECT_THAT(result.amp_num, Eq(amps::BRITISH_80S));
     EXPECT_THAT(result.gain, Eq(0xaa));
     EXPECT_THAT(result.volume, Eq(0x10));
@@ -1038,7 +1038,7 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
     data[v1::KNOB5] = 0x55;
     data[v1::KNOB6] = 0x66;
     data[v1::EFFECT] = 0x49;
-    v2::Packet<v2::EffectPayload> payload{};
+    Packet<EffectPayload> payload{};
     payload.fromBytes(data);
 
     const auto result = decodeEffectsFromData({{payload, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}});
@@ -1103,8 +1103,8 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
     data[4][v1::FXSLOT] = 0x02;
     data[5][v1::FXSLOT] = 0x03;
 
-    const auto result = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
-                                                fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
+    const auto result = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
+                                                fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::input));
     EXPECT_THAT(result[1].fx_slot, Eq(1));
@@ -1123,8 +1123,8 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
     data[4][v1::FXSLOT] = 0x06;
     data[5][v1::FXSLOT] = 0x07;
 
-    const auto result = decodeEffectsFromData({{fromRawData<v2::EffectPayload>(data[2]), fromRawData<v2::EffectPayload>(data[3]),
-                                                fromRawData<v2::EffectPayload>(data[4]), fromRawData<v2::EffectPayload>(data[5])}});
+    const auto result = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
+                                                fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
     EXPECT_THAT(result[0].fx_slot, Eq(0));
     EXPECT_THAT(result[0].position, Eq(Position::effectsLoop));
     EXPECT_THAT(result[1].fx_slot, Eq(1));
