@@ -31,6 +31,17 @@
 
 namespace plug::com
 {
+    namespace
+    {
+        // amp's VID and PID while in update mode
+        inline constexpr std::uint16_t USB_UPDATE_VID{0x1ed8};
+        inline constexpr std::uint16_t SMALL_AMPS_USB_UPDATE_PID{0x0006};    //Mustang I and II
+        inline constexpr std::uint16_t BIG_AMPS_USB_UPDATE_PID{0x0007};      //Mustang III, IV, V
+        inline constexpr std::uint16_t MINI_USB_UPDATE_PID{0x0011};          //Mustang Mini
+        inline constexpr std::uint16_t FLOOR_USB_UPDATE_PID{0x0013};         //Mustang Floor
+        inline constexpr std::uint16_t SMALL_AMPS_V2_USB_UPDATE_PID{0x0015}; //Mustang I & II V2
+        inline constexpr std::uint16_t BIG_AMPS_V2_USB_UPDATE_PID{0x0017};   //Mustang III+ V2
+    }
 
     namespace
     {
@@ -58,7 +69,6 @@ namespace plug::com
 
     int updateFirmware(const char* filename)
     {
-        using namespace v1;
         int ret, recieved;
         unsigned char array[sizeOfPacket], number = 0;
         FILE* file;
