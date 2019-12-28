@@ -26,6 +26,8 @@
 
 namespace plug::com
 {
+    namespace v1
+    {
     // amp's VID and PID
     inline constexpr std::uint16_t USB_VID{0x1ed8};
     inline constexpr std::uint16_t SMALL_AMPS_USB_PID{0x0004};    //Mustang I and II
@@ -79,4 +81,5 @@ namespace plug::com
     // save fields
     inline constexpr std::size_t SAVE_SLOT{4};
     inline constexpr std::size_t FXKNOB{3};
+    }
 }
