@@ -650,11 +650,12 @@ namespace plug::com
             void fromBytes(const RawType& data)
             {
                 typename Header::RawType headerData{{}};
-                std::copy(data.cbegin(), std::next(data.cbegin(), sizeHeader), headerData.begin());
+                const auto startOfPayload = std::next(data.cbegin(), headerData.size());
+                std::copy(data.cbegin(), startOfPayload, headerData.begin());
                 header.fromBytes(headerData);
 
                 typename Payload::RawType payloadData{{}};
-                std::copy(std::next(data.cbegin(), sizeHeader), data.cend(), payloadData.begin());
+                std::copy(startOfPayload, data.cend(), payloadData.begin());
                 payload.fromBytes(payloadData);
             }
 
