@@ -666,7 +666,5 @@ namespace plug::com
         };
 
     }
-    [[deprecated]] constexpr std::size_t packetSize{64};
-    using Packet [[deprecated]] = std::array<std::uint8_t, v2::packetRawTypeSize>;
 
 }
