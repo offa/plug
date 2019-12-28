@@ -22,7 +22,7 @@
 #include <gmock/gmock.h>
 
 using namespace testing;
-using namespace plug::com::v2;
+using namespace plug::com;
 
 
 class PacketTest : public testing::Test

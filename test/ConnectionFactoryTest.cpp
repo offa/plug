@@ -52,7 +52,7 @@ protected:
 
     mock::UsbMock* usbmock = nullptr;
     libusb_device_handle handle{};
-    static inline constexpr std::uint16_t vid{USB_VID};
+    static inline constexpr std::uint16_t vid{0x1ed8};
 };
 
 TEST_F(ConnectionFactoryTest, createUsbConnectionOpensDevice)

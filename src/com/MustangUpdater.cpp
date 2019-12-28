@@ -31,6 +31,17 @@
 
 namespace plug::com
 {
+    namespace
+    {
+        // amp's VID and PID while in update mode
+        inline constexpr std::uint16_t USB_UPDATE_VID{0x1ed8};
+        inline constexpr std::uint16_t SMALL_AMPS_USB_UPDATE_PID{0x0006};    //Mustang I and II
+        inline constexpr std::uint16_t BIG_AMPS_USB_UPDATE_PID{0x0007};      //Mustang III, IV, V
+        inline constexpr std::uint16_t MINI_USB_UPDATE_PID{0x0011};          //Mustang Mini
+        inline constexpr std::uint16_t FLOOR_USB_UPDATE_PID{0x0013};         //Mustang Floor
+        inline constexpr std::uint16_t SMALL_AMPS_V2_USB_UPDATE_PID{0x0015}; //Mustang I & II V2
+        inline constexpr std::uint16_t BIG_AMPS_V2_USB_UPDATE_PID{0x0017};   //Mustang III+ V2
+    }
 
     namespace
     {
@@ -52,18 +63,14 @@ namespace plug::com
 
 
         inline constexpr std::chrono::milliseconds timeout{500};
-        inline constexpr std::size_t sizeOfPacket = v2::packetRawTypeSize;
+        inline constexpr std::size_t sizeOfPacket = packetRawTypeSize;
     }
 
 
     int updateFirmware(const char* filename)
     {
-        int ret, recieved;
-        unsigned char array[sizeOfPacket], number = 0;
-        FILE* file;
-
         // initialize libusb
-        ret = libusb_init(nullptr);
+        int ret = libusb_init(nullptr);
         if (ret != 0)
         {
             return ret;
@@ -117,15 +124,17 @@ namespace plug::com
             return ret;
         }
 
-        file = fopen(filename, "rb");
+        FILE* file = fopen(filename, "rb");
         // send date when firmware was created
         fseek(file, 0x1a, SEEK_SET);
+        unsigned char array[sizeOfPacket];
         memset(array, 0x00, sizeOfPacket);
         array[0] = 0x02;
         array[1] = 0x03;
         array[2] = 0x01;
         array[3] = 0x06;
         [[maybe_unused]] const auto n = fread(array + 4, 1, 11, file);
+        int recieved{0};
         ret = libusb_interrupt_transfer(amp_hand, 0x01, array, sizeOfPacket, &recieved, timeout.count());
         libusb_interrupt_transfer(amp_hand, 0x81, array, sizeOfPacket, &recieved, timeout.count());
         usleep(10000);
@@ -135,9 +144,10 @@ namespace plug::com
         for (;;)
         {
             memset(array, 0x00, sizeOfPacket);
+            unsigned char number{0};
             array[0] = array[1] = 0x03;
             array[2] = number;
-            number++;
+            ++number;
             array[3] = static_cast<std::uint8_t>(fread(array + 4, 1, sizeOfPacket - 8, file));
             ret = libusb_interrupt_transfer(amp_hand, 0x01, array, sizeOfPacket, &recieved, timeout.count());
             libusb_interrupt_transfer(amp_hand, 0x81, array, sizeOfPacket, &recieved, timeout.count());
