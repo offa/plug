@@ -18,6 +18,8 @@ do
         -cov)
             BUILD_ARGS+=("-DCOVERAGE=ON")
             COVERAGE=true;
+            apt-get install -y --no-install-recommends python3-pip python3-pkg-resources python3-setuptools
+            pip3 install gcovr
             ;;
     esac
 done
@@ -37,7 +39,6 @@ make unittest
 
 if [[ "${COVERAGE}" == true ]]
 then
-    pip install gcovr
     make coverage
 fi
 
