@@ -17,10 +17,6 @@ RUN apt-get install -y --no-install-recommends pkg-config qt5-default libusb-1.0
         cd googletest && \
         mkdir build && cd build && \
         cmake -DCMAKE_CXX_STANDARD=17 .. && \
-        make && make install && \
-        cd ../.. && \
-        apt-get install -y --no-install-recommends libperlio-gzip-perl libjson-perl && \
-        git clone --depth=1 https://github.com/linux-test-project/lcov.git && \
-        cd lcov && make install && \
+        make -j && make install && \
         cd ../.. && rm -rf deps
 
