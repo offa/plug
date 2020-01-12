@@ -2,8 +2,8 @@
 
 set -ex
 
-
-BUILD_ARGS=("-DCMAKE_BUILD_TYPE=Release")
+declare -a BUILD_ARGS
+BUILD_TYPE="Release"
 COVERAGE=false
 
 for arg in "$@"
@@ -18,12 +18,14 @@ do
         -cov)
             BUILD_ARGS+=("-DCOVERAGE=ON")
             COVERAGE=true;
+            BUILD_TYPE="Debug"
             apt-get install -y --no-install-recommends python3-pip python3-pkg-resources python3-setuptools
             pip3 install gcovr
             ;;
     esac
 done
 
+BUILD_ARGS+=("-DCMAKE_BUILD_TYPE=${BUILD_TYPE}")
 
 
 if [[ "${CXX}" == clang* ]]
