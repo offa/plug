@@ -37,6 +37,7 @@ make unittest
 
 if [[ "${COVERAGE}" == true ]]
 then
+    pip install gcovr
     make coverage
 fi
 
