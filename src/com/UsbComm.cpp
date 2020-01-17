@@ -51,7 +51,7 @@ namespace plug::com
 
     UsbComm::~UsbComm()
     {
-        this->close();
+        this->closeAndRelease();
     }
 
     void UsbComm::open(std::uint16_t vid, std::uint16_t pid)
@@ -78,17 +78,7 @@ namespace plug::com
 
     void UsbComm::close()
     {
-        if (handle != nullptr)
-        {
-            if (libusb_release_interface(handle, 0) != LIBUSB_ERROR_NO_DEVICE)
-            {
-                libusb_attach_kernel_driver(handle, 0);
-            }
-
-            libusb_close(handle);
-            libusb_exit(nullptr);
-            handle = nullptr;
-        }
+        closeAndRelease();
     }
 
     bool UsbComm::isOpen() const
@@ -119,6 +109,21 @@ namespace plug::com
         checked(rtn, "Interrupt write failed");
 
         return static_cast<std::size_t>(actualTransfered);
+    }
+
+    void UsbComm::closeAndRelease()
+    {
+        if (handle != nullptr)
+        {
+            if (libusb_release_interface(handle, 0) != LIBUSB_ERROR_NO_DEVICE)
+            {
+                libusb_attach_kernel_driver(handle, 0);
+            }
+
+            libusb_close(handle);
+            libusb_exit(nullptr);
+            handle = nullptr;
+        }
     }
 
     void UsbComm::initInterface()

@@ -33,7 +33,7 @@ namespace plug::com
     {
     public:
         UsbComm();
-        virtual ~UsbComm();
+        ~UsbComm();
 
         void open(std::uint16_t vid, std::uint16_t pid);
         void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids);
@@ -45,6 +45,7 @@ namespace plug::com
 
     private:
         std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
+        void closeAndRelease();
 
         void initInterface();
 
