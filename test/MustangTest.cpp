@@ -493,11 +493,12 @@ TEST_F(MustangTest, setEffectSendsValue)
 {
     constexpr fx_pedal_settings settings{3, effects::OVERDRIVE, 8, 7, 6, 5, 4, 3, Position::input};
     const auto data = serializeEffectSettings(settings).getBytes();
-
+    const PacketRawType clearEffect = serializeClearEffectSettings(settings).getBytes();
 
     InSequence s;
-    // Clear command
-    EXPECT_CALL(*conn, sendImpl(BufferIs(clearCmd), clearCmd.size())).WillOnce(Return(clearCmd.size()));
+
+    // Clear effect command
+    EXPECT_CALL(*conn, sendImpl(BufferIs(clearEffect), clearEffect.size())).WillOnce(Return(clearEffect.size()));
     EXPECT_CALL(*conn, receive(packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     // Apply command
@@ -512,6 +513,23 @@ TEST_F(MustangTest, setEffectSendsValue)
     EXPECT_CALL(*conn, sendImpl(BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
     EXPECT_CALL(*conn, receive(packetRawTypeSize)).WillOnce(Return(ignoreData));
 
+    m->set_effect(settings);
+}
+
+TEST_F(MustangTest, setEffectDoesNotSendValueIfDisabled)
+{
+    constexpr fx_pedal_settings settings{3, effects::OVERDRIVE, 8, 7, 6, 5, 4, 3, Position::input, false};
+    const PacketRawType clearEffect = serializeClearEffectSettings(settings).getBytes();
+
+    InSequence s;
+
+    // Clear effect command
+    EXPECT_CALL(*conn, sendImpl(BufferIs(clearEffect), clearEffect.size())).WillOnce(Return(clearEffect.size()));
+    EXPECT_CALL(*conn, receive(packetRawTypeSize)).WillOnce(Return(ignoreData));
+
+    // Apply command
+    EXPECT_CALL(*conn, sendImpl(BufferIs(applyCmd), applyCmd.size())).WillOnce(Return(applyCmd.size()));
+    EXPECT_CALL(*conn, receive(packetRawTypeSize)).WillOnce(Return(ignoreData));
 
     m->set_effect(settings);
 }

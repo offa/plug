@@ -65,5 +65,6 @@ namespace plug
         std::uint8_t knob5;
         std::uint8_t knob6;
         Position position;
+        bool enabled{true};
     };
 }

@@ -92,6 +92,7 @@ namespace plug
           knob5(0),
           knob6(0),
           position(Position::input),
+          enabled(true),
           changed(false)
     {
         ui->setupUi(this);
@@ -1683,6 +1684,7 @@ namespace plug
         pedal.knob4 = knob4;
         pedal.knob5 = knob5;
         pedal.knob6 = knob6;
+        pedal.enabled = enabled;
 
         dynamic_cast<MainWindow*>(parent())->set_effect(pedal);
     }
@@ -1718,6 +1720,7 @@ namespace plug
     {
         if (value)
         {
+            enabled = false;
             ui->pushButton->setText(tr("On"));
             ui->comboBox->setDisabled(true);
             ui->setButton->setDisabled(true);
@@ -1741,7 +1744,6 @@ namespace plug
             ui->label_5->setDisabled(true);
             ui->label_6->setDisabled(true);
             ui->label_7->setDisabled(true);
-            effect_num = effects::EMPTY;
             temp1 = windowTitle();
             temp2 = accessibleName();
             setWindowTitle(tr("FX%1: OFF").arg(fx_slot + 1));
@@ -1749,6 +1751,7 @@ namespace plug
         }
         else
         {
+            enabled = true;
             ui->pushButton->setText(tr("Off"));
             ui->comboBox->setDisabled(false);
             ui->setButton->setDisabled(false);

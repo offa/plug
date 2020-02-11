@@ -99,11 +99,11 @@ namespace plug::com
 
     void Mustang::set_effect(fx_pedal_settings value)
     {
-        const auto clearEffectPacket = serializeClearEffectSettings();
+        const auto clearEffectPacket = serializeClearEffectSettings(value);
         sendCommand(*conn, clearEffectPacket.getBytes());
         sendApplyCommand(*conn);
 
-        if (value.effect_num != effects::EMPTY)
+        if ((value.enabled == true) && (value.effect_num != effects::EMPTY))
         {
             const auto settingsPacket = serializeEffectSettings(value);
             sendCommand(*conn, settingsPacket.getBytes());

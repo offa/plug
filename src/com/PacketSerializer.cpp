@@ -558,6 +558,16 @@ namespace plug::com
         return applyCommand;
     }
 
+    Packet<EffectPayload> serializeClearEffectSettings(fx_pedal_settings effect)
+    {
+        auto clearEffectPacket = serializeClearEffectSettings();
+        const auto dspWorkaround = serializeEffectSettings(effect);
+        auto header = clearEffectPacket.getHeader();
+        header.setDSP(dspWorkaround.getHeader().getDSP());
+        clearEffectPacket.setHeader(header);
+        return clearEffectPacket;
+    }
+
     Packet<NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
     {
         const std::size_t repeat = getSaveEffectsRepeats(effects);
