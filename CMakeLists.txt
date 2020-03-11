@@ -46,6 +46,7 @@ include(ClangFormat)
 add_compile_options(-Wall
                     -Wextra
                     -pedantic
+                    -pedantic-errors
                     -Werror
                     -Wshadow
                     -Wold-style-cast
