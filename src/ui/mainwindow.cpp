@@ -254,7 +254,7 @@ namespace plug
         {
             amp->show();
         }
-        for (int i = 0; i < 4; i++)
+        for (std::size_t i = 0; i < 4; i++)
         {
             switch (effects_set[i].fx_slot)
             {
@@ -449,7 +449,7 @@ namespace plug
         }
 
         current_name = name;
-        presetNames[slot] = current_name.toStdString();
+        presetNames[static_cast<std::size_t>(slot)] = current_name.toStdString();
     }
 
     void MainWindow::load_from_amp(int slot)

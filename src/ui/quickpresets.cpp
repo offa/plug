@@ -47,8 +47,8 @@ namespace plug
 
     void QuickPresets::load_names(const std::vector<std::string>& names)
     {
-        int i;
         QSettings settings;
+        std::size_t i = 0;
 
         for (i = 0; i < 100; i++)
         {
