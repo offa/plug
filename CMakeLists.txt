@@ -50,6 +50,9 @@ add_compile_options(-Wall
                     -Werror
                     -Wshadow
                     -Wold-style-cast
+                    -Wnull-dereference
+                    -Wnon-virtual-dtor
+                    -Woverloaded-virtual
                     )
 
 set(CMAKE_CXX_STANDARD 17)
