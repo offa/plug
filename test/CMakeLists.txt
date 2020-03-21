@@ -1,5 +1,10 @@
 find_package(GTest REQUIRED)
 
+# #192 – Workaround for broken GTest
+if( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+    target_compile_options(GTest::GTest INTERFACE -Wno-gnu-zero-variadic-macro-arguments)
+endif()
+
 add_library(TestLibs INTERFACE)
 target_link_libraries(TestLibs INTERFACE
                         GTest::GTest
@@ -53,4 +58,3 @@ add_custom_target(unittest MustangTest
                         COMMENT "Running unittests\n\n"
                         VERBATIM
                         )
-
