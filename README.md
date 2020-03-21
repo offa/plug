@@ -14,16 +14,6 @@ Software for Fender Mustang Amps. This is a fork of [piorekf's Plug](https://bit
 Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project.
 
 
-## Goals
-
-- Port to *Modern C++*
-- Port to Qt5
-- CMake support
-- Modernization and Improvements
-- Unit Test Suite
-- Moving to Git
-
-
 ## Requirements
 
 - [**CMake**](https://www.cmake.org/)
@@ -81,6 +71,3 @@ Thanks to [piorekf and all Plug contributors](https://bitbucket.org/piorekf/plug
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
