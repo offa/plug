@@ -40,6 +40,7 @@ protected:
     {
     }
 
+    [[nodiscard]]
     std::array<PacketRawType, 7> filledPackage(std::uint8_t value) const
     {
         PacketRawType packet{};
@@ -49,6 +50,7 @@ protected:
         return data;
     };
 
+    [[nodiscard]]
     Packet<AmpPayload> ampPackage(std::uint8_t ampId) const
     {
         AmpPayload payload{};
@@ -60,6 +62,7 @@ protected:
         return packet;
     };
 
+    [[nodiscard]]
     Packet<AmpPayload> cabinetPackage(std::uint8_t cabinetId) const
     {
         AmpPayload payload{};
@@ -71,6 +74,7 @@ protected:
         return packet;
     };
 
+    [[nodiscard]]
     std::array<Packet<EffectPayload>, 4> effectPackage(std::uint8_t effectId) const
     {
         EffectPayload payload{};
@@ -82,6 +86,7 @@ protected:
         return {{packet, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}};
     };
 
+    [[nodiscard]]
     Packet<NamePayload> presetNameEmptyPacket() const
     {
         NamePayload payload{};
@@ -90,6 +95,7 @@ protected:
         return packet;
     }
 
+    [[nodiscard]]
     Packet<NamePayload> presetNamePacket(std::string_view name) const
     {
         NamePayload payload{};

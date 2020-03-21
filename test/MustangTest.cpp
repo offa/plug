@@ -49,12 +49,14 @@ protected:
     {
     }
 
+    [[nodiscard]]
     std::vector<std::uint8_t> createEmptyPacketData() const
     {
         return std::vector<std::uint8_t>(packetRawTypeSize, 0x00);
     }
 
     template <class Container>
+    [[nodiscard]]
     auto asBuffer(const Container& c) const
     {
         return std::vector<std::uint8_t>{std::cbegin(c), std::cend(c)};
