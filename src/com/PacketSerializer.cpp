@@ -578,12 +578,18 @@ namespace plug::com
 
     Packet<EffectPayload> serializeClearEffectSettings(fx_pedal_settings effect)
     {
-        auto clearEffectPacket = serializeClearEffectSettings();
-        const auto dspWorkaround = serializeEffectSettings(effect);
-        auto header = clearEffectPacket.getHeader();
-        header.setDSP(dspWorkaround.getHeader().getDSP());
-        clearEffectPacket.setHeader(header);
-        return clearEffectPacket;
+        Header h{};
+        h.setStage(Stage::ready);
+        h.setType(Type::data);
+        h.setDSP(dspFromEffect(effect.effect_num));
+        h.setUnknown(0x00, 0x01, 0x01);
+        EffectPayload payload{};
+        payload.setUnknown(0x00, 0x08, 0x01);
+
+        Packet<EffectPayload> applyCommand{};
+        applyCommand.setHeader(h);
+        applyCommand.setPayload(payload);
+        return applyCommand;
     }
 
     Packet<NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)

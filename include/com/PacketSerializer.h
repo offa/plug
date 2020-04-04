@@ -50,6 +50,7 @@ namespace plug::com
     Packet<AmpPayload> serializeAmpSettingsUsbGain(const amp_settings& value);
     Packet<NamePayload> serializeName(std::uint8_t slot, std::string_view name);
     Packet<EffectPayload> serializeEffectSettings(const fx_pedal_settings& value);
+    [[deprecated("Use serializeClearEffectSettings(effect) instead")]]
     Packet<EffectPayload> serializeClearEffectSettings();
     Packet<EffectPayload> serializeClearEffectSettings(fx_pedal_settings effect);
     Packet<NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
