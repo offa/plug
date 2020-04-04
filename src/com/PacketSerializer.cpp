@@ -86,6 +86,60 @@ namespace plug::com
             return size;
         }
 
+
+        constexpr DSP dspFromEffect(effects effect)
+        {
+            switch (effect)
+            {
+                case effects::OVERDRIVE:
+                case effects::WAH:
+                case effects::TOUCH_WAH:
+                case effects::FUZZ:
+                case effects::FUZZ_TOUCH_WAH:
+                case effects::SIMPLE_COMP:
+                case effects::COMPRESSOR:
+                    return DSP::effect0;
+
+                case effects::SINE_CHORUS:
+                case effects::TRIANGLE_CHORUS:
+                case effects::SINE_FLANGER:
+                case effects::TRIANGLE_FLANGER:
+                case effects::VIBRATONE:
+                case effects::VINTAGE_TREMOLO:
+                case effects::SINE_TREMOLO:
+                case effects::RING_MODULATOR:
+                case effects::STEP_FILTER:
+                case effects::PHASER:
+                case effects::PITCH_SHIFTER:
+                    return DSP::effect1;
+
+                case effects::MONO_DELAY:
+                case effects::MONO_ECHO_FILTER:
+                case effects::STEREO_ECHO_FILTER:
+                case effects::MULTITAP_DELAY:
+                case effects::PING_PONG_DELAY:
+                case effects::DUCKING_DELAY:
+                case effects::REVERSE_DELAY:
+                case effects::TAPE_DELAY:
+                case effects::STEREO_TAPE_DELAY:
+                    return DSP::effect2;
+
+                case effects::SMALL_HALL_REVERB:
+                case effects::LARGE_HALL_REVERB:
+                case effects::SMALL_ROOM_REVERB:
+                case effects::LARGE_ROOM_REVERB:
+                case effects::SMALL_PLATE_REVERB:
+                case effects::LARGE_PLATE_REVERB:
+                case effects::AMBIENT_REVERB:
+                case effects::ARENA_REVERB:
+                case effects::FENDER_63_SPRING_REVERB:
+                case effects::FENDER_65_SPRING_REVERB:
+                    return DSP::effect3;
+
+                default:
+                    return DSP::none;
+            }
+        }
     }
 
 
@@ -299,6 +353,7 @@ namespace plug::com
         header.setStage(Stage::ready);
         header.setType(Type::data);
         header.setUnknown(0x00, 0x01, 0x01);
+        header.setDSP(dspFromEffect(value.effect_num));
 
         EffectPayload payload{};
         payload.setSlot(getSlot(value));
@@ -317,34 +372,28 @@ namespace plug::com
         switch (value.effect_num)
         {
             case effects::OVERDRIVE:
-                header.setDSP(DSP::effect0);
                 payload.setModel(0x3c);
                 break;
 
             case effects::WAH:
-                header.setDSP(DSP::effect0);
                 payload.setModel(0x49);
                 payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::TOUCH_WAH:
-                header.setDSP(DSP::effect0);
                 payload.setModel(0x4a);
                 payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::FUZZ:
-                header.setDSP(DSP::effect0);
                 payload.setModel(0x1a);
                 break;
 
             case effects::FUZZ_TOUCH_WAH:
-                header.setDSP(DSP::effect0);
                 payload.setModel(0x1c);
                 break;
 
             case effects::SIMPLE_COMP:
-                header.setDSP(DSP::effect0);
                 payload.setModel(0x88);
                 payload.setKnob1(clampToRange<std::uint8_t, 0x03>(value.knob1));
                 payload.setKnob2(0x00);
@@ -355,180 +404,149 @@ namespace plug::com
                 break;
 
             case effects::COMPRESSOR:
-                header.setDSP(DSP::effect0);
                 payload.setModel(0x07);
                 break;
 
             case effects::SINE_CHORUS:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x12);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::TRIANGLE_CHORUS:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x13);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::SINE_FLANGER:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x18);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::TRIANGLE_FLANGER:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x19);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::VIBRATONE:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x2d);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::VINTAGE_TREMOLO:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x40);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::SINE_TREMOLO:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x41);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::RING_MODULATOR:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x22);
                 payload.setKnob4(clampToRange<std::uint8_t, 0x01>(value.knob4));
                 payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::STEP_FILTER:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x29);
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::PHASER:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x4f);
                 payload.setKnob5(clampToRange<std::uint8_t, 0x01>(value.knob5));
                 payload.setUnknown(0x01, 0x01, 0x01);
                 break;
 
             case effects::PITCH_SHIFTER:
-                header.setDSP(DSP::effect1);
                 payload.setModel(0x1f);
                 payload.setUnknown(0x01, 0x08, 0x01);
                 break;
 
             case effects::MONO_DELAY:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x16);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::MONO_ECHO_FILTER:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x43);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::STEREO_ECHO_FILTER:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x48);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::MULTITAP_DELAY:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x44);
                 payload.setKnob5(clampToRange<std::uint8_t, 0x03>(value.knob5));
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::PING_PONG_DELAY:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x45);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::DUCKING_DELAY:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x15);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::REVERSE_DELAY:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x46);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::TAPE_DELAY:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x2b);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::STEREO_TAPE_DELAY:
-                header.setDSP(DSP::effect2);
                 payload.setModel(0x2a);
                 payload.setUnknown(0x02, 0x01, 0x01);
                 break;
 
             case effects::SMALL_HALL_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x24);
                 break;
 
             case effects::LARGE_HALL_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x3a);
                 break;
 
             case effects::SMALL_ROOM_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x26);
                 break;
 
             case effects::LARGE_ROOM_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x3b);
                 break;
 
             case effects::SMALL_PLATE_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x4e);
                 break;
 
             case effects::LARGE_PLATE_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x4b);
                 break;
 
             case effects::AMBIENT_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x4c);
                 break;
 
             case effects::ARENA_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x4d);
                 break;
 
             case effects::FENDER_63_SPRING_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x21);
                 break;
 
             case effects::FENDER_65_SPRING_REVERB:
-                header.setDSP(DSP::effect3);
                 payload.setModel(0x0b);
                 break;
 
