@@ -404,10 +404,10 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
     EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
 }
 
-TEST_F(PacketSerializerTest, serializeClearEffectsSettingsDataForSpecificEffect)
+TEST_F(PacketSerializerTest, serializeClearEffectsSettingsData)
 {
-    constexpr fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
-    const PacketRawType expected{{0x1c, 0x03, 0x06, 0x00, 0x00, 0x00, 0x01, 0x01,
+    constexpr fx_pedal_settings settings{10, effects::VINTAGE_TREMOLO, 11, 22, 33, 44, 55, 66, Position::input};
+    const PacketRawType expected{{0x1c, 0x03, 0x07, 0x00, 0x00, 0x00, 0x01, 0x01,
                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                   0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -417,7 +417,7 @@ TEST_F(PacketSerializerTest, serializeClearEffectsSettingsDataForSpecificEffect)
                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
     const auto packet = serializeClearEffectSettings(settings);
-    EXPECT_THAT(packet.getBytes()[2], Eq(0x06));
+    EXPECT_THAT(packet.getBytes()[2], Eq(0x07));
     EXPECT_THAT(packet.getBytes(), ContainerEq(expected));
 }
 
