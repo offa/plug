@@ -70,7 +70,6 @@ protected:
     const std::vector<std::uint8_t> ignoreAmpData = [] { std::vector<std::uint8_t> d(packetRawTypeSize, 0x00); d[ampPos] = 0x5e; return d; }();
     const PacketRawType loadCmd = serializeLoadCommand().getBytes();
     const PacketRawType applyCmd = serializeApplyCommand().getBytes();
-    const PacketRawType clearCmd = serializeClearEffectSettings().getBytes();
     static inline constexpr std::size_t presetPacketCountShort{48};
     static inline constexpr std::size_t presetPacketCountFull{200};
     static inline constexpr int slot{5};
@@ -537,6 +536,7 @@ TEST_F(MustangTest, setEffectDoesNotSendValueIfDisabled)
 TEST_F(MustangTest, setEffectClearsEffectIfEmptyEffect)
 {
     constexpr fx_pedal_settings settings{2, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+    const PacketRawType clearCmd = serializeClearEffectSettings(settings).getBytes();
 
 
     InSequence s;

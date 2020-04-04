@@ -560,22 +560,6 @@ namespace plug::com
         return packet;
     }
 
-    Packet<EffectPayload> serializeClearEffectSettings()
-    {
-        Header h{};
-        h.setStage(Stage::ready);
-        h.setType(Type::data);
-        h.setDSP(DSP::none);
-        h.setUnknown(0x00, 0x01, 0x01);
-        EffectPayload payload{};
-        payload.setUnknown(0x00, 0x08, 0x01);
-
-        Packet<EffectPayload> applyCommand{};
-        applyCommand.setHeader(h);
-        applyCommand.setPayload(payload);
-        return applyCommand;
-    }
-
     Packet<EffectPayload> serializeClearEffectSettings(fx_pedal_settings effect)
     {
         Header h{};
