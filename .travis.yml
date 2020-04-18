@@ -12,6 +12,7 @@ env:
 
 jobs:
     include:
+    - env: COMPILER=gcc-10 ANALYSE="-asan -ubsan"
     - env: COMPILER=gcc-9 ANALYSE="-asan -ubsan"
     - env: COMPILER=gcc-8 ANALYSE="-asan -ubsan"
     - env: COMPILER=gcc-7 ANALYSE="-asan -ubsan"
