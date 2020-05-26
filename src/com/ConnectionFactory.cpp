@@ -32,6 +32,7 @@ namespace plug::com
         {
             inline constexpr std::uint16_t smallAmps{0x0004};   //Mustang I and II
             inline constexpr std::uint16_t bigAmps{0x0005};     //Mustang III, IV and V
+            inline constexpr std::uint16_t broncoAmps{0x000a};  //Mustang Bronco
             inline constexpr std::uint16_t miniAmps{0x0010};    //Mustang Mini
             inline constexpr std::uint16_t floorAmps{0x0012};   //Mustang Floor
             inline constexpr std::uint16_t smallAmpsV2{0x0014}; //Mustang II (and I?) V2
@@ -41,6 +42,7 @@ namespace plug::com
         inline constexpr std::initializer_list<std::uint16_t> pids{
             usbPID::smallAmps,
             usbPID::bigAmps,
+            usbPID::broncoAmps,
             usbPID::miniAmps,
             usbPID::floorAmps,
             usbPID::smallAmpsV2,
