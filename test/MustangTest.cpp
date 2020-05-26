@@ -22,7 +22,6 @@
 #include "com/Packet.h"
 #include "com/PacketSerializer.h"
 #include "com/CommunicationException.h"
-#include "helper/PacketConstants.h"
 #include "mocks/MockConnection.h"
 #include "matcher/Matcher.h"
 #include "matcher/TypeMatcher.h"
@@ -33,7 +32,6 @@ using namespace plug;
 using namespace plug::com;
 using namespace test;
 using namespace test::matcher;
-using namespace test::constants;
 using namespace testing;
 
 class MustangTest : public testing::Test
@@ -67,7 +65,7 @@ protected:
     std::unique_ptr<com::Mustang> m;
     const std::vector<std::uint8_t> noData{};
     const std::vector<std::uint8_t> ignoreData = std::vector<std::uint8_t>(packetRawTypeSize);
-    const std::vector<std::uint8_t> ignoreAmpData = [] { std::vector<std::uint8_t> d(packetRawTypeSize, 0x00); d[ampPos] = 0x5e; return d; }();
+    const std::vector<std::uint8_t> ignoreAmpData = [] { std::vector<std::uint8_t> d(packetRawTypeSize, 0x00); d[16] = 0x5e; return d; }();
     const PacketRawType loadCmd = serializeLoadCommand().getBytes();
     const PacketRawType applyCmd = serializeApplyCommand().getBytes();
     static inline constexpr std::size_t presetPacketCountShort{48};
