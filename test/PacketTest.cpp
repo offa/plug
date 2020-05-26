@@ -37,12 +37,16 @@ TEST_F(PacketTest, packetFormat)
     EffectPayload pl{};
     pl.setKnob3(3);
 
-    Packet<EffectPayload> p{};
-    p.setHeader(h);
-    p.setPayload(pl);
+    const Packet<EffectPayload> p{h, pl};
+    Packet<EffectPayload> p2{};
+    p2.setHeader(h);
+    p2.setPayload(pl);
+
 
     EXPECT_THAT(p.getHeader().getBytes(), ContainerEq(h.getBytes()));
     EXPECT_THAT(p.getPayload().getBytes(), ContainerEq(pl.getBytes()));
+    EXPECT_THAT(p2.getHeader().getBytes(), ContainerEq(h.getBytes()));
+    EXPECT_THAT(p2.getPayload().getBytes(), ContainerEq(pl.getBytes()));
 }
 
 TEST_F(PacketTest, packetFromData)
