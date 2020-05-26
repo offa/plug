@@ -20,7 +20,7 @@
 
 #include "com/Mustang.h"
 #include "com/ConnectionFactory.h"
-#include "version.h"
+#include "Version.h"
 #include <iostream>
 
 int main()

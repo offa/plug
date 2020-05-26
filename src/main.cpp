@@ -20,7 +20,7 @@
  */
 
 #include "ui/mainwindow.h"
-#include "version.h"
+#include "Version.h"
 #include <QApplication>
 
 int main(int argc, char* argv[])
