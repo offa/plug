@@ -239,6 +239,16 @@ namespace plug::com
     public:
         using RawType = std::array<std::uint8_t, sizePayload>;
 
+        RawType getBytes() const
+        {
+            return bytes;
+        }
+
+        void fromBytes(const RawType& data)
+        {
+            bytes = data;
+        }
+
     protected:
         RawType bytes{{}};
     };
@@ -246,10 +256,6 @@ namespace plug::com
     class EmptyPayload : public PayloadBase
     {
     public:
-        RawType getBytes() const
-        {
-            return bytes;
-        }
     };
 
     class NamePayload : public PayloadBase
@@ -269,16 +275,6 @@ namespace plug::com
             const auto maxEnd = std::next(bytes.cbegin(), nameLength);
 
             return std::string(bytes.cbegin(), std::min(end, maxEnd));
-        }
-
-        RawType getBytes() const
-        {
-            return bytes;
-        }
-
-        void fromBytes(const RawType& data)
-        {
-            bytes = data;
         }
     };
 
@@ -370,16 +366,6 @@ namespace plug::com
             bytes[3] = value0;
             bytes[4] = value1;
             bytes[5] = value2;
-        }
-
-        RawType getBytes() const
-        {
-            return bytes;
-        }
-
-        void fromBytes(const RawType& data)
-        {
-            bytes = data;
         }
     };
 
@@ -576,17 +562,6 @@ namespace plug::com
         {
             return bytes[0];
         }
-
-        RawType getBytes() const
-        {
-            return bytes;
-        }
-
-        void fromBytes(const RawType& data)
-        {
-            bytes = data;
-        }
-
     };
 
 
