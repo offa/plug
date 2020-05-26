@@ -28,6 +28,7 @@ using namespace plug::com;
 class PacketTest : public testing::Test
 {
 protected:
+    static inline constexpr std::size_t sizePayload{48};
 };
 
 TEST_F(PacketTest, packetFormat)

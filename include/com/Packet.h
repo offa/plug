@@ -28,9 +28,6 @@
 
 namespace plug::com
 {
-    constexpr std::size_t sizeHeader{16};
-    constexpr std::size_t sizePayload{48};
-
     enum class DSP
     {
         none,
@@ -65,7 +62,7 @@ namespace plug::com
     class Header
     {
     public:
-        using RawType = std::array<std::uint8_t, sizeHeader>;
+        using RawType = std::array<std::uint8_t, 16>;
 
 
         Header()
@@ -237,7 +234,7 @@ namespace plug::com
     class PayloadBase
     {
     public:
-        using RawType = std::array<std::uint8_t, sizePayload>;
+        using RawType = std::array<std::uint8_t, 48>;
 
         RawType getBytes() const
         {
