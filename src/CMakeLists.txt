@@ -1,7 +1,7 @@
 add_subdirectory(com)
 add_subdirectory(ui)
 
-add_executable(plug main.cpp)
+add_executable(plug Main.cpp)
 target_link_libraries(plug
                         PRIVATE
                             plug-version
@@ -14,4 +14,3 @@ target_link_libraries(plug
                         )
 
 install(TARGETS plug EXPORT plug-config DESTINATION bin)
-
