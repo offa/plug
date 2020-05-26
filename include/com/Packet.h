@@ -234,9 +234,13 @@ namespace plug::com
     };
 
 
-    struct PayloadBase
+    class PayloadBase
     {
+    public:
         using RawType = std::array<std::uint8_t, sizePayload>;
+
+    protected:
+        RawType bytes{{}};
     };
 
     class EmptyPayload : public PayloadBase
@@ -246,9 +250,6 @@ namespace plug::com
         {
             return bytes;
         }
-
-    private:
-        RawType bytes{{}};
     };
 
     class NamePayload : public PayloadBase
@@ -279,9 +280,6 @@ namespace plug::com
         {
             bytes = data;
         }
-
-    private:
-        RawType bytes{{}};
     };
 
     class EffectPayload : public PayloadBase
@@ -383,9 +381,6 @@ namespace plug::com
         {
             bytes = data;
         }
-
-    private:
-        RawType bytes{{}};
     };
 
 
@@ -592,9 +587,6 @@ namespace plug::com
             bytes = data;
         }
 
-
-    private:
-        RawType bytes{{}};
     };
 
 
