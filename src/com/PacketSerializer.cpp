@@ -306,10 +306,7 @@ namespace plug::com
                 break;
         }
 
-        Packet<AmpPayload> packet{};
-        packet.setHeader(header);
-        packet.setPayload(payload);
-        return packet;
+        return Packet<AmpPayload>{header, payload};
     }
 
     Packet<AmpPayload> serializeAmpSettingsUsbGain(const amp_settings& value)
@@ -323,10 +320,7 @@ namespace plug::com
         AmpPayload payload{};
         payload.setUsbGain(value.usb_gain);
 
-        Packet<AmpPayload> packet{};
-        packet.setHeader(header);
-        packet.setPayload(payload);
-        return packet;
+        return Packet<AmpPayload>{header, payload};
     }
 
     Packet<NamePayload> serializeName(std::uint8_t slot, std::string_view name)
@@ -341,10 +335,7 @@ namespace plug::com
         NamePayload payload{};
         payload.setName(name);
 
-        Packet<NamePayload> packet{};
-        packet.setHeader(header);
-        packet.setPayload(payload);
-        return packet;
+        return Packet<NamePayload>{header, payload};
     }
 
     Packet<EffectPayload> serializeEffectSettings(const fx_pedal_settings& value)
@@ -554,26 +545,20 @@ namespace plug::com
                 break;
         }
 
-        Packet<EffectPayload> packet{};
-        packet.setHeader(header);
-        packet.setPayload(payload);
-        return packet;
+        return Packet<EffectPayload>{header, payload};
     }
 
     Packet<EffectPayload> serializeClearEffectSettings(fx_pedal_settings effect)
     {
-        Header h{};
-        h.setStage(Stage::ready);
-        h.setType(Type::data);
-        h.setDSP(dspFromEffect(effect.effect_num));
-        h.setUnknown(0x00, 0x01, 0x01);
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::data);
+        header.setDSP(dspFromEffect(effect.effect_num));
+        header.setUnknown(0x00, 0x01, 0x01);
         EffectPayload payload{};
         payload.setUnknown(0x00, 0x08, 0x01);
 
-        Packet<EffectPayload> applyCommand{};
-        applyCommand.setHeader(h);
-        applyCommand.setPayload(payload);
-        return applyCommand;
+        return Packet<EffectPayload>{header, payload};
     }
 
     Packet<NamePayload> serializeSaveEffectName(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
@@ -599,10 +584,7 @@ namespace plug::com
         NamePayload payload{};
         payload.setName(name.substr(0, nameLength));
 
-        Packet<NamePayload> packet{};
-        packet.setHeader(header);
-        packet.setPayload(payload);
-        return packet;
+        return Packet<NamePayload>{header, payload};
     }
 
     std::vector<Packet<EffectPayload>> serializeSaveEffectPacket(std::uint8_t slot, const std::vector<fx_pedal_settings>& effects)
@@ -642,10 +624,7 @@ namespace plug::com
         h.setSlot(slot);
         h.setUnknown(0x00, 0x01, 0x00);
 
-        Packet<EmptyPayload> loadCommand{};
-        loadCommand.setHeader(h);
-        loadCommand.setPayload(EmptyPayload{});
-        return loadCommand;
+        return Packet<EmptyPayload>{h, EmptyPayload{}};
     }
 
     Packet<EmptyPayload> serializeLoadCommand()
@@ -654,10 +633,7 @@ namespace plug::com
         h.setStage(Stage::unknown);
         h.setType(Type::load);
         h.setDSP(DSP::none);
-        Packet<EmptyPayload> loadCommand{};
-        loadCommand.setHeader(h);
-        loadCommand.setPayload(EmptyPayload{});
-        return loadCommand;
+        return Packet<EmptyPayload>{h, EmptyPayload{}};
     }
 
     Packet<EmptyPayload> serializeApplyCommand()
@@ -666,10 +642,7 @@ namespace plug::com
         h.setStage(Stage::ready);
         h.setType(Type::data);
         h.setDSP(DSP::none);
-        Packet<EmptyPayload> applyCommand{};
-        applyCommand.setHeader(h);
-        applyCommand.setPayload(EmptyPayload{});
-        return applyCommand;
+        return Packet<EmptyPayload>{h, EmptyPayload{}};
     }
 
     Packet<EmptyPayload> serializeApplyCommand(fx_pedal_settings effect)
@@ -687,17 +660,13 @@ namespace plug::com
         h0.setStage(Stage::init0);
         h0.setType(Type::init0);
         h0.setDSP(DSP::none);
-        Packet<EmptyPayload> p0{};
-        p0.setHeader(h0);
-        p0.setPayload(EmptyPayload{});
+        Packet<EmptyPayload> p0{h0, EmptyPayload{}};
 
         Header h1{};
         h1.setStage(Stage::init1);
         h1.setType(Type::init1);
         h1.setDSP(DSP::none);
-        Packet<EmptyPayload> p1{};
-        p1.setHeader(h1);
-        p1.setPayload(EmptyPayload{});
+        Packet<EmptyPayload> p1{h1, EmptyPayload{}};
 
         return {{p0, p1}};
     }

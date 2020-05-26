@@ -614,6 +614,14 @@ namespace plug::com
     public:
         using RawType = PacketRawType;
 
+        Packet(Header h, Payload p)
+            : header(h), payload(p)
+        {
+        }
+
+        Packet()
+        {
+        }
 
         void setHeader(Header h)
         {
