@@ -20,7 +20,6 @@
 
 #include "com/ConnectionFactory.h"
 #include "com/UsbComm.h"
-#include "com/MustangConstants.h"
 
 namespace plug::com
 {

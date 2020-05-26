@@ -23,7 +23,6 @@
 
 #include "data_structs.h"
 #include "effects_enum.h"
-#include "com/MustangConstants.h"
 #include "com/Packet.h"
 #include <string>
 #include <vector>

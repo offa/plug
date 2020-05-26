@@ -20,7 +20,6 @@
 
 #include "com/ConnectionFactory.h"
 #include "com/CommunicationException.h"
-#include "com/MustangConstants.h"
 #include "mocks/LibUsbMocks.h"
 #include <gmock/gmock.h>
 
