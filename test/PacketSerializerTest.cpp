@@ -21,6 +21,7 @@
 #include "com/PacketSerializer.h"
 #include "data_structs.h"
 #include "matcher/PacketMatcher.h"
+#include "helper/MustangConstants.h"
 #include <gmock/gmock.h>
 
 using namespace plug;
