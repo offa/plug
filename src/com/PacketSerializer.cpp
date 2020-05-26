@@ -617,32 +617,32 @@ namespace plug::com
 
     Packet<EmptyPayload> serializeLoadSlotCommand(std::uint8_t slot)
     {
-        Header h{};
-        h.setStage(Stage::ready);
-        h.setType(Type::operation);
-        h.setDSP(DSP::opSelectMemBank);
-        h.setSlot(slot);
-        h.setUnknown(0x00, 0x01, 0x00);
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::operation);
+        header.setDSP(DSP::opSelectMemBank);
+        header.setSlot(slot);
+        header.setUnknown(0x00, 0x01, 0x00);
 
-        return Packet<EmptyPayload>{h, EmptyPayload{}};
+        return Packet<EmptyPayload>{header, EmptyPayload{}};
     }
 
     Packet<EmptyPayload> serializeLoadCommand()
     {
-        Header h{};
-        h.setStage(Stage::unknown);
-        h.setType(Type::load);
-        h.setDSP(DSP::none);
-        return Packet<EmptyPayload>{h, EmptyPayload{}};
+        Header header{};
+        header.setStage(Stage::unknown);
+        header.setType(Type::load);
+        header.setDSP(DSP::none);
+        return Packet<EmptyPayload>{header, EmptyPayload{}};
     }
 
     Packet<EmptyPayload> serializeApplyCommand()
     {
-        Header h{};
-        h.setStage(Stage::ready);
-        h.setType(Type::data);
-        h.setDSP(DSP::none);
-        return Packet<EmptyPayload>{h, EmptyPayload{}};
+        Header header{};
+        header.setStage(Stage::ready);
+        header.setType(Type::data);
+        header.setDSP(DSP::none);
+        return Packet<EmptyPayload>{header, EmptyPayload{}};
     }
 
     Packet<EmptyPayload> serializeApplyCommand(fx_pedal_settings effect)
@@ -656,18 +656,15 @@ namespace plug::com
 
     std::array<Packet<EmptyPayload>, 2> serializeInitCommand()
     {
-        Header h0{};
-        h0.setStage(Stage::init0);
-        h0.setType(Type::init0);
-        h0.setDSP(DSP::none);
-        Packet<EmptyPayload> p0{h0, EmptyPayload{}};
+        Header header0{};
+        header0.setStage(Stage::init0);
+        header0.setType(Type::init0);
+        header0.setDSP(DSP::none);
 
-        Header h1{};
-        h1.setStage(Stage::init1);
-        h1.setType(Type::init1);
-        h1.setDSP(DSP::none);
-        Packet<EmptyPayload> p1{h1, EmptyPayload{}};
-
-        return {{p0, p1}};
+        Header header1{};
+        header1.setStage(Stage::init1);
+        header1.setType(Type::init1);
+        header1.setDSP(DSP::none);
+        return {{Packet<EmptyPayload>{header0, EmptyPayload{}}, Packet<EmptyPayload>{header1, EmptyPayload{}}}};
     }
 }
