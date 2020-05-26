@@ -80,10 +80,7 @@ TEST_F(PacketTest, packetBytes)
     const auto headerBytes = h.getBytes();
     const auto payloadBytes = pl.getBytes();
 
-    Packet<EffectPayload> p{};
-    p.setHeader(h);
-    p.setPayload(pl);
-
+    const Packet<EffectPayload> p{h, pl};
     std::array<std::uint8_t, 64> expected{{}};
     const auto itr = std::copy(headerBytes.cbegin(), headerBytes.cend(), expected.begin());
     std::copy(payloadBytes.cbegin(), payloadBytes.cend(), itr);
