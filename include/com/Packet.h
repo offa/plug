@@ -234,12 +234,14 @@ namespace plug::com
     };
 
 
-    class EmptyPayload
+    struct PayloadBase
+    {
+        using RawType = std::array<std::uint8_t, sizePayload>;
+    };
+
+    class EmptyPayload : public PayloadBase
     {
     public:
-        using RawType = std::array<std::uint8_t, sizePayload>;
-
-
         RawType getBytes() const
         {
             return bytes;
@@ -249,12 +251,9 @@ namespace plug::com
         RawType bytes{{}};
     };
 
-    class NamePayload
+    class NamePayload : public PayloadBase
     {
     public:
-        using RawType = std::array<std::uint8_t, sizePayload>;
-
-
         void setName(std::string_view name)
         {
             constexpr std::size_t nameLength{32};
@@ -285,12 +284,9 @@ namespace plug::com
         RawType bytes{{}};
     };
 
-    class EffectPayload
+    class EffectPayload : public PayloadBase
     {
     public:
-        using RawType = std::array<std::uint8_t, sizePayload>;
-
-
         void setKnob1(std::uint8_t value)
         {
             bytes[16] = value;
@@ -393,12 +389,9 @@ namespace plug::com
     };
 
 
-    class AmpPayload
+    class AmpPayload : public PayloadBase
     {
     public:
-        using RawType = std::array<std::uint8_t, sizePayload>;
-
-
         AmpPayload()
         {
         }
