@@ -66,7 +66,7 @@ clang-6:
     - script/ci_build.sh -asan -ubsan
 
 coverage:
-  image: ${DOCKER_IMG}/gcc-8:latest
+  image: ${DOCKER_IMG}/gcc-10:latest
   stage: build
   script:
     - script/ci_build.sh -cov
