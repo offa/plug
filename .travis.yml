@@ -21,7 +21,6 @@ jobs:
     - env: COMPILER=clang-8 ANALYSE="-asan -ubsan"
     - env: COMPILER=clang-7 ANALYSE="-asan" # UBSan disabled, see #129
     - env: COMPILER=clang-6 ANALYSE="-asan -ubsan"
-    - env: COMPILER=clang-5 ANALYSE="-asan -ubsan"
     - env: COMPILER=gcc-8 ANALYSE="-cov"
 
 
