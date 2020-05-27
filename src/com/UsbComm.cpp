@@ -68,7 +68,7 @@ namespace plug::com
             return (handle != nullptr);
         });
 
-        if (handle == nullptr)
+        if (isOpen() == false)
         {
             throw CommunicationException{"Failed to open usb device"};
         }
@@ -113,7 +113,7 @@ namespace plug::com
 
     void UsbComm::closeAndRelease()
     {
-        if (handle != nullptr)
+        if (isOpen())
         {
             if (libusb_release_interface(handle, 0) != LIBUSB_ERROR_NO_DEVICE)
             {
