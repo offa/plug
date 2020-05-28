@@ -281,43 +281,43 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 {
-    constexpr auto create = [](amps a) {
-        return amp_settings{a, 0, 0, 0, 0, 0, cabinets::cab2x12C, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
+    auto serializeWithType = [](amps a) {
+        return serializeAmpSettings(amp_settings{a, 0, 0, 0, 0, 0, cabinets::cab2x12C, 0, 0, 0, 0, 0, 0, 0, 0, false, 0}).getBytes();
     };
 
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_DELUXE)).getBytes(), AmpDataIs(0x67, 0x80, 0x01, 0x53));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_59_BASSMAN)).getBytes(), AmpDataIs(0x64, 0x80, 0x02, 0x67));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_57_CHAMP)).getBytes(), AmpDataIs(0x7c, 0x80, 0x0c, 0x00));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_DELUXE_REVERB)).getBytes(), AmpDataIs(0x53, 0x00, 0x03, 0x6a));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_PRINCETON)).getBytes(), AmpDataIs(0x6a, 0x80, 0x04, 0x61));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_65_TWIN_REVERB)).getBytes(), AmpDataIs(0x75, 0x80, 0x05, 0x72));
-    EXPECT_THAT(serializeAmpSettings(create(amps::FENDER_SUPER_SONIC)).getBytes(), AmpDataIs(0x72, 0x80, 0x06, 0x79));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_60S)).getBytes(), AmpDataIs(0x61, 0x80, 0x07, 0x5e));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_70S)).getBytes(), AmpDataIs(0x79, 0x80, 0x0b, 0x7c));
-    EXPECT_THAT(serializeAmpSettings(create(amps::BRITISH_80S)).getBytes(), AmpDataIs(0x5e, 0x80, 0x09, 0x5d));
-    EXPECT_THAT(serializeAmpSettings(create(amps::AMERICAN_90S)).getBytes(), AmpDataIs(0x5d, 0x80, 0x0a, 0x6d));
-    EXPECT_THAT(serializeAmpSettings(create(amps::METAL_2000)).getBytes(), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
+    EXPECT_THAT(serializeWithType(amps::FENDER_57_DELUXE), AmpDataIs(0x67, 0x80, 0x01, 0x53));
+    EXPECT_THAT(serializeWithType(amps::FENDER_59_BASSMAN), AmpDataIs(0x64, 0x80, 0x02, 0x67));
+    EXPECT_THAT(serializeWithType(amps::FENDER_57_CHAMP), AmpDataIs(0x7c, 0x80, 0x0c, 0x00));
+    EXPECT_THAT(serializeWithType(amps::FENDER_65_DELUXE_REVERB), AmpDataIs(0x53, 0x00, 0x03, 0x6a));
+    EXPECT_THAT(serializeWithType(amps::FENDER_65_PRINCETON), AmpDataIs(0x6a, 0x80, 0x04, 0x61));
+    EXPECT_THAT(serializeWithType(amps::FENDER_65_TWIN_REVERB), AmpDataIs(0x75, 0x80, 0x05, 0x72));
+    EXPECT_THAT(serializeWithType(amps::FENDER_SUPER_SONIC), AmpDataIs(0x72, 0x80, 0x06, 0x79));
+    EXPECT_THAT(serializeWithType(amps::BRITISH_60S), AmpDataIs(0x61, 0x80, 0x07, 0x5e));
+    EXPECT_THAT(serializeWithType(amps::BRITISH_70S), AmpDataIs(0x79, 0x80, 0x0b, 0x7c));
+    EXPECT_THAT(serializeWithType(amps::BRITISH_80S), AmpDataIs(0x5e, 0x80, 0x09, 0x5d));
+    EXPECT_THAT(serializeWithType(amps::AMERICAN_90S), AmpDataIs(0x5d, 0x80, 0x0a, 0x6d));
+    EXPECT_THAT(serializeWithType(amps::METAL_2000), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
 {
-    constexpr auto create = [](cabinets c) {
-        return amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0};
+    auto serializeWithType = [](cabinets c) {
+        return serializeAmpSettings(amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0}).getBytes();
     };
 
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::OFF)).getBytes(), CabinetDataIs(0x00));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab57DLX)).getBytes(), CabinetDataIs(0x01));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabBSSMN)).getBytes(), CabinetDataIs(0x02));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65DLX)).getBytes(), CabinetDataIs(0x03));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65PRN)).getBytes(), CabinetDataIs(0x04));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabCHAMP)).getBytes(), CabinetDataIs(0x05));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12M)).getBytes(), CabinetDataIs(0x06));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab2x12C)).getBytes(), CabinetDataIs(0x07));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12G)).getBytes(), CabinetDataIs(0x08));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab65TWN)).getBytes(), CabinetDataIs(0x09));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cab4x12V)).getBytes(), CabinetDataIs(0x0a));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS212)).getBytes(), CabinetDataIs(0x0b));
-    EXPECT_THAT(serializeAmpSettings(create(cabinets::cabSS112)).getBytes(), CabinetDataIs(0x0c));
+    EXPECT_THAT(serializeWithType(cabinets::OFF), CabinetDataIs(0x00));
+    EXPECT_THAT(serializeWithType(cabinets::cab57DLX), CabinetDataIs(0x01));
+    EXPECT_THAT(serializeWithType(cabinets::cabBSSMN), CabinetDataIs(0x02));
+    EXPECT_THAT(serializeWithType(cabinets::cab65DLX), CabinetDataIs(0x03));
+    EXPECT_THAT(serializeWithType(cabinets::cab65PRN), CabinetDataIs(0x04));
+    EXPECT_THAT(serializeWithType(cabinets::cabCHAMP), CabinetDataIs(0x05));
+    EXPECT_THAT(serializeWithType(cabinets::cab4x12M), CabinetDataIs(0x06));
+    EXPECT_THAT(serializeWithType(cabinets::cab2x12C), CabinetDataIs(0x07));
+    EXPECT_THAT(serializeWithType(cabinets::cab4x12G), CabinetDataIs(0x08));
+    EXPECT_THAT(serializeWithType(cabinets::cab65TWN), CabinetDataIs(0x09));
+    EXPECT_THAT(serializeWithType(cabinets::cab4x12V), CabinetDataIs(0x0a));
+    EXPECT_THAT(serializeWithType(cabinets::cabSS212), CabinetDataIs(0x0b));
+    EXPECT_THAT(serializeWithType(cabinets::cabSS112), CabinetDataIs(0x0c));
 }
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsLimitSagData)
@@ -523,14 +523,14 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
 {
-    constexpr auto create = [](effects e, std::uint8_t knob6) {
-        return fx_pedal_settings{100, e, 0, 0, 0, 0, 0, knob6, Position::input};
+    auto serializeWithType = [](effects e, std::uint8_t knob6) {
+        return serializeEffectSettings(fx_pedal_settings{100, e, 0, 0, 0, 0, 0, knob6, Position::input}).getBytes();
     };
 
-    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_ECHO_FILTER, 1)).getBytes()[v1::KNOB6], Eq(1));
-    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_ECHO_FILTER, 2)).getBytes()[v1::KNOB6], Eq(2));
-    EXPECT_THAT(serializeEffectSettings(create(effects::TAPE_DELAY, 3)).getBytes()[v1::KNOB6], Eq(3));
-    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_TAPE_DELAY, 4)).getBytes()[v1::KNOB6], Eq(4));
+    EXPECT_THAT(serializeWithType(effects::MONO_ECHO_FILTER, 1)[v1::KNOB6], Eq(1));
+    EXPECT_THAT(serializeWithType(effects::STEREO_ECHO_FILTER, 2)[v1::KNOB6], Eq(2));
+    EXPECT_THAT(serializeWithType(effects::TAPE_DELAY, 3)[v1::KNOB6], Eq(3));
+    EXPECT_THAT(serializeWithType(effects::STEREO_TAPE_DELAY, 4)[v1::KNOB6], Eq(4));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
@@ -540,50 +540,50 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     constexpr std::uint8_t dsp2{0x08};
     constexpr std::uint8_t dsp3{0x09};
 
-    constexpr auto create = [](effects e) {
-        return fx_pedal_settings{100, e, 1, 2, 3, 4, 5, 6, Position::input};
+    auto serializeWithType = [](effects e) {
+        return serializeEffectSettings(fx_pedal_settings{100, e, 1, 2, 3, 4, 5, 6, Position::input}).getBytes();
     };
 
-    EXPECT_THAT(serializeEffectSettings(create(effects::OVERDRIVE)).getBytes(), EffectDataIs(dsp0, 0x3c, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::WAH)).getBytes(), EffectDataIs(dsp0, 0x49, 0x01, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::TOUCH_WAH)).getBytes(), EffectDataIs(dsp0, 0x4a, 0x01, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::FUZZ)).getBytes(), EffectDataIs(dsp0, 0x1a, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::FUZZ_TOUCH_WAH)).getBytes(), EffectDataIs(dsp0, 0x1c, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::SIMPLE_COMP)).getBytes(), EffectDataIs(dsp0, 0x88, 0x08, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::COMPRESSOR)).getBytes(), EffectDataIs(dsp0, 0x07, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::OVERDRIVE), EffectDataIs(dsp0, 0x3c, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::WAH), EffectDataIs(dsp0, 0x49, 0x01, 0x08));
+    EXPECT_THAT(serializeWithType(effects::TOUCH_WAH), EffectDataIs(dsp0, 0x4a, 0x01, 0x08));
+    EXPECT_THAT(serializeWithType(effects::FUZZ), EffectDataIs(dsp0, 0x1a, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::FUZZ_TOUCH_WAH), EffectDataIs(dsp0, 0x1c, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SIMPLE_COMP), EffectDataIs(dsp0, 0x88, 0x08, 0x08));
+    EXPECT_THAT(serializeWithType(effects::COMPRESSOR), EffectDataIs(dsp0, 0x07, 0x00, 0x08));
 
-    EXPECT_THAT(serializeEffectSettings(create(effects::SINE_CHORUS)).getBytes(), EffectDataIs(dsp1, 0x12, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::TRIANGLE_CHORUS)).getBytes(), EffectDataIs(dsp1, 0x13, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::SINE_FLANGER)).getBytes(), EffectDataIs(dsp1, 0x18, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::TRIANGLE_FLANGER)).getBytes(), EffectDataIs(dsp1, 0x19, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::VIBRATONE)).getBytes(), EffectDataIs(dsp1, 0x2d, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::VINTAGE_TREMOLO)).getBytes(), EffectDataIs(dsp1, 0x40, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::SINE_TREMOLO)).getBytes(), EffectDataIs(dsp1, 0x41, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::RING_MODULATOR)).getBytes(), EffectDataIs(dsp1, 0x22, 0x01, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::STEP_FILTER)).getBytes(), EffectDataIs(dsp1, 0x29, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::PHASER)).getBytes(), EffectDataIs(dsp1, 0x4f, 0x01, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::PITCH_SHIFTER)).getBytes(), EffectDataIs(dsp1, 0x1f, 0x01, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SINE_CHORUS), EffectDataIs(dsp1, 0x12, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::TRIANGLE_CHORUS), EffectDataIs(dsp1, 0x13, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::SINE_FLANGER), EffectDataIs(dsp1, 0x18, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::TRIANGLE_FLANGER), EffectDataIs(dsp1, 0x19, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::VIBRATONE), EffectDataIs(dsp1, 0x2d, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::VINTAGE_TREMOLO), EffectDataIs(dsp1, 0x40, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::SINE_TREMOLO), EffectDataIs(dsp1, 0x41, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::RING_MODULATOR), EffectDataIs(dsp1, 0x22, 0x01, 0x08));
+    EXPECT_THAT(serializeWithType(effects::STEP_FILTER), EffectDataIs(dsp1, 0x29, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::PHASER), EffectDataIs(dsp1, 0x4f, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::PITCH_SHIFTER), EffectDataIs(dsp1, 0x1f, 0x01, 0x08));
 
-    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_DELAY)).getBytes(), EffectDataIs(dsp2, 0x16, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::MONO_ECHO_FILTER)).getBytes(), EffectDataIs(dsp2, 0x43, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_ECHO_FILTER)).getBytes(), EffectDataIs(dsp2, 0x48, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::MULTITAP_DELAY)).getBytes(), EffectDataIs(dsp2, 0x44, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::PING_PONG_DELAY)).getBytes(), EffectDataIs(dsp2, 0x45, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::DUCKING_DELAY)).getBytes(), EffectDataIs(dsp2, 0x15, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::REVERSE_DELAY)).getBytes(), EffectDataIs(dsp2, 0x46, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::TAPE_DELAY)).getBytes(), EffectDataIs(dsp2, 0x2b, 0x02, 0x01));
-    EXPECT_THAT(serializeEffectSettings(create(effects::STEREO_TAPE_DELAY)).getBytes(), EffectDataIs(dsp2, 0x2a, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::MONO_DELAY), EffectDataIs(dsp2, 0x16, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::MONO_ECHO_FILTER), EffectDataIs(dsp2, 0x43, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::STEREO_ECHO_FILTER), EffectDataIs(dsp2, 0x48, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::MULTITAP_DELAY), EffectDataIs(dsp2, 0x44, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::PING_PONG_DELAY), EffectDataIs(dsp2, 0x45, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::DUCKING_DELAY), EffectDataIs(dsp2, 0x15, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::REVERSE_DELAY), EffectDataIs(dsp2, 0x46, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::TAPE_DELAY), EffectDataIs(dsp2, 0x2b, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::STEREO_TAPE_DELAY), EffectDataIs(dsp2, 0x2a, 0x02, 0x01));
 
-    EXPECT_THAT(serializeEffectSettings(create(effects::SMALL_HALL_REVERB)).getBytes(), EffectDataIs(dsp3, 0x24, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::LARGE_HALL_REVERB)).getBytes(), EffectDataIs(dsp3, 0x3a, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::SMALL_ROOM_REVERB)).getBytes(), EffectDataIs(dsp3, 0x26, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::LARGE_ROOM_REVERB)).getBytes(), EffectDataIs(dsp3, 0x3b, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::SMALL_PLATE_REVERB)).getBytes(), EffectDataIs(dsp3, 0x4e, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::LARGE_PLATE_REVERB)).getBytes(), EffectDataIs(dsp3, 0x4b, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::AMBIENT_REVERB)).getBytes(), EffectDataIs(dsp3, 0x4c, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::ARENA_REVERB)).getBytes(), EffectDataIs(dsp3, 0x4d, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::FENDER_63_SPRING_REVERB)).getBytes(), EffectDataIs(dsp3, 0x21, 0x00, 0x08));
-    EXPECT_THAT(serializeEffectSettings(create(effects::FENDER_65_SPRING_REVERB)).getBytes(), EffectDataIs(dsp3, 0x0b, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SMALL_HALL_REVERB), EffectDataIs(dsp3, 0x24, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::LARGE_HALL_REVERB), EffectDataIs(dsp3, 0x3a, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SMALL_ROOM_REVERB), EffectDataIs(dsp3, 0x26, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::LARGE_ROOM_REVERB), EffectDataIs(dsp3, 0x3b, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SMALL_PLATE_REVERB), EffectDataIs(dsp3, 0x4e, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::LARGE_PLATE_REVERB), EffectDataIs(dsp3, 0x4b, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::AMBIENT_REVERB), EffectDataIs(dsp3, 0x4c, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::ARENA_REVERB), EffectDataIs(dsp3, 0x4d, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::FENDER_63_SPRING_REVERB), EffectDataIs(dsp3, 0x21, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::FENDER_65_SPRING_REVERB), EffectDataIs(dsp3, 0x0b, 0x00, 0x08));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompKnobSetting)
@@ -650,64 +650,58 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameFxKnobData)
 {
-    constexpr std::uint8_t slot{8};
-    const std::string name{"ignore"};
-
-    constexpr auto create = [](effects e) -> std::vector<fx_pedal_settings> {
-        return {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}};
+    auto serializeWithType = [](effects e) {
+        return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}}).getBytes();
     };
 
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SINE_CHORUS)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::TRIANGLE_CHORUS)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SINE_FLANGER)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::TRIANGLE_FLANGER)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::VIBRATONE)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::VINTAGE_TREMOLO)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SINE_TREMOLO)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::RING_MODULATOR)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::STEP_FILTER)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::PHASER)).getBytes(), FxKnobIs(0x01));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::PITCH_SHIFTER)).getBytes(), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::SINE_CHORUS), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::TRIANGLE_CHORUS), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::SINE_FLANGER), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::TRIANGLE_FLANGER), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::VIBRATONE), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::VINTAGE_TREMOLO), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::SINE_TREMOLO), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::RING_MODULATOR), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::STEP_FILTER), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::PHASER), FxKnobIs(0x01));
+    EXPECT_THAT(serializeWithType(effects::PITCH_SHIFTER), FxKnobIs(0x01));
 
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::MONO_DELAY)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::MONO_ECHO_FILTER)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::STEREO_ECHO_FILTER)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::MULTITAP_DELAY)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::PING_PONG_DELAY)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::DUCKING_DELAY)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::REVERSE_DELAY)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::TAPE_DELAY)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::STEREO_TAPE_DELAY)).getBytes(), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::MONO_DELAY), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::MONO_ECHO_FILTER), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::STEREO_ECHO_FILTER), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::MULTITAP_DELAY), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::PING_PONG_DELAY), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::DUCKING_DELAY), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::REVERSE_DELAY), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::TAPE_DELAY), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::STEREO_TAPE_DELAY), FxKnobIs(0x02));
 
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SMALL_HALL_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::LARGE_HALL_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SMALL_ROOM_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::LARGE_ROOM_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::SMALL_PLATE_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::LARGE_PLATE_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::AMBIENT_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::ARENA_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::FENDER_63_SPRING_REVERB)).getBytes(), FxKnobIs(0x02));
-    EXPECT_THAT(serializeSaveEffectName(slot, name, create(effects::FENDER_65_SPRING_REVERB)).getBytes(), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::SMALL_HALL_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::LARGE_HALL_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::SMALL_ROOM_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::LARGE_ROOM_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::SMALL_PLATE_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::LARGE_PLATE_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::AMBIENT_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::ARENA_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::FENDER_63_SPRING_REVERB), FxKnobIs(0x02));
+    EXPECT_THAT(serializeWithType(effects::FENDER_65_SPRING_REVERB), FxKnobIs(0x02));
 }
 
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameThrowsOnInvalidEffect)
 {
-    constexpr std::uint8_t slot{8};
-    const std::string name{"ignore"};
-
-    constexpr auto create = [](effects e) -> std::vector<fx_pedal_settings> {
-        return {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}};
+    auto serializeInvalid = [](effects e) {
+        return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}}).getBytes();
     };
 
-    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::OVERDRIVE)).getBytes(), std::invalid_argument);
-    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::WAH)).getBytes(), std::invalid_argument);
-    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::TOUCH_WAH)).getBytes(), std::invalid_argument);
-    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::FUZZ)).getBytes(), std::invalid_argument);
-    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::FUZZ_TOUCH_WAH)).getBytes(), std::invalid_argument);
-    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::SIMPLE_COMP)).getBytes(), std::invalid_argument);
-    EXPECT_THROW(serializeSaveEffectName(slot, name, create(effects::COMPRESSOR)).getBytes(), std::invalid_argument);
+    EXPECT_THROW(serializeInvalid(effects::OVERDRIVE), std::invalid_argument);
+    EXPECT_THROW(serializeInvalid(effects::WAH), std::invalid_argument);
+    EXPECT_THROW(serializeInvalid(effects::TOUCH_WAH), std::invalid_argument);
+    EXPECT_THROW(serializeInvalid(effects::FUZZ), std::invalid_argument);
+    EXPECT_THROW(serializeInvalid(effects::FUZZ_TOUCH_WAH), std::invalid_argument);
+    EXPECT_THROW(serializeInvalid(effects::SIMPLE_COMP), std::invalid_argument);
+    EXPECT_THROW(serializeInvalid(effects::COMPRESSOR), std::invalid_argument);
 }
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameSetsFxKnobOfFirstEffect)
@@ -795,44 +789,43 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSetsEffectValues)
 {
-    constexpr std::uint8_t slot{9};
-
-    constexpr auto createEffect = [](effects e) {
-        return fx_pedal_settings{slot, e, 1, 2, 3, 4, 5, 6, Position::input};
+    auto serializeWithType = [](effects e) {
+        constexpr std::uint8_t slot{9};
+        return serializeSaveEffectPacket(slot, {fx_pedal_settings{slot, e, 1, 2, 3, 4, 5, 6, Position::input}})[0].getBytes();
     };
 
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SINE_CHORUS)})[0].getBytes(), EffectDataIs(0x07, 0x12, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::TRIANGLE_CHORUS)})[0].getBytes(), EffectDataIs(0x07, 0x13, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SINE_FLANGER)})[0].getBytes(), EffectDataIs(0x07, 0x18, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::TRIANGLE_FLANGER)})[0].getBytes(), EffectDataIs(0x07, 0x19, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::VIBRATONE)})[0].getBytes(), EffectDataIs(0x07, 0x2d, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::VINTAGE_TREMOLO)})[0].getBytes(), EffectDataIs(0x07, 0x40, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SINE_TREMOLO)})[0].getBytes(), EffectDataIs(0x07, 0x41, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::RING_MODULATOR)})[0].getBytes(), EffectDataIs(0x07, 0x22, 0x01, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::STEP_FILTER)})[0].getBytes(), EffectDataIs(0x07, 0x29, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::PHASER)})[0].getBytes(), EffectDataIs(0x07, 0x4f, 0x01, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::PITCH_SHIFTER)})[0].getBytes(), EffectDataIs(0x07, 0x1f, 0x01, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SINE_CHORUS), EffectDataIs(0x07, 0x12, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::TRIANGLE_CHORUS), EffectDataIs(0x07, 0x13, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::SINE_FLANGER), EffectDataIs(0x07, 0x18, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::TRIANGLE_FLANGER), EffectDataIs(0x07, 0x19, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::VIBRATONE), EffectDataIs(0x07, 0x2d, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::VINTAGE_TREMOLO), EffectDataIs(0x07, 0x40, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::SINE_TREMOLO), EffectDataIs(0x07, 0x41, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::RING_MODULATOR), EffectDataIs(0x07, 0x22, 0x01, 0x08));
+    EXPECT_THAT(serializeWithType(effects::STEP_FILTER), EffectDataIs(0x07, 0x29, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::PHASER), EffectDataIs(0x07, 0x4f, 0x01, 0x01));
+    EXPECT_THAT(serializeWithType(effects::PITCH_SHIFTER), EffectDataIs(0x07, 0x1f, 0x01, 0x08));
 
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::MONO_DELAY)})[0].getBytes(), EffectDataIs(0x08, 0x16, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::MONO_ECHO_FILTER)})[0].getBytes(), EffectDataIs(0x08, 0x43, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::STEREO_ECHO_FILTER)})[0].getBytes(), EffectDataIs(0x08, 0x48, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::MULTITAP_DELAY)})[0].getBytes(), EffectDataIs(0x08, 0x44, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::PING_PONG_DELAY)})[0].getBytes(), EffectDataIs(0x08, 0x45, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::DUCKING_DELAY)})[0].getBytes(), EffectDataIs(0x08, 0x15, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::REVERSE_DELAY)})[0].getBytes(), EffectDataIs(0x08, 0x46, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::TAPE_DELAY)})[0].getBytes(), EffectDataIs(0x08, 0x2b, 0x02, 0x01));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::STEREO_TAPE_DELAY)})[0].getBytes(), EffectDataIs(0x08, 0x2a, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::MONO_DELAY), EffectDataIs(0x08, 0x16, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::MONO_ECHO_FILTER), EffectDataIs(0x08, 0x43, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::STEREO_ECHO_FILTER), EffectDataIs(0x08, 0x48, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::MULTITAP_DELAY), EffectDataIs(0x08, 0x44, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::PING_PONG_DELAY), EffectDataIs(0x08, 0x45, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::DUCKING_DELAY), EffectDataIs(0x08, 0x15, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::REVERSE_DELAY), EffectDataIs(0x08, 0x46, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::TAPE_DELAY), EffectDataIs(0x08, 0x2b, 0x02, 0x01));
+    EXPECT_THAT(serializeWithType(effects::STEREO_TAPE_DELAY), EffectDataIs(0x08, 0x2a, 0x02, 0x01));
 
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SMALL_HALL_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x24, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::LARGE_HALL_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x3a, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SMALL_ROOM_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x26, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::LARGE_ROOM_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x3b, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::SMALL_PLATE_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x4e, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::LARGE_PLATE_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x4b, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::AMBIENT_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x4c, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::ARENA_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x4d, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::FENDER_63_SPRING_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x21, 0x00, 0x08));
-    EXPECT_THAT(serializeSaveEffectPacket(slot, {createEffect(effects::FENDER_65_SPRING_REVERB)})[0].getBytes(), EffectDataIs(0x09, 0x0b, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SMALL_HALL_REVERB), EffectDataIs(0x09, 0x24, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::LARGE_HALL_REVERB), EffectDataIs(0x09, 0x3a, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SMALL_ROOM_REVERB), EffectDataIs(0x09, 0x26, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::LARGE_ROOM_REVERB), EffectDataIs(0x09, 0x3b, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::SMALL_PLATE_REVERB), EffectDataIs(0x09, 0x4e, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::LARGE_PLATE_REVERB), EffectDataIs(0x09, 0x4b, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::AMBIENT_REVERB), EffectDataIs(0x09, 0x4c, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::ARENA_REVERB), EffectDataIs(0x09, 0x4d, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::FENDER_63_SPRING_REVERB), EffectDataIs(0x09, 0x21, 0x00, 0x08));
+    EXPECT_THAT(serializeWithType(effects::FENDER_65_SPRING_REVERB), EffectDataIs(0x09, 0x0b, 0x00, 0x08));
 }
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffectsData)
@@ -994,18 +987,22 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataAmps)
 {
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x67), emptyAmpPayload).amp_num, Eq(amps::FENDER_57_DELUXE));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x64), emptyAmpPayload).amp_num, Eq(amps::FENDER_59_BASSMAN));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x7c), emptyAmpPayload).amp_num, Eq(amps::FENDER_57_CHAMP));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x53), emptyAmpPayload).amp_num, Eq(amps::FENDER_65_DELUXE_REVERB));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6a), emptyAmpPayload).amp_num, Eq(amps::FENDER_65_PRINCETON));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x75), emptyAmpPayload).amp_num, Eq(amps::FENDER_65_TWIN_REVERB));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x72), emptyAmpPayload).amp_num, Eq(amps::FENDER_SUPER_SONIC));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x61), emptyAmpPayload).amp_num, Eq(amps::BRITISH_60S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x79), emptyAmpPayload).amp_num, Eq(amps::BRITISH_70S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5e), emptyAmpPayload).amp_num, Eq(amps::BRITISH_80S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x5d), emptyAmpPayload).amp_num, Eq(amps::AMERICAN_90S));
-    EXPECT_THAT(decodeAmpFromData(ampPackage(0x6d), emptyAmpPayload).amp_num, Eq(amps::METAL_2000));
+    auto decodeWithId = [this](const auto id) {
+        return decodeAmpFromData(ampPackage(id), emptyAmpPayload).amp_num;
+    };
+
+    EXPECT_THAT(decodeWithId(0x67), Eq(amps::FENDER_57_DELUXE));
+    EXPECT_THAT(decodeWithId(0x64), Eq(amps::FENDER_59_BASSMAN));
+    EXPECT_THAT(decodeWithId(0x7c), Eq(amps::FENDER_57_CHAMP));
+    EXPECT_THAT(decodeWithId(0x53), Eq(amps::FENDER_65_DELUXE_REVERB));
+    EXPECT_THAT(decodeWithId(0x6a), Eq(amps::FENDER_65_PRINCETON));
+    EXPECT_THAT(decodeWithId(0x75), Eq(amps::FENDER_65_TWIN_REVERB));
+    EXPECT_THAT(decodeWithId(0x72), Eq(amps::FENDER_SUPER_SONIC));
+    EXPECT_THAT(decodeWithId(0x61), Eq(amps::BRITISH_60S));
+    EXPECT_THAT(decodeWithId(0x79), Eq(amps::BRITISH_70S));
+    EXPECT_THAT(decodeWithId(0x5e), Eq(amps::BRITISH_80S));
+    EXPECT_THAT(decodeWithId(0x5d), Eq(amps::AMERICAN_90S));
+    EXPECT_THAT(decodeWithId(0x6d), Eq(amps::METAL_2000));
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidAmpId)
@@ -1015,19 +1012,22 @@ TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidAmpId)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataCabinets)
 {
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x00), emptyAmpPayload).cabinet, Eq(cabinets::OFF));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x01), emptyAmpPayload).cabinet, Eq(cabinets::cab57DLX));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x02), emptyAmpPayload).cabinet, Eq(cabinets::cabBSSMN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x03), emptyAmpPayload).cabinet, Eq(cabinets::cab65DLX));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x04), emptyAmpPayload).cabinet, Eq(cabinets::cab65PRN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x05), emptyAmpPayload).cabinet, Eq(cabinets::cabCHAMP));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x06), emptyAmpPayload).cabinet, Eq(cabinets::cab4x12M));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x07), emptyAmpPayload).cabinet, Eq(cabinets::cab2x12C));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x08), emptyAmpPayload).cabinet, Eq(cabinets::cab4x12G));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x09), emptyAmpPayload).cabinet, Eq(cabinets::cab65TWN));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0a), emptyAmpPayload).cabinet, Eq(cabinets::cab4x12V));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0b), emptyAmpPayload).cabinet, Eq(cabinets::cabSS212));
-    EXPECT_THAT(decodeAmpFromData(cabinetPackage(0x0c), emptyAmpPayload).cabinet, Eq(cabinets::cabSS112));
+    auto decodeWithId = [this](const auto id) {
+        return decodeAmpFromData(cabinetPackage(id), emptyAmpPayload).cabinet;
+    };
+    EXPECT_THAT(decodeWithId(0x00), Eq(cabinets::OFF));
+    EXPECT_THAT(decodeWithId(0x01), Eq(cabinets::cab57DLX));
+    EXPECT_THAT(decodeWithId(0x02), Eq(cabinets::cabBSSMN));
+    EXPECT_THAT(decodeWithId(0x03), Eq(cabinets::cab65DLX));
+    EXPECT_THAT(decodeWithId(0x04), Eq(cabinets::cab65PRN));
+    EXPECT_THAT(decodeWithId(0x05), Eq(cabinets::cabCHAMP));
+    EXPECT_THAT(decodeWithId(0x06), Eq(cabinets::cab4x12M));
+    EXPECT_THAT(decodeWithId(0x07), Eq(cabinets::cab2x12C));
+    EXPECT_THAT(decodeWithId(0x08), Eq(cabinets::cab4x12G));
+    EXPECT_THAT(decodeWithId(0x09), Eq(cabinets::cab65TWN));
+    EXPECT_THAT(decodeWithId(0x0a), Eq(cabinets::cab4x12V));
+    EXPECT_THAT(decodeWithId(0x0b), Eq(cabinets::cabSS212));
+    EXPECT_THAT(decodeWithId(0x0c), Eq(cabinets::cabSS112));
 }
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidCabinetId)
@@ -1064,44 +1064,47 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
 {
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x00))[1].effect_num, Eq(effects::EMPTY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x3c))[1].effect_num, Eq(effects::OVERDRIVE));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x49))[1].effect_num, Eq(effects::WAH));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4a))[1].effect_num, Eq(effects::TOUCH_WAH));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x1a))[1].effect_num, Eq(effects::FUZZ));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x1c))[1].effect_num, Eq(effects::FUZZ_TOUCH_WAH));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x88))[1].effect_num, Eq(effects::SIMPLE_COMP));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x07))[1].effect_num, Eq(effects::COMPRESSOR));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x12))[1].effect_num, Eq(effects::SINE_CHORUS));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x13))[1].effect_num, Eq(effects::TRIANGLE_CHORUS));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x18))[1].effect_num, Eq(effects::SINE_FLANGER));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x19))[1].effect_num, Eq(effects::TRIANGLE_FLANGER));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x2d))[1].effect_num, Eq(effects::VIBRATONE));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x40))[1].effect_num, Eq(effects::VINTAGE_TREMOLO));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x41))[1].effect_num, Eq(effects::SINE_TREMOLO));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x22))[1].effect_num, Eq(effects::RING_MODULATOR));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x29))[1].effect_num, Eq(effects::STEP_FILTER));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4f))[1].effect_num, Eq(effects::PHASER));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x1f))[1].effect_num, Eq(effects::PITCH_SHIFTER));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x16))[1].effect_num, Eq(effects::MONO_DELAY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x43))[1].effect_num, Eq(effects::MONO_ECHO_FILTER));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x48))[1].effect_num, Eq(effects::STEREO_ECHO_FILTER));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x44))[1].effect_num, Eq(effects::MULTITAP_DELAY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x45))[1].effect_num, Eq(effects::PING_PONG_DELAY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x15))[1].effect_num, Eq(effects::DUCKING_DELAY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x46))[1].effect_num, Eq(effects::REVERSE_DELAY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x2b))[1].effect_num, Eq(effects::TAPE_DELAY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x2a))[1].effect_num, Eq(effects::STEREO_TAPE_DELAY));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x24))[1].effect_num, Eq(effects::SMALL_HALL_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x3a))[1].effect_num, Eq(effects::LARGE_HALL_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x26))[1].effect_num, Eq(effects::SMALL_ROOM_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x3b))[1].effect_num, Eq(effects::LARGE_ROOM_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4e))[1].effect_num, Eq(effects::SMALL_PLATE_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4b))[1].effect_num, Eq(effects::LARGE_PLATE_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4c))[1].effect_num, Eq(effects::AMBIENT_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x4d))[1].effect_num, Eq(effects::ARENA_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x21))[1].effect_num, Eq(effects::FENDER_63_SPRING_REVERB));
-    EXPECT_THAT(decodeEffectsFromData(effectPackage(0x0b))[1].effect_num, Eq(effects::FENDER_65_SPRING_REVERB));
+    auto decodeWithId = [this](const auto id) {
+        return decodeEffectsFromData(effectPackage(id))[1].effect_num;
+    };
+    EXPECT_THAT(decodeWithId(0x00), Eq(effects::EMPTY));
+    EXPECT_THAT(decodeWithId(0x3c), Eq(effects::OVERDRIVE));
+    EXPECT_THAT(decodeWithId(0x49), Eq(effects::WAH));
+    EXPECT_THAT(decodeWithId(0x4a), Eq(effects::TOUCH_WAH));
+    EXPECT_THAT(decodeWithId(0x1a), Eq(effects::FUZZ));
+    EXPECT_THAT(decodeWithId(0x1c), Eq(effects::FUZZ_TOUCH_WAH));
+    EXPECT_THAT(decodeWithId(0x88), Eq(effects::SIMPLE_COMP));
+    EXPECT_THAT(decodeWithId(0x07), Eq(effects::COMPRESSOR));
+    EXPECT_THAT(decodeWithId(0x12), Eq(effects::SINE_CHORUS));
+    EXPECT_THAT(decodeWithId(0x13), Eq(effects::TRIANGLE_CHORUS));
+    EXPECT_THAT(decodeWithId(0x18), Eq(effects::SINE_FLANGER));
+    EXPECT_THAT(decodeWithId(0x19), Eq(effects::TRIANGLE_FLANGER));
+    EXPECT_THAT(decodeWithId(0x2d), Eq(effects::VIBRATONE));
+    EXPECT_THAT(decodeWithId(0x40), Eq(effects::VINTAGE_TREMOLO));
+    EXPECT_THAT(decodeWithId(0x41), Eq(effects::SINE_TREMOLO));
+    EXPECT_THAT(decodeWithId(0x22), Eq(effects::RING_MODULATOR));
+    EXPECT_THAT(decodeWithId(0x29), Eq(effects::STEP_FILTER));
+    EXPECT_THAT(decodeWithId(0x4f), Eq(effects::PHASER));
+    EXPECT_THAT(decodeWithId(0x1f), Eq(effects::PITCH_SHIFTER));
+    EXPECT_THAT(decodeWithId(0x16), Eq(effects::MONO_DELAY));
+    EXPECT_THAT(decodeWithId(0x43), Eq(effects::MONO_ECHO_FILTER));
+    EXPECT_THAT(decodeWithId(0x48), Eq(effects::STEREO_ECHO_FILTER));
+    EXPECT_THAT(decodeWithId(0x44), Eq(effects::MULTITAP_DELAY));
+    EXPECT_THAT(decodeWithId(0x45), Eq(effects::PING_PONG_DELAY));
+    EXPECT_THAT(decodeWithId(0x15), Eq(effects::DUCKING_DELAY));
+    EXPECT_THAT(decodeWithId(0x46), Eq(effects::REVERSE_DELAY));
+    EXPECT_THAT(decodeWithId(0x2b), Eq(effects::TAPE_DELAY));
+    EXPECT_THAT(decodeWithId(0x2a), Eq(effects::STEREO_TAPE_DELAY));
+    EXPECT_THAT(decodeWithId(0x24), Eq(effects::SMALL_HALL_REVERB));
+    EXPECT_THAT(decodeWithId(0x3a), Eq(effects::LARGE_HALL_REVERB));
+    EXPECT_THAT(decodeWithId(0x26), Eq(effects::SMALL_ROOM_REVERB));
+    EXPECT_THAT(decodeWithId(0x3b), Eq(effects::LARGE_ROOM_REVERB));
+    EXPECT_THAT(decodeWithId(0x4e), Eq(effects::SMALL_PLATE_REVERB));
+    EXPECT_THAT(decodeWithId(0x4b), Eq(effects::LARGE_PLATE_REVERB));
+    EXPECT_THAT(decodeWithId(0x4c), Eq(effects::AMBIENT_REVERB));
+    EXPECT_THAT(decodeWithId(0x4d), Eq(effects::ARENA_REVERB));
+    EXPECT_THAT(decodeWithId(0x21), Eq(effects::FENDER_63_SPRING_REVERB));
+    EXPECT_THAT(decodeWithId(0x0b), Eq(effects::FENDER_65_SPRING_REVERB));
 }
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
