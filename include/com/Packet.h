@@ -63,9 +63,6 @@ namespace plug::com
     public:
         using RawType = std::array<std::uint8_t, 16>;
 
-
-        Header();
-
         void setStage(Stage stage);
         Stage getStage() const;
 

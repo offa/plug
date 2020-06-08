@@ -23,10 +23,6 @@
 
 namespace plug::com
 {
-    Header::Header()
-    {
-    }
-
     void Header::setStage(Stage stage)
     {
         bytes[0] = [stage]() -> std::uint8_t {
