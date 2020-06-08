@@ -1796,7 +1796,7 @@ namespace plug
         changed = value;
     }
 
-    bool Effect::get_changed()
+    bool Effect::get_changed() const
     {
         return changed;
     }

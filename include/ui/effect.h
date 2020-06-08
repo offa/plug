@@ -44,7 +44,7 @@ namespace plug
         ~Effect() override;
 
         void set_changed(bool);
-        bool get_changed();
+        bool get_changed() const;
 
         Effect& operator=(const Effect&) = delete;
 
