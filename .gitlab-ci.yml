@@ -33,7 +33,13 @@ coverage:
 # -----------------------------------------
 # --- CI Images
 # -----------------------------------------
-.docker_build_template: &build_ci_definition
+build_docker_images:
+  parallel:
+    matrix:
+      - COMPILER: gcc
+        VERSION: [10, 9, 8, 7]
+      - COMPILER: clang
+        VERSION: [10, 9, 8, 7, 6]
   image: docker:latest
   stage: build-docker-images
   variables:
@@ -42,52 +48,9 @@ coverage:
     - docker:dind
   before_script:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  script:
+    - script/image_build.sh ${COMPILER}-${VERSION}
   only:
     - schedules
     - web
     - /^docker-.*$/
-
-build-ci-gcc-10:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh gcc-10
-
-build-ci-gcc-9:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh gcc-9
-
-build-ci-gcc-8:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh gcc-8
-
-build-ci-gcc-7:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh gcc-7
-
-build-ci-clang-10:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh clang-10
-
-build-ci-clang-9:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh clang-9
-
-build-ci-clang-8:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh clang-8
-
-build-ci-clang-7:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh clang-7
-
-build-ci-clang-6:
-  <<: *build_ci_definition
-  script:
-    - script/image_build.sh clang-6
