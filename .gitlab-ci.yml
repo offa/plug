@@ -11,56 +11,14 @@ stages:
 # -----------------------------------------
 # --- CI Builds
 # -----------------------------------------
-gcc-10:
-  image: ${DOCKER_IMG}/gcc-10:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan -ubsan
-
-gcc-9:
-  image: ${DOCKER_IMG}/gcc-9:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan -ubsan
-
-gcc-8:
-  image: ${DOCKER_IMG}/gcc-8:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan -ubsan
-
-gcc-7:
-  image: ${DOCKER_IMG}/gcc-7:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan -ubsan
-
-clang-10:
-  image: ${DOCKER_IMG}/clang-10:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan -ubsan
-
-clang-9:
-  image: ${DOCKER_IMG}/clang-9:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan -ubsan
-
-clang-8:
-  image: ${DOCKER_IMG}/clang-8:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan -ubsan
-
-clang-7:
-  image: ${DOCKER_IMG}/clang-7:latest
-  stage: build
-  script:
-    - script/ci_build.sh -asan # UBSan disabled, see #129
-
-clang-6:
-  image: ${DOCKER_IMG}/clang-6:latest
+build:
+  parallel:
+    matrix:
+      - COMPILER: gcc
+        VERSION: [10, 9, 8, 7]
+      - COMPILER: clang
+        VERSION: [10, 9, 8, 7, 6]
+  image: ${DOCKER_IMG}/${COMPILER}-${VERSION}:latest
   stage: build
   script:
     - script/ci_build.sh -asan -ubsan
