@@ -20,7 +20,6 @@ jobs:
     - env: COMPILER=clang-9 ANALYSE="-asan -ubsan"
     - env: COMPILER=clang-8 ANALYSE="-asan -ubsan"
     - env: COMPILER=clang-7 ANALYSE="-asan -ubsan"
-    - env: COMPILER=clang-6 ANALYSE="-asan -ubsan"
     - env: COMPILER=gcc-10 ANALYSE="-cov"
 
 
