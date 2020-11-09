@@ -2,6 +2,7 @@
 
 ### [[GitHub](https://github.com/offa/plug)] [[GitLab](https://gitlab.com/offa/plug)]
 
+[![CI](https://github.com/offa/plug/workflows/ci/badge.svg)](https://github.com/offa/plug/actions)
 [![Build Status](https://travis-ci.org/offa/plug.svg?branch=master)](https://travis-ci.org/offa/plug)
 [![Pipeline Status](https://gitlab.com/offa/plug/badges/master/pipeline.svg)](https://gitlab.com/offa/plug/commits/master)
 [![Coverage Report](https://gitlab.com/offa/plug/badges/master/coverage.svg)](https://gitlab.com/offa/plug/commits/master)
