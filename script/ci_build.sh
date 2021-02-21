@@ -43,4 +43,3 @@ if [[ "${COVERAGE}" == true ]]
 then
     make coverage
 fi
-
