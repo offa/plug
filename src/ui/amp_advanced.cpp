@@ -67,20 +67,11 @@ namespace plug
 
     void Amp_Advanced::activate_custom_ng(int value)
     {
-        if (value == 5)
-        {
-            ui->dial_5->setDisabled(false);
-            ui->spinBox_5->setDisabled(false);
-            ui->dial_4->setDisabled(false);
-            ui->spinBox_4->setDisabled(false);
-        }
-        else
-        {
-            ui->dial_5->setDisabled(true);
-            ui->spinBox_5->setDisabled(true);
-            ui->dial_4->setDisabled(true);
-            ui->spinBox_4->setDisabled(true);
-        }
+        const bool disabled = ( value != 5 );
+        ui->dial_5->setDisabled(disabled);
+        ui->spinBox_5->setDisabled(disabled);
+        ui->dial_4->setDisabled(disabled);
+        ui->spinBox_4->setDisabled(disabled);
     }
 
     void Amp_Advanced::set_master_vol(int value)
