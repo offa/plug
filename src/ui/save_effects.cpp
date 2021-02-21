@@ -51,14 +51,8 @@ namespace plug
 
     void SaveEffects::select_checkbox()
     {
-        if (!ui->checkBox->isChecked() && !ui->checkBox_2->isChecked() && !ui->checkBox_3->isChecked())
-        {
-            ui->pushButton->setDisabled(true);
-        }
-        else
-        {
-            ui->pushButton->setDisabled(false);
-        }
+        const bool buttonDisabled = (!ui->checkBox->isChecked() && !ui->checkBox_2->isChecked() && !ui->checkBox_3->isChecked());
+        ui->pushButton->setDisabled(buttonDisabled);
 
         if (sender() == ui->checkBox)
         {

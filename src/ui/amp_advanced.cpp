@@ -67,7 +67,7 @@ namespace plug
 
     void Amp_Advanced::activate_custom_ng(int value)
     {
-        const bool disabled = ( value != 5 );
+        const bool disabled = (value != 5);
         ui->dial_5->setDisabled(disabled);
         ui->spinBox_5->setDisabled(disabled);
         ui->dial_4->setDisabled(disabled);
