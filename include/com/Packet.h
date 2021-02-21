@@ -211,7 +211,7 @@ namespace plug::com
     public:
         using RawType = PacketRawType;
 
-        Packet(Header h, Payload p)
+        Packet(const Header& h, const Payload& p)
             : header(h), payload(p)
         {
         }
@@ -220,7 +220,7 @@ namespace plug::com
         {
         }
 
-        void setHeader(Header h)
+        void setHeader(const Header& h)
         {
             header = h;
         }
@@ -230,7 +230,7 @@ namespace plug::com
             return header;
         }
 
-        void setPayload(Payload p)
+        void setPayload(const Payload& p)
         {
             payload = p;
         }
