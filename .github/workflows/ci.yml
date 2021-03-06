@@ -12,6 +12,7 @@ jobs:
           - gcc-9
           - gcc-8
           - gcc-7
+          - clang-12
           - clang-11
           - clang-10
           - clang-9
