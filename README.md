@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
 [![C++](https://img.shields.io/badge/c++-17-green.svg)]()
 
-Software for Fender Mustang Amps. This is a fork of [piorekf's Plug](https://bitbucket.org/piorekf/plug/).
+Software for Fender Mustang Amps. This is a fork of ***piorekf's Plug***.
 
 Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project.
 
@@ -45,14 +45,9 @@ make install
 The *udev* rule allows the USB access without *root* for the users of the `plugdev` group.
 
 
-## Documentation
-
-Visit the [Plug Website](https://bitbucket.org/piorekf/plug/) for documentation and technical details.
-
-
 ## Credits
 
-Thanks to [piorekf and all Plug contributors](https://bitbucket.org/piorekf/plug/).
+Thanks to *piorekf* and all Plug contributors.
 
 
 ## License
