@@ -32,11 +32,11 @@ namespace mock
         {
         }
 
-        MOCK_METHOD2(open, void(std::uint16_t, std::uint16_t));
-        MOCK_METHOD2(openFirst, void(std::uint16_t, std::initializer_list<std::uint16_t>));
-        MOCK_METHOD0(close, void());
-        MOCK_CONST_METHOD0(isOpen, bool());
-        MOCK_METHOD1(receive, std::vector<std::uint8_t>(std::size_t));
-        MOCK_METHOD2(sendImpl, std::size_t(std::uint8_t*, std::size_t));
+        MOCK_METHOD(void, open, (std::uint16_t, std::uint16_t));
+        MOCK_METHOD(void, openFirst, (std::uint16_t, std::initializer_list<std::uint16_t>));
+        MOCK_METHOD(void, close, ());
+        MOCK_METHOD(bool, isOpen, (), (const));
+        MOCK_METHOD(std::vector<std::uint8_t>, receive, (std::size_t));
+        MOCK_METHOD(std::size_t, sendImpl, (std::uint8_t*, std::size_t));
     };
 }

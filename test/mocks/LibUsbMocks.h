@@ -28,16 +28,16 @@ namespace mock
     class UsbMock
     {
     public:
-        MOCK_METHOD1(init, int(libusb_context**));
-        MOCK_METHOD1(close, void(libusb_device_handle*));
-        MOCK_METHOD3(open_device_with_vid_pid, libusb_device_handle*(libusb_context*, uint16_t, uint16_t));
-        MOCK_METHOD1(exit, void(libusb_context*));
-        MOCK_METHOD2(release_interface, int(libusb_device_handle*, int));
-        MOCK_METHOD2(kernel_driver_active, int(libusb_device_handle*, int));
-        MOCK_METHOD2(detach_kernel_driver, int(libusb_device_handle*, int));
-        MOCK_METHOD2(attach_kernel_driver, int(libusb_device_handle*, int));
-        MOCK_METHOD6(interrupt_transfer, int(libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
-        MOCK_METHOD2(claim_interface, int(libusb_device_handle*, int));
+        MOCK_METHOD(int, init, (libusb_context**));
+        MOCK_METHOD(void, close, (libusb_device_handle*));
+        MOCK_METHOD(libusb_device_handle*, open_device_with_vid_pid, (libusb_context*, uint16_t, uint16_t));
+        MOCK_METHOD(void, exit, (libusb_context*));
+        MOCK_METHOD(int, release_interface, (libusb_device_handle*, int));
+        MOCK_METHOD(int, kernel_driver_active, (libusb_device_handle*, int));
+        MOCK_METHOD(int, detach_kernel_driver, (libusb_device_handle*, int));
+        MOCK_METHOD(int, attach_kernel_driver, (libusb_device_handle*, int));
+        MOCK_METHOD(int, interrupt_transfer, (libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
+        MOCK_METHOD(int, claim_interface, (libusb_device_handle*, int));
     };
 
     UsbMock* getUsbMock();
