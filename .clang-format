@@ -19,6 +19,7 @@ PointerAlignment: Left
 SortIncludes: 'false'
 SpaceAfterCStyleCast: 'true'
 SpaceInEmptyParentheses: 'false'
+StatementAttributeLikeMacros: [MOCK_METHOD]
 TabWidth: '4'
 UseTab: Never
 
