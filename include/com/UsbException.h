@@ -18,33 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "com/Mustang.h"
-#include "com/ConnectionFactory.h"
-#include "com/UsbContext.h"
-#include "Version.h"
-#include <iostream>
+#pragma once
 
-int main()
+#include <string>
+#include <stdexcept>
+
+namespace plug::com::usb
 {
-    using namespace plug::com::usb;
-
-    std::cout << " === Plug v" << plug::version() << " - Integrationtest ===\n\n";
-
-    Context ctx;
-    auto devs = listDevices();
-
-    for (auto& d : devs)
+    class UsbException : public std::exception
     {
-        try
-        {
-            std::cout << " - " << d.vendorId() << ":" << d.productId() << "\n";
-            d.open();
-        }
-        catch (const std::exception& ex)
-        {
-            std::cout << "ERROR: " << ex.what() << "\n";
-        }
-    }
+    public:
+        explicit UsbException(int errorCode);
 
-    return 0;
+        int code() const noexcept;
+        std::string name() const;
+        std::string message() const;
+
+        const char* what() const noexcept override;
+
+    private:
+        int error_;
+        std::string name_;
+        std::string message_;
+    };
+
 }

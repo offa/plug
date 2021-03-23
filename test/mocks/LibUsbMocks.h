@@ -40,6 +40,13 @@ namespace mock
         MOCK_METHOD(int, claim_interface, (libusb_device_handle*, int));
         MOCK_METHOD(const char*, error_name, (int));
         MOCK_METHOD(const char*, strerror, (int));
+        MOCK_METHOD(ssize_t, get_device_list, (libusb_context*, libusb_device***));
+        MOCK_METHOD(int, get_device_descriptor, (libusb_device*, libusb_device_descriptor*));
+        MOCK_METHOD(void, free_device_list, (libusb_device**, int));
+        MOCK_METHOD(libusb_device*, ref_device, (libusb_device*));
+        MOCK_METHOD(void, unref_device, (libusb_device*));
+        MOCK_METHOD(int, open, (libusb_device*, libusb_device_handle**));
+        MOCK_METHOD(int, get_string_descriptor_ascii, (libusb_device_handle*, uint8_t, unsigned char*, int));
     };
 
     UsbMock* getUsbMock();
@@ -50,9 +57,17 @@ namespace mock
 
 extern "C"
 {
+    struct libusb_device
+    {
+        uint16_t idVendor;
+        uint16_t idProduct;
+        uint8_t iProduct;
+    };
+
 
     struct libusb_device_handle
     {
         char dummy;
     };
+
 }

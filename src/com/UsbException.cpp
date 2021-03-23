@@ -18,33 +18,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "com/Mustang.h"
-#include "com/ConnectionFactory.h"
-#include "com/UsbContext.h"
-#include "Version.h"
-#include <iostream>
+#include "com/UsbException.h"
+#include <libusb-1.0/libusb.h>
 
-int main()
+namespace plug::com::usb
 {
-    using namespace plug::com::usb;
-
-    std::cout << " === Plug v" << plug::version() << " - Integrationtest ===\n\n";
-
-    Context ctx;
-    auto devs = listDevices();
-
-    for (auto& d : devs)
+    UsbException::UsbException(int errorCode)
+        : error_(errorCode),
+          name_(libusb_error_name(errorCode)),
+          message_(libusb_strerror(errorCode))
     {
-        try
-        {
-            std::cout << " - " << d.vendorId() << ":" << d.productId() << "\n";
-            d.open();
-        }
-        catch (const std::exception& ex)
-        {
-            std::cout << "ERROR: " << ex.what() << "\n";
-        }
     }
 
-    return 0;
+    int UsbException::code() const noexcept
+    {
+        return error_;
+    }
+
+    std::string UsbException::name() const
+    {
+        return name_;
+    }
+
+    std::string UsbException::message() const
+    {
+        return message_;
+    }
+
+    const char* UsbException::what() const noexcept
+    {
+        return message_.c_str();
+    }
 }

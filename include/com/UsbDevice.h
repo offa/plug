@@ -18,33 +18,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "com/Mustang.h"
-#include "com/ConnectionFactory.h"
-#include "com/UsbContext.h"
-#include "Version.h"
-#include <iostream>
+#pragma once
 
-int main()
+#include <string>
+#include <cstdint>
+
+struct libusb_device;
+struct libusb_device_handle;
+
+namespace plug::com::usb
 {
-    using namespace plug::com::usb;
 
-    std::cout << " === Plug v" << plug::version() << " - Integrationtest ===\n\n";
-
-    Context ctx;
-    auto devs = listDevices();
-
-    for (auto& d : devs)
+    class Device
     {
-        try
-        {
-            std::cout << " - " << d.vendorId() << ":" << d.productId() << "\n";
-            d.open();
-        }
-        catch (const std::exception& ex)
-        {
-            std::cout << "ERROR: " << ex.what() << "\n";
-        }
-    }
+    public:
+        Device(libusb_device* device, std::uint16_t vid, std::uint16_t pid, std::uint8_t stringDescriptorIndex);
+        Device(Device&&) = default;
 
-    return 0;
+        ~Device();
+
+        void open();
+        void close();
+        bool isOpen() const noexcept;
+
+        std::uint16_t vendorId() const noexcept;
+        std::uint16_t productId() const noexcept;
+        std::string name();
+
+        Device& operator=(Device&&) = default;
+
+
+    private:
+        libusb_device* device_;
+        libusb_device_handle* handle_;
+        std::uint16_t vid_;
+        std::uint16_t pid_;
+        std::uint8_t stringDescriptorIndex_;
+    };
 }
