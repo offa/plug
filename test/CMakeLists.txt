@@ -31,6 +31,7 @@ target_link_libraries(MustangTest PRIVATE
 add_executable(CommunicationTest
                 UsbCommTest.cpp
                 ConnectionFactoryTest.cpp
+                UsbTest.cpp
                 )
 add_test(CommunicationTest CommunicationTest)
 target_link_libraries(CommunicationTest PRIVATE

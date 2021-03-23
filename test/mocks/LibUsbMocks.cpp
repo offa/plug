@@ -101,4 +101,14 @@ extern "C"
     {
         mock::getUsbMock()->close(dev_handle);
     }
+
+    const char* libusb_error_name(int error_code)
+    {
+        return mock::getUsbMock()->error_name(error_code);
+    }
+
+    const char* libusb_strerror(int errcode)
+    {
+        return mock::getUsbMock()->strerror(errcode);
+    }
 }

@@ -38,6 +38,8 @@ namespace mock
         MOCK_METHOD(int, attach_kernel_driver, (libusb_device_handle*, int));
         MOCK_METHOD(int, interrupt_transfer, (libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
         MOCK_METHOD(int, claim_interface, (libusb_device_handle*, int));
+        MOCK_METHOD(const char*, error_name, (int));
+        MOCK_METHOD(const char*, strerror, (int));
     };
 
     UsbMock* getUsbMock();
