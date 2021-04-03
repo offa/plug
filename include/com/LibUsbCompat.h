@@ -18,36 +18,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "com/UsbException.h"
-#include "com/LibUsbCompat.h"
+#pragma once
+
 #include <libusb-1.0/libusb.h>
 
-namespace plug::com::usb
+namespace plug::com::usb::libusb
 {
-    UsbException::UsbException(int errorCode)
-        : error_(errorCode),
-          name_(libusb_error_name(errorCode)),
-          message_(libusb::strerror(libusb::ErrorCodeAdapter{errorCode}))
+    class ErrorCodeAdapter
     {
-    }
+    public:
+        constexpr explicit ErrorCodeAdapter(int errorCode)
+            : errorCode_(errorCode)
+        {
+        }
 
-    int UsbException::code() const noexcept
-    {
-        return error_;
-    }
+        constexpr operator int() const noexcept
+        {
+            return errorCode_;
+        }
 
-    std::string UsbException::name() const
-    {
-        return name_;
-    }
+        constexpr operator libusb_error() const noexcept
+        {
+            return static_cast<libusb_error>(errorCode_);
+        }
 
-    std::string UsbException::message() const
-    {
-        return message_;
-    }
+    private:
+        int errorCode_;
+    };
 
-    const char* UsbException::what() const noexcept
-    {
-        return message_.c_str();
-    }
+
+    const char* strerror(ErrorCodeAdapter errorCode);
 }

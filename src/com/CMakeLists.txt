@@ -7,4 +7,5 @@ add_library(plug-communication
     UsbException.cpp
     UsbDevice.cpp
     )
+add_library(plug-libusb-compat LibUsbCompat.cpp)
 add_library(plug-updater MustangUpdater.cpp)

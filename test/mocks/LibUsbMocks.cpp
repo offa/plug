@@ -19,6 +19,7 @@
  */
 
 #include "LibUsbMocks.h"
+#include "com/LibUsbCompat.h"
 #include <stdexcept>
 
 namespace mock
@@ -107,11 +108,6 @@ extern "C"
         return mock::getUsbMock()->error_name(error_code);
     }
 
-    const char* libusb_strerror(int errcode)
-    {
-        return mock::getUsbMock()->strerror(errcode);
-    }
-
     ssize_t libusb_get_device_list(libusb_context* ctx, libusb_device*** list)
     {
         return mock::getUsbMock()->get_device_list(ctx, list);
@@ -145,5 +141,14 @@ extern "C"
     int libusb_get_string_descriptor_ascii(libusb_device_handle* dev_handle, uint8_t desc_index, unsigned char* data, int length)
     {
         return mock::getUsbMock()->get_string_descriptor_ascii(dev_handle, desc_index, data, length);
+    }
+}
+
+
+namespace plug::com::usb::libusb
+{
+    const char* strerror(ErrorCodeAdapter errorCode)
+    {
+        return mock::getUsbMock()->strerror(errorCode);
     }
 }
