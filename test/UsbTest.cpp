@@ -103,12 +103,11 @@ TEST_F(UsbTest, listDevicesReturnsDevices)
     EXPECT_CALL(*usbmock, ref_device(_)).Times(2);
     EXPECT_CALL(*usbmock, unref_device(_)).Times(2);
 
-    libusb_device dummy;
-    std::array<libusb_device*, 1> dummyList{&dummy};
-
-    std::array<libusb_device**, 2> deviceList{dummyList.data(), dummyList.data()};
+    libusb_device device0;
+    libusb_device device1;
+    std::array<libusb_device*, 2> deviceList{&device0, &device1};
     EXPECT_CALL(*usbmock, get_device_list(nullptr, NotNull()))
-        .WillOnce(DoAll(SetArrayArgument<1>(deviceList.data(), std::next(deviceList.data(), deviceList.size())),
+        .WillOnce(DoAll(SetArgPointee<1>(deviceList.data()),
                         Return(deviceList.size())));
     libusb_device_descriptor descr0;
     descr0.idVendor = 0xabcd;
@@ -134,12 +133,10 @@ TEST_F(UsbTest, listDevicesUnrefsList)
     EXPECT_CALL(*usbmock, ref_device(_));
     EXPECT_CALL(*usbmock, unref_device(_));
 
-    libusb_device dummy;
-    std::array<libusb_device*, 1> dummyList{&dummy};
-
-    std::array<libusb_device**, 1> deviceList{dummyList.data()};
+    libusb_device device0;
+    std::array<libusb_device*, 1> deviceList{&device0};
     EXPECT_CALL(*usbmock, get_device_list(nullptr, NotNull()))
-        .WillOnce(DoAll(SetArrayArgument<1>(deviceList.data(), std::next(deviceList.data(), deviceList.size())),
+        .WillOnce(DoAll(SetArgPointee<1>(deviceList.data()),
                         Return(deviceList.size())));
     EXPECT_CALL(*usbmock, get_device_descriptor(NotNull(), NotNull()))
         .WillOnce(DoAll(SetArgPointee<1>(libusb_device_descriptor{}), Return(LIBUSB_SUCCESS)));
@@ -153,12 +150,11 @@ TEST_F(UsbTest, listDevicesSkipsDevicesFailingDescriptor)
     EXPECT_CALL(*usbmock, ref_device(_));
     EXPECT_CALL(*usbmock, unref_device(_));
 
-    libusb_device dummy;
-    std::array<libusb_device*, 1> dummyList{&dummy};
-
-    std::array<libusb_device**, 2> deviceList{dummyList.data(), dummyList.data()};
+    libusb_device device0;
+    libusb_device device1;
+    std::array<libusb_device*, 2> deviceList{&device0, &device1};
     EXPECT_CALL(*usbmock, get_device_list(nullptr, NotNull()))
-        .WillOnce(DoAll(SetArrayArgument<1>(deviceList.data(), std::next(deviceList.data(), deviceList.size())),
+        .WillOnce(DoAll(SetArgPointee<1>(deviceList.data()),
                         Return(deviceList.size())));
     libusb_device_descriptor descr0;
     descr0.idVendor = 0x1234;
