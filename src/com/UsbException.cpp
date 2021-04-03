@@ -26,7 +26,7 @@ namespace plug::com::usb
     UsbException::UsbException(int errorCode)
         : error_(errorCode),
           name_(libusb_error_name(errorCode)),
-          message_(libusb_strerror(errorCode))
+          message_(libusb_strerror(static_cast<libusb_error>(errorCode)))
     {
     }
 
