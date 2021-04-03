@@ -23,10 +23,23 @@
 
 namespace plug::com::usb
 {
+    namespace
+    {
+
+        const char* libusb_strerror_wrapper(int errcode)
+        {
+            if constexpr (std::is_invocable_v<decltype(libusb_strerror), int>)
+            {
+                return libusb_strerror(errcode);
+            }
+            return libusb_strerror(static_cast<libusb_error>(errcode));
+        }
+    }
+
     UsbException::UsbException(int errorCode)
         : error_(errorCode),
           name_(libusb_error_name(errorCode)),
-          message_(libusb_strerror(static_cast<libusb_error>(errorCode)))
+          message_(libusb_strerror_wrapper(errorCode))
     {
     }
 
