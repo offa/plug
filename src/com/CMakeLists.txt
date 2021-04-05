@@ -7,5 +7,8 @@ add_library(plug-communication
     UsbException.cpp
     UsbDevice.cpp
     )
-add_library(plug-libusb-compat LibUsbCompat.cpp)
+
+add_library(plug-libusb LibUsbCompat.cpp)
+target_link_libraries(plug-libusb PUBLIC libusb-1.0::libusb-1.0)
+
 add_library(plug-updater MustangUpdater.cpp)
