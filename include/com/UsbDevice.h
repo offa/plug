@@ -49,10 +49,17 @@ namespace plug::com::usb
 
 
     private:
+        struct Descriptor
+        {
+            std::uint16_t vid;
+            std::uint16_t pid;
+            std::uint8_t stringDescriptorIndex;
+        };
+
+        Descriptor getDeviceDescriptor(libusb_device* device) const;
+
         libusb_device* device_;
         libusb_device_handle* handle_;
-        std::uint16_t vid_;
-        std::uint16_t pid_;
-        std::uint8_t stringDescriptorIndex_;
+        Descriptor descriptor_;
     };
 }
