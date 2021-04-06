@@ -30,6 +30,21 @@ namespace plug::com::usb
     {
     }
 
+    Device::Device(libusb_device* device)
+        : device_(libusb_ref_device(device)), handle_(nullptr)
+    {
+        libusb_device_descriptor descriptor;
+
+        if (const auto result = libusb_get_device_descriptor(device, &descriptor); result != LIBUSB_SUCCESS)
+        {
+            libusb_unref_device(device_);
+            throw UsbException{result};
+        }
+        vid_ = descriptor.idVendor;
+        pid_ = descriptor.idProduct;
+        stringDescriptorIndex_ = descriptor.iProduct;
+    }
+
     Device::~Device()
     {
         close();
@@ -73,7 +88,7 @@ namespace plug::com::usb
         std::array<unsigned char, 256> buffer;
         const int n = libusb_get_string_descriptor_ascii(handle_, stringDescriptorIndex_, buffer.data(), buffer.size());
 
-        if ( n < 0 )
+        if (n < 0)
         {
             throw UsbException{n};
         }

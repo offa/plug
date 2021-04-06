@@ -145,10 +145,10 @@ TEST_F(UsbTest, listDevicesUnrefsList)
     listDevices();
 }
 
-TEST_F(UsbTest, listDevicesSkipsDevicesFailingDescriptor)
+TEST_F(UsbTest, listDevicesSkipsDeviceOnFailingDescriptor)
 {
-    EXPECT_CALL(*usbmock, ref_device(_));
-    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, ref_device(_)).Times(2);
+    EXPECT_CALL(*usbmock, unref_device(_)).Times(2);
 
     libusb_device device0;
     libusb_device device1;
@@ -166,6 +166,8 @@ TEST_F(UsbTest, listDevicesSkipsDevicesFailingDescriptor)
         .WillOnce(DoAll(SetArgPointee<1>(descr0), Return(0)))
         .WillOnce(DoAll(SetArgPointee<1>(descr1), Return(LIBUSB_ERROR_ACCESS)));
     EXPECT_CALL(*usbmock, free_device_list(_, _));
+    EXPECT_CALL(*usbmock, error_name(LIBUSB_ERROR_ACCESS)).WillOnce(Return("ignore_name"));
+    EXPECT_CALL(*usbmock, strerror(LIBUSB_ERROR_ACCESS)).WillOnce(Return("ignore_message"));
 
     const auto devices = listDevices();
     EXPECT_THAT(devices, SizeIs(1));

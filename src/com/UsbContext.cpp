@@ -63,11 +63,12 @@ namespace plug::com::usb
 
             for (std::size_t i = 0; i < static_cast<std::size_t>(n); ++i)
             {
-                libusb_device_descriptor descriptor;
-
-                if (libusb_get_device_descriptor(devices[i], &descriptor) == LIBUSB_SUCCESS)
+                try
                 {
-                    devicesFound.emplace_back(devices[i], descriptor.idVendor, descriptor.idProduct, descriptor.iProduct);
+                    devicesFound.emplace_back(devices[i]);
+                }
+                catch (const UsbException&)
+                {
                 }
             }
             libusb_free_device_list(devices, 1);
