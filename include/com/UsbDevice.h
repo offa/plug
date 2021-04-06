@@ -43,7 +43,7 @@ namespace plug::com::usb
 
         std::uint16_t vendorId() const noexcept;
         std::uint16_t productId() const noexcept;
-        std::string name();
+        std::string name() const;
 
         Device& operator=(Device&&) = default;
 

@@ -78,7 +78,7 @@ namespace plug::com::usb
         return pid_;
     }
 
-    std::string Device::name()
+    std::string Device::name() const
     {
         std::array<unsigned char, 256> buffer;
         const int n = libusb_get_string_descriptor_ascii(handle_, stringDescriptorIndex_, buffer.data(), buffer.size());
