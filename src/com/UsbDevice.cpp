@@ -25,11 +25,6 @@
 
 namespace plug::com::usb
 {
-    Device::Device(libusb_device* device, std::uint16_t vid, std::uint16_t pid, std::uint8_t stringDescriptorIndex)
-        : device_(libusb_ref_device(device)), handle_(nullptr), vid_(vid), pid_(pid), stringDescriptorIndex_(stringDescriptorIndex)
-    {
-    }
-
     Device::Device(libusb_device* device)
         : device_(libusb_ref_device(device)), handle_(nullptr)
     {

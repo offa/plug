@@ -32,8 +32,7 @@ namespace plug::com::usb
     class Device
     {
     public:
-        Device(libusb_device* device, std::uint16_t vid, std::uint16_t pid, std::uint8_t stringDescriptorIndex);
-        Device(libusb_device* device);
+        explicit Device(libusb_device* device);
         Device(Device&&) = default;
 
         ~Device();
