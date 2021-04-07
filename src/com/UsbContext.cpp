@@ -51,28 +51,27 @@ namespace plug::com::usb
     std::vector<Device> listDevices()
     {
         libusb_device** devices;
+        const auto n = libusb_get_device_list(nullptr, &devices);
 
-        if (const auto n = libusb_get_device_list(nullptr, &devices); n < 0)
+        if (n < 0)
         {
             throw UsbException(n);
         }
-        else
-        {
-            std::vector<Device> devicesFound;
-            devicesFound.reserve(n);
 
-            for (std::size_t i = 0; i < static_cast<std::size_t>(n); ++i)
+        std::vector<Device> devicesFound;
+        devicesFound.reserve(n);
+
+        for (std::size_t i = 0; i < static_cast<std::size_t>(n); ++i)
+        {
+            try
             {
-                try
-                {
-                    devicesFound.emplace_back(devices[i]);
-                }
-                catch (const UsbException&)
-                {
-                }
+                devicesFound.emplace_back(devices[i]);
             }
-            libusb_free_device_list(devices, 1);
-            return devicesFound;
+            catch (const UsbException&)
+            {
+            }
         }
+        libusb_free_device_list(devices, 1);
+        return devicesFound;
     }
 }
