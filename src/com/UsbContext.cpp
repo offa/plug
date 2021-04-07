@@ -20,6 +20,7 @@
 
 #include "com/UsbContext.h"
 #include "com/UsbException.h"
+#include <algorithm>
 #include <libusb-1.0/libusb.h>
 
 namespace plug::com::usb
@@ -61,16 +62,16 @@ namespace plug::com::usb
         std::vector<Device> devicesFound;
         devicesFound.reserve(n);
 
-        for (std::size_t i = 0; i < static_cast<std::size_t>(n); ++i)
-        {
+        std::for_each(devices, std::next(devices, n), [&devicesFound](auto* dev) {
             try
             {
-                devicesFound.emplace_back(devices[i]);
+                devicesFound.emplace_back(dev);
             }
             catch (const UsbException&)
             {
             }
-        }
+        });
+
         libusb_free_device_list(devices, 1);
         return devicesFound;
     }
