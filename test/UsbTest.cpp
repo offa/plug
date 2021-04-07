@@ -281,7 +281,7 @@ TEST_F(UsbTest, deviceNameReturnsNameIfOpen)
         .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
     std::string nameBuffer = "usb-device-0";
     EXPECT_CALL(*usbmock, get_string_descriptor_ascii(handle, _, NotNull(), 256))
-        .WillOnce(DoAll(SetArrayArgument<2>(nameBuffer.data(), nameBuffer.data() + nameBuffer.size()), Return(nameBuffer.size())));
+        .WillOnce(DoAll(SetArrayArgument<2>(nameBuffer.begin(), nameBuffer.end()), Return(nameBuffer.size())));
     EXPECT_CALL(*usbmock, close(_));
 
     Device device{&dev};
@@ -299,7 +299,7 @@ TEST_F(UsbTest, deviceNameReturnsEmptyStringOfZeroLengthName)
         .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
     std::string nameBuffer = "usb-device-0";
     EXPECT_CALL(*usbmock, get_string_descriptor_ascii(handle, _, NotNull(), 256))
-        .WillOnce(DoAll(SetArrayArgument<2>(nameBuffer.data(), nameBuffer.data() + nameBuffer.size()), Return(0)));
+        .WillOnce(DoAll(SetArrayArgument<2>(nameBuffer.begin(), nameBuffer.end()), Return(0)));
     EXPECT_CALL(*usbmock, close(_));
 
     Device device{&dev};
@@ -317,7 +317,7 @@ TEST_F(UsbTest, deviceNameThrowsOnError)
         .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
     std::string nameBuffer = "usb-device-0";
     EXPECT_CALL(*usbmock, get_string_descriptor_ascii(handle, _, NotNull(), 256))
-        .WillOnce(DoAll(SetArrayArgument<2>(nameBuffer.data(), nameBuffer.data() + nameBuffer.size()), Return(LIBUSB_ERROR_TIMEOUT)));
+        .WillOnce(DoAll(SetArrayArgument<2>(nameBuffer.begin(), nameBuffer.end()), Return(LIBUSB_ERROR_TIMEOUT)));
     EXPECT_CALL(*usbmock, close(_));
     EXPECT_CALL(*usbmock, error_name(LIBUSB_ERROR_TIMEOUT)).WillOnce(Return("ignore_name"));
     EXPECT_CALL(*usbmock, strerror(LIBUSB_ERROR_TIMEOUT)).WillOnce(Return("ignore_message"));
