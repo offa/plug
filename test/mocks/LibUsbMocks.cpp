@@ -88,19 +88,24 @@ extern "C"
         return mock::getUsbMock()->kernel_driver_active(dev_handle, interface_number);
     }
 
-    int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
-    {
-        return mock::getUsbMock()->release_interface(dev_handle, interface_number);
-    }
-
     int libusb_attach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
     {
         return mock::getUsbMock()->attach_kernel_driver(dev_handle, interface_number);
     }
 
+    int libusb_set_auto_detach_kernel_driver(libusb_device_handle* dev_handle, int enable)
+    {
+        return mock::getUsbMock()->set_auto_detach_kernel_driver(dev_handle, enable);
+    }
+
     void libusb_close(libusb_device_handle* dev_handle)
     {
         mock::getUsbMock()->close(dev_handle);
+    }
+
+    int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
+    {
+        return mock::getUsbMock()->release_interface(dev_handle, interface_number);
     }
 
     const char* libusb_error_name(int error_code)

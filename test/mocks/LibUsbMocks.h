@@ -32,12 +32,13 @@ namespace mock
         MOCK_METHOD(void, close, (libusb_device_handle*));
         MOCK_METHOD(libusb_device_handle*, open_device_with_vid_pid, (libusb_context*, uint16_t, uint16_t));
         MOCK_METHOD(void, exit, (libusb_context*));
-        MOCK_METHOD(int, release_interface, (libusb_device_handle*, int));
         MOCK_METHOD(int, kernel_driver_active, (libusb_device_handle*, int));
         MOCK_METHOD(int, detach_kernel_driver, (libusb_device_handle*, int));
         MOCK_METHOD(int, attach_kernel_driver, (libusb_device_handle*, int));
-        MOCK_METHOD(int, interrupt_transfer, (libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
+        MOCK_METHOD(int, set_auto_detach_kernel_driver, (libusb_device_handle*, int));
+        MOCK_METHOD(int, release_interface, (libusb_device_handle*, int));
         MOCK_METHOD(int, claim_interface, (libusb_device_handle*, int));
+        MOCK_METHOD(int, interrupt_transfer, (libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
         MOCK_METHOD(const char*, error_name, (int));
         MOCK_METHOD(const char*, strerror, (int));
         MOCK_METHOD(ssize_t, get_device_list, (libusb_context*, libusb_device***));

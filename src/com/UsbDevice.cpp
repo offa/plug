@@ -42,12 +42,23 @@ namespace plug::com::usb
         {
             throw UsbException{result};
         }
+
+        if (const int result = libusb_set_auto_detach_kernel_driver(handle_, 1); result != LIBUSB_SUCCESS)
+        {
+            throw UsbException{result};
+        }
+
+        if (const int result = libusb_claim_interface(handle_, 0); result != LIBUSB_SUCCESS)
+        {
+            throw UsbException{result};
+        }
     }
 
     void Device::close()
     {
         if (handle_ != nullptr)
         {
+            libusb_release_interface(handle_, 0);
             libusb_close(handle_);
             handle_ = nullptr;
         }
