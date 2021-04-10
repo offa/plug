@@ -91,6 +91,30 @@ namespace plug::com::usb
         return std::string{buffer.cbegin(), std::next(buffer.cbegin(), n)};
     }
 
+    std::size_t Device::write(std::uint8_t endpoint, std::uint8_t* data, std::size_t dataSize)
+    {
+        int transfered{0};
+
+        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, data, dataSize, &transfered, 500); result != LIBUSB_SUCCESS)
+        {
+            throw UsbException{result};
+        }
+        return transfered;
+    }
+
+    std::vector<std::uint8_t> Device::receive(std::uint8_t endpoint, std::size_t dataSize)
+    {
+        std::vector<std::uint8_t> buffer(dataSize);
+        int transfered{0};
+
+        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, buffer.data(), dataSize, &transfered, 500); result != LIBUSB_SUCCESS)
+        {
+            throw UsbException{result};
+        }
+        buffer.resize(transfered);
+        return buffer;
+    }
+
     Device::Descriptor Device::getDeviceDescriptor(libusb_device* device) const
     {
         libusb_device_descriptor descriptor;

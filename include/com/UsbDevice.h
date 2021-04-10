@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <cstdint>
 
 struct libusb_device;
@@ -44,6 +45,9 @@ namespace plug::com::usb
         std::uint16_t vendorId() const noexcept;
         std::uint16_t productId() const noexcept;
         std::string name() const;
+
+        std::size_t write(std::uint8_t endpoint, std::uint8_t* data, std::size_t dataSize);
+        std::vector<std::uint8_t> receive(std::uint8_t endpoint, std::size_t dataSize);
 
         Device& operator=(Device&&) = default;
 

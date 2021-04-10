@@ -398,3 +398,136 @@ TEST_F(UsbTest, deviceNameThrowsOnError)
     device.open();
     EXPECT_THROW(device.name(), UsbException);
 }
+
+TEST_F(UsbTest, writeTransmitsData)
+{
+    EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
+    libusb_device_descriptor descr;
+    EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, open(_, _))
+        .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, set_auto_detach_kernel_driver(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, close(_));
+
+    std::array<std::uint8_t, 4> buffer{{0x00, 0x01, 0x02, 0x3}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(handle, 0xab, buffer.data(), buffer.size(), NotNull(), 500))
+        .WillOnce(DoAll(SetArgPointee<4>(buffer.size()), Return(LIBUSB_SUCCESS)));
+
+    Device device{&dev};
+    device.open();
+    EXPECT_THAT(device.write(0xab, buffer.data(), buffer.size()), Eq(buffer.size()));
+}
+
+TEST_F(UsbTest, writeTransmitsDataPartial)
+{
+    EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
+    libusb_device_descriptor descr;
+    EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, open(_, _))
+        .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, set_auto_detach_kernel_driver(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, close(_));
+
+    std::array<std::uint8_t, 4> buffer{{0x00, 0x01, 0x02, 0x3}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(handle, 0xab, buffer.data(), buffer.size(), NotNull(), 500))
+        .WillOnce(DoAll(SetArgPointee<4>(3), Return(LIBUSB_SUCCESS)));
+
+    Device device{&dev};
+    device.open();
+    EXPECT_THAT(device.write(0xab, buffer.data(), buffer.size()), Eq(3));
+}
+
+TEST_F(UsbTest, writeThrowsOnTransmitFailure)
+{
+    EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
+    libusb_device_descriptor descr;
+    EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, open(_, _))
+        .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, set_auto_detach_kernel_driver(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, close(_));
+    EXPECT_CALL(*usbmock, error_name(LIBUSB_ERROR_NOT_FOUND)).WillOnce(Return("ignore_name"));
+    EXPECT_CALL(*usbmock, strerror(LIBUSB_ERROR_NOT_FOUND)).WillOnce(Return("ignore_message"));
+
+    std::array<std::uint8_t, 4> buffer{{0x00, 0x01, 0x02, 0x03}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(Return(LIBUSB_ERROR_NOT_FOUND));
+
+    Device device{&dev};
+    device.open();
+    EXPECT_THROW(device.write(0xab, buffer.data(), buffer.size()), UsbException);
+}
+
+TEST_F(UsbTest, receiveReceivesData)
+{
+    EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
+    libusb_device_descriptor descr;
+    EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, open(_, _))
+        .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, set_auto_detach_kernel_driver(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, close(_));
+
+    std::array<std::uint8_t, 4> buffer{{0x10, 0x11, 0x12, 0x13}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(handle, 0xcd, NotNull(), buffer.size(), NotNull(), 500))
+        .WillOnce(DoAll(SetArrayArgument<2>(buffer.begin(), buffer.end()), SetArgPointee<4>(buffer.size()), Return(LIBUSB_SUCCESS)));
+
+    Device device{&dev};
+    device.open();
+    EXPECT_THAT(device.receive(0xcd, buffer.size()), ElementsAreArray(buffer));
+}
+
+TEST_F(UsbTest, receiveReceivesDataPartial)
+{
+    EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
+    libusb_device_descriptor descr;
+    EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, open(_, _))
+        .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, set_auto_detach_kernel_driver(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, close(_));
+
+    std::array<std::uint8_t, 4> buffer{{0x10, 0x11, 0x12, 0x13}};
+    EXPECT_CALL(*usbmock, interrupt_transfer(handle, 0xcd, NotNull(), buffer.size(), NotNull(), 500))
+        .WillOnce(DoAll(SetArrayArgument<2>(buffer.begin(), std::next(buffer.begin(), 2)), SetArgPointee<4>(2), Return(LIBUSB_SUCCESS)));
+
+    Device device{&dev};
+    device.open();
+    EXPECT_THAT(device.receive(0xcd, buffer.size()), ElementsAreArray({0x10, 0x11}));
+}
+
+TEST_F(UsbTest, receiveThrowsOnTransmitFailure)
+{
+    EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
+    libusb_device_descriptor descr;
+    EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, open(_, _))
+        .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, set_auto_detach_kernel_driver(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, close(_));
+    EXPECT_CALL(*usbmock, error_name(LIBUSB_ERROR_TIMEOUT)).WillOnce(Return("ignore_name"));
+    EXPECT_CALL(*usbmock, strerror(LIBUSB_ERROR_TIMEOUT)).WillOnce(Return("ignore_message"));
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(Return(LIBUSB_ERROR_TIMEOUT));
+
+    Device device{&dev};
+    device.open();
+    EXPECT_THROW(device.receive(0x33, 17), UsbException);
+}
