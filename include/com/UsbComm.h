@@ -21,9 +21,7 @@
 #pragma once
 
 #include "com/Connection.h"
-#include <initializer_list>
-
-struct libusb_device_handle;
+#include <com/UsbDevice.h>
 
 
 namespace plug::com
@@ -32,11 +30,7 @@ namespace plug::com
     class UsbComm : public Connection
     {
     public:
-        UsbComm();
-        ~UsbComm();
-
-        void open(std::uint16_t vid, std::uint16_t pid);
-        void openFirst(std::uint16_t vid, std::initializer_list<std::uint16_t> pids);
+        explicit UsbComm(usb::Device device);
 
         void close() override;
         bool isOpen() const override;
@@ -45,11 +39,7 @@ namespace plug::com
 
     private:
         std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
-        void closeAndRelease();
 
-        void initInterface();
-
-
-        libusb_device_handle* handle;
+        usb::Device device_;
     };
 }

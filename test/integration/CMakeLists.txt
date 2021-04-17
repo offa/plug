@@ -5,6 +5,7 @@ target_link_libraries(CommIT
                             plug-mustang
                             plug-version
                             plug-communication
+                            plug-communication-usb
                             plug-libusb
                             build-libs
                             )

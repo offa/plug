@@ -8,6 +8,7 @@ target_link_libraries(plug
                             plug-ui
                             plug-mustang
                             plug-communication
+                            plug-communication-usb
                             plug-libusb
                             plug-updater
                             build-libs

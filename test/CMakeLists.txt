@@ -29,13 +29,22 @@ target_link_libraries(MustangTest PRIVATE
 
 
 add_executable(CommunicationTest
-                UsbCommTest.cpp
                 ConnectionFactoryTest.cpp
-                UsbTest.cpp
+                UsbCommTest.cpp
                 )
 add_test(CommunicationTest CommunicationTest)
 target_link_libraries(CommunicationTest PRIVATE
                         plug-communication
+                        TestLibs
+                        UsbDeviceMock
+                        )
+
+add_executable(UsbTest
+    UsbTest.cpp
+    )
+add_test(UsbTest UsbTest)
+target_link_libraries(UsbTest PRIVATE
+                        plug-communication-usb
                         TestLibs
                         LibUsbMocks
                         )
@@ -50,6 +59,7 @@ target_link_libraries(IdLookupTest PRIVATE
 
 add_custom_target(unittest MustangTest
                         COMMAND CommunicationTest
+                        COMMAND UsbTest
                         COMMAND IdLookupTest
 
                         COMMENT "Running unittests\n\n"
