@@ -21,10 +21,16 @@
 #include "com/UsbDevice.h"
 #include "com/UsbException.h"
 #include <array>
+#include <chrono>
 #include <libusb-1.0/libusb.h>
 
 namespace plug::com::usb
 {
+    namespace
+    {
+        inline constexpr std::chrono::milliseconds usbTimeout{500};
+    }
+
     Device::Device(libusb_device* device)
         : device_(libusb_ref_device(device)), handle_(nullptr), descriptor_(getDeviceDescriptor(device))
     {
@@ -95,7 +101,7 @@ namespace plug::com::usb
     {
         int transfered{0};
 
-        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, data, dataSize, &transfered, 500); result != LIBUSB_SUCCESS)
+        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, data, dataSize, &transfered, usbTimeout.count()); result != LIBUSB_SUCCESS)
         {
             throw UsbException{result};
         }
@@ -107,7 +113,7 @@ namespace plug::com::usb
         std::vector<std::uint8_t> buffer(dataSize);
         int transfered{0};
 
-        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, buffer.data(), dataSize, &transfered, 500); (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
+        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, buffer.data(), dataSize, &transfered, usbTimeout.count()); (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
         {
             throw UsbException{result};
         }
