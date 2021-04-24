@@ -510,6 +510,26 @@ TEST_F(UsbTest, receiveReceivesDataPartial)
     EXPECT_THAT(device.receive(0xcd, buffer.size()), ElementsAreArray({0x10, 0x11}));
 }
 
+TEST_F(UsbTest, receiveReturnsEmptyOnTimeout)
+{
+    EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
+    libusb_device_descriptor descr;
+    EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, unref_device(_));
+    EXPECT_CALL(*usbmock, open(_, _))
+        .WillOnce(DoAll(SetArgPointee<1>(handle), Return(LIBUSB_SUCCESS)));
+    EXPECT_CALL(*usbmock, set_auto_detach_kernel_driver(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
+    EXPECT_CALL(*usbmock, close(_));
+
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(Return(LIBUSB_ERROR_TIMEOUT));
+
+    Device device{&dev};
+    device.open();
+    EXPECT_THAT(device.receive(0x88, 99), IsEmpty());
+}
+
 TEST_F(UsbTest, receiveThrowsOnTransmitFailure)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
@@ -522,10 +542,10 @@ TEST_F(UsbTest, receiveThrowsOnTransmitFailure)
     EXPECT_CALL(*usbmock, claim_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
     EXPECT_CALL(*usbmock, release_interface(_, _)).WillOnce(Return(LIBUSB_SUCCESS));
     EXPECT_CALL(*usbmock, close(_));
-    EXPECT_CALL(*usbmock, error_name(LIBUSB_ERROR_TIMEOUT)).WillOnce(Return("ignore_name"));
-    EXPECT_CALL(*usbmock, strerror(LIBUSB_ERROR_TIMEOUT)).WillOnce(Return("ignore_message"));
+    EXPECT_CALL(*usbmock, error_name(LIBUSB_ERROR_ACCESS)).WillOnce(Return("ignore_name"));
+    EXPECT_CALL(*usbmock, strerror(LIBUSB_ERROR_ACCESS)).WillOnce(Return("ignore_message"));
 
-    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(Return(LIBUSB_ERROR_TIMEOUT));
+    EXPECT_CALL(*usbmock, interrupt_transfer(_, _, _, _, _, _)).WillOnce(Return(LIBUSB_ERROR_ACCESS));
 
     Device device{&dev};
     device.open();

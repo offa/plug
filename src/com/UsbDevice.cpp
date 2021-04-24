@@ -107,7 +107,7 @@ namespace plug::com::usb
         std::vector<std::uint8_t> buffer(dataSize);
         int transfered{0};
 
-        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, buffer.data(), dataSize, &transfered, 500); result != LIBUSB_SUCCESS)
+        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, buffer.data(), dataSize, &transfered, 500); (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
         {
             throw UsbException{result};
         }
