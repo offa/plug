@@ -46,7 +46,8 @@ namespace plug::com::usb
 
     namespace detail
     {
-        void release(libusb_device* device);
+        void releaseDevice(libusb_device* device);
+        void releaseHandle(libusb_device_handle* handle);
     }
 
 
@@ -81,8 +82,8 @@ namespace plug::com::usb
 
         Descriptor getDeviceDescriptor(libusb_device* device) const;
 
-        Ressource<libusb_device, detail::release> device_;
-        libusb_device_handle* handle_;
+        Ressource<libusb_device, detail::releaseDevice> device_;
+        Ressource<libusb_device_handle, detail::releaseHandle> handle_;
         Descriptor descriptor_;
     };
 }

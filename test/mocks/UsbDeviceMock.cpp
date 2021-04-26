@@ -73,7 +73,11 @@ namespace plug::com::usb
 {
     namespace detail
     {
-        void release([[maybe_unused]] libusb_device* device)
+        void releaseDevice([[maybe_unused]] libusb_device* device)
+        {
+        }
+
+        void releaseHandle([[maybe_unused]] libusb_device_handle* handle)
         {
         }
     }

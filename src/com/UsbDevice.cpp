@@ -33,9 +33,15 @@ namespace plug::com::usb
 
     namespace detail
     {
-        void release(libusb_device* device)
+        void releaseDevice(libusb_device* device)
         {
             libusb_unref_device(device);
+        }
+
+        void releaseHandle(libusb_device_handle* handle)
+        {
+            libusb_release_interface(handle, 0);
+            libusb_close(handle);
         }
     }
 
@@ -47,22 +53,23 @@ namespace plug::com::usb
 
     Device::~Device()
     {
-        close();
     }
 
     void Device::open()
     {
-        if (const int result = libusb_open(device_.get(), &handle_); result != LIBUSB_SUCCESS)
+        libusb_device_handle* h;
+        if (const int result = libusb_open(device_.get(), &h); result != LIBUSB_SUCCESS)
+        {
+            throw UsbException{result};
+        }
+        handle_.reset(h);
+
+        if (const int result = libusb_set_auto_detach_kernel_driver(handle_.get(), 1); result != LIBUSB_SUCCESS)
         {
             throw UsbException{result};
         }
 
-        if (const int result = libusb_set_auto_detach_kernel_driver(handle_, 1); result != LIBUSB_SUCCESS)
-        {
-            throw UsbException{result};
-        }
-
-        if (const int result = libusb_claim_interface(handle_, 0); result != LIBUSB_SUCCESS)
+        if (const int result = libusb_claim_interface(handle_.get(), 0); result != LIBUSB_SUCCESS)
         {
             throw UsbException{result};
         }
@@ -70,12 +77,7 @@ namespace plug::com::usb
 
     void Device::close()
     {
-        if (handle_ != nullptr)
-        {
-            libusb_release_interface(handle_, 0);
-            libusb_close(handle_);
-            handle_ = nullptr;
-        }
+        handle_ = nullptr;
     }
 
     bool Device::isOpen() const noexcept
@@ -96,7 +98,7 @@ namespace plug::com::usb
     std::string Device::name() const
     {
         std::array<std::uint8_t, 256> buffer;
-        const int n = libusb_get_string_descriptor_ascii(handle_, descriptor_.stringDescriptorIndex, buffer.data(), buffer.size());
+        const int n = libusb_get_string_descriptor_ascii(handle_.get(), descriptor_.stringDescriptorIndex, buffer.data(), buffer.size());
 
         if (n < 0)
         {
@@ -109,7 +111,7 @@ namespace plug::com::usb
     {
         int transfered{0};
 
-        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, data, dataSize, &transfered, usbTimeout.count()); result != LIBUSB_SUCCESS)
+        if (const auto result = libusb_interrupt_transfer(handle_.get(), endpoint, data, dataSize, &transfered, usbTimeout.count()); result != LIBUSB_SUCCESS)
         {
             throw UsbException{result};
         }
@@ -121,7 +123,7 @@ namespace plug::com::usb
         std::vector<std::uint8_t> buffer(dataSize);
         int transfered{0};
 
-        if (const auto result = libusb_interrupt_transfer(handle_, endpoint, buffer.data(), dataSize, &transfered, usbTimeout.count()); (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
+        if (const auto result = libusb_interrupt_transfer(handle_.get(), endpoint, buffer.data(), dataSize, &transfered, usbTimeout.count()); (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
         {
             throw UsbException{result};
         }
