@@ -56,7 +56,6 @@ namespace plug::com::usb
     public:
         explicit Device(libusb_device* device);
         Device(Device&&) = default;
-        ~Device();
 
         void open();
         void close();

@@ -93,8 +93,6 @@ namespace plug::com::usb
     {
     }
 
-    Device::~Device() = default;
-
     void Device::open()
     {
         mock::usbDeviceMock->open();

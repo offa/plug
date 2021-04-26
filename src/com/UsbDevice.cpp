@@ -51,13 +51,10 @@ namespace plug::com::usb
     {
     }
 
-    Device::~Device()
-    {
-    }
-
     void Device::open()
     {
         libusb_device_handle* h;
+
         if (const int result = libusb_open(device_.get(), &h); result != LIBUSB_SUCCESS)
         {
             throw UsbException{result};
