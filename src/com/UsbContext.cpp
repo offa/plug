@@ -37,7 +37,7 @@ namespace plug::com::usb
 
     void Context::init()
     {
-        if (int status = libusb_init(nullptr); status != LIBUSB_SUCCESS)
+        if (const int status = libusb_init(nullptr); status != LIBUSB_SUCCESS)
         {
             throw UsbException{status};
         }
