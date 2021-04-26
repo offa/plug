@@ -27,6 +27,13 @@
 using namespace testing;
 using namespace plug::com::usb;
 
+
+MATCHER_P(BufferIs, expected, "")
+{
+    return std::equal(std::cbegin(expected), std::cend(expected), std::cbegin(arg));
+}
+
+
 class UsbTest : public testing::Test
 {
 protected:
@@ -40,10 +47,10 @@ protected:
         mock::clearUsbMock();
     }
 
-    mock::UsbMock* usbmock = nullptr;
+    mock::UsbMock* usbmock{nullptr};
     libusb_device dev;
     libusb_device_handle dummy;
-    libusb_device_handle* handle = &dummy;
+    libusb_device_handle* handle{&dummy};
 };
 
 TEST_F(UsbTest, contextCtorInitializesDefaultContext)
@@ -89,7 +96,7 @@ TEST_F(UsbTest, listDevicesEmptyIfNoDevices)
     EXPECT_CALL(*usbmock, free_device_list(_, _));
 
     const auto devices = listDevices();
-    EXPECT_THAT(devices, IsEmpty());
+    EXPECT_THAT(devices, SizeIs(0));
 }
 
 TEST_F(UsbTest, listDevicesThrowsOnDeviceListError)
@@ -205,7 +212,7 @@ TEST_F(UsbTest, deviceOpen)
 
     Device device{&dev};
     device.open();
-    EXPECT_THAT(device.isOpen(), IsTrue());
+    EXPECT_TRUE(device.isOpen());
 }
 
 TEST_F(UsbTest, deviceOpenThrowsOnOpenError)
@@ -263,7 +270,7 @@ TEST_F(UsbTest, deviceIsOpenReturnsFalseIfNotOpen)
     EXPECT_CALL(*usbmock, unref_device(_));
 
     Device device{&dev};
-    EXPECT_THAT(device.isOpen(), IsFalse());
+    EXPECT_FALSE(device.isOpen());
 }
 
 TEST_F(UsbTest, deviceCloseClosesOpenDevice)
@@ -280,9 +287,9 @@ TEST_F(UsbTest, deviceCloseClosesOpenDevice)
 
     Device device{&dev};
     device.open();
-    EXPECT_THAT(device.isOpen(), IsTrue());
+    EXPECT_TRUE(device.isOpen());
     device.close();
-    EXPECT_THAT(device.isOpen(), IsFalse());
+    EXPECT_FALSE(device.isOpen());
 }
 
 TEST_F(UsbTest, deviceCloseIgnoresNotOpen)
@@ -293,7 +300,7 @@ TEST_F(UsbTest, deviceCloseIgnoresNotOpen)
 
     Device device{&dev};
     device.close();
-    EXPECT_THAT(device.isOpen(), IsFalse());
+    EXPECT_FALSE(device.isOpen());
 }
 
 TEST_F(UsbTest, deviceCloseDoesNotThrowOnReleaseInterfaceError)
@@ -310,9 +317,9 @@ TEST_F(UsbTest, deviceCloseDoesNotThrowOnReleaseInterfaceError)
 
     Device device{&dev};
     device.open();
-    EXPECT_THAT(device.isOpen(), IsTrue());
+    EXPECT_TRUE(device.isOpen());
     device.close();
-    EXPECT_THAT(device.isOpen(), IsFalse());
+    EXPECT_FALSE(device.isOpen());
 }
 
 TEST_F(UsbTest, deviceIsClosedOnDestruction)
@@ -370,7 +377,7 @@ TEST_F(UsbTest, deviceNameReturnsEmptyStringOfZeroLengthName)
 
     Device device{&dev};
     device.open();
-    EXPECT_THAT(device.name(), IsEmpty());
+    EXPECT_THAT(device.name(), SizeIs(0));
 }
 
 TEST_F(UsbTest, deviceNameThrowsOnError)
@@ -482,7 +489,7 @@ TEST_F(UsbTest, receiveReceivesData)
 
     Device device{&dev};
     device.open();
-    EXPECT_THAT(device.receive(0xcd, buffer.size()), ElementsAreArray(buffer));
+    EXPECT_THAT(device.receive(0xcd, buffer.size()), BufferIs(buffer));
 }
 
 TEST_F(UsbTest, receiveReceivesDataPartial)
@@ -504,7 +511,7 @@ TEST_F(UsbTest, receiveReceivesDataPartial)
 
     Device device{&dev};
     device.open();
-    EXPECT_THAT(device.receive(0xcd, buffer.size()), ElementsAreArray({0x10, 0x11}));
+    EXPECT_THAT(device.receive(0xcd, buffer.size()), BufferIs(std::array<std::uint8_t, 2>{{0x10, 0x11}}));
 }
 
 TEST_F(UsbTest, receiveReturnsEmptyOnTimeout)
@@ -524,7 +531,7 @@ TEST_F(UsbTest, receiveReturnsEmptyOnTimeout)
 
     Device device{&dev};
     device.open();
-    EXPECT_THAT(device.receive(0x88, 99), IsEmpty());
+    EXPECT_THAT(device.receive(0x88, 99), SizeIs(0));
 }
 
 TEST_F(UsbTest, receiveThrowsOnTransmitFailure)
