@@ -104,7 +104,6 @@ TEST_F(UsbTest, listDevicesThrowsOnDeviceListError)
 TEST_F(UsbTest, listDevicesReturnsDevices)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).Times(2);
-    EXPECT_CALL(*usbmock, unref_device(_)).Times(2);
 
     libusb_device device0;
     libusb_device device1;
@@ -134,7 +133,6 @@ TEST_F(UsbTest, listDevicesReturnsDevices)
 TEST_F(UsbTest, listDevicesUnrefsList)
 {
     EXPECT_CALL(*usbmock, ref_device(_));
-    EXPECT_CALL(*usbmock, unref_device(_));
 
     std::array<libusb_device*, 1> deviceList{&dev};
     EXPECT_CALL(*usbmock, get_device_list(nullptr, NotNull()))
@@ -150,7 +148,6 @@ TEST_F(UsbTest, listDevicesUnrefsList)
 TEST_F(UsbTest, listDevicesSkipsDeviceOnFailingDescriptor)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).Times(2);
-    EXPECT_CALL(*usbmock, unref_device(_)).Times(2);
 
     libusb_device device0;
     libusb_device device1;

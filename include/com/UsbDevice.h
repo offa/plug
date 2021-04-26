@@ -23,19 +23,38 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <memory>
 
 struct libusb_device;
 struct libusb_device_handle;
 
 namespace plug::com::usb
 {
+    template <auto Fn>
+    struct ReleaseFunction
+    {
+        template <class T>
+        void operator()(T* ptr)
+        {
+            Fn(ptr);
+        }
+    };
+
+    template <class T, auto Fn>
+    using Ressource = std::unique_ptr<T, ReleaseFunction<Fn>>;
+
+
+    namespace detail
+    {
+        void release(libusb_device* device);
+    }
+
 
     class Device
     {
     public:
         explicit Device(libusb_device* device);
         Device(Device&&) = default;
-
         ~Device();
 
         void open();
@@ -62,7 +81,7 @@ namespace plug::com::usb
 
         Descriptor getDeviceDescriptor(libusb_device* device) const;
 
-        libusb_device* device_;
+        Ressource<libusb_device, detail::release> device_;
         libusb_device_handle* handle_;
         Descriptor descriptor_;
     };

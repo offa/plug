@@ -71,6 +71,13 @@ namespace mock
 
 namespace plug::com::usb
 {
+    namespace detail
+    {
+        void release([[maybe_unused]] libusb_device* device)
+        {
+        }
+    }
+
     std::vector<Device> listDevices()
     {
         return mock::usbContextMock->listDevices();

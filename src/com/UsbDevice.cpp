@@ -31,6 +31,15 @@ namespace plug::com::usb
         inline constexpr std::chrono::milliseconds usbTimeout{500};
     }
 
+    namespace detail
+    {
+        void release(libusb_device* device)
+        {
+            libusb_unref_device(device);
+        }
+    }
+
+
     Device::Device(libusb_device* device)
         : device_(libusb_ref_device(device)), handle_(nullptr), descriptor_(getDeviceDescriptor(device))
     {
@@ -39,12 +48,11 @@ namespace plug::com::usb
     Device::~Device()
     {
         close();
-        libusb_unref_device(device_);
     }
 
     void Device::open()
     {
-        if (const int result = libusb_open(device_, &handle_); result != LIBUSB_SUCCESS)
+        if (const int result = libusb_open(device_.get(), &handle_); result != LIBUSB_SUCCESS)
         {
             throw UsbException{result};
         }
@@ -127,7 +135,6 @@ namespace plug::com::usb
 
         if (const auto result = libusb_get_device_descriptor(device, &descriptor); result != LIBUSB_SUCCESS)
         {
-            libusb_unref_device(device_);
             throw UsbException{result};
         }
         return {descriptor.idVendor, descriptor.idProduct, descriptor.iProduct};
