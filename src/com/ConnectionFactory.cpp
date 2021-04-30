@@ -19,7 +19,10 @@
  */
 
 #include "com/ConnectionFactory.h"
+#include "com/CommunicationException.h"
 #include "com/UsbComm.h"
+#include "com/UsbContext.h"
+#include <algorithm>
 
 namespace plug::com
 {
@@ -50,8 +53,17 @@ namespace plug::com
 
     std::shared_ptr<Connection> createUsbConnection()
     {
-        auto conn = std::make_shared<UsbComm>();
-        conn->openFirst(usbVID, pids);
-        return conn;
+        auto devices = usb::listDevices();
+
+        auto itr = std::find_if(devices.begin(), devices.end(), [](const auto& dev) {
+            return (dev.vendorId() == usbVID) && std::any_of(pids.begin(), pids.end(), [&dev](std::uint16_t pid) { return dev.productId() == pid; });
+        });
+
+        if (itr == devices.end())
+        {
+            throw CommunicationException{"No device found"};
+        }
+
+        return std::make_shared<UsbComm>(std::move(*itr));
     }
 }

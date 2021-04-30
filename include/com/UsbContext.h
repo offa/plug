@@ -20,26 +20,25 @@
 
 #pragma once
 
-#include "com/Connection.h"
 #include <com/UsbDevice.h>
+#include <vector>
 
-
-namespace plug::com
+namespace plug::com::usb
 {
-
-    class UsbComm : public Connection
+    class Context
     {
     public:
-        explicit UsbComm(usb::Device device);
+        Context();
+        Context(const Context&) = delete;
+        ~Context();
 
-        void close() override;
-        bool isOpen() const override;
-
-        std::vector<std::uint8_t> receive(std::size_t recvSize) override;
+        Context& operator=(const Context&) = delete;
 
     private:
-        std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
-
-        usb::Device device_;
+        void init();
+        void deinit();
     };
+
+    std::vector<Device> listDevices();
+
 }

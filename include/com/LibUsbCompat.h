@@ -20,26 +20,32 @@
 
 #pragma once
 
-#include "com/Connection.h"
-#include <com/UsbDevice.h>
+#include <libusb-1.0/libusb.h>
 
-
-namespace plug::com
+namespace plug::com::usb::libusb
 {
-
-    class UsbComm : public Connection
+    class ErrorCodeAdapter
     {
     public:
-        explicit UsbComm(usb::Device device);
+        constexpr explicit ErrorCodeAdapter(int errorCode)
+            : errorCode_(errorCode)
+        {
+        }
 
-        void close() override;
-        bool isOpen() const override;
+        constexpr operator int() const noexcept
+        {
+            return errorCode_;
+        }
 
-        std::vector<std::uint8_t> receive(std::size_t recvSize) override;
+        constexpr operator libusb_error() const noexcept
+        {
+            return static_cast<libusb_error>(errorCode_);
+        }
 
     private:
-        std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
-
-        usb::Device device_;
+        int errorCode_;
     };
+
+
+    const char* strerror(ErrorCodeAdapter errorCode);
 }

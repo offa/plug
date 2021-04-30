@@ -20,15 +20,31 @@
 
 #include "com/Mustang.h"
 #include "com/ConnectionFactory.h"
+#include "com/UsbContext.h"
 #include "Version.h"
 #include <iostream>
 
 int main()
 {
+    using namespace plug::com::usb;
+
     std::cout << " === Plug v" << plug::version() << " - Integrationtest ===\n\n";
 
-    plug::com::Mustang m{plug::com::createUsbConnection()};
-    const auto initialData = m.start_amp();
+    Context ctx;
+    auto devs = listDevices();
+
+    for (auto& d : devs)
+    {
+        try
+        {
+            std::cout << " - " << d.vendorId() << ":" << d.productId() << "\n";
+            d.open();
+        }
+        catch (const std::exception& ex)
+        {
+            std::cout << "ERROR: " << ex.what() << "\n";
+        }
+    }
 
     return 0;
 }

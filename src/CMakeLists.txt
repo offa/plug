@@ -8,9 +8,10 @@ target_link_libraries(plug
                             plug-ui
                             plug-mustang
                             plug-communication
+                            plug-communication-usb
+                            plug-libusb
                             plug-updater
                             build-libs
-                            libusb-1.0::libusb-1.0
                         )
 
 install(TARGETS plug EXPORT plug-config DESTINATION bin)

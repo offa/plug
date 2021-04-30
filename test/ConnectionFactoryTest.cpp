@@ -20,75 +20,57 @@
 
 #include "com/ConnectionFactory.h"
 #include "com/CommunicationException.h"
-#include "mocks/LibUsbMocks.h"
+#include "mocks/UsbDeviceMock.h"
+#include <gmock/gmock-spec-builders.h>
 #include <gmock/gmock.h>
+#include <memory>
 
 using namespace plug::com;
 using namespace testing;
+
 
 class ConnectionFactoryTest : public testing::Test
 {
 protected:
     void SetUp() override
     {
-        usbmock = mock::resetUsbMock();
-        ignoreClose();
+        contextMock = mock::resetUsbContextMock();
+        deviceMock = mock::resetUsbDeviceMock();
     }
 
     void TearDown() override
     {
-        mock::clearUsbMock();
+        mock::clearUsbContextMock();
+        mock::clearUsbDeviceMock();
     }
 
-    void ignoreClose()
-    {
-        EXPECT_CALL(*usbmock, release_interface(_, _)).Times(AnyNumber());
-        EXPECT_CALL(*usbmock, attach_kernel_driver(_, _)).Times(AnyNumber());
-        EXPECT_CALL(*usbmock, close(_)).Times(AnyNumber());
-        EXPECT_CALL(*usbmock, exit(_)).Times(AnyNumber());
-    }
-
-
-    mock::UsbMock* usbmock = nullptr;
-    libusb_device_handle handle{};
-    static inline constexpr std::uint16_t vid{0x1ed8};
+    mock::UsbContextMock* contextMock{nullptr};
+    mock::UsbDeviceMock* deviceMock{nullptr};
 };
 
-TEST_F(ConnectionFactoryTest, createUsbConnectionOpensDevice)
+
+TEST_F(ConnectionFactoryTest, createUsbConnectionThrowsIfNoDeviceFound)
 {
-
-    InSequence s;
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0));
-
-    auto conn = createUsbConnection();
-    EXPECT_TRUE(conn->isOpen());
-}
-
-TEST_F(ConnectionFactoryTest, createUsbConnectionOpensFirstMatchedDevice)
-{
-    InSequence s;
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, _))
-        .Times(2)
-        .WillRepeatedly(Return(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, _)).WillOnce(Return(&handle));
-    EXPECT_CALL(*usbmock, kernel_driver_active(&handle, 0));
-    EXPECT_CALL(*usbmock, claim_interface(&handle, 0));
-
-    auto conn = createUsbConnection();
-    EXPECT_TRUE(conn->isOpen());
-}
-
-TEST_F(ConnectionFactoryTest, createUsbConnectionThrowsIfNoMatchingDeviceFound)
-{
-    InSequence s;
-    EXPECT_CALL(*usbmock, init(nullptr));
-    EXPECT_CALL(*usbmock, open_device_with_vid_pid(nullptr, vid, _))
-        .Times(AtLeast(1))
-        .WillRepeatedly(Return(nullptr));
+    EXPECT_CALL(*contextMock, listDevices).WillOnce(Return(ByMove(std::vector<usb::Device>{})));
 
     EXPECT_THROW(createUsbConnection(), CommunicationException);
+}
+
+TEST_F(ConnectionFactoryTest, createUsbConnectionReturnsFirstDeviceFound)
+{
+    std::vector<usb::Device> devices{};
+    devices.emplace_back(nullptr);
+    devices.emplace_back(nullptr);
+    devices.emplace_back(nullptr);
+    EXPECT_CALL(*contextMock, listDevices).WillOnce(Return(ByMove(std::move(devices))));
+    EXPECT_CALL(*deviceMock, open());
+    EXPECT_CALL(*deviceMock, vendorId())
+        .WillOnce(Return(0xf0f0))
+        .WillOnce(Return(0x1ed8));
+    EXPECT_CALL(*deviceMock, productId())
+        .WillOnce(Return(0xff04))
+        .WillOnce(Return(0x0005));
+
+    auto device = createUsbConnection();
+    EXPECT_THAT(device, NotNull());
 }

@@ -18,28 +18,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "com/UsbException.h"
+#include "com/LibUsbCompat.h"
+#include <libusb-1.0/libusb.h>
 
-#include "com/Connection.h"
-#include <com/UsbDevice.h>
-
-
-namespace plug::com
+namespace plug::com::usb
 {
-
-    class UsbComm : public Connection
+    UsbException::UsbException(int errorCode)
+        : error_(errorCode),
+          name_(libusb_error_name(errorCode)),
+          message_(libusb::strerror(libusb::ErrorCodeAdapter{errorCode}))
     {
-    public:
-        explicit UsbComm(usb::Device device);
+    }
 
-        void close() override;
-        bool isOpen() const override;
+    int UsbException::code() const noexcept
+    {
+        return error_;
+    }
 
-        std::vector<std::uint8_t> receive(std::size_t recvSize) override;
+    std::string UsbException::name() const
+    {
+        return name_;
+    }
 
-    private:
-        std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
+    std::string UsbException::message() const
+    {
+        return message_;
+    }
 
-        usb::Device device_;
-    };
+    const char* UsbException::what() const noexcept
+    {
+        return message_.c_str();
+    }
 }

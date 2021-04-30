@@ -19,6 +19,7 @@
  */
 
 #include "LibUsbMocks.h"
+#include "com/LibUsbCompat.h"
 #include <stdexcept>
 
 namespace mock
@@ -87,18 +88,72 @@ extern "C"
         return mock::getUsbMock()->kernel_driver_active(dev_handle, interface_number);
     }
 
-    int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
-    {
-        return mock::getUsbMock()->release_interface(dev_handle, interface_number);
-    }
-
     int libusb_attach_kernel_driver(libusb_device_handle* dev_handle, int interface_number)
     {
         return mock::getUsbMock()->attach_kernel_driver(dev_handle, interface_number);
     }
 
+    int libusb_set_auto_detach_kernel_driver(libusb_device_handle* dev_handle, int enable)
+    {
+        return mock::getUsbMock()->set_auto_detach_kernel_driver(dev_handle, enable);
+    }
+
     void libusb_close(libusb_device_handle* dev_handle)
     {
         mock::getUsbMock()->close(dev_handle);
+    }
+
+    int libusb_release_interface(libusb_device_handle* dev_handle, int interface_number)
+    {
+        return mock::getUsbMock()->release_interface(dev_handle, interface_number);
+    }
+
+    const char* libusb_error_name(int error_code)
+    {
+        return mock::getUsbMock()->error_name(error_code);
+    }
+
+    ssize_t libusb_get_device_list(libusb_context* ctx, libusb_device*** list)
+    {
+        return mock::getUsbMock()->get_device_list(ctx, list);
+    }
+
+    int libusb_get_device_descriptor(libusb_device* dev, libusb_device_descriptor* desc)
+    {
+        return mock::getUsbMock()->get_device_descriptor(dev, desc);
+    }
+
+    void libusb_free_device_list(libusb_device** list, int unref_devices)
+    {
+        mock::getUsbMock()->free_device_list(list, unref_devices);
+    }
+
+    libusb_device* libusb_ref_device(libusb_device* dev)
+    {
+        return mock::getUsbMock()->ref_device(dev);
+    }
+
+    void libusb_unref_device(libusb_device* dev)
+    {
+        return mock::getUsbMock()->unref_device(dev);
+    }
+
+    int libusb_open(libusb_device* dev, libusb_device_handle** dev_handle)
+    {
+        return mock::getUsbMock()->open(dev, dev_handle);
+    }
+
+    int libusb_get_string_descriptor_ascii(libusb_device_handle* dev_handle, uint8_t desc_index, unsigned char* data, int length)
+    {
+        return mock::getUsbMock()->get_string_descriptor_ascii(dev_handle, desc_index, data, length);
+    }
+}
+
+
+namespace plug::com::usb::libusb
+{
+    const char* strerror(ErrorCodeAdapter errorCode)
+    {
+        return mock::getUsbMock()->strerror(errorCode);
     }
 }

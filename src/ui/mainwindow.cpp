@@ -59,7 +59,6 @@ namespace plug
                 return 3;
             if ((value >= effects::SMALL_HALL_REVERB) && (value <= effects::FENDER_65_SPRING_REVERB))
                 return 4;
-
             return 0;
         }
 
@@ -218,7 +217,7 @@ namespace plug
 
         try
         {
-            amp_ops = std::make_unique<com::Mustang>(com::createUsbConnection());
+            amp_ops = std::make_unique<plug::com::Mustang>(plug::com::createUsbConnection());
             const auto [signalChain, presets] = amp_ops->start_amp();
             name = QString::fromStdString(signalChain.name());
             amplifier_set = signalChain.amp();

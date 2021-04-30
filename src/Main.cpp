@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "com/UsbContext.h"
+#include "com/Mustang.h"
 #include "ui/mainwindow.h"
 #include "Version.h"
 #include <QApplication>
@@ -29,6 +31,8 @@ int main(int argc, char* argv[])
     QCoreApplication::setOrganizationName("offa");
     QCoreApplication::setApplicationName("Plug");
     QCoreApplication::setApplicationVersion(QString::fromStdString(plug::version()));
+
+    plug::com::usb::Context context{};
 
     plug::MainWindow window;
     window.show();

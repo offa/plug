@@ -20,26 +20,26 @@
 
 #pragma once
 
-#include "com/Connection.h"
-#include <com/UsbDevice.h>
+#include <string>
+#include <stdexcept>
 
-
-namespace plug::com
+namespace plug::com::usb
 {
-
-    class UsbComm : public Connection
+    class UsbException : public std::exception
     {
     public:
-        explicit UsbComm(usb::Device device);
+        explicit UsbException(int errorCode);
 
-        void close() override;
-        bool isOpen() const override;
+        int code() const noexcept;
+        std::string name() const;
+        std::string message() const;
 
-        std::vector<std::uint8_t> receive(std::size_t recvSize) override;
+        const char* what() const noexcept override;
 
     private:
-        std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
-
-        usb::Device device_;
+        int error_;
+        std::string name_;
+        std::string message_;
     };
+
 }
