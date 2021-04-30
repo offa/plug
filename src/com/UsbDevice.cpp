@@ -53,7 +53,7 @@ namespace plug::com::usb
 
     void Device::open()
     {
-        libusb_device_handle* h;
+        libusb_device_handle* h{nullptr};
 
         if (const int result = libusb_open(device_.get(), &h); result != LIBUSB_SUCCESS)
         {
