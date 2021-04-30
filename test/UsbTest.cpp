@@ -118,10 +118,10 @@ TEST_F(UsbTest, listDevicesReturnsDevices)
     EXPECT_CALL(*usbmock, get_device_list(nullptr, NotNull()))
         .WillOnce(DoAll(SetArgPointee<1>(deviceList.data()),
                         Return(deviceList.size())));
-    libusb_device_descriptor descr0;
+    libusb_device_descriptor descr0{};
     descr0.idVendor = 0xabcd;
     descr0.idProduct = 0x1221;
-    libusb_device_descriptor descr1;
+    libusb_device_descriptor descr1{};
     descr1.idVendor = 0xeeff;
     descr1.idProduct = 0x0202;
     EXPECT_CALL(*usbmock, get_device_descriptor(NotNull(), NotNull()))
@@ -162,10 +162,10 @@ TEST_F(UsbTest, listDevicesSkipsDeviceOnFailingDescriptor)
     EXPECT_CALL(*usbmock, get_device_list(nullptr, NotNull()))
         .WillOnce(DoAll(SetArgPointee<1>(deviceList.data()),
                         Return(deviceList.size())));
-    libusb_device_descriptor descr0;
+    libusb_device_descriptor descr0{};
     descr0.idVendor = 0x1234;
     descr0.idProduct = 0x5678;
-    libusb_device_descriptor descr1;
+    libusb_device_descriptor descr1{};
     descr1.idVendor = 0x0ff0;
     descr1.idProduct = 0x0ee0;
     EXPECT_CALL(*usbmock, get_device_descriptor(NotNull(), NotNull()))
@@ -341,7 +341,7 @@ TEST_F(UsbTest, deviceIsClosedOnDestruction)
 TEST_F(UsbTest, deviceNameReturnsNameIfOpen)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(NotNull(), NotNull())).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -362,7 +362,7 @@ TEST_F(UsbTest, deviceNameReturnsNameIfOpen)
 TEST_F(UsbTest, deviceNameReturnsEmptyStringOfZeroLengthName)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(NotNull(), NotNull())).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -383,7 +383,7 @@ TEST_F(UsbTest, deviceNameReturnsEmptyStringOfZeroLengthName)
 TEST_F(UsbTest, deviceNameThrowsOnError)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(NotNull(), NotNull())).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -406,7 +406,7 @@ TEST_F(UsbTest, deviceNameThrowsOnError)
 TEST_F(UsbTest, writeTransmitsData)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -428,7 +428,7 @@ TEST_F(UsbTest, writeTransmitsData)
 TEST_F(UsbTest, writeTransmitsDataPartial)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -450,7 +450,7 @@ TEST_F(UsbTest, writeTransmitsDataPartial)
 TEST_F(UsbTest, writeThrowsOnTransmitFailure)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -473,7 +473,7 @@ TEST_F(UsbTest, writeThrowsOnTransmitFailure)
 TEST_F(UsbTest, receiveReceivesData)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -495,7 +495,7 @@ TEST_F(UsbTest, receiveReceivesData)
 TEST_F(UsbTest, receiveReceivesDataPartial)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -517,7 +517,7 @@ TEST_F(UsbTest, receiveReceivesDataPartial)
 TEST_F(UsbTest, receiveReturnsEmptyOnTimeout)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
@@ -537,7 +537,7 @@ TEST_F(UsbTest, receiveReturnsEmptyOnTimeout)
 TEST_F(UsbTest, receiveThrowsOnTransmitFailure)
 {
     EXPECT_CALL(*usbmock, ref_device(_)).WillOnce(Return(&dev));
-    libusb_device_descriptor descr;
+    libusb_device_descriptor descr{};
     EXPECT_CALL(*usbmock, get_device_descriptor(_, _)).WillOnce(DoAll(SetArgPointee<1>(descr), Return(LIBUSB_SUCCESS)));
     EXPECT_CALL(*usbmock, unref_device(_));
     EXPECT_CALL(*usbmock, open(_, _))
