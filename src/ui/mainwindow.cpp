@@ -196,7 +196,7 @@ namespace plug
                               "<hr>"
                               "<p>Copyright © 2017-2021 offa</p>"
                               "<p>Copyright © 2010-2016 piorekf <piorek@piorekf.org></p>"
-                              "<p>License: <a href=\"http://www.gnu.org/licenses/gpl.txt\">GPLv3</a></p>"
+                              "<p>License: <a href=\"https://www.gnu.org/licenses/gpl.txt\">GPLv3</a></p>"
                               "</center>")
                                .arg(QCoreApplication::applicationName(),
                                     QCoreApplication::applicationVersion())};
