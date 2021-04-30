@@ -36,7 +36,7 @@ namespace plug
             : name_(""), amp_(), effects_()
         {
         }
-        SignalChain(const std::string& name, amp_settings amp, std::array<fx_pedal_settings, 4> effects)
+        SignalChain(const std::string& name, amp_settings amp, const std::array<fx_pedal_settings, 4>& effects)
             : name_(name), amp_(amp), effects_(effects)
         {
         }
@@ -67,7 +67,7 @@ namespace plug
             return effects_;
         }
 
-        void setEffects(std::array<fx_pedal_settings, 4> effects)
+        void setEffects(const std::array<fx_pedal_settings, 4>& effects)
         {
             effects_ = effects;
         }
