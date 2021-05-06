@@ -1,3 +1,6 @@
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 add_library(plug-ui amp_advanced.cpp
                     amplifier.cpp

@@ -61,14 +61,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include("${CMAKE_BINARY_DIR}/conan_paths.cmake" OPTIONAL)
 
-## Qt
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
-
-## LibUSB
 find_package(libusb-1.0 REQUIRED)
 
 
