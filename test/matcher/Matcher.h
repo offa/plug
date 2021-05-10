@@ -29,13 +29,4 @@ namespace test::matcher
         return std::equal(expected.cbegin(), expected.cend(), arg);
     }
 
-    MATCHER(IsSuccessful, "Successful (0)")
-    {
-        return (arg == 0);
-    }
-
-    MATCHER(IsFailure, "Failure (!= 0)")
-    {
-        return (arg != 0);
-    }
 }

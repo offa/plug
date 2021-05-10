@@ -34,6 +34,7 @@ using namespace test;
 using namespace test::matcher;
 using namespace testing;
 
+
 class MustangTest : public testing::Test
 {
 protected:
@@ -47,15 +48,13 @@ protected:
     {
     }
 
-    [[nodiscard]]
-    std::vector<std::uint8_t> createEmptyPacketData() const
+    [[nodiscard]] std::vector<std::uint8_t> createEmptyPacketData() const
     {
         return std::vector<std::uint8_t>(packetRawTypeSize, 0x00);
     }
 
     template <class Container>
-    [[nodiscard]]
-    auto asBuffer(const Container& c) const
+    [[nodiscard]] auto asBuffer(const Container& c) const
     {
         return std::vector<std::uint8_t>{std::cbegin(c), std::cend(c)};
     }
