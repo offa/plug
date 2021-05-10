@@ -16,7 +16,6 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 
 ## Requirements
 
-- [**CMake**](https://www.cmake.org/)
 - [**Qt5**](https://www.qt.io/)
 - [**libusb-1.0**](http://libusb.info/)
 
@@ -45,7 +44,7 @@ make install
 The *udev* rule allows the USB access without *root* for the users of the `plugdev` group.
 
 
-## Enable libusb debug message logging
+## Libusb Logging
 
 Debug message logging of [*libusb*](https://libusb.sourceforge.io/api-1.0/) can be controlled by the `LIBUSB_DEBUG` variable (0: None, 1: Error, 2: Warning, 3: Info, 4: Debug).
 
