@@ -94,7 +94,7 @@ namespace plug::com::usb
 
     std::string Device::name() const
     {
-        std::array<std::uint8_t, 256> buffer;
+        std::array<std::uint8_t, 256> buffer{{}};
         const int n = libusb_get_string_descriptor_ascii(handle_.get(), descriptor_.stringDescriptorIndex, buffer.data(), buffer.size());
 
         if (n < 0)
