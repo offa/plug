@@ -33,6 +33,8 @@ then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
+export GTEST_BRIEF=1
+
 mkdir -p build && cd build
 cmake "${BUILD_ARGS[@]}" ..
 make
