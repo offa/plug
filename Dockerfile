@@ -6,6 +6,7 @@ RUN apt-get install -y --no-install-recommends pkg-config qt5-default libusb-1.0
         mkdir deps && cd deps && \
         if [ "$(echo ${CXX} | cut -c -5)" = "clang" ]; then \
             export CXXFLAGS="-stdlib=libc++"; \
+            apt-get install -y --no-install-recommends libunwind-dev; \
         fi && \
         git clone --depth=1 https://github.com/google/googletest.git && \
         cd googletest && \
