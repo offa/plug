@@ -23,6 +23,6 @@ jobs:
       image: "registry.gitlab.com/offa/plug/ci/${{ matrix.compiler }}:latest"
     name: "${{ matrix.compiler }}"
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
       - name: Build
         run: script/ci_build.sh -asan -ubsan
