@@ -22,6 +22,7 @@
 #include "com/CommunicationException.h"
 #include "mocks/UsbDeviceMock.h"
 #include "matcher/Matcher.h"
+#include <array>
 #include <gmock/gmock.h>
 
 using plug::com::UsbComm;

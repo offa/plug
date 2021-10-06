@@ -21,6 +21,7 @@
 #include "com/UsbContext.h"
 #include "com/UsbException.h"
 #include "mocks/LibUsbMocks.h"
+#include <array>
 #include <libusb-1.0/libusb.h>
 #include <gmock/gmock.h>
 
