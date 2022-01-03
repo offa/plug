@@ -31,6 +31,9 @@ BUILD_ARGS+=("-DCMAKE_BUILD_TYPE=${BUILD_TYPE}")
 if [[ "${CXX}" == clang* ]]
 then
     export CXXFLAGS="-stdlib=libc++"
+
+    # Workaround for #228
+    export ASAN_OPTIONS=alloc_dealloc_mismatch=0
 fi
 
 export GTEST_BRIEF=1
