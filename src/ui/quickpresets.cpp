@@ -285,13 +285,10 @@ namespace plug
     void QuickPresets::changeEvent(QEvent* e)
     {
         QDialog::changeEvent(e);
-        switch (e->type())
+
+        if (e->type() == QEvent::LanguageChange)
         {
-            case QEvent::LanguageChange:
-                ui->retranslateUi(this);
-                break;
-            default:
-                break;
+            ui->retranslateUi(this);
         }
     }
 }
