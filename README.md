@@ -35,7 +35,7 @@ make unittest
 
 ## Installation
 
-CMake will install the application and *udev* rule (`50-mustang.rules`) using:
+CMake will install the application and *udev* rule ([`50-mustang.rules`](./cmake/50-mustang.rules)) using:
 
 ```
 make install
