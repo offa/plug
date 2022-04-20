@@ -17,7 +17,7 @@ build:
       - COMPILER: gcc
         VERSION: [11, 10, 9, 8, 7]
       - COMPILER: clang
-        VERSION: [13, 12, 11, 10, 9, 8, 7]
+        VERSION: [14, 13, 12, 11, 10, 9, 8, 7]
   image: ${DOCKER_IMG}/${COMPILER}-${VERSION}:latest
   stage: build
   script:
@@ -39,7 +39,7 @@ build_docker_images:
       - COMPILER: gcc
         VERSION: [11, 10, 9, 8, 7]
       - COMPILER: clang
-        VERSION: [13, 12, 11, 10, 9, 8, 7]
+        VERSION: [14, 13, 12, 11, 10, 9, 8, 7]
   image: docker:latest
   stage: build-docker-images
   variables:
