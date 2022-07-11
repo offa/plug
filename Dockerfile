@@ -8,7 +8,7 @@ RUN apt-get update && \
         if [ "$(echo ${CXX} | cut -c -5)" = "clang" ]; then \
             export CXXFLAGS="-stdlib=libc++"; \
         fi && \
-        git clone --depth=1 https://github.com/google/googletest.git && \
+        git clone --depth=1 --branch=release-1.12.1 https://github.com/google/googletest.git && \
         cd googletest && \
         mkdir build && cd build && \
         cmake -DCMAKE_CXX_STANDARD=17 .. && \

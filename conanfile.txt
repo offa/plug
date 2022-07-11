@@ -1,5 +1,5 @@
 [requires]
-gtest/1.11.0
+gtest/1.12.1
 
 [generators]
 cmake_find_package
