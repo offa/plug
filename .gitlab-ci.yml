@@ -28,6 +28,7 @@ coverage:
   stage: build
   script:
     - script/ci_build.sh -cov
+  coverage: /^\s*lines:\s*\d+.\d+\%/
 
 
 # -----------------------------------------
