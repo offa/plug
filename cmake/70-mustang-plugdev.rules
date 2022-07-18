@@ -1,0 +1,6 @@
+ACTION!="add|bind", GOTO="mustang_plug_plugdev_end"
+
+ENV{ID_AUDIO_MODELING_AMP}=="?*", GROUP="plugdev"
+
+LABEL="mustang_plug_plugdev_end"
+

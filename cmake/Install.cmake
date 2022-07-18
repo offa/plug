@@ -1,7 +1,10 @@
 set(PLUG_UDEV_RULE_PATH "/lib/udev/rules.d" CACHE PATH "Udev rules directory.")
 set(PLUG_DESKTOP_PATH "/lib/share/applications" CACHE PATH "Desktop file directory.")
 
-install(FILES ${CMAKE_SOURCE_DIR}/cmake/50-mustang.rules
+install(FILES
+        ${CMAKE_SOURCE_DIR}/cmake/50-mustang.rules
+        ${CMAKE_SOURCE_DIR}/cmake/70-mustang-uaccess.rules
+        ${CMAKE_SOURCE_DIR}/cmake/70-mustang-plugdev.rules
         DESTINATION ${PLUG_UDEV_RULE_PATH}
         )
 install(FILES ${CMAKE_SOURCE_DIR}/cmake/plug.desktop
