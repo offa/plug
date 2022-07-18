@@ -5,7 +5,7 @@ Name=Plug
 Comment=Software for Fender Mustang Amps.
 Path=/usr/bin/plug
 Exec=plug
-#Icon=plug
+Icon=mustang-plug
 Terminal=false
 Categories=AudioVideo;Audio;Music;Qt
 
