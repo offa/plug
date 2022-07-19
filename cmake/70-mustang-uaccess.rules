@@ -1,0 +1,5 @@
+ACTION!="add|bind", GOTO="mustang_plug_uaccess_end"
+
+ENV{ID_AUDIO_MODELING_AMP}=="?*", TAG+="uaccess"
+
+LABEL="mustang_plug_uaccess_end"
