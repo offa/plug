@@ -22,7 +22,6 @@
 #include "com/CommunicationException.h"
 #include <algorithm>
 #include <chrono>
-#include <libusb-1.0/libusb.h>
 
 namespace plug::com
 {
