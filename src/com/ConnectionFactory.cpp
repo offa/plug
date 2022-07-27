@@ -32,32 +32,32 @@ namespace plug::com
 
         namespace usbPID
         {
-            inline constexpr std::uint16_t smallAmps{0x0004};   //Mustang I and II
-            inline constexpr std::uint16_t bigAmps{0x0005};     //Mustang III, IV and V
-            inline constexpr std::uint16_t broncoAmps{0x000a};  //Mustang Bronco
-            inline constexpr std::uint16_t miniAmps{0x0010};    //Mustang Mini
-            inline constexpr std::uint16_t floorAmps{0x0012};   //Mustang Floor
-            inline constexpr std::uint16_t smallAmpsV2{0x0014}; //Mustang II (and I?) V2
-            inline constexpr std::uint16_t bigAmpsV2{0x0016};   //Mustang III+ V2
+            inline constexpr std::uint16_t mustangI_II{0x0004};
+            inline constexpr std::uint16_t mustangIII_IV_V{0x0005};
+            inline constexpr std::uint16_t mustangBronco{0x000a};
+            inline constexpr std::uint16_t mustangMini{0x0010};
+            inline constexpr std::uint16_t mustangFloor{0x0012};
+            inline constexpr std::uint16_t mustangI_II_v2{0x0014};
+            inline constexpr std::uint16_t mustangIII_IV_V_v2{0x0016};
         }
 
         inline constexpr std::initializer_list<std::uint16_t> pids{
-            usbPID::smallAmps,
-            usbPID::bigAmps,
-            usbPID::broncoAmps,
-            usbPID::miniAmps,
-            usbPID::floorAmps,
-            usbPID::smallAmpsV2,
-            usbPID::bigAmpsV2};
+            usbPID::mustangI_II,
+            usbPID::mustangIII_IV_V,
+            usbPID::mustangBronco,
+            usbPID::mustangMini,
+            usbPID::mustangFloor,
+            usbPID::mustangI_II_v2,
+            usbPID::mustangIII_IV_V_v2};
     }
 
     std::shared_ptr<Connection> createUsbConnection()
     {
         auto devices = usb::listDevices();
 
-        auto itr = std::find_if(devices.begin(), devices.end(), [](const auto& dev) {
-            return (dev.vendorId() == usbVID) && std::any_of(pids.begin(), pids.end(), [&dev](std::uint16_t pid) { return dev.productId() == pid; });
-        });
+        auto itr = std::find_if(devices.begin(), devices.end(), [](const auto& dev)
+                                { return (dev.vendorId() == usbVID) && std::any_of(pids.begin(), pids.end(), [&dev](std::uint16_t pid)
+                                                                                   { return dev.productId() == pid; }); });
 
         if (itr == devices.end())
         {
