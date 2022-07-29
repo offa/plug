@@ -10,7 +10,7 @@ add_library(plug-communication-usb
     UsbException.cpp
     UsbDevice.cpp
     )
-target_link_libraries(plug-communication PRIVATE libusb-1.0::libusb-1.0)
+target_link_libraries(plug-communication-usb PRIVATE libusb-1.0::libusb-1.0)
 
 add_library(plug-libusb LibUsbCompat.cpp)
 target_link_libraries(plug-libusb PUBLIC libusb-1.0::libusb-1.0)
