@@ -136,15 +136,23 @@ namespace plug
         connect(ui->action_Quick_presets, SIGNAL(triggered()), quickpres, SLOT(show()));
 
         // shortcuts to activate effect windows
-        QShortcut* showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showfx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showfx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showfx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        connect(showfx1, SIGNAL(activated()), this, SLOT(show_fx1()));
-        connect(showfx2, SIGNAL(activated()), this, SLOT(show_fx2()));
-        connect(showfx3, SIGNAL(activated()), this, SLOT(show_fx3()));
-        connect(showfx4, SIGNAL(activated()), this, SLOT(show_fx4()));
+        QShortcut* showFx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFxLoop1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFxLoop2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_6), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFxLoop3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFxLoop4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        connect(showFx1, SIGNAL(activated()), this, SLOT(show_fx1()));
+        connect(showFx2, SIGNAL(activated()), this, SLOT(show_fx2()));
+        connect(showFx3, SIGNAL(activated()), this, SLOT(show_fx3()));
+        connect(showFx4, SIGNAL(activated()), this, SLOT(show_fx4()));
+        connect(showFxLoop1, SIGNAL(activated()), this, SLOT(show_fx1()));
+        connect(showFxLoop2, SIGNAL(activated()), this, SLOT(show_fx2()));
+        connect(showFxLoop3, SIGNAL(activated()), this, SLOT(show_fx3()));
+        connect(showFxLoop4, SIGNAL(activated()), this, SLOT(show_fx4()));
         connect(showamp, SIGNAL(activated()), this, SLOT(show_amp()));
 
         // shortcuts for quick loading presets
