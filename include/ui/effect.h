@@ -39,7 +39,7 @@ namespace plug
         Q_OBJECT
 
     public:
-        explicit Effect(QWidget* parent = nullptr, std::uint8_t fxSlot = 0);
+        explicit Effect(QWidget* parent, std::uint8_t fxSlot, bool fxLoop);
         Effect(const Effect&) = delete;
         ~Effect() override;
 
@@ -69,7 +69,6 @@ namespace plug
 
     public slots:
         // functions to set variables
-        void set_post_amp(bool);
         void set_knob1(int);
         void set_knob2(int);
         void set_knob3(int);

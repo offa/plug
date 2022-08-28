@@ -80,7 +80,7 @@ namespace plug
     }
 
 
-    Effect::Effect(QWidget* parent, std::uint8_t fxSlot)
+    Effect::Effect(QWidget* parent, std::uint8_t fxSlot, bool fxLoop)
         : QMainWindow(parent),
           ui(std::make_unique<Ui::Effect>()),
           fx_slot(fxSlot),
@@ -107,8 +107,6 @@ namespace plug
 
         setAccessibleName(tr("Effect's %1 window: EMPTY").arg(fx_slot + 1));
         setAccessibleDescription(tr("Here you can choose which effect should be emulated on this slot and it's parameters"));
-        ui->checkBox->setAccessibleName(tr("Put effect %1 after amplifier").arg(fx_slot + 1));
-        ui->checkBox->setAccessibleDescription(tr("Virtually put this effect after amplifier's emulator"));
         ui->setButton->setAccessibleName(tr("Effect's %1 set button").arg(fx_slot + 1));
         ui->setButton->setAccessibleDescription(tr("Send effect's %1 settings to the amplifier").arg(fx_slot + 1));
         ui->pushButton->setAccessibleName(tr("Effect's %1 On/Off button").arg(fx_slot + 1));
@@ -116,9 +114,13 @@ namespace plug
         ui->comboBox->setAccessibleName(tr("Choose effect's %1 effect").arg(fx_slot + 1));
         ui->comboBox->setAccessibleDescription(tr("Allows you to choose which effect should be emulated on this slot"));
 
+        if (fxLoop)
+        {
+            ui->labelPosition->setText("Fx Loop");
+        }
+
         // connect elements to slots
         connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
-        connect(ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(set_post_amp(bool)));
         connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_knob1(int)));
         connect(ui->dial_2, SIGNAL(valueChanged(int)), this, SLOT(set_knob2(int)));
         connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_knob3(int)));
@@ -136,6 +138,7 @@ namespace plug
 
         QShortcut* default_fx = new QShortcut(QKeySequence(QString("F%1").arg(fx_slot + 5)), this, nullptr, nullptr, Qt::ApplicationShortcut);
         connect(default_fx, SIGNAL(activated()), this, SLOT(load_default_fx()));
+
     }
 
     Effect::~Effect()
@@ -145,12 +148,6 @@ namespace plug
     }
 
     // functions setting variables
-    void Effect::set_post_amp(bool value)
-    {
-        position = (value == true ? Position::effectsLoop : Position::input);
-        set_changed(true);
-    }
-
     void Effect::set_knob1(int value)
     {
         knob1 = static_cast<std::uint8_t>(value);
@@ -203,7 +200,6 @@ namespace plug
         switch (static_cast<effects>(value))
         {
             case effects::EMPTY:
-                ui->checkBox->setDisabled(true);
                 if (sender() == ui->comboBox)
                 {
                     ui->dial->setValue(0);
@@ -228,7 +224,6 @@ namespace plug
                 break;
 
             case effects::SIMPLE_COMP:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(3);
                 ui->spinBox->setMaximum(3);
                 ui->dial_2->setValue(0);
@@ -251,7 +246,6 @@ namespace plug
                 break;
 
             case effects::RING_MODULATOR:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(1);
@@ -274,7 +268,6 @@ namespace plug
                 break;
 
             case effects::PHASER:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(255);
@@ -297,7 +290,6 @@ namespace plug
                 break;
 
             case effects::MULTITAP_DELAY:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(255);
@@ -323,7 +315,6 @@ namespace plug
             case effects::STEREO_ECHO_FILTER:
             case effects::TAPE_DELAY:
             case effects::STEREO_TAPE_DELAY:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(255);
@@ -345,7 +336,6 @@ namespace plug
                 break;
 
             default:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(255);
@@ -1700,7 +1690,6 @@ namespace plug
         ui->dial_4->setValue(settings.knob4);
         ui->dial_5->setValue(settings.knob5);
         ui->dial_6->setValue(settings.knob6);
-        ui->checkBox->setChecked(settings.position == Position::effectsLoop);
     }
 
     void Effect::get_settings(fx_pedal_settings& pedal)
@@ -1736,7 +1725,6 @@ namespace plug
             ui->spinBox_4->setDisabled(true);
             ui->spinBox_5->setDisabled(true);
             ui->spinBox_6->setDisabled(true);
-            ui->checkBox->setDisabled(true);
             ui->label->setDisabled(true);
             ui->label_2->setDisabled(true);
             ui->label_3->setDisabled(true);
@@ -1755,7 +1743,6 @@ namespace plug
             ui->pushButton->setText(tr("Off"));
             ui->comboBox->setDisabled(false);
             ui->setButton->setDisabled(false);
-            ui->checkBox->setDisabled(false);
             ui->label->setDisabled(false);
             ui->label_2->setDisabled(false);
             ui->label_3->setDisabled(false);
@@ -1822,7 +1809,6 @@ namespace plug
         ui->dial_4->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob4").arg(fx_slot)).toInt());
         ui->dial_5->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob5").arg(fx_slot)).toInt());
         ui->dial_6->setValue(settings.value(QString("DefaultEffects/Effect%1/Knob6").arg(fx_slot)).toInt());
-        ui->checkBox->setChecked(settings.value(QString("DefaultEffects/Effect%1/Post amp").arg(fx_slot)).toBool());
 
         set_changed(true);
         this->send_fx();

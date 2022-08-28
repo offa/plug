@@ -92,10 +92,14 @@ namespace plug
 
         // create child objects
         amp = new Amplifier(this);
-        effect1 = new Effect(this, 0);
-        effect2 = new Effect(this, 1);
-        effect3 = new Effect(this, 2);
-        effect4 = new Effect(this, 3);
+        effect1 = new Effect(this, 0, false);
+        effect2 = new Effect(this, 1, false);
+        effect3 = new Effect(this, 2, false);
+        effect4 = new Effect(this, 3, false);
+        fxLoopEffect1 = new Effect(this, 4, true);
+        fxLoopEffect2 = new Effect(this, 5, true);
+        fxLoopEffect3 = new Effect(this, 6, true);
+        fxLoopEffect4 = new Effect(this, 7, true);
 
         save = new SaveOnAmp(this);
         load = new LoadFromAmp(this);
@@ -112,6 +116,10 @@ namespace plug
         connect(ui->EffectButton2, SIGNAL(clicked()), effect2, SLOT(showAndActivate()));
         connect(ui->EffectButton3, SIGNAL(clicked()), effect3, SLOT(showAndActivate()));
         connect(ui->EffectButton4, SIGNAL(clicked()), effect4, SLOT(showAndActivate()));
+        connect(ui->FxEffectButton1, SIGNAL(clicked()), fxLoopEffect1, SLOT(showAndActivate()));
+        connect(ui->FxEffectButton2, SIGNAL(clicked()), fxLoopEffect2, SLOT(showAndActivate()));
+        connect(ui->FxEffectButton3, SIGNAL(clicked()), fxLoopEffect3, SLOT(showAndActivate()));
+        connect(ui->FxEffectButton4, SIGNAL(clicked()), fxLoopEffect4, SLOT(showAndActivate()));
         connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(start_amp()));
         connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
         connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));

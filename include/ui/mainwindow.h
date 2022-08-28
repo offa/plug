@@ -93,6 +93,10 @@ namespace plug
         Effect* effect2;
         Effect* effect3;
         Effect* effect4;
+        Effect* fxLoopEffect1;
+        Effect* fxLoopEffect2;
+        Effect* fxLoopEffect3;
+        Effect* fxLoopEffect4;
         SaveOnAmp* save;
         LoadFromAmp* load;
         SaveEffects* seffects;
