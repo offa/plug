@@ -22,6 +22,7 @@
 #include "ui/savetofile.h"
 #include "ui/mainwindow.h"
 #include "ui_savetofile.h"
+#include <array>
 
 namespace plug
 {

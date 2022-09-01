@@ -22,10 +22,10 @@
 #pragma once
 
 #include "data_structs.h"
-#include "effects_enum.h"
 #include <QFile>
 #include <QTextEdit>
 #include <QXmlStreamReader>
+#include <array>
 #include <memory>
 
 namespace plug

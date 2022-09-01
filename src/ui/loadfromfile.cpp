@@ -20,6 +20,7 @@
  */
 
 #include "ui/loadfromfile.h"
+#include "effects_enum.h"
 
 namespace plug
 {
