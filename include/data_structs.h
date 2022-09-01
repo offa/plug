@@ -28,12 +28,6 @@
 namespace plug
 {
 
-    enum class Position
-    {
-        input,
-        effectsLoop
-    };
-
     struct amp_settings
     {
         amps amp_num;
