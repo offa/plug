@@ -96,7 +96,6 @@ namespace plug
         switch (static_cast<effects>(value))
         {
             case effects::EMPTY:
-                ui->checkBox->setDisabled(true);
                 if (sender() == ui->comboBox)
                 {
                     ui->dial->setValue(0);
@@ -121,7 +120,6 @@ namespace plug
                 break;
 
             case effects::SIMPLE_COMP:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(3);
                 ui->spinBox->setMaximum(3);
                 ui->dial_2->setValue(0);
@@ -144,7 +142,6 @@ namespace plug
                 break;
 
             case effects::RING_MODULATOR:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(1);
@@ -167,7 +164,6 @@ namespace plug
                 break;
 
             case effects::PHASER:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(255);
@@ -193,7 +189,6 @@ namespace plug
             case effects::STEREO_ECHO_FILTER:
             case effects::TAPE_DELAY:
             case effects::STEREO_TAPE_DELAY:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(255);
@@ -215,7 +210,6 @@ namespace plug
                 break;
 
             default:
-                ui->checkBox->setDisabled(false);
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_4->setMaximum(255);
@@ -1158,7 +1152,12 @@ namespace plug
 
     void DefaultEffects::get_settings()
     {
-        std::array<fx_pedal_settings, 4> settings_data{};
+        std::array<fx_pedal_settings, 4> settings_data{{
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false}
+        }};
         dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data.data());
 
         const std::size_t index = static_cast<std::size_t>(ui->comboBox_2->currentIndex());
@@ -1169,7 +1168,11 @@ namespace plug
         ui->dial_4->setValue(settings_data[index].knob4);
         ui->dial_5->setValue(settings_data[index].knob5);
         ui->dial_6->setValue(settings_data[index].knob6);
-        ui->checkBox->setChecked(settings_data[index].position == Position::effectsLoop);
+
+        if (settings_data[index].slot.isFxLoop())
+        {
+            ui->labelPosition->setText("Fx Loop");
+        }
     }
 
     void DefaultEffects::save_default_effects()
@@ -1183,7 +1186,6 @@ namespace plug
         settings.setValue(QString("DefaultEffects/Effect%1/Knob4").arg(ui->comboBox_3->currentIndex()), ui->dial_4->value());
         settings.setValue(QString("DefaultEffects/Effect%1/Knob5").arg(ui->comboBox_3->currentIndex()), ui->dial_5->value());
         settings.setValue(QString("DefaultEffects/Effect%1/Knob6").arg(ui->comboBox_3->currentIndex()), ui->dial_6->value());
-        settings.setValue(QString("DefaultEffects/Effect%1/Post amp").arg(ui->comboBox_3->currentIndex()), ui->checkBox->checkState() != 0u);
     }
 }
 

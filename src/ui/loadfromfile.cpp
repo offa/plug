@@ -24,7 +24,7 @@
 namespace plug
 {
 
-    LoadFromFile::LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, fx_pedal_settings fx_settings[4])
+    LoadFromFile::LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::array<fx_pedal_settings, 4>& fx_settings)
         : m_name(name),
           m_amp_settings(amp_settings),
           m_fx_settings(fx_settings),
@@ -219,16 +219,6 @@ namespace plug
                 else if (m_xml->name() == "Module")
                 {
                     const int position = m_xml->attributes().value("POS").toString().toInt();
-
-                    if (position > 3)
-                    {
-                        m_fx_settings[x].position = Position::effectsLoop;
-                    }
-                    else
-                    {
-                        m_fx_settings[x].position = Position::input;
-                    }
-
                     fx_slots[position] = x + 1;
 
                     switch (m_xml->attributes().value("ID").toString().toInt())
@@ -421,11 +411,11 @@ namespace plug
             m_xml->readNext();
         }
 
-        for (int i = 0, j = 0; i < 8; ++i)
+        for (std::uint8_t i = 0, j = 0; i < 8; ++i)
         {
             if (fx_slots[i] != 0)
             {
-                m_fx_settings[fx_slots[i] - 1].fx_slot = static_cast<std::uint8_t>(j);
+                m_fx_settings[fx_slots[i] - 1].slot = FxSlot{j};
                 ++j;
             }
         }

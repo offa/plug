@@ -27,10 +27,12 @@ namespace test::matcher
 {
     MATCHER_P(EffectIs, value, "")
     {
-        return std::tie(value.fx_slot, value.effect_num, value.knob1, value.knob2, value.knob3,
-                        value.knob4, value.knob5, value.knob6, value.position) ==
-               std::tie(arg.fx_slot, arg.effect_num, arg.knob1, arg.knob2, arg.knob3,
-                        arg.knob4, arg.knob5, arg.knob6, arg.position);
+        std::uint8_t valueSlot = value.slot.id();
+        std::uint8_t argSlot = value.slot.id();
+        return std::tie(valueSlot, value.effect_num, value.knob1, value.knob2, value.knob3,
+                        value.knob4, value.knob5, value.knob6) ==
+               std::tie(argSlot, arg.effect_num, arg.knob1, arg.knob2, arg.knob3,
+                        arg.knob4, arg.knob5, arg.knob6);
     }
 
     MATCHER_P(AmpIs, value, "")
@@ -50,12 +52,11 @@ namespace plug
 
     inline void PrintTo(const fx_pedal_settings& e, std::ostream* os)
     {
-        *os << "[slot: " + std::to_string(e.fx_slot)
+        *os << "[slot: " + std::to_string(e.slot.id())
             << ", effect: " << std::to_string(static_cast<int>(e.effect_num))
             << ", knobs: (" << std::to_string(e.knob1) << ", " << std::to_string(e.knob2)
             << ", " << std::to_string(e.knob3) << ", " << std::to_string(e.knob4)
-            << ", " << std::to_string(e.knob5) << ", " << std::to_string(e.knob6) << ")"
-            << ", position: " << std::to_string(static_cast<int>(e.position)) << "]";
+            << ", " << std::to_string(e.knob5) << ", " << std::to_string(e.knob6) << ")]";
     }
 
 

@@ -49,11 +49,11 @@ namespace plug
         Effect& operator=(const Effect&) = delete;
 
     private:
-        void setTitleTexts(int slot, const QString& name);
+        void setTitleTexts(int slotNumber, const QString& name);
         void setDialValues(int d1, int d2, int d3, int d4, int d5, int d6);
 
         const std::unique_ptr<Ui::Effect> ui;
-        std::uint8_t fx_slot;
+        FxSlot slot;
         effects effect_num;
         unsigned char knob1;
         unsigned char knob2;
@@ -61,7 +61,6 @@ namespace plug
         unsigned char knob4;
         unsigned char knob5;
         unsigned char knob6;
-        Position position;
         bool enabled;
         bool changed;
         QString temp1;

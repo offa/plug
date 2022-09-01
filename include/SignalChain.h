@@ -33,7 +33,10 @@ namespace plug
     {
     public:
         SignalChain()
-            : name_(""), amp_(), effects_()
+            : name_(""), amp_(), effects_{{{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+                                           {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+                                           {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+                                           {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false}}}
         {
         }
         SignalChain(const std::string& name, amp_settings amp, const std::array<fx_pedal_settings, 4>& effects)

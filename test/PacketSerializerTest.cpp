@@ -138,7 +138,7 @@ TEST_F(PacketSerializerTest, serializeApplyCommand)
 TEST_F(PacketSerializerTest, serializeApplyCommandWithFxKnob)
 {
     constexpr std::uint8_t fxKnob{0x02};
-    const fx_pedal_settings effect{fxKnob, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+    const fx_pedal_settings effect{FxSlot{fxKnob}, effects::EMPTY, 0, 0, 0, 0, 0, 0};
     PacketRawType expected{};
     expected[0] = 0x1c;
     expected[1] = 0x03;
@@ -407,7 +407,7 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsUsbGain)
 
 TEST_F(PacketSerializerTest, serializeClearEffectsSettingsData)
 {
-    constexpr fx_pedal_settings settings{10, effects::VINTAGE_TREMOLO, 11, 22, 33, 44, 55, 66, Position::input};
+    constexpr fx_pedal_settings settings{FxSlot{1}, effects::VINTAGE_TREMOLO, 11, 22, 33, 44, 55, 66};
     const PacketRawType expected{{0x1c, 0x03, 0x07, 0x00, 0x00, 0x00, 0x01, 0x01,
                                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                   0x00, 0x00, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00,
@@ -471,7 +471,7 @@ TEST_F(PacketSerializerTest, serializeNameLimitsToLength)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsData)
 {
-    constexpr fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
+    constexpr fx_pedal_settings settings{FxSlot{1}, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66};
 
     PacketRawType expected{{0x1c, 0x03, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01,
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -481,7 +481,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsData)
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-    expected[v1::FXSLOT] = 10;
+    expected[v1::FXSLOT] = 1;
     expected[v1::KNOB1] = 11;
     expected[v1::KNOB2] = 22;
     expected[v1::KNOB3] = 33;
@@ -497,8 +497,8 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsData)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetsInputPosition)
 {
-    constexpr std::uint8_t value{45};
-    constexpr fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::input};
+    constexpr std::uint8_t value{3};
+    constexpr fx_pedal_settings settings{FxSlot{value}, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66};
 
     const auto packet = serializeEffectSettings(settings).getBytes();
     EXPECT_THAT(packet[v1::FXSLOT], Eq(value));
@@ -506,16 +506,16 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSetsInputPosition)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsEffectsSetsLoopPosition)
 {
-    constexpr std::uint8_t value{60};
-    constexpr fx_pedal_settings settings{value, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr std::uint8_t value{6};
+    constexpr fx_pedal_settings settings{FxSlot{value}, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66};
 
     const auto packet = serializeEffectSettings(settings).getBytes();
-    EXPECT_THAT(packet[v1::FXSLOT], Eq(value + 4));
+    EXPECT_THAT(packet[v1::FXSLOT], Eq(value));
 }
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNotRequired)
 {
-    constexpr fx_pedal_settings settings{10, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr fx_pedal_settings settings{FxSlot{2}, effects::OVERDRIVE, 11, 22, 33, 44, 55, 66};
 
     const auto packet = serializeEffectSettings(settings).getBytes();
     EXPECT_THAT(packet[v1::KNOB6], Eq(0x00));
@@ -524,7 +524,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
 {
     auto serializeWithType = [](effects e, std::uint8_t knob6) {
-        return serializeEffectSettings(fx_pedal_settings{100, e, 0, 0, 0, 0, 0, knob6, Position::input}).getBytes();
+        return serializeEffectSettings(fx_pedal_settings{FxSlot{1}, e, 0, 0, 0, 0, 0, knob6}).getBytes();
     };
 
     EXPECT_THAT(serializeWithType(effects::MONO_ECHO_FILTER, 1)[v1::KNOB6], Eq(1));
@@ -541,7 +541,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     constexpr std::uint8_t dsp3{0x09};
 
     auto serializeWithType = [](effects e) {
-        return serializeEffectSettings(fx_pedal_settings{100, e, 1, 2, 3, 4, 5, 6, Position::input}).getBytes();
+        return serializeEffectSettings(fx_pedal_settings{FxSlot{1}, e, 1, 2, 3, 4, 5, 6}).getBytes();
     };
 
     EXPECT_THAT(serializeWithType(effects::OVERDRIVE), EffectDataIs(dsp0, 0x3c, 0x00, 0x08));
@@ -588,7 +588,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompKnobSetting)
 {
-    constexpr fx_pedal_settings settings{10, effects::SIMPLE_COMP, 3, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings settings{FxSlot{1}, effects::SIMPLE_COMP, 3, 2, 3, 4, 5, 6};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet.getBytes(), KnobsAre(3, 0, 0, 0, 0, 0));
@@ -596,7 +596,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompKnobSetting)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompLimitsValue)
 {
-    constexpr fx_pedal_settings settings{10, effects::SIMPLE_COMP, 4, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings settings{FxSlot{1}, effects::SIMPLE_COMP, 4, 2, 3, 4, 5, 6};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet.getBytes(), KnobsAre(3, 0, 0, 0, 0, 0));
@@ -604,7 +604,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsSimpleCompLimitsValue)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsRingModulatorLimitsValue)
 {
-    constexpr fx_pedal_settings settings{10, effects::RING_MODULATOR, 1, 2, 3, 2, 5, 6, Position::input};
+    constexpr fx_pedal_settings settings{FxSlot{1}, effects::RING_MODULATOR, 1, 2, 3, 2, 5, 6};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet.getBytes(), KnobsAre(1, 2, 3, 1, 5, 0));
@@ -612,7 +612,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsRingModulatorLimitsValue)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
 {
-    constexpr fx_pedal_settings settings{10, effects::PHASER, 1, 2, 3, 2, 2, 6, Position::input};
+    constexpr fx_pedal_settings settings{FxSlot{1}, effects::PHASER, 1, 2, 3, 2, 2, 6};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet.getBytes(), KnobsAre(1, 2, 3, 2, 1, 0));
@@ -620,7 +620,7 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsPhaserLimitsValue)
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsMultitapDelayLimitsValue)
 {
-    constexpr fx_pedal_settings settings{10, effects::MULTITAP_DELAY, 1, 2, 3, 2, 4, 6, Position::input};
+    constexpr fx_pedal_settings settings{FxSlot{1}, effects::MULTITAP_DELAY, 1, 2, 3, 2, 4, 6};
 
     const auto packet = serializeEffectSettings(settings);
     EXPECT_THAT(packet.getBytes(), KnobsAre(1, 2, 3, 2, 3, 0));
@@ -628,9 +628,9 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsMultitapDelayLimitsValue)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
 {
-    constexpr std::uint8_t slot{17};
-    const std::string name{"name 17"};
-    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr std::uint8_t slot{7};
+    const std::string name{"name 7"};
+    constexpr fx_pedal_settings effect{FxSlot{slot}, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6};
 
     PacketRawType expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -651,7 +651,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
 TEST_F(PacketSerializerTest, serializeSaveEffectNameFxKnobData)
 {
     auto serializeWithType = [](effects e) {
-        return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}}).getBytes();
+        return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{FxSlot{0}, e, 0, 0, 0, 0, 0, 0}}).getBytes();
     };
 
     EXPECT_THAT(serializeWithType(effects::SINE_CHORUS), FxKnobIs(0x01));
@@ -692,7 +692,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameFxKnobData)
 TEST_F(PacketSerializerTest, serializeSaveEffectNameThrowsOnInvalidEffect)
 {
     auto serializeInvalid = [](effects e) {
-        return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input}}).getBytes();
+        return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{FxSlot{0}, e, 0, 0, 0, 0, 0, 0}}).getBytes();
     };
 
     EXPECT_THROW(serializeInvalid(effects::OVERDRIVE), std::invalid_argument);
@@ -710,7 +710,7 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameSetsFxKnobOfFirstEffect)
     const std::string name{"ignore"};
 
     constexpr auto create = [](effects e) {
-        return fx_pedal_settings{0, e, 0, 0, 0, 0, 0, 0, Position::input};
+        return fx_pedal_settings{FxSlot{0}, e, 0, 0, 0, 0, 0, 0};
     };
 
     EXPECT_THAT(serializeSaveEffectName(slot, name, {create(effects::ARENA_REVERB), create(effects::SINE_CHORUS)}).getBytes(), FxKnobIs(0x02));
@@ -718,10 +718,10 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameSetsFxKnobOfFirstEffect)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
 {
-    constexpr std::uint8_t slot{17};
+    constexpr std::uint8_t slot{7};
     constexpr std::size_t nameLength{24};
     std::string name(nameLength + 5, 'x');
-    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect{FxSlot{slot}, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6};
 
     PacketRawType expected{{0x1c, 0x01, 0x04, 0x00, 0x00, 0x00, 0x01, 0x01,
                             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -741,10 +741,10 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameLimitsNameLength)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
 {
-    constexpr std::uint8_t slot{17};
+    constexpr std::uint8_t slot{7};
     constexpr std::size_t nameLength{24};
     std::string name(nameLength + 5, 'x');
-    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr fx_pedal_settings effect{FxSlot{slot}, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6};
 
     PacketRawType expected{};
     std::copy(name.cbegin(), std::next(name.cbegin(), nameLength), std::next(expected.begin(), v1::NAME));
@@ -755,8 +755,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameTerminatesName)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
 {
-    constexpr std::uint8_t slot{8};
-    constexpr fx_pedal_settings effect{slot, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr std::uint8_t slot{6};
+    constexpr fx_pedal_settings effect{FxSlot{slot}, effects::SINE_CHORUS, 1, 2, 3, 4, 5, 6};
 
     PacketRawType expected = serializeEffectSettings(effect).getBytes();
     expected[v1::FXKNOB] = 0x01;
@@ -771,17 +771,17 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketData)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketThrowsOnInvalidEffect)
 {
-    constexpr std::uint8_t slot{8};
-    constexpr fx_pedal_settings effect{slot, effects::COMPRESSOR, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr std::uint8_t slot{7};
+    const fx_pedal_settings effect{FxSlot{slot}, effects::COMPRESSOR, 1, 2, 3, 4, 5, 6};
 
     EXPECT_THROW(serializeSaveEffectPacket(slot, {effect}), std::invalid_argument);
 }
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects)
 {
-    constexpr std::uint8_t slot{9};
-    constexpr fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
-    constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
+    constexpr std::uint8_t slot{5};
+    constexpr fx_pedal_settings effect1{FxSlot{slot}, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6};
+    constexpr fx_pedal_settings effect2{FxSlot{slot}, effects::MONO_DELAY, 1, 2, 3, 4, 5, 6};
 
     const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2});
     EXPECT_THAT(packet, SizeIs(2));
@@ -790,8 +790,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSetsEffectValues)
 {
     auto serializeWithType = [](effects e) {
-        constexpr std::uint8_t slot{9};
-        return serializeSaveEffectPacket(slot, {fx_pedal_settings{slot, e, 1, 2, 3, 4, 5, 6, Position::input}})[0].getBytes();
+        constexpr std::uint8_t slot{5};
+        return serializeSaveEffectPacket(slot, {fx_pedal_settings{FxSlot{slot}, e, 1, 2, 3, 4, 5, 6}})[0].getBytes();
     };
 
     EXPECT_THAT(serializeWithType(effects::SINE_CHORUS), EffectDataIs(0x07, 0x12, 0x01, 0x01));
@@ -830,9 +830,9 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSetsEffectValues)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffectsData)
 {
-    constexpr std::uint8_t slot{9};
-    constexpr fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
-    constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
+    constexpr std::uint8_t slot{2};
+    constexpr fx_pedal_settings effect1{FxSlot{slot}, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6};
+    constexpr fx_pedal_settings effect2{FxSlot{slot}, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66};
 
     PacketRawType expected1 = serializeEffectSettings(effect1).getBytes();
     expected1[v1::FXKNOB] = 0x02;
@@ -853,10 +853,10 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketLimitsInputEffects)
 {
-    constexpr std::uint8_t slot{9};
-    constexpr fx_pedal_settings effect1{slot, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6, Position::input};
-    constexpr fx_pedal_settings effect2{slot, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66, Position::effectsLoop};
-    constexpr fx_pedal_settings effect3{slot, effects::PING_PONG_DELAY, 0, 0, 0, 0, 0, 0, Position::effectsLoop};
+    constexpr std::uint8_t slot{3};
+    constexpr fx_pedal_settings effect1{FxSlot{slot}, effects::TAPE_DELAY, 1, 2, 3, 4, 5, 6};
+    constexpr fx_pedal_settings effect2{FxSlot{slot}, effects::MONO_DELAY, 11, 22, 33, 44, 55, 66};
+    constexpr fx_pedal_settings effect3{FxSlot{slot}, effects::PING_PONG_DELAY, 0, 0, 0, 0, 0, 0};
 
     const auto packet = serializeSaveEffectPacket(slot, {effect1, effect2, effect3});
     EXPECT_THAT(packet, SizeIs(1));
@@ -1051,14 +1051,14 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
     payload.fromBytes(data);
 
     const auto result = decodeEffectsFromData({{payload, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}});
-    EXPECT_THAT(result[1].fx_slot, Eq(0x01));
+    EXPECT_THAT(result[1].slot.id(), Eq(0x01));
+    EXPECT_THAT(result[1].slot.isFxLoop(), IsFalse());
     EXPECT_THAT(result[1].knob1, Eq(0x11));
     EXPECT_THAT(result[1].knob2, Eq(0x22));
     EXPECT_THAT(result[1].knob3, Eq(0x33));
     EXPECT_THAT(result[1].knob4, Eq(0x44));
     EXPECT_THAT(result[1].knob5, Eq(0x55));
     EXPECT_THAT(result[1].knob6, Eq(0x66));
-    EXPECT_THAT(result[1].position, Eq(Position::input));
     EXPECT_THAT(result[1].effect_num, Eq(effects::WAH));
 }
 
@@ -1117,14 +1117,14 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)
 
     const auto result = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
                                                 fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
-    EXPECT_THAT(result[0].fx_slot, Eq(0));
-    EXPECT_THAT(result[0].position, Eq(Position::input));
-    EXPECT_THAT(result[1].fx_slot, Eq(1));
-    EXPECT_THAT(result[1].position, Eq(Position::input));
-    EXPECT_THAT(result[2].fx_slot, Eq(2));
-    EXPECT_THAT(result[2].position, Eq(Position::input));
-    EXPECT_THAT(result[3].fx_slot, Eq(3));
-    EXPECT_THAT(result[3].position, Eq(Position::input));
+    EXPECT_THAT(result[0].slot.id(), Eq(0));
+    EXPECT_THAT(result[0].slot.isFxLoop(), IsFalse());
+    EXPECT_THAT(result[1].slot.id(), Eq(1));
+    EXPECT_THAT(result[1].slot.isFxLoop(), IsFalse());
+    EXPECT_THAT(result[2].slot.id(), Eq(2));
+    EXPECT_THAT(result[2].slot.isFxLoop(), IsFalse());
+    EXPECT_THAT(result[3].slot.id(), Eq(3));
+    EXPECT_THAT(result[3].slot.isFxLoop(), IsFalse());
 }
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
@@ -1137,12 +1137,12 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionEffectsLoop)
 
     const auto result = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
                                                 fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
-    EXPECT_THAT(result[0].fx_slot, Eq(0));
-    EXPECT_THAT(result[0].position, Eq(Position::effectsLoop));
-    EXPECT_THAT(result[1].fx_slot, Eq(1));
-    EXPECT_THAT(result[1].position, Eq(Position::effectsLoop));
-    EXPECT_THAT(result[2].fx_slot, Eq(2));
-    EXPECT_THAT(result[2].position, Eq(Position::effectsLoop));
-    EXPECT_THAT(result[3].fx_slot, Eq(3));
-    EXPECT_THAT(result[3].position, Eq(Position::effectsLoop));
+    EXPECT_THAT(result[0].slot.id(), Eq(4));
+    EXPECT_THAT(result[0].slot.isFxLoop(), IsTrue());
+    EXPECT_THAT(result[1].slot.id(), Eq(5));
+    EXPECT_THAT(result[1].slot.isFxLoop(), IsTrue());
+    EXPECT_THAT(result[2].slot.id(), Eq(6));
+    EXPECT_THAT(result[2].slot.isFxLoop(), IsTrue());
+    EXPECT_THAT(result[3].slot.id(), Eq(7));
+    EXPECT_THAT(result[3].slot.isFxLoop(), IsTrue());
 }

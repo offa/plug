@@ -34,14 +34,14 @@ namespace plug
     class LoadFromFile
     {
     public:
-        LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, fx_pedal_settings fx_settings[4]);
+        LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::array<fx_pedal_settings, 4>& fx_settings);
 
         void loadfile();
 
     private:
         QString* m_name;
         amp_settings* m_amp_settings;
-        fx_pedal_settings* m_fx_settings;
+        std::array<fx_pedal_settings, 4> m_fx_settings;
         const std::unique_ptr<QXmlStreamReader> m_xml;
 
         void parseAmp();

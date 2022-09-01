@@ -70,8 +70,13 @@ namespace plug
 
         xml = std::make_unique<QXmlStreamWriter>(file.get());
         amp_settings amplifier_settings{};
-        fx_pedal_settings fx_settings[4];
-        dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings);
+        std::array<fx_pedal_settings, 4> fx_settings{{
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false}
+        }};
+        dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings.data());
 
         xml->setAutoFormatting(true);
         xml->writeStartDocument();
@@ -80,7 +85,7 @@ namespace plug
         xml->writeAttribute("ProductId", "1");
 
         writeAmp(amplifier_settings);
-        manageWriteFX(fx_settings);
+        manageWriteFX(fx_settings.data());
         writeFUSE();
         writeUSBGain(amplifier_settings.usb_gain);
 
@@ -303,7 +308,7 @@ namespace plug
 
     void SaveToFile::manageWriteFX(fx_pedal_settings settings[4])
     {
-        fx_pedal_settings empty{0, effects::EMPTY, 0, 0, 0, 0, 0, 0, Position::input};
+        fx_pedal_settings empty{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
 
         xml->writeStartElement("FX");
 
@@ -565,11 +570,9 @@ namespace plug
                 break;
         }
 
-        const int position = (settings.position == Position::effectsLoop ? (settings.fx_slot + 4) : settings.fx_slot);
-
         xml->writeStartElement("Module");
         xml->writeAttribute("ID", QString("%1").arg(model));
-        xml->writeAttribute("POS", QString("%1").arg(position));
+        xml->writeAttribute("POS", QString("%1").arg(settings.slot.id()));
         xml->writeAttribute("BypassState", "1");
 
         if (model == value(effects::EMPTY))

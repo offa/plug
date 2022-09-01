@@ -224,7 +224,12 @@ namespace plug
     {
         QSettings settings;
         amp_settings amplifier_set{};
-        std::array<fx_pedal_settings, 4> effects_set{{}};
+        std::array<fx_pedal_settings, 4> effects_set{{
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false}
+        }};
         QString name;
 
         ui->statusBar->showMessage(tr("Connecting..."));
@@ -270,7 +275,7 @@ namespace plug
         }
         for (std::size_t i = 0; i < 4; i++)
         {
-            switch (effects_set[i].fx_slot)
+            switch (effects_set[i].slot.id())
             {
                 case 0x00:
                 case 0x04:
@@ -399,7 +404,7 @@ namespace plug
         {
             if (settings.value("Settings/oneSetToSetThemAll").toBool())
             {
-                fx_pedal_settings pedal{};
+                fx_pedal_settings pedal{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
 
                 if (effect1->get_changed())
                 {
@@ -502,7 +507,7 @@ namespace plug
             const auto effects_set = signalChain.effects();
             for (std::size_t i = 0; i < 4; i++)
             {
-                switch (effects_set[i].fx_slot)
+                switch (effects_set[i].slot.id())
                 {
                     case 0x00:
                     case 0x04:
@@ -579,7 +584,7 @@ namespace plug
 
     void MainWindow::save_effects(int slot, char* name, int fx_num, bool mod, bool dly, bool rev)
     {
-        std::vector<fx_pedal_settings> effects(static_cast<std::size_t>(fx_num));
+        std::vector<fx_pedal_settings> effects(static_cast<std::size_t>(fx_num), {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false});
 
         if (fx_num == 1)
         {
@@ -655,10 +660,15 @@ namespace plug
         }
 
         amp_settings amplifier_set{};
-        fx_pedal_settings effects_set[4];
+        std::array<fx_pedal_settings, 4> effects_set{{
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
+            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false}
+        }};
         QString name;
-        auto loader = std::make_unique<LoadFromFile>(file.get(), &name, &amplifier_set, effects_set);
-        loader->loadfile();
+        LoadFromFile loader{file.get(), &name, &amplifier_set, effects_set};
+        loader.loadfile();
         file->close();
 
         change_title(name);
@@ -675,7 +685,7 @@ namespace plug
 
         for (int i = 0; i < 4; i++)
         {
-            switch (effects_set[i].fx_slot)
+            switch (effects_set[i].slot.id())
             {
                 case 0x00:
                     effect1->load(effects_set[i]);
@@ -859,7 +869,7 @@ namespace plug
     void MainWindow::empty_other(int value, Effect* caller)
     {
         const int fx_family = check_fx_family(static_cast<effects>(value));
-        fx_pedal_settings settings{};
+        fx_pedal_settings settings{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
 
         if (caller != effect1)
         {
