@@ -25,7 +25,7 @@
 namespace plug
 {
 
-    LoadFromFile::LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::array<fx_pedal_settings, 4>& fx_settings)
+    LoadFromFile::LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::vector<fx_pedal_settings>& fx_settings)
         : m_name(name),
           m_amp_settings(amp_settings),
           m_fx_settings(fx_settings),

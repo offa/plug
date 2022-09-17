@@ -71,13 +71,8 @@ namespace plug
 
         xml = std::make_unique<QXmlStreamWriter>(file.get());
         amp_settings amplifier_settings{};
-        std::array<fx_pedal_settings, 4> fx_settings{{
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false}
-        }};
-        dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings.data());
+        std::vector<fx_pedal_settings> fx_settings{};
+        dynamic_cast<MainWindow*>(parent())->get_settings(&amplifier_settings, fx_settings);
 
         xml->setAutoFormatting(true);
         xml->writeStartDocument();

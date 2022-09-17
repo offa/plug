@@ -42,7 +42,7 @@ namespace plug::com
     std::string decodeNameFromData(const Packet<NamePayload>& packet);
     amp_settings decodeAmpFromData(const Packet<AmpPayload>& packet, const Packet<AmpPayload>& packetUsbGain);
 
-    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet<EffectPayload>, 4>& packet);
+    std::vector<fx_pedal_settings> decodeEffectsFromData(const std::array<Packet<EffectPayload>, 4>& packet);
     std::vector<std::string> decodePresetListFromData(const std::vector<Packet<NamePayload>>& packet);
 
     Packet<AmpPayload> serializeAmpSettings(const amp_settings& value);

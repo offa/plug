@@ -80,10 +80,10 @@ namespace plug
     }
 
 
-    Effect::Effect(QWidget* parent, std::uint8_t fxSlot, bool fxLoop)
+    Effect::Effect(QWidget* parent, FxSlot fxSlot)
         : QMainWindow(parent),
           ui(std::make_unique<Ui::Effect>()),
-          slot(FxSlot{fxSlot}),
+          slot(fxSlot),
           effect_num(effects::EMPTY),
           knob1(0),
           knob2(0),
@@ -102,10 +102,9 @@ namespace plug
         restoreGeometry(settings.value(QString("Windows/Effect%1WindowGeometry").arg(slot.id())).toByteArray());
 
         // set window title
-        const auto slotArg = slot.id() + 1;
-        setWindowTitle(tr("FX%1: EMPTY").arg(slotArg));
+        setTitleTexts(slot.id(), "EMPTY");
 
-        setAccessibleName(tr("Effect's %1 window: EMPTY").arg(slotArg));
+        const auto slotArg = slot.id() + 1;
         setAccessibleDescription(tr("Here you can choose which effect should be emulated on this slot and it's parameters"));
         ui->setButton->setAccessibleName(tr("Effect's %1 set button").arg(slotArg));
         ui->setButton->setAccessibleDescription(tr("Send effect's %1 settings to the amplifier").arg(slotArg));
@@ -114,7 +113,7 @@ namespace plug
         ui->comboBox->setAccessibleName(tr("Choose effect's %1 effect").arg(slotArg));
         ui->comboBox->setAccessibleDescription(tr("Allows you to choose which effect should be emulated on this slot"));
 
-        if (fxLoop)
+        if (slot.isFxLoop())
         {
             ui->labelPosition->setText("Fx Loop");
         }
@@ -361,155 +360,155 @@ namespace plug
         switch (static_cast<effects>(value))
         {
             case effects::EMPTY:
-                setTitleTexts(slot.id() + 1, "EMPTY");
+                setTitleTexts(slot.id(), "EMPTY");
                 break;
 
             case effects::OVERDRIVE:
-                setTitleTexts(slot.id() + 1, "Overdrive");
+                setTitleTexts(slot.id(), "Overdrive");
                 break;
 
             case effects::WAH:
-                setTitleTexts(slot.id() + 1, "Wah");
+                setTitleTexts(slot.id(), "Wah");
                 break;
 
             case effects::TOUCH_WAH:
-                setTitleTexts(slot.id() + 1, "Touch Wah");
+                setTitleTexts(slot.id(), "Touch Wah");
                 break;
 
             case effects::FUZZ:
-                setTitleTexts(slot.id() + 1, "Fuzz");
+                setTitleTexts(slot.id(), "Fuzz");
                 break;
 
             case effects::FUZZ_TOUCH_WAH:
-                setTitleTexts(slot.id() + 1, "Fuzz Touch Wah");
+                setTitleTexts(slot.id(), "Fuzz Touch Wah");
                 break;
 
             case effects::SIMPLE_COMP:
-                setTitleTexts(slot.id() + 1, "Simple Compressor");
+                setTitleTexts(slot.id(), "Simple Compressor");
                 break;
 
             case effects::COMPRESSOR:
-                setTitleTexts(slot.id() + 1, "Compressor");
+                setTitleTexts(slot.id(), "Compressor");
                 break;
 
             case effects::SINE_CHORUS:
-                setTitleTexts(slot.id() + 1, "Sine Chorus");
+                setTitleTexts(slot.id(), "Sine Chorus");
                 break;
 
             case effects::TRIANGLE_CHORUS:
-                setTitleTexts(slot.id() + 1, "Triangle Chorus");
+                setTitleTexts(slot.id(), "Triangle Chorus");
                 break;
 
             case effects::SINE_FLANGER:
-                setTitleTexts(slot.id() + 1, "Sine Flanger");
+                setTitleTexts(slot.id(), "Sine Flanger");
                 break;
 
             case effects::TRIANGLE_FLANGER:
-                setTitleTexts(slot.id() + 1, "Triangle Flanger");
+                setTitleTexts(slot.id(), "Triangle Flanger");
                 break;
 
             case effects::VIBRATONE:
-                setTitleTexts(slot.id() + 1, "Vibratone");
+                setTitleTexts(slot.id(), "Vibratone");
                 break;
 
             case effects::VINTAGE_TREMOLO:
-                setTitleTexts(slot.id() + 1, "Vintage Tremolo");
+                setTitleTexts(slot.id(), "Vintage Tremolo");
                 break;
 
             case effects::SINE_TREMOLO:
-                setTitleTexts(slot.id() + 1, "Sine Tremolo");
+                setTitleTexts(slot.id(), "Sine Tremolo");
                 break;
 
             case effects::RING_MODULATOR:
-                setTitleTexts(slot.id() + 1, "Ring Modulator");
+                setTitleTexts(slot.id(), "Ring Modulator");
                 break;
 
             case effects::STEP_FILTER:
-                setTitleTexts(slot.id() + 1, "Step Filter");
+                setTitleTexts(slot.id(), "Step Filter");
                 break;
 
             case effects::PHASER:
-                setTitleTexts(slot.id() + 1, "Phaser");
+                setTitleTexts(slot.id(), "Phaser");
                 break;
 
             case effects::PITCH_SHIFTER:
-                setTitleTexts(slot.id() + 1, "Pitch Shifter");
+                setTitleTexts(slot.id(), "Pitch Shifter");
                 break;
 
             case effects::MONO_DELAY:
-                setTitleTexts(slot.id() + 1, "Mono Delay");
+                setTitleTexts(slot.id(), "Mono Delay");
                 break;
 
             case effects::MONO_ECHO_FILTER:
-                setTitleTexts(slot.id() + 1, "Mono Echo Filter");
+                setTitleTexts(slot.id(), "Mono Echo Filter");
                 break;
 
             case effects::STEREO_ECHO_FILTER:
-                setTitleTexts(slot.id() + 1, "Stereo Echo Filter");
+                setTitleTexts(slot.id(), "Stereo Echo Filter");
                 break;
 
             case effects::MULTITAP_DELAY:
-                setTitleTexts(slot.id() + 1, "Multitap Delay");
+                setTitleTexts(slot.id(), "Multitap Delay");
                 break;
 
             case effects::PING_PONG_DELAY:
-                setTitleTexts(slot.id() + 1, "Ping-Pong Delay");
+                setTitleTexts(slot.id(), "Ping-Pong Delay");
                 break;
 
             case effects::DUCKING_DELAY:
-                setTitleTexts(slot.id() + 1, "Ducking Delay");
+                setTitleTexts(slot.id(), "Ducking Delay");
                 break;
 
             case effects::REVERSE_DELAY:
-                setTitleTexts(slot.id() + 1, "Reverse Delay");
+                setTitleTexts(slot.id(), "Reverse Delay");
                 break;
 
             case effects::TAPE_DELAY:
-                setTitleTexts(slot.id() + 1, "Tape Delay");
+                setTitleTexts(slot.id(), "Tape Delay");
                 break;
 
             case effects::STEREO_TAPE_DELAY:
-                setTitleTexts(slot.id() + 1, "Stereo Tape Delay");
+                setTitleTexts(slot.id(), "Stereo Tape Delay");
                 break;
 
             case effects::SMALL_HALL_REVERB:
-                setTitleTexts(slot.id() + 1, "Small Hall Reverb");
+                setTitleTexts(slot.id(), "Small Hall Reverb");
                 break;
 
             case effects::LARGE_HALL_REVERB:
-                setTitleTexts(slot.id() + 1, "Large Hall Reverb");
+                setTitleTexts(slot.id(), "Large Hall Reverb");
                 break;
 
             case effects::SMALL_ROOM_REVERB:
-                setTitleTexts(slot.id() + 1, "Small Room Reverb");
+                setTitleTexts(slot.id(), "Small Room Reverb");
                 break;
 
             case effects::LARGE_ROOM_REVERB:
-                setTitleTexts(slot.id() + 1, "Large Room Reverb");
+                setTitleTexts(slot.id(), "Large Room Reverb");
                 break;
 
             case effects::SMALL_PLATE_REVERB:
-                setTitleTexts(slot.id() + 1, "Small Plate Reverb");
+                setTitleTexts(slot.id(), "Small Plate Reverb");
                 break;
 
             case effects::LARGE_PLATE_REVERB:
-                setTitleTexts(slot.id() + 1, "Large Plate Reverb");
+                setTitleTexts(slot.id(), "Large Plate Reverb");
                 break;
 
             case effects::AMBIENT_REVERB:
-                setTitleTexts(slot.id() + 1, "Ambient Reverb");
+                setTitleTexts(slot.id(), "Ambient Reverb");
                 break;
 
             case effects::ARENA_REVERB:
-                setTitleTexts(slot.id() + 1, "Arena Reverb");
+                setTitleTexts(slot.id(), "Arena Reverb");
                 break;
 
             case effects::FENDER_63_SPRING_REVERB:
-                setTitleTexts(slot.id() + 1, "Fender '63 Spring Reverb");
+                setTitleTexts(slot.id(), "Fender '63 Spring Reverb");
                 break;
 
             case effects::FENDER_65_SPRING_REVERB:
-                setTitleTexts(slot.id() + 1, "Fender '65 Spring Reverb");
+                setTitleTexts(slot.id(), "Fender '65 Spring Reverb");
                 break;
         }
 

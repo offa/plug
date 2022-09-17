@@ -23,6 +23,7 @@
 
 #include "data_structs.h"
 #include "effects_enum.h"
+#include "FxSlot.h"
 #include <QMainWindow>
 #include <memory>
 
@@ -39,7 +40,7 @@ namespace plug
         Q_OBJECT
 
     public:
-        explicit Effect(QWidget* parent, std::uint8_t fxSlot, bool fxLoop);
+        explicit Effect(QWidget* parent, FxSlot fxSlot);
         Effect(const Effect&) = delete;
         ~Effect() override;
 

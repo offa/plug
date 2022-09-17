@@ -1050,7 +1050,7 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
     Packet<EffectPayload> payload{};
     payload.fromBytes(data);
 
-    const auto result = decodeEffectsFromData({{payload, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}});
+    const auto result = decodeEffectsFromData({{emptyEffectPayload, payload, emptyEffectPayload, emptyEffectPayload}});
     EXPECT_THAT(result[1].slot.id(), Eq(0x01));
     EXPECT_THAT(result[1].slot.isFxLoop(), IsFalse());
     EXPECT_THAT(result[1].knob1, Eq(0x11));
@@ -1065,7 +1065,7 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
 TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
 {
     auto decodeWithId = [this](const auto id) {
-        return decodeEffectsFromData(effectPackage(id))[1].effect_num;
+        return decodeEffectsFromData(effectPackage(id))[0].effect_num;
     };
     EXPECT_THAT(decodeWithId(0x00), Eq(effects::EMPTY));
     EXPECT_THAT(decodeWithId(0x3c), Eq(effects::OVERDRIVE));

@@ -1152,13 +1152,8 @@ namespace plug
 
     void DefaultEffects::get_settings()
     {
-        std::array<fx_pedal_settings, 4> settings_data{{
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false},
-            {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false}
-        }};
-        dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data.data());
+        std::vector<fx_pedal_settings> settings_data{};
+        dynamic_cast<MainWindow*>(parent())->get_settings(nullptr, settings_data);
 
         const std::size_t index = static_cast<std::size_t>(ui->comboBox_2->currentIndex());
         ui->comboBox->setCurrentIndex(value(settings_data[index].effect_num));
