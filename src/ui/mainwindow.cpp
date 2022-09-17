@@ -140,19 +140,20 @@ namespace plug
         QShortcut* showFx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
         QShortcut* showFx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
         QShortcut* showFx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFxLoop1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFxLoop2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_6), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFxLoop3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFxLoop4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx5 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx6 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_6), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx7 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx8 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        connect(showFx1, &QShortcut::activated, this, [this] { this->showEffect(0); });
+        connect(showFx2, &QShortcut::activated, this, [this] { this->showEffect(1); });
+        connect(showFx3, &QShortcut::activated, this, [this] { this->showEffect(2); });
+        connect(showFx4, &QShortcut::activated, this, [this] { this->showEffect(3); });
+        connect(showFx5, &QShortcut::activated, this, [this] { this->showEffect(4); });
+        connect(showFx6, &QShortcut::activated, this, [this] { this->showEffect(5); });
+        connect(showFx7, &QShortcut::activated, this, [this] { this->showEffect(6); });
+        connect(showFx8, &QShortcut::activated, this, [this] { this->showEffect(7); });
+
         QShortcut* showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        connect(showFx1, SIGNAL(activated()), this, SLOT(show_fx1()));
-        connect(showFx2, SIGNAL(activated()), this, SLOT(show_fx2()));
-        connect(showFx3, SIGNAL(activated()), this, SLOT(show_fx3()));
-        connect(showFx4, SIGNAL(activated()), this, SLOT(show_fx4()));
-        connect(showFxLoop1, SIGNAL(activated()), this, SLOT(show_fx1()));
-        connect(showFxLoop2, SIGNAL(activated()), this, SLOT(show_fx2()));
-        connect(showFxLoop3, SIGNAL(activated()), this, SLOT(show_fx3()));
-        connect(showFxLoop4, SIGNAL(activated()), this, SLOT(show_fx4()));
         connect(showamp, SIGNAL(activated()), this, SLOT(show_amp()));
 
         // shortcuts for quick loading presets
@@ -644,39 +645,17 @@ namespace plug
         }
     }
 
-    void MainWindow::show_fx1()
+    void MainWindow::showEffect(std::uint8_t slot)
     {
-        if (!effectComponents[0]->isVisible())
+        auto comp = effectComponents.at(slot);
+
+        if (!comp->isVisible())
         {
-            effectComponents[0]->show();
+            comp->show();
         }
-        effectComponents[0]->activateWindow();
+        comp->activateWindow();
     }
 
-    void MainWindow::show_fx2()
-    {
-        if (!effectComponents[1]->isVisible())
-        {
-            effectComponents[1]->show();
-        }
-        effectComponents[1]->activateWindow();
-    }
-    void MainWindow::show_fx3()
-    {
-        if (!effectComponents[2]->isVisible())
-        {
-            effectComponents[2]->show();
-        }
-        effectComponents[2]->activateWindow();
-    }
-    void MainWindow::show_fx4()
-    {
-        if (!effectComponents[3]->isVisible())
-        {
-            effectComponents[3]->show();
-        }
-        effectComponents[3]->activateWindow();
-    }
 
     void MainWindow::show_amp()
     {

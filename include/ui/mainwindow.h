@@ -102,10 +102,7 @@ namespace plug
 
     private slots:
         void about();
-        void show_fx1();
-        void show_fx2();
-        void show_fx3();
-        void show_fx4();
+        void showEffect(std::uint8_t slot);
         void show_amp();
         void show_library();
         void show_default_effects();
