@@ -368,12 +368,10 @@ namespace plug
         {
             if (settings.value("Settings/oneSetToSetThemAll").toBool())
             {
-                std::for_each(effectComponents.begin(), effectComponents.end(), [this](const auto& effect) {
-                    if (effect->get_changed())
+                std::for_each(effectComponents.begin(), effectComponents.end(), [this](const auto& comp) {
+                    if (comp->get_changed())
                     {
-                        fx_pedal_settings pedal{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
-                        effect->get_settings(pedal);
-                        amp_ops->set_effect(pedal);
+                        amp_ops->set_effect(comp->getSettings());
                     }
                 });
             }
@@ -506,17 +504,17 @@ namespace plug
         {
             if (mod)
             {
-                effectComponents[1]->get_settings(effects[0]);
+                effects[0] = effectComponents[1]->getSettings();
                 set_effect(effects[0]);
             }
             else if (dly)
             {
-                effectComponents[2]->get_settings(effects[0]);
+                effects[0] = effectComponents[2]->getSettings();
                 set_effect(effects[0]);
             }
             else if (rev)
             {
-                effectComponents[3]->get_settings(effects[0]);
+                effects[0] = effectComponents[3]->getSettings();
                 set_effect(effects[0]);
             }
             else
@@ -526,9 +524,9 @@ namespace plug
         }
         else
         {
-            effectComponents[2]->get_settings(effects[0]);
+            effects[0] = effectComponents[2]->getSettings();
             set_effect(effects[0]);
-            effectComponents[3]->get_settings(effects[1]);
+            effects[1] = effectComponents[3]->getSettings();
             set_effect(effects[1]);
         }
 
@@ -623,9 +621,7 @@ namespace plug
         fx_settings = std::vector<fx_pedal_settings>{};
 
         std::for_each(effectComponents.cbegin(), effectComponents.cend(), [&fx_settings](const auto& comp) {
-            fx_pedal_settings effect{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
-            comp->get_settings(effect);
-            fx_settings.push_back(effect);
+            fx_settings.push_back(comp->getSettings());
         });
     }
 
@@ -737,7 +733,7 @@ namespace plug
         std::for_each(effectComponents.cbegin(), effectComponents.cend(), [&caller, &settings, fx_family](const auto& comp) {
             if (caller != comp)
             {
-                comp->get_settings(settings);
+                settings = comp->getSettings();
 
                 if (check_fx_family(settings.effect_num) == fx_family)
                 {

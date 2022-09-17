@@ -40,12 +40,14 @@ namespace plug
         Q_OBJECT
 
     public:
-        explicit Effect(QWidget* parent, FxSlot fxSlot);
+        Effect(QWidget* parent, FxSlot fxSlot);
         Effect(const Effect&) = delete;
         ~Effect() override;
 
         void set_changed(bool);
         bool get_changed() const;
+
+        fx_pedal_settings getSettings() const;
 
         Effect& operator=(const Effect&) = delete;
 
@@ -83,7 +85,6 @@ namespace plug
         void send_fx();
 
         void load(fx_pedal_settings);
-        void get_settings(fx_pedal_settings&);
         void load_default_fx();
 
         void showAndActivate();

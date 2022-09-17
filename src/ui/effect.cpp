@@ -1678,18 +1678,6 @@ namespace plug
         ui->dial_6->setValue(settings.knob6);
     }
 
-    void Effect::get_settings(fx_pedal_settings& pedal)
-    {
-        pedal.effect_num = effect_num;
-        pedal.slot = slot;
-        pedal.knob1 = knob1;
-        pedal.knob2 = knob2;
-        pedal.knob3 = knob3;
-        pedal.knob4 = knob4;
-        pedal.knob5 = knob5;
-        pedal.knob6 = knob6;
-    }
-
     void Effect::off_switch(bool value)
     {
         if (value)
@@ -1771,6 +1759,11 @@ namespace plug
     bool Effect::get_changed() const
     {
         return changed;
+    }
+
+    fx_pedal_settings Effect::getSettings() const
+    {
+        return {slot, effect_num, knob1, knob2, knob3, knob4, knob5, knob6, true};
     }
 
     void Effect::enable_set_button(bool value)
