@@ -15,9 +15,9 @@ build:
   parallel:
     matrix:
       - COMPILER: gcc
-        VERSION: [12, 11, 10]
+        VERSION: [12, 11]
       - COMPILER: clang
-        VERSION: [15, 14, 13]
+        VERSION: [15, 14]
   image: ${DOCKER_IMG}/${COMPILER}-${VERSION}:latest
   stage: build
   script:
@@ -38,9 +38,9 @@ build_docker_images:
   parallel:
     matrix:
       - COMPILER: gcc
-        VERSION: [12, 11, 10]
+        VERSION: [12, 11]
       - COMPILER: clang
-        VERSION: [15, 14, 13]
+        VERSION: [15, 14]
   image: docker:latest
   stage: build-docker-images
   variables:

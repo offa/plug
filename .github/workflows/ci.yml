@@ -10,10 +10,8 @@ jobs:
         compiler:
           - gcc-12
           - gcc-11
-          - gcc-10
           - clang-15
           - clang-14
-          - clang-13
     container:
       image: "registry.gitlab.com/offa/plug/ci/${{ matrix.compiler }}:latest"
     name: "${{ matrix.compiler }}"
