@@ -3,7 +3,7 @@
 set -ex
 
 declare -a BUILD_ARGS
-BUILD_TYPE="Release"
+BUILD_TYPE="Debug"
 COVERAGE=false
 
 for arg in "$@"
