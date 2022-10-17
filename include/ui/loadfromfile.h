@@ -41,7 +41,7 @@ namespace plug
     private:
         QString* m_name;
         amp_settings* m_amp_settings;
-        std::vector<fx_pedal_settings> m_fx_settings;
+        std::vector<fx_pedal_settings>& m_fx_settings;
         const std::unique_ptr<QXmlStreamReader> m_xml;
 
         void parseAmp();
