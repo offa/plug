@@ -16,11 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
       - name: CodeQL Initialization
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@main
         with:
           languages: cpp
           queries: +security-and-quality
       - name: Build
         run: script/ci_build.sh
       - name: CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@main
