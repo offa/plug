@@ -10,7 +10,7 @@ jobs:
   codeql:
     runs-on: ubuntu-latest
     container:
-      image: "registry.gitlab.com/offa/plug/ci/gcc-11:latest"
+      image: "registry.gitlab.com/offa/plug/ci/gcc-12:latest"
     name: "CodeQL"
     steps:
       - name: Checkout

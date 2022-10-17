@@ -24,7 +24,7 @@ build:
     - script/ci_build.sh -asan -ubsan
 
 coverage:
-  image: ${DOCKER_IMG}/gcc-10:latest
+  image: ${DOCKER_IMG}/gcc-12:latest
   stage: build
   script:
     - script/ci_build.sh -cov
