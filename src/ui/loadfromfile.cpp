@@ -21,6 +21,7 @@
 
 #include "ui/loadfromfile.h"
 #include "effects_enum.h"
+#include <QXmlStreamReader>
 
 namespace plug
 {

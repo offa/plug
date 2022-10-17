@@ -27,6 +27,8 @@
 #include <vector>
 #include <memory>
 
+class QXmlStreamReader;
+
 namespace plug
 {
 
