@@ -557,11 +557,11 @@ namespace plug
         }
 
         settings.setValue("LoadFile/lastDirectory", QFileInfo(filename).absolutePath());
-        auto file = std::make_unique<QFile>(filename, this);
+        QFile file{filename, this};
 
-        if (file->exists())
+        if (file.exists())
         {
-            if (!file->open(QFile::ReadOnly | QFile::Text))
+            if (!file.open(QFile::ReadOnly | QFile::Text))
             {
                 QMessageBox::critical(this, tr("Error!"), tr("Could not open file"));
                 return;
@@ -576,9 +576,9 @@ namespace plug
         amp_settings amplifier_set{};
         std::vector<fx_pedal_settings> effects_set{};
         QString name;
-        LoadFromFile loader{file.get(), &name, &amplifier_set, effects_set};
+        LoadFromFile loader{&file, &name, &amplifier_set, effects_set};
         loader.loadfile();
-        file->close();
+        file.close();
 
         change_title(name);
 
