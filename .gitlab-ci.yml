@@ -30,28 +30,3 @@ coverage:
     - script/ci_build.sh -cov
   coverage: /^\s*lines:\s*\d+.\d+\%/
 
-
-# -----------------------------------------
-# --- CI Images
-# -----------------------------------------
-build_docker_images:
-  parallel:
-    matrix:
-      - COMPILER: gcc
-        VERSION: [12, 11]
-      - COMPILER: clang
-        VERSION: [15, 14]
-  image: docker:latest
-  stage: build-docker-images
-  variables:
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-  script:
-    - script/image_build.sh ${COMPILER}-${VERSION}
-  only:
-    - schedules
-    - web
-    - /^docker-.*$/
