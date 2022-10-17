@@ -13,7 +13,7 @@ jobs:
           - clang-15
           - clang-14
     container:
-      image: "registry.gitlab.com/offa/plug/ci/${{ matrix.compiler }}:latest"
+      image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}:stable"
     name: "${{ matrix.compiler }}"
     steps:
       - uses: actions/checkout@main

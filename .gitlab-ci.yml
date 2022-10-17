@@ -18,13 +18,13 @@ build:
         VERSION: [12, 11]
       - COMPILER: clang
         VERSION: [15, 14]
-  image: ${DOCKER_IMG}/${COMPILER}-${VERSION}:latest
+  image: registry.gitlab.com/offa/docker-images/${COMPILER}-${VERSION}:stable
   stage: build
   script:
     - script/ci_build.sh -asan -ubsan
 
 coverage:
-  image: ${DOCKER_IMG}/gcc-12:latest
+  image: registry.gitlab.com/offa/docker-images/gcc-12:stable
   stage: build
   script:
     - script/ci_build.sh -cov
