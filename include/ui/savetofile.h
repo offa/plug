@@ -23,8 +23,6 @@
 
 #include "data_structs.h"
 #include <QDialog>
-#include <QFileDialog>
-#include <QMessageBox>
 #include <QXmlStreamWriter>
 #include <vector>
 #include <memory>

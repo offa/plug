@@ -23,7 +23,6 @@
 
 #include "data_structs.h"
 #include <QFile>
-#include <QTextEdit>
 #include <QXmlStreamReader>
 #include <vector>
 #include <memory>

@@ -22,7 +22,8 @@
 #include "ui/savetofile.h"
 #include "ui/mainwindow.h"
 #include "ui_savetofile.h"
-#include <array>
+#include <QFileDialog>
+#include <QMessageBox>
 
 namespace plug
 {
