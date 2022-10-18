@@ -3,11 +3,9 @@ find_package(GTest REQUIRED)
 
 add_library(TestLibs INTERFACE)
 target_link_libraries(TestLibs INTERFACE
-                        GTest::GTest
-                        GTest::Mock
-                        GTest::Main
-                        build-libs
-                        )
+    GTest::gmock_main
+    build-libs
+    )
 
 add_subdirectory(mocks)
 
