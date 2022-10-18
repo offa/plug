@@ -69,7 +69,16 @@ namespace plug
         : QMainWindow(parent),
           ui(std::make_unique<Ui::MainWindow>()),
           presetNames(100, ""),
-          amp_ops(nullptr)
+          amp_ops(nullptr),
+          effectComponents{{
+                  new Effect{this, FxSlot{0}},
+                  new Effect{this, FxSlot{1}},
+                  new Effect{this, FxSlot{2}},
+                  new Effect{this, FxSlot{3}},
+                  new Effect{this, FxSlot{4}},
+                  new Effect{this, FxSlot{5}},
+                  new Effect{this, FxSlot{6}},
+                  new Effect{this, FxSlot{7}}}}
     {
         ui->setupUi(this);
 
@@ -92,11 +101,6 @@ namespace plug
 
         // create child objects
         amp = new Amplifier(this);
-        effect1 = new Effect(this, 0);
-        effect2 = new Effect(this, 1);
-        effect3 = new Effect(this, 2);
-        effect4 = new Effect(this, 3);
-
         save = new SaveOnAmp(this);
         load = new LoadFromAmp(this);
         seffects = new SaveEffects(this);
@@ -108,10 +112,14 @@ namespace plug
 
         // connect buttons to slots
         connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(showAndActivate()));
-        connect(ui->EffectButton1, SIGNAL(clicked()), effect1, SLOT(showAndActivate()));
-        connect(ui->EffectButton2, SIGNAL(clicked()), effect2, SLOT(showAndActivate()));
-        connect(ui->EffectButton3, SIGNAL(clicked()), effect3, SLOT(showAndActivate()));
-        connect(ui->EffectButton4, SIGNAL(clicked()), effect4, SLOT(showAndActivate()));
+        connect(ui->EffectButton1, SIGNAL(clicked()), effectComponents[0], SLOT(showAndActivate()));
+        connect(ui->EffectButton2, SIGNAL(clicked()), effectComponents[1], SLOT(showAndActivate()));
+        connect(ui->EffectButton3, SIGNAL(clicked()), effectComponents[2], SLOT(showAndActivate()));
+        connect(ui->EffectButton4, SIGNAL(clicked()), effectComponents[3], SLOT(showAndActivate()));
+        connect(ui->FxEffectButton1, SIGNAL(clicked()), effectComponents[4], SLOT(showAndActivate()));
+        connect(ui->FxEffectButton2, SIGNAL(clicked()), effectComponents[5], SLOT(showAndActivate()));
+        connect(ui->FxEffectButton3, SIGNAL(clicked()), effectComponents[6], SLOT(showAndActivate()));
+        connect(ui->FxEffectButton4, SIGNAL(clicked()), effectComponents[7], SLOT(showAndActivate()));
         connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(start_amp()));
         connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(stop_amp()));
         connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
@@ -128,15 +136,24 @@ namespace plug
         connect(ui->action_Quick_presets, SIGNAL(triggered()), quickpres, SLOT(show()));
 
         // shortcuts to activate effect windows
-        QShortcut* showfx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showfx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showfx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showfx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        connect(showfx1, SIGNAL(activated()), this, SLOT(show_fx1()));
-        connect(showfx2, SIGNAL(activated()), this, SLOT(show_fx2()));
-        connect(showfx3, SIGNAL(activated()), this, SLOT(show_fx3()));
-        connect(showfx4, SIGNAL(activated()), this, SLOT(show_fx4()));
+        QShortcut* showFx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx5 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx6 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_6), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx7 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx8 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        connect(showFx1, &QShortcut::activated, this, [this] { this->showEffect(0); });
+        connect(showFx2, &QShortcut::activated, this, [this] { this->showEffect(1); });
+        connect(showFx3, &QShortcut::activated, this, [this] { this->showEffect(2); });
+        connect(showFx4, &QShortcut::activated, this, [this] { this->showEffect(3); });
+        connect(showFx5, &QShortcut::activated, this, [this] { this->showEffect(4); });
+        connect(showFx6, &QShortcut::activated, this, [this] { this->showEffect(5); });
+        connect(showFx7, &QShortcut::activated, this, [this] { this->showEffect(6); });
+        connect(showFx8, &QShortcut::activated, this, [this] { this->showEffect(7); });
+
+        QShortcut* showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, nullptr, nullptr, Qt::ApplicationShortcut);
         connect(showamp, SIGNAL(activated()), this, SLOT(show_amp()));
 
         // shortcuts for quick loading presets
@@ -208,7 +225,7 @@ namespace plug
     {
         QSettings settings;
         amp_settings amplifier_set{};
-        std::array<fx_pedal_settings, 4> effects_set{{}};
+        std::vector<fx_pedal_settings> effects_set{};
         QString name;
 
         ui->statusBar->showMessage(tr("Connecting..."));
@@ -252,50 +269,21 @@ namespace plug
         {
             amp->show();
         }
-        for (std::size_t i = 0; i < 4; i++)
+
+        for (const auto& effect : effects_set)
         {
-            switch (effects_set[i].fx_slot)
+            Effect* component = effectComponents.at(effect.slot.id());
+            component->load(effect);
+
+            if ((effect.effect_num != effects::EMPTY) && (settings.value("Settings/popupChangedWindows").toBool()))
             {
-                case 0x00:
-                case 0x04:
-                    effect1->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect1->show();
-                    break;
-
-                case 0x01:
-                case 0x05:
-                    effect2->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect2->show();
-                    break;
-
-                case 0x02:
-                case 0x06:
-                    effect3->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect3->show();
-                    break;
-
-                case 0x03:
-                case 0x07:
-                    effect4->load(effects_set[i]);
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect4->show();
-                    break;
+                component->show();
             }
         }
 
         // activate buttons
         amp->enable_set_button(true);
-        effect1->enable_set_button(true);
-        effect2->enable_set_button(true);
-        effect3->enable_set_button(true);
-        effect4->enable_set_button(true);
+        std::for_each(effectComponents.cbegin(), effectComponents.cend(), [](const auto& effect) { effect->enable_set_button(true); });
         ui->actionConnect->setDisabled(true);
         ui->actionDisconnect->setDisabled(false);
         ui->actionSave_to_amplifier->setDisabled(false);
@@ -319,10 +307,7 @@ namespace plug
 
             // deactivate buttons
             amp->enable_set_button(false);
-            effect1->enable_set_button(false);
-            effect2->enable_set_button(false);
-            effect3->enable_set_button(false);
-            effect4->enable_set_button(false);
+            std::for_each(effectComponents.cbegin(), effectComponents.cend(), [](const auto& effect) { effect->enable_set_button(false); });
             ui->actionConnect->setDisabled(false);
             ui->actionDisconnect->setDisabled(true);
             ui->actionSave_to_amplifier->setDisabled(true);
@@ -383,28 +368,12 @@ namespace plug
         {
             if (settings.value("Settings/oneSetToSetThemAll").toBool())
             {
-                fx_pedal_settings pedal{};
-
-                if (effect1->get_changed())
-                {
-                    effect1->get_settings(pedal);
-                    amp_ops->set_effect(pedal);
-                }
-                if (effect2->get_changed())
-                {
-                    effect2->get_settings(pedal);
-                    amp_ops->set_effect(pedal);
-                }
-                if (effect3->get_changed())
-                {
-                    effect3->get_settings(pedal);
-                    amp_ops->set_effect(pedal);
-                }
-                if (effect4->get_changed())
-                {
-                    effect4->get_settings(pedal);
-                    amp_ops->set_effect(pedal);
-                }
+                std::for_each(effectComponents.begin(), effectComponents.end(), [this](const auto& comp) {
+                    if (comp->get_changed())
+                    {
+                        amp_ops->set_effect(comp->getSettings());
+                    }
+                });
             }
 
             amp_ops->set_amplifier(amp_settings);
@@ -484,47 +453,16 @@ namespace plug
             }
 
             const auto effects_set = signalChain.effects();
-            for (std::size_t i = 0; i < 4; i++)
-            {
-                switch (effects_set[i].fx_slot)
+            const bool shouldPopup = settings.value("Settings/popupChangedWindows").toBool();
+            std::for_each(effects_set.cbegin(), effects_set.cend(), [this, shouldPopup](const auto& effect) {
+                const auto component = effectComponents.at(effect.slot.id());
+
+                component->load(effect);
+                if ((effect.effect_num != effects::EMPTY) && shouldPopup)
                 {
-                    case 0x00:
-                    case 0x04:
-                        effect1->load(effects_set[i]);
-                        if (effects_set[i].effect_num != effects::EMPTY)
-                            if (settings.value("Settings/popupChangedWindows").toBool())
-                                effect1->show();
-                        break;
-
-                    case 0x01:
-                    case 0x05:
-                        effect2->load(effects_set[i]);
-                        if (effects_set[i].effect_num != effects::EMPTY)
-                            if (settings.value("Settings/popupChangedWindows").toBool())
-                                effect2->show();
-                        break;
-
-                    case 0x02:
-                    case 0x06:
-                        effect3->load(effects_set[i]);
-                        if (effects_set[i].effect_num != effects::EMPTY)
-                            if (settings.value("Settings/popupChangedWindows").toBool())
-                                effect3->show();
-                        break;
-
-                    case 0x03:
-                    case 0x07:
-                        effect4->load(effects_set[i]);
-                        if (effects_set[i].effect_num != effects::EMPTY)
-                        {
-                            if (settings.value("Settings/popupChangedWindows").toBool())
-                            {
-                                effect4->show();
-                            }
-                        }
-                        break;
+                    component->show();
                 }
-            }
+            });
         }
         catch (const std::exception& ex)
         {
@@ -538,10 +476,7 @@ namespace plug
     void MainWindow::enable_buttons()
     {
         amp->enable_set_button(true);
-        effect1->enable_set_button(true);
-        effect2->enable_set_button(true);
-        effect3->enable_set_button(true);
-        effect4->enable_set_button(true);
+        std::for_each(effectComponents.cbegin(), effectComponents.cend(), [](const auto& effect) { effect->enable_set_button(true); });
         ui->actionConnect->setDisabled(false);
         ui->actionDisconnect->setDisabled(false);
         ui->actionSave_to_amplifier->setDisabled(false);
@@ -563,23 +498,23 @@ namespace plug
 
     void MainWindow::save_effects(int slot, char* name, int fx_num, bool mod, bool dly, bool rev)
     {
-        std::vector<fx_pedal_settings> effects(static_cast<std::size_t>(fx_num));
+        std::vector<fx_pedal_settings> effects(static_cast<std::size_t>(fx_num), {FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false});
 
         if (fx_num == 1)
         {
             if (mod)
             {
-                effect2->get_settings(effects[0]);
+                effects[0] = effectComponents[1]->getSettings();
                 set_effect(effects[0]);
             }
             else if (dly)
             {
-                effect3->get_settings(effects[0]);
+                effects[0] = effectComponents[2]->getSettings();
                 set_effect(effects[0]);
             }
             else if (rev)
             {
-                effect4->get_settings(effects[0]);
+                effects[0] = effectComponents[3]->getSettings();
                 set_effect(effects[0]);
             }
             else
@@ -589,9 +524,9 @@ namespace plug
         }
         else
         {
-            effect3->get_settings(effects[0]);
+            effects[0] = effectComponents[2]->getSettings();
             set_effect(effects[0]);
-            effect4->get_settings(effects[1]);
+            effects[1] = effectComponents[3]->getSettings();
             set_effect(effects[1]);
         }
 
@@ -622,11 +557,11 @@ namespace plug
         }
 
         settings.setValue("LoadFile/lastDirectory", QFileInfo(filename).absolutePath());
-        auto file = std::make_unique<QFile>(filename, this);
+        QFile file{filename, this};
 
-        if (file->exists())
+        if (file.exists())
         {
-            if (!file->open(QFile::ReadOnly | QFile::Text))
+            if (!file.open(QFile::ReadOnly | QFile::Text))
             {
                 QMessageBox::critical(this, tr("Error!"), tr("Could not open file"));
                 return;
@@ -639,11 +574,11 @@ namespace plug
         }
 
         amp_settings amplifier_set{};
-        fx_pedal_settings effects_set[4];
+        std::vector<fx_pedal_settings> effects_set{};
         QString name;
-        auto loader = std::make_unique<LoadFromFile>(file.get(), &name, &amplifier_set, effects_set);
-        loader->loadfile();
-        file->close();
+        LoadFromFile loader{&file, &name, &amplifier_set, effects_set};
+        loader.loadfile();
+        file.close();
 
         change_title(name);
 
@@ -652,67 +587,42 @@ namespace plug
         {
             amp->send_amp();
         }
-        if (settings.value("Settings/popupChangedWindows").toBool())
+
+        const bool shouldPopup = settings.value("Settings/popupChangedWindows").toBool();
+
+        if (shouldPopup)
         {
             amp->show();
         }
 
-        for (int i = 0; i < 4; i++)
-        {
-            switch (effects_set[i].fx_slot)
+        std::for_each(effects_set.begin(), effects_set.end(), [this, shouldPopup](auto& effect) {
+            const auto& component = effectComponents.at(effect.slot.id());
+            component->load(effect);
+
+            if (connected)
             {
-                case 0x00:
-                    effect1->load(effects_set[i]);
-                    if (connected)
-                        effect1->send_fx();
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect1->show();
-                    break;
-
-                case 0x01:
-                    effect2->load(effects_set[i]);
-                    if (connected)
-                        effect2->send_fx();
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect2->show();
-                    break;
-
-                case 0x02:
-                    effect3->load(effects_set[i]);
-                    if (connected)
-                        effect3->send_fx();
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect3->show();
-                    break;
-
-                case 0x03:
-                    effect4->load(effects_set[i]);
-                    if (connected)
-                        effect4->send_fx();
-                    if (effects_set[i].effect_num != effects::EMPTY)
-                        if (settings.value("Settings/popupChangedWindows").toBool())
-                            effect4->show();
-                    break;
+                component->send_fx();
             }
-        }
+
+            if ((effect.effect_num != effects::EMPTY) && shouldPopup)
+            {
+                component->show();
+            }
+        });
     }
 
-    void MainWindow::get_settings(amp_settings* amplifier_settings, fx_pedal_settings fx_settings[4])
+    void MainWindow::get_settings(amp_settings* amplifier_settings, std::vector<fx_pedal_settings>& fx_settings)
     {
         if (amplifier_settings != nullptr)
         {
             amp->get_settings(amplifier_settings);
         }
-        if (fx_settings != nullptr)
-        {
-            effect1->get_settings(fx_settings[0]);
-            effect2->get_settings(fx_settings[1]);
-            effect3->get_settings(fx_settings[2]);
-            effect4->get_settings(fx_settings[3]);
-        }
+
+        fx_settings = std::vector<fx_pedal_settings>{};
+
+        std::for_each(effectComponents.cbegin(), effectComponents.cend(), [&fx_settings](const auto& comp) {
+            fx_settings.push_back(comp->getSettings());
+        });
     }
 
     void MainWindow::change_title(const QString& name)
@@ -731,39 +641,17 @@ namespace plug
         }
     }
 
-    void MainWindow::show_fx1()
+    void MainWindow::showEffect(std::uint8_t slot)
     {
-        if (!effect1->isVisible())
+        auto comp = effectComponents.at(slot);
+
+        if (!comp->isVisible())
         {
-            effect1->show();
+            comp->show();
         }
-        effect1->activateWindow();
+        comp->activateWindow();
     }
 
-    void MainWindow::show_fx2()
-    {
-        if (!effect2->isVisible())
-        {
-            effect2->show();
-        }
-        effect2->activateWindow();
-    }
-    void MainWindow::show_fx3()
-    {
-        if (!effect3->isVisible())
-        {
-            effect3->show();
-        }
-        effect3->activateWindow();
-    }
-    void MainWindow::show_fx4()
-    {
-        if (!effect4->isVisible())
-        {
-            effect4->show();
-        }
-        effect4->activateWindow();
-    }
 
     void MainWindow::show_amp()
     {
@@ -782,10 +670,7 @@ namespace plug
         settings.setValue("Settings/popupChangedWindows", false);
 
         library = std::make_unique<Library>(presetNames, this);
-        effect1->close();
-        effect2->close();
-        effect3->close();
-        effect4->close();
+        std::for_each(effectComponents.cbegin(), effectComponents.cend(), [](const auto& comp) { comp->close(); });
         amp->close();
         this->close();
         library->exec();
@@ -843,47 +728,20 @@ namespace plug
     void MainWindow::empty_other(int value, Effect* caller)
     {
         const int fx_family = check_fx_family(static_cast<effects>(value));
-        fx_pedal_settings settings{};
+        fx_pedal_settings settings{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
 
-        if (caller != effect1)
-        {
-            effect1->get_settings(settings);
-            if (check_fx_family(settings.effect_num) == fx_family)
+        std::for_each(effectComponents.cbegin(), effectComponents.cend(), [&caller, &settings, fx_family](const auto& comp) {
+            if (caller != comp)
             {
-                effect1->choose_fx(0);
-                effect1->send_fx();
-            }
-        }
+                settings = comp->getSettings();
 
-        if (caller != effect2)
-        {
-            effect2->get_settings(settings);
-            if (check_fx_family(settings.effect_num) == fx_family)
-            {
-                effect2->choose_fx(0);
-                effect2->send_fx();
+                if (check_fx_family(settings.effect_num) == fx_family)
+                {
+                    comp->choose_fx(0);
+                    comp->send_fx();
+                }
             }
-        }
-
-        if (caller != effect3)
-        {
-            effect3->get_settings(settings);
-            if (check_fx_family(settings.effect_num) == fx_family)
-            {
-                effect3->choose_fx(0);
-                effect3->send_fx();
-            }
-        }
-
-        if (caller != effect4)
-        {
-            effect4->get_settings(settings);
-            if (check_fx_family(settings.effect_num) == fx_family)
-            {
-                effect4->choose_fx(0);
-                effect4->send_fx();
-            }
-        }
+        });
     }
 
     void MainWindow::load_presets0()

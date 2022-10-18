@@ -3,7 +3,6 @@
  *        Linux replacement for Fender FUSE software
  *
  * Copyright (C) 2017-2022  offa
- * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,32 +20,41 @@
 
 #pragma once
 
-#include "data_structs.h"
-#include <QFile>
-#include <QXmlStreamReader>
-#include <vector>
-#include <memory>
-
-class QXmlStreamReader;
+#include <string>
+#include <stdexcept>
+#include <cstdint>
 
 namespace plug
 {
-
-    class LoadFromFile
+    class FxSlot
     {
     public:
-        LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::vector<fx_pedal_settings>& fx_settings);
+        constexpr explicit FxSlot(std::uint8_t id)
+            : id_(checkRange(id))
+        {
+        }
 
-        void loadfile();
+        constexpr std::uint8_t id() const
+        {
+            return id_;
+        }
+
+        constexpr bool isFxLoop() const
+        {
+            return id_ >= 4;
+        }
 
     private:
-        QString* m_name;
-        amp_settings* m_amp_settings;
-        std::vector<fx_pedal_settings>& m_fx_settings;
-        const std::unique_ptr<QXmlStreamReader> m_xml;
+        constexpr std::uint8_t checkRange(std::uint8_t value) const
+        {
+            if (value > 7)
+            {
+                throw std::invalid_argument{"Slot ID out of range: " + std::to_string(value)};
+            }
+            return value;
+        }
 
-        void parseAmp();
-        void parseFX();
-        void parseFUSE();
+        std::uint8_t id_;
     };
+
 }

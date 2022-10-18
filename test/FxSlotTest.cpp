@@ -3,7 +3,6 @@
  *        Linux replacement for Fender FUSE software
  *
  * Copyright (C) 2017-2022  offa
- * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,34 +18,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "FxSlot.h"
+#include <gmock/gmock.h>
 
-#include "data_structs.h"
-#include <QFile>
-#include <QXmlStreamReader>
-#include <vector>
-#include <memory>
+using plug::FxSlot;
 
-class QXmlStreamReader;
-
-namespace plug
+class FxSlotTest : public testing::Test
 {
+};
 
-    class LoadFromFile
-    {
-    public:
-        LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::vector<fx_pedal_settings>& fx_settings);
+TEST_F(FxSlotTest, validSlotId)
+{
+    constexpr FxSlot slotPre{0};
+    EXPECT_EQ(slotPre.id(), 0);
+    EXPECT_FALSE(slotPre.isFxLoop());
 
-        void loadfile();
+    constexpr FxSlot slotPost{4};
+    EXPECT_EQ(slotPost.id(), 4);
+    EXPECT_TRUE(slotPost.isFxLoop());
+}
 
-    private:
-        QString* m_name;
-        amp_settings* m_amp_settings;
-        std::vector<fx_pedal_settings>& m_fx_settings;
-        const std::unique_ptr<QXmlStreamReader> m_xml;
-
-        void parseAmp();
-        void parseFX();
-        void parseFUSE();
-    };
+TEST_F(FxSlotTest, invalidSlotIdThrows)
+{
+    EXPECT_THROW(FxSlot{9}, std::invalid_argument);
 }

@@ -511,14 +511,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QCheckBox" name="checkBox">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>&amp;after amplifier</string>
-        </property>
-       </widget>
+       <widget class="QLabel" name="labelPosition"/>
       </item>
       <item>
        <widget class="QPushButton" name="setButton">
@@ -552,7 +545,6 @@
   <tabstop>spinBox_5</tabstop>
   <tabstop>dial_6</tabstop>
   <tabstop>spinBox_6</tabstop>
-  <tabstop>checkBox</tabstop>
   <tabstop>setButton</tabstop>
  </tabstops>
  <resources/>

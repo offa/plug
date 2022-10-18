@@ -23,6 +23,7 @@
 
 #include "data_structs.h"
 #include <QMainWindow>
+#include <array>
 #include <memory>
 
 namespace Ui
@@ -76,7 +77,7 @@ namespace plug
         void save_effects(int, char*, int, bool, bool, bool);
         void set_index(int);
         void loadfile(QString filename = QString());
-        void get_settings(amp_settings*, fx_pedal_settings[4]);
+        void get_settings(amp_settings*, std::vector<fx_pedal_settings>&);
         void change_title(const QString&);
         void update_firmware();
         void empty_other(int, Effect*);
@@ -89,10 +90,7 @@ namespace plug
         bool connected;
         std::unique_ptr<com::Mustang> amp_ops;
         Amplifier* amp;
-        Effect* effect1;
-        Effect* effect2;
-        Effect* effect3;
-        Effect* effect4;
+        std::array<Effect*, 8> effectComponents;
         SaveOnAmp* save;
         LoadFromAmp* load;
         SaveEffects* seffects;
@@ -104,10 +102,7 @@ namespace plug
 
     private slots:
         void about();
-        void show_fx1();
-        void show_fx2();
-        void show_fx3();
-        void show_fx4();
+        void showEffect(std::uint8_t slot);
         void show_amp();
         void show_library();
         void show_default_effects();

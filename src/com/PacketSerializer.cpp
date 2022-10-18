@@ -43,16 +43,6 @@ namespace plug::com
             return 0x02;
         }
 
-        constexpr std::uint8_t getSlot(const fx_pedal_settings& effect)
-        {
-            if (effect.position == Position::effectsLoop)
-            {
-                constexpr std::uint8_t fxLoopOffset{4};
-                return effect.fx_slot + fxLoopOffset;
-            }
-            return effect.fx_slot;
-        }
-
 
         constexpr bool hasExtraKnob(effects e)
         {
@@ -173,24 +163,23 @@ namespace plug::com
         return settings;
     }
 
-    std::array<fx_pedal_settings, 4> decodeEffectsFromData(const std::array<Packet<EffectPayload>, 4>& packet)
+    std::vector<fx_pedal_settings> decodeEffectsFromData(const std::array<Packet<EffectPayload>, 4>& packet)
     {
-        std::array<fx_pedal_settings, 4> effects{{}};
+        std::vector<fx_pedal_settings> effects;
 
-        std::for_each(packet.cbegin(), packet.cend(), [&effects](const auto& p) {
+        std::transform(packet.cbegin(), packet.cend(), std::back_inserter(effects), [](const auto& p)
+                       {
             const auto payload = p.getPayload();
-            const auto slot = payload.getSlot() % 4;
-            effects[slot].fx_slot = slot;
-            effects[slot].knob1 = payload.getKnob1();
-            effects[slot].knob2 = payload.getKnob2();
-            effects[slot].knob3 = payload.getKnob3();
-            effects[slot].knob4 = payload.getKnob4();
-            effects[slot].knob5 = payload.getKnob5();
-            effects[slot].knob6 = payload.getKnob6();
-            effects[slot].position = (payload.getSlot() > 0x03 ? Position::effectsLoop : Position::input);
-            effects[slot].effect_num = lookupEffectById(payload.getModel());
-        });
-
+            return fx_pedal_settings{FxSlot{payload.getSlot()},
+                    lookupEffectById(payload.getModel()),
+                    payload.getKnob1(),
+                    payload.getKnob2(),
+                    payload.getKnob3(),
+                    payload.getKnob4(),
+                    payload.getKnob5(),
+                    payload.getKnob6(),
+                    true
+                    }; });
         return effects;
     }
 
@@ -347,7 +336,7 @@ namespace plug::com
         header.setDSP(dspFromEffect(value.effect_num));
 
         EffectPayload payload{};
-        payload.setSlot(getSlot(value));
+        payload.setSlot(value.slot.id());
         payload.setUnknown(0x00, 0x08, 0x01);
         payload.setKnob1(value.knob1);
         payload.setKnob2(value.knob2);

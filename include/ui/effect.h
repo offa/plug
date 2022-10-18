@@ -23,6 +23,7 @@
 
 #include "data_structs.h"
 #include "effects_enum.h"
+#include "FxSlot.h"
 #include <QMainWindow>
 #include <memory>
 
@@ -39,21 +40,23 @@ namespace plug
         Q_OBJECT
 
     public:
-        explicit Effect(QWidget* parent = nullptr, std::uint8_t fxSlot = 0);
+        Effect(QWidget* parent, FxSlot fxSlot);
         Effect(const Effect&) = delete;
         ~Effect() override;
 
         void set_changed(bool);
         bool get_changed() const;
 
+        fx_pedal_settings getSettings() const;
+
         Effect& operator=(const Effect&) = delete;
 
     private:
-        void setTitleTexts(int slot, const QString& name);
+        void setTitleTexts(int slotNumber, const QString& name);
         void setDialValues(int d1, int d2, int d3, int d4, int d5, int d6);
 
         const std::unique_ptr<Ui::Effect> ui;
-        std::uint8_t fx_slot;
+        FxSlot slot;
         effects effect_num;
         unsigned char knob1;
         unsigned char knob2;
@@ -61,7 +64,6 @@ namespace plug
         unsigned char knob4;
         unsigned char knob5;
         unsigned char knob6;
-        Position position;
         bool enabled;
         bool changed;
         QString temp1;
@@ -69,7 +71,6 @@ namespace plug
 
     public slots:
         // functions to set variables
-        void set_post_amp(bool);
         void set_knob1(int);
         void set_knob2(int);
         void set_knob3(int);
@@ -84,7 +85,6 @@ namespace plug
         void send_fx();
 
         void load(fx_pedal_settings);
-        void get_settings(fx_pedal_settings&);
         void load_default_fx();
 
         void showAndActivate();

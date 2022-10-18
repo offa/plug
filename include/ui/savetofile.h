@@ -23,9 +23,8 @@
 
 #include "data_structs.h"
 #include <QDialog>
-#include <QFileDialog>
-#include <QMessageBox>
 #include <QXmlStreamWriter>
+#include <vector>
 #include <memory>
 
 namespace Ui
@@ -55,7 +54,7 @@ namespace plug
         std::unique_ptr<QXmlStreamWriter> xml;
 
         void writeAmp(amp_settings);
-        void manageWriteFX(fx_pedal_settings[4]);
+        void manageWriteFX(const std::vector<fx_pedal_settings>& settings);
         void writeFX(fx_pedal_settings);
         void writeFUSE();
         void writeUSBGain(int);

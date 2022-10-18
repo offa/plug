@@ -21,17 +21,12 @@
 
 #pragma once
 
-#include <cstdint>
+#include "FxSlot.h"
 #include "effects_enum.h"
+#include <cstdint>
 
 namespace plug
 {
-
-    enum class Position
-    {
-        input,
-        effectsLoop
-    };
 
     struct amp_settings
     {
@@ -56,7 +51,7 @@ namespace plug
 
     struct fx_pedal_settings
     {
-        std::uint8_t fx_slot;
+        FxSlot slot;
         effects effect_num;
         std::uint8_t knob1;
         std::uint8_t knob2;
@@ -64,7 +59,6 @@ namespace plug
         std::uint8_t knob4;
         std::uint8_t knob5;
         std::uint8_t knob6;
-        Position position;
         bool enabled{true};
     };
 }

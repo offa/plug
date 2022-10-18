@@ -507,18 +507,9 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBox">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="accessibleName">
-      <string>After amplifier</string>
-     </property>
-     <property name="accessibleDescription">
-      <string>Set effect to be put virtually after emulated amplifier</string>
-     </property>
+    <widget class="QLabel" name="labelPosition">
      <property name="text">
-      <string>&amp;after amplifier</string>
+      <string/>
      </property>
     </widget>
    </item>

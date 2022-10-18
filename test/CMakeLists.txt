@@ -17,6 +17,7 @@ add_executable(MustangTest
                 MustangTest.cpp
                 PacketSerializerTest.cpp
                 PacketTest.cpp
+                FxSlotTest.cpp
                 )
 add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest PRIVATE
