@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.12.0)
 project(plug VERSION 1.4.3)
 message(STATUS "~~~ ${PROJECT_NAME} v${PROJECT_VERSION} ~~~")
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 option(UNITTEST "Build Unit Tests" ON)
 message(STATUS "Unit Tests : ${UNITTEST}")
 
