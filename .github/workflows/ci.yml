@@ -17,5 +17,7 @@ jobs:
     name: "${{ matrix.compiler }}"
     steps:
       - uses: actions/checkout@main
+      - name: Setup
+        run: script/ci_setup.sh
       - name: Build
         run: script/ci_build.sh -asan -ubsan

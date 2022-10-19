@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
+      - name: Setup
+        run: script/ci_setup.sh
       - name: CodeQL Initialization
         uses: github/codeql-action/init@main
         with:
