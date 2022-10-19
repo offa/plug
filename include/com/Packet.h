@@ -105,7 +105,6 @@ namespace plug::com
     class NamePayload : public PayloadBase
     {
     public:
-
         void setName(std::string_view name);
         std::string getName() const;
     };
@@ -113,7 +112,6 @@ namespace plug::com
     class EffectPayload : public PayloadBase
     {
     public:
-
         void setKnob1(std::uint8_t value);
         std::uint8_t getKnob1() const;
 
@@ -145,7 +143,6 @@ namespace plug::com
     class AmpPayload : public PayloadBase
     {
     public:
-
         void setModel(std::uint8_t value);
         std::uint8_t getModel() const;
 

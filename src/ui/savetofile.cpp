@@ -306,43 +306,40 @@ namespace plug
     void SaveToFile::manageWriteFX(const std::vector<fx_pedal_settings>& settings)
     {
         constexpr fx_pedal_settings empty{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
-        auto writeOrEmpty = [&settings, empty, this](const auto& itr) { writeFX(itr != settings.cend() ? *itr : empty);};
+        auto writeOrEmpty = [&settings, empty, this](const auto& itr)
+        { writeFX(itr != settings.cend() ? *itr : empty); };
         xml->writeStartElement("FX");
 
 
         xml->writeStartElement("Stompbox");
         xml->writeAttribute("ID", "1");
 
-        auto stomp = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect) {
-            return (effect.effect_num > effects::EMPTY) && (effect.effect_num <= effects::COMPRESSOR);
-        });
+        auto stomp = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect)
+                                  { return (effect.effect_num > effects::EMPTY) && (effect.effect_num <= effects::COMPRESSOR); });
         writeOrEmpty(stomp);
         xml->writeEndElement(); // end Stompbox
 
 
         xml->writeStartElement("Modulation");
         xml->writeAttribute("ID", "2");
-        auto modulation = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect) {
-            return (effect.effect_num >= effects::SINE_CHORUS) && (effect.effect_num <= effects::PITCH_SHIFTER);
-        });
+        auto modulation = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect)
+                                       { return (effect.effect_num >= effects::SINE_CHORUS) && (effect.effect_num <= effects::PITCH_SHIFTER); });
         writeOrEmpty(modulation);
         xml->writeEndElement(); // end Modulation
 
 
         xml->writeStartElement("Delay");
         xml->writeAttribute("ID", "3");
-        auto delay = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect) {
-            return (effect.effect_num >= effects::MONO_DELAY) && (effect.effect_num <= effects::STEREO_TAPE_DELAY);
-        });
+        auto delay = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect)
+                                  { return (effect.effect_num >= effects::MONO_DELAY) && (effect.effect_num <= effects::STEREO_TAPE_DELAY); });
         writeOrEmpty(delay);
         xml->writeEndElement(); // end Delay
 
 
         xml->writeStartElement("Reverb");
         xml->writeAttribute("ID", "4");
-        auto reverb = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect) {
-            return (effect.effect_num >= effects::SMALL_HALL_REVERB) && (effect.effect_num <= effects::FENDER_65_SPRING_REVERB);
-        });
+        auto reverb = std::find_if(settings.cbegin(), settings.cend(), [](const auto& effect)
+                                   { return (effect.effect_num >= effects::SMALL_HALL_REVERB) && (effect.effect_num <= effects::FENDER_65_SPRING_REVERB); });
         writeOrEmpty(reverb);
         xml->writeEndElement(); // end Reverb
         xml->writeEndElement(); // end FX

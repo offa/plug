@@ -25,7 +25,8 @@ namespace plug::com
 {
     void Header::setStage(Stage stage)
     {
-        bytes[0] = [stage]() -> std::uint8_t {
+        bytes[0] = [stage]() -> std::uint8_t
+        {
             switch (stage)
             {
                 case Stage::init0:
@@ -57,7 +58,8 @@ namespace plug::com
 
     void Header::setType(Type type)
     {
-        bytes[1] = [type]() -> std::uint8_t {
+        bytes[1] = [type]() -> std::uint8_t
+        {
             switch (type)
             {
                 case Type::operation:
@@ -95,7 +97,8 @@ namespace plug::com
 
     void Header::setDSP(DSP dsp)
     {
-        bytes[2] = [dsp]() -> std::uint8_t {
+        bytes[2] = [dsp]() -> std::uint8_t
+        {
             switch (dsp)
             {
                 case DSP::none:

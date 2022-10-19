@@ -41,8 +41,7 @@ protected:
     {
     }
 
-    [[nodiscard]]
-    std::array<PacketRawType, 7> filledPackage(std::uint8_t value) const
+    [[nodiscard]] std::array<PacketRawType, 7> filledPackage(std::uint8_t value) const
     {
         PacketRawType packet{};
         std::fill(packet.begin(), packet.end(), value);
@@ -51,8 +50,7 @@ protected:
         return data;
     };
 
-    [[nodiscard]]
-    Packet<AmpPayload> ampPackage(std::uint8_t ampId) const
+    [[nodiscard]] Packet<AmpPayload> ampPackage(std::uint8_t ampId) const
     {
         AmpPayload payload{};
         payload.setModel(ampId);
@@ -63,8 +61,7 @@ protected:
         return packet;
     };
 
-    [[nodiscard]]
-    Packet<AmpPayload> cabinetPackage(std::uint8_t cabinetId) const
+    [[nodiscard]] Packet<AmpPayload> cabinetPackage(std::uint8_t cabinetId) const
     {
         AmpPayload payload{};
         payload.setModel(0x67);
@@ -75,8 +72,7 @@ protected:
         return packet;
     };
 
-    [[nodiscard]]
-    std::array<Packet<EffectPayload>, 4> effectPackage(std::uint8_t effectId) const
+    [[nodiscard]] std::array<Packet<EffectPayload>, 4> effectPackage(std::uint8_t effectId) const
     {
         EffectPayload payload{};
         payload.setSlot(0x01);
@@ -87,8 +83,7 @@ protected:
         return {{packet, emptyEffectPayload, emptyEffectPayload, emptyEffectPayload}};
     };
 
-    [[nodiscard]]
-    Packet<NamePayload> presetNameEmptyPacket() const
+    [[nodiscard]] Packet<NamePayload> presetNameEmptyPacket() const
     {
         NamePayload payload{};
         Packet<NamePayload> packet{};
@@ -96,8 +91,7 @@ protected:
         return packet;
     }
 
-    [[nodiscard]]
-    Packet<NamePayload> presetNamePacket(std::string_view name) const
+    [[nodiscard]] Packet<NamePayload> presetNamePacket(std::string_view name) const
     {
         NamePayload payload{};
         payload.setName(name);
@@ -281,7 +275,8 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpControllsData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 {
-    auto serializeWithType = [](amps a) {
+    auto serializeWithType = [](amps a)
+    {
         return serializeAmpSettings(amp_settings{a, 0, 0, 0, 0, 0, cabinets::cab2x12C, 0, 0, 0, 0, 0, 0, 0, 0, false, 0}).getBytes();
     };
 
@@ -301,7 +296,8 @@ TEST_F(PacketSerializerTest, serializeAmpSettingsAmpData)
 
 TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)
 {
-    auto serializeWithType = [](cabinets c) {
+    auto serializeWithType = [](cabinets c)
+    {
         return serializeAmpSettings(amp_settings{amps::BRITISH_70S, 0, 0, 0, 0, 0, c, 0, 0, 0, 0, 0, 0, 0, 0, false, 0}).getBytes();
     };
 
@@ -523,7 +519,8 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDoesNotSetAdditionalKnobIfNo
 
 TEST_F(PacketSerializerTest, serializeEffectSettingsSetSAdditionalKnobIfRequired)
 {
-    auto serializeWithType = [](effects e, std::uint8_t knob6) {
+    auto serializeWithType = [](effects e, std::uint8_t knob6)
+    {
         return serializeEffectSettings(fx_pedal_settings{FxSlot{1}, e, 0, 0, 0, 0, 0, knob6}).getBytes();
     };
 
@@ -540,7 +537,8 @@ TEST_F(PacketSerializerTest, serializeEffectSettingsDspAndEffectIdData)
     constexpr std::uint8_t dsp2{0x08};
     constexpr std::uint8_t dsp3{0x09};
 
-    auto serializeWithType = [](effects e) {
+    auto serializeWithType = [](effects e)
+    {
         return serializeEffectSettings(fx_pedal_settings{FxSlot{1}, e, 1, 2, 3, 4, 5, 6}).getBytes();
     };
 
@@ -650,7 +648,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameData)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameFxKnobData)
 {
-    auto serializeWithType = [](effects e) {
+    auto serializeWithType = [](effects e)
+    {
         return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{FxSlot{0}, e, 0, 0, 0, 0, 0, 0}}).getBytes();
     };
 
@@ -691,7 +690,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameFxKnobData)
 
 TEST_F(PacketSerializerTest, serializeSaveEffectNameThrowsOnInvalidEffect)
 {
-    auto serializeInvalid = [](effects e) {
+    auto serializeInvalid = [](effects e)
+    {
         return serializeSaveEffectName(8, "ignore", {fx_pedal_settings{FxSlot{0}, e, 0, 0, 0, 0, 0, 0}}).getBytes();
     };
 
@@ -709,7 +709,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectNameSetsFxKnobOfFirstEffect)
     constexpr std::uint8_t slot{8};
     const std::string name{"ignore"};
 
-    constexpr auto create = [](effects e) {
+    constexpr auto create = [](effects e)
+    {
         return fx_pedal_settings{FxSlot{0}, e, 0, 0, 0, 0, 0, 0};
     };
 
@@ -789,7 +790,8 @@ TEST_F(PacketSerializerTest, serializeSaveEffectPacketSerializesListOfTwoEffects
 
 TEST_F(PacketSerializerTest, serializeSaveEffectPacketSetsEffectValues)
 {
-    auto serializeWithType = [](effects e) {
+    auto serializeWithType = [](effects e)
+    {
         constexpr std::uint8_t slot{5};
         return serializeSaveEffectPacket(slot, {fx_pedal_settings{FxSlot{slot}, e, 1, 2, 3, 4, 5, 6}})[0].getBytes();
     };
@@ -886,10 +888,10 @@ TEST_F(PacketSerializerTest, decodePresetListLimitsToMaxReceiveSize)
     const std::vector<Packet<NamePayload>> names((threshold / 2), presetPacket);
     std::vector<Packet<NamePayload>> dataReduced;
 
-    std::for_each(names.cbegin(), names.cend(), [&dataReduced, &emptyData](const auto& n) {
+    std::for_each(names.cbegin(), names.cend(), [&dataReduced, &emptyData](const auto& n)
+                  {
         dataReduced.push_back(n);
-        dataReduced.push_back(emptyData);
-    });
+        dataReduced.push_back(emptyData); });
     std::vector<Packet<NamePayload>> dataFull = dataReduced;
     dataFull.insert(dataFull.end(), dataReduced.cbegin(), dataReduced.cend());
 
@@ -987,7 +989,8 @@ TEST_F(PacketSerializerTest, decodeAmpFromData)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataAmps)
 {
-    auto decodeWithId = [this](const auto id) {
+    auto decodeWithId = [this](const auto id)
+    {
         return decodeAmpFromData(ampPackage(id), emptyAmpPayload).amp_num;
     };
 
@@ -1012,7 +1015,8 @@ TEST_F(PacketSerializerTest, decodeAmpFromDataThrowsOnInvalidAmpId)
 
 TEST_F(PacketSerializerTest, decodeAmpFromDataCabinets)
 {
-    auto decodeWithId = [this](const auto id) {
+    auto decodeWithId = [this](const auto id)
+    {
         return decodeAmpFromData(cabinetPackage(id), emptyAmpPayload).cabinet;
     };
     EXPECT_THAT(decodeWithId(0x00), Eq(cabinets::OFF));
@@ -1064,7 +1068,8 @@ TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsData)
 
 TEST_F(PacketSerializerTest, decodeEffectsFromDataEffectsValues)
 {
-    auto decodeWithId = [this](const auto id) {
+    auto decodeWithId = [this](const auto id)
+    {
         return decodeEffectsFromData(effectPackage(id))[0].effect_num;
     };
     EXPECT_THAT(decodeWithId(0x00), Eq(effects::EMPTY));

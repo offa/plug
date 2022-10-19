@@ -28,26 +28,26 @@ namespace mock
     class UsbMock
     {
     public:
-        MOCK_METHOD(int, init, (libusb_context**));
-        MOCK_METHOD(void, close, (libusb_device_handle*));
+        MOCK_METHOD(int, init, (libusb_context**) );
+        MOCK_METHOD(void, close, (libusb_device_handle*) );
         MOCK_METHOD(libusb_device_handle*, open_device_with_vid_pid, (libusb_context*, uint16_t, uint16_t));
-        MOCK_METHOD(void, exit, (libusb_context*));
-        MOCK_METHOD(int, kernel_driver_active, (libusb_device_handle*, int));
-        MOCK_METHOD(int, detach_kernel_driver, (libusb_device_handle*, int));
-        MOCK_METHOD(int, attach_kernel_driver, (libusb_device_handle*, int));
-        MOCK_METHOD(int, set_auto_detach_kernel_driver, (libusb_device_handle*, int));
-        MOCK_METHOD(int, release_interface, (libusb_device_handle*, int));
-        MOCK_METHOD(int, claim_interface, (libusb_device_handle*, int));
-        MOCK_METHOD(int, interrupt_transfer, (libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int));
-        MOCK_METHOD(const char*, error_name, (int));
-        MOCK_METHOD(const char*, strerror, (int));
-        MOCK_METHOD(ssize_t, get_device_list, (libusb_context*, libusb_device***));
-        MOCK_METHOD(int, get_device_descriptor, (libusb_device*, libusb_device_descriptor*));
-        MOCK_METHOD(void, free_device_list, (libusb_device**, int));
-        MOCK_METHOD(libusb_device*, ref_device, (libusb_device*));
-        MOCK_METHOD(void, unref_device, (libusb_device*));
-        MOCK_METHOD(int, open, (libusb_device*, libusb_device_handle**));
-        MOCK_METHOD(int, get_string_descriptor_ascii, (libusb_device_handle*, uint8_t, unsigned char*, int));
+        MOCK_METHOD(void, exit, (libusb_context*) );
+        MOCK_METHOD(int, kernel_driver_active, (libusb_device_handle*, int) );
+        MOCK_METHOD(int, detach_kernel_driver, (libusb_device_handle*, int) );
+        MOCK_METHOD(int, attach_kernel_driver, (libusb_device_handle*, int) );
+        MOCK_METHOD(int, set_auto_detach_kernel_driver, (libusb_device_handle*, int) );
+        MOCK_METHOD(int, release_interface, (libusb_device_handle*, int) );
+        MOCK_METHOD(int, claim_interface, (libusb_device_handle*, int) );
+        MOCK_METHOD(int, interrupt_transfer, (libusb_device_handle*, unsigned char, unsigned char*, int, int*, unsigned int) );
+        MOCK_METHOD(const char*, error_name, (int) );
+        MOCK_METHOD(const char*, strerror, (int) );
+        MOCK_METHOD(ssize_t, get_device_list, (libusb_context*, libusb_device***) );
+        MOCK_METHOD(int, get_device_descriptor, (libusb_device*, libusb_device_descriptor*) );
+        MOCK_METHOD(void, free_device_list, (libusb_device**, int) );
+        MOCK_METHOD(libusb_device*, ref_device, (libusb_device*) );
+        MOCK_METHOD(void, unref_device, (libusb_device*) );
+        MOCK_METHOD(int, open, (libusb_device*, libusb_device_handle**) );
+        MOCK_METHOD(int, get_string_descriptor_ascii, (libusb_device_handle*, uint8_t, unsigned char*, int) );
     };
 
     UsbMock* getUsbMock();
@@ -70,5 +70,4 @@ extern "C"
     {
         char dummy;
     };
-
 }

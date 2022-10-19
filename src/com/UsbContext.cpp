@@ -62,15 +62,15 @@ namespace plug::com::usb
         std::vector<Device> devicesFound;
         devicesFound.reserve(n);
 
-        std::for_each(devices, std::next(devices, n), [&devicesFound](auto* dev) {
+        std::for_each(devices, std::next(devices, n), [&devicesFound](auto* dev)
+                      {
             try
             {
                 devicesFound.emplace_back(dev);
             }
             catch (const UsbException&)
             {
-            }
-        });
+            } });
 
         libusb_free_device_list(devices, 1);
         return devicesFound;

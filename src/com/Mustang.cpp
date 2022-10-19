@@ -140,7 +140,8 @@ namespace plug::com
         sendCommand(*conn, saveNamePacket.getBytes());
 
         const auto packets = serializeSaveEffectPacket(slot, effects);
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p.getBytes()); });
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
+                      { sendCommand(*conn, p.getBytes()); });
 
         sendCommand(*conn, serializeApplyCommand(effects[0]).getBytes());
     }
@@ -164,11 +165,11 @@ namespace plug::com
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
         std::vector<Packet<NamePayload>> presetListData;
         presetListData.reserve(max_to_receive);
-        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p) {
+        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p)
+                       {
             Packet<NamePayload> packet{};
             packet.fromBytes(p);
-            return packet;
-        });
+            return packet; });
         auto presetNames = decodePresetListFromData(presetListData);
 
         std::array<PacketRawType, 7> presetData{{}};
@@ -180,6 +181,7 @@ namespace plug::com
     void Mustang::initializeAmp()
     {
         const auto packets = serializeInitCommand();
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p) { sendCommand(*conn, p.getBytes()); });
+        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
+                      { sendCommand(*conn, p.getBytes()); });
     }
 }
