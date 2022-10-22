@@ -22,3 +22,11 @@ coverage:
     - script/ci_build.sh -cov
   coverage: /^\s*lines:\s*\d+.\d+\%/
 
+formatting:
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker build -t clang-format-lint github.com/DoozyX/clang-format-lint-action
+  script:
+    - docker run -it --rm --workdir /src -v ${PWD}:/src clang-format-lint --clang-format-executable /clang-format/clang-format14 -r --exclude .git .
