@@ -23,7 +23,7 @@
 #include "com/Connection.h"
 #include <gmock/gmock.h>
 
-namespace mock
+namespace plug::test::mock
 {
     class MockConnection : public plug::com::Connection
     {

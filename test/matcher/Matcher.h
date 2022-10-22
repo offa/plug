@@ -22,7 +22,7 @@
 
 #include <gmock/gmock.h>
 
-namespace test::matcher
+namespace plug::test::matcher
 {
     MATCHER_P(BufferIs, expected, "")
     {

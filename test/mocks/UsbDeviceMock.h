@@ -24,7 +24,7 @@
 #include "com/UsbDevice.h"
 #include <gmock/gmock.h>
 
-namespace mock
+namespace plug::test::mock
 {
     struct UsbContextMock
     {

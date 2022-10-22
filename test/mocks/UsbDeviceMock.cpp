@@ -21,7 +21,7 @@
 #include "UsbDeviceMock.h"
 #include <memory>
 
-namespace mock
+namespace plug::test::mock
 {
     static std::unique_ptr<UsbContextMock> usbContextMock;
     static std::unique_ptr<UsbDeviceMock> usbDeviceMock;
@@ -84,7 +84,7 @@ namespace plug::com::usb
 
     std::vector<Device> listDevices()
     {
-        return mock::usbContextMock->listDevices();
+        return plug::test::mock::usbContextMock->listDevices();
     }
 
 
@@ -95,37 +95,37 @@ namespace plug::com::usb
 
     void Device::open()
     {
-        mock::usbDeviceMock->open();
+        plug::test::mock::usbDeviceMock->open();
     }
 
     void Device::close()
     {
-        mock::usbDeviceMock->close();
+        plug::test::mock::usbDeviceMock->close();
     }
 
     bool Device::isOpen() const noexcept
     {
-        return mock::usbDeviceMock->isOpen();
+        return plug::test::mock::usbDeviceMock->isOpen();
     }
 
     std::uint16_t Device::vendorId() const noexcept
     {
-        return mock::usbDeviceMock->vendorId();
+        return plug::test::mock::usbDeviceMock->vendorId();
     }
 
     std::uint16_t Device::productId() const noexcept
     {
-        return mock::usbDeviceMock->productId();
+        return plug::test::mock::usbDeviceMock->productId();
     }
 
     std::size_t Device::write(std::uint8_t endpoint, std::uint8_t* data, std::size_t dataSize)
     {
-        return mock::usbDeviceMock->write(endpoint, data, dataSize);
+        return plug::test::mock::usbDeviceMock->write(endpoint, data, dataSize);
     }
 
     std::vector<std::uint8_t> Device::receive(std::uint8_t endpoint, std::size_t dataSize)
     {
-        return mock::usbDeviceMock->receive(endpoint, dataSize);
+        return plug::test::mock::usbDeviceMock->receive(endpoint, dataSize);
     }
 
 }

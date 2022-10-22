@@ -21,24 +21,27 @@
 #include "FxSlot.h"
 #include <gmock/gmock.h>
 
-using plug::FxSlot;
 
-class FxSlotTest : public testing::Test
+namespace plug::test
 {
-};
+    class FxSlotTest : public testing::Test
+    {
+    };
 
-TEST_F(FxSlotTest, validSlotId)
-{
-    constexpr FxSlot slotPre{0};
-    EXPECT_EQ(slotPre.id(), 0);
-    EXPECT_FALSE(slotPre.isFxLoop());
+    TEST_F(FxSlotTest, validSlotId)
+    {
+        constexpr FxSlot slotPre{0};
+        EXPECT_EQ(slotPre.id(), 0);
+        EXPECT_FALSE(slotPre.isFxLoop());
 
-    constexpr FxSlot slotPost{4};
-    EXPECT_EQ(slotPost.id(), 4);
-    EXPECT_TRUE(slotPost.isFxLoop());
-}
+        constexpr FxSlot slotPost{4};
+        EXPECT_EQ(slotPost.id(), 4);
+        EXPECT_TRUE(slotPost.isFxLoop());
+    }
 
-TEST_F(FxSlotTest, invalidSlotIdThrows)
-{
-    EXPECT_THROW(FxSlot{9}, std::invalid_argument);
+    TEST_F(FxSlotTest, invalidSlotIdThrows)
+    {
+        EXPECT_THROW(FxSlot{9}, std::invalid_argument);
+    }
+
 }

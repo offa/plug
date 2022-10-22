@@ -23,7 +23,7 @@
 #include "data_structs.h"
 #include <gmock/gmock.h>
 
-namespace test::matcher
+namespace plug::test::matcher
 {
     MATCHER_P(EffectIs, value, "")
     {

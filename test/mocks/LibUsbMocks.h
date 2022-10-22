@@ -23,7 +23,7 @@
 #include <gmock/gmock.h>
 #include <libusb-1.0/libusb.h>
 
-namespace mock
+namespace plug::test::mock
 {
     class UsbMock
     {
