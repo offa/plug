@@ -702,8 +702,6 @@ namespace plug
     void MainWindow::update_firmware()
     {
         QString filename;
-        int ret = 0;
-
         QMessageBox::information(this, "Prepare", R"(Please power off the amplifier, then power it back on while holding down:<ul><li>The "Save" button (Mustang I and II)</li><li>The Data Wheel (Mustang III, IV and IV)</li></ul>After pressing "OK" choose firmware file and then update will begin.It will take about one minute. You will be notified when it's finished.)");
 
         filename = QFileDialog::getOpenFileName(this, tr("Open..."), QDir::homePath(), tr("Mustang firmware (*.upd)"));
@@ -721,7 +719,7 @@ namespace plug
         ui->centralWidget->setDisabled(true);
         ui->menuBar->setDisabled(true);
         this->repaint();
-        ret = com::updateFirmware(filename.toLatin1().constData());
+        const int ret = com::updateFirmware(filename.toLatin1().constData());
         ui->centralWidget->setDisabled(false);
         ui->menuBar->setDisabled(false);
         ui->statusBar->showMessage("", 1);
