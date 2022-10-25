@@ -37,6 +37,7 @@
 #include "com/MustangUpdater.h"
 #include "ui_defaulteffects.h"
 #include "ui_mainwindow.h"
+#include <algorithm>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
@@ -287,17 +288,15 @@ namespace plug
             amp->show();
         }
 
-        for (const auto& effect : effects_set)
-        {
+        std::for_each(effects_set.cbegin(), effects_set.cend(), [this, &settings](const auto& effect)
+                      {
             Effect* component = effectComponents.at(effect.slot.id());
             component->load(effect);
 
             if ((effect.effect_num != effects::EMPTY) && (settings.value("Settings/popupChangedWindows").toBool()))
             {
                 component->show();
-            }
-        }
-
+            } });
         // activate buttons
         amp->enable_set_button(true);
         std::for_each(effectComponents.cbegin(), effectComponents.cend(), [](const auto& effect)
@@ -375,7 +374,6 @@ namespace plug
 
     void MainWindow::set_amplifier(amp_settings amp_settings)
     {
-
         if (!connected)
         {
             return;
