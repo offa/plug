@@ -102,16 +102,7 @@ namespace plug
         void show_amp();
         void show_library();
         void show_default_effects();
-        void load_presets0();
-        void load_presets1();
-        void load_presets2();
-        void load_presets3();
-        void load_presets4();
-        void load_presets5();
-        void load_presets6();
-        void load_presets7();
-        void load_presets8();
-        void load_presets9();
+        void loadPreset(std::size_t number);
 
 
     signals:

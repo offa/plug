@@ -174,16 +174,26 @@ namespace plug
         QShortcut* loadpres7 = new QShortcut(QKeySequence(Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
         QShortcut* loadpres8 = new QShortcut(QKeySequence(Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
         QShortcut* loadpres9 = new QShortcut(QKeySequence(Qt::Key_9), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        connect(loadpres0, SIGNAL(activated()), this, SLOT(load_presets0()));
-        connect(loadpres1, SIGNAL(activated()), this, SLOT(load_presets1()));
-        connect(loadpres2, SIGNAL(activated()), this, SLOT(load_presets2()));
-        connect(loadpres3, SIGNAL(activated()), this, SLOT(load_presets3()));
-        connect(loadpres4, SIGNAL(activated()), this, SLOT(load_presets4()));
-        connect(loadpres5, SIGNAL(activated()), this, SLOT(load_presets5()));
-        connect(loadpres6, SIGNAL(activated()), this, SLOT(load_presets6()));
-        connect(loadpres7, SIGNAL(activated()), this, SLOT(load_presets7()));
-        connect(loadpres8, SIGNAL(activated()), this, SLOT(load_presets8()));
-        connect(loadpres9, SIGNAL(activated()), this, SLOT(load_presets9()));
+        connect(loadpres0, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(0); }));
+        connect(loadpres1, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(1); }));
+        connect(loadpres2, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(2); }));
+        connect(loadpres3, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(3); }));
+        connect(loadpres4, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(4); }));
+        connect(loadpres5, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(5); }));
+        connect(loadpres6, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(6); }));
+        connect(loadpres7, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(7); }));
+        connect(loadpres8, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(8); }));
+        connect(loadpres9, SIGNAL(activated()), this, SLOT([this]
+                                                           { loadPreset(9); }));
 
         // shortcut to activate buttons
         QShortcut* shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
@@ -753,85 +763,16 @@ namespace plug
             } });
     }
 
-    void MainWindow::load_presets0()
+    void MainWindow::loadPreset(std::size_t number)
     {
         QSettings settings;
 
-        if (settings.contains("DefaultPresets/Preset0"))
-            load_from_amp(settings.value("DefaultPresets/Preset0").toInt());
+        if (const auto key = QString{"DefaultPresets/Preset%1"}.arg(number); settings.contains(key))
+        {
+            load_from_amp(settings.value(key).toInt());
+        }
     }
 
-    void MainWindow::load_presets1()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset1"))
-            load_from_amp(settings.value("DefaultPresets/Preset1").toInt());
-    }
-
-    void MainWindow::load_presets2()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset2"))
-            load_from_amp(settings.value("DefaultPresets/Preset2").toInt());
-    }
-
-    void MainWindow::load_presets3()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset3"))
-            load_from_amp(settings.value("DefaultPresets/Preset3").toInt());
-    }
-
-    void MainWindow::load_presets4()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset4"))
-            load_from_amp(settings.value("DefaultPresets/Preset4").toInt());
-    }
-
-    void MainWindow::load_presets5()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset5"))
-            load_from_amp(settings.value("DefaultPresets/Preset5").toInt());
-    }
-
-    void MainWindow::load_presets6()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset6"))
-            load_from_amp(settings.value("DefaultPresets/Preset6").toInt());
-    }
-
-    void MainWindow::load_presets7()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset7"))
-            load_from_amp(settings.value("DefaultPresets/Preset7").toInt());
-    }
-
-    void MainWindow::load_presets8()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset8"))
-            load_from_amp(settings.value("DefaultPresets/Preset8").toInt());
-    }
-
-    void MainWindow::load_presets9()
-    {
-        QSettings settings;
-
-        if (settings.contains("DefaultPresets/Preset9"))
-            load_from_amp(settings.value("DefaultPresets/Preset9").toInt());
-    }
 }
 
 #include "ui/moc_mainwindow.moc"
