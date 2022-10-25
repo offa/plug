@@ -40,8 +40,6 @@ namespace plug
     class SaveOnAmp;
     class LoadFromAmp;
     class Settings;
-    class Library;
-    class DefaultEffects;
     class QuickPresets;
 
     namespace com
@@ -96,8 +94,6 @@ namespace plug
         SaveEffects* seffects;
         Settings* settings_win;
         SaveToFile* saver;
-        std::unique_ptr<Library> library;
-        std::unique_ptr<DefaultEffects> deffx;
         QuickPresets* quickpres;
 
     private slots:

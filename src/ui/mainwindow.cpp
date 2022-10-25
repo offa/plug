@@ -678,12 +678,12 @@ namespace plug
 
         settings.setValue("Settings/popupChangedWindows", false);
 
-        library = std::make_unique<Library>(presetNames, this);
+        Library library{presetNames, this};
         std::for_each(effectComponents.cbegin(), effectComponents.cend(), [](const auto& comp)
                       { comp->close(); });
         amp->close();
         this->close();
-        library->exec();
+        library.exec();
 
         settings.setValue("Settings/popupChangedWindows", previous);
         this->show();
@@ -730,9 +730,8 @@ namespace plug
 
     void MainWindow::show_default_effects()
     {
-        deffx = std::make_unique<DefaultEffects>(this);
-        deffx->exec();
-        deffx.reset();
+        DefaultEffects deffx{this};
+        deffx.exec();
     }
 
     void MainWindow::empty_other(int value, Effect* caller)
