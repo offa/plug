@@ -52,10 +52,10 @@ namespace plug
         void resizeEvent(QResizeEvent*) override;
 
     private slots:
-        void load_slot(int);
+        void load_slot(std::size_t slot);
         void get_directory();
         void get_files(const QString&);
-        void load_file(int);
+        void load_file(std::size_t row);
         void change_font_size(int);
         void change_font_family(QFont);
 
