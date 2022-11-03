@@ -27,6 +27,7 @@ formatting:
   services:
     - docker:dind
   before_script:
+    - apk add --no-cache git
     - docker build -t clang-format-lint github.com/DoozyX/clang-format-lint-action
   script:
-    - docker run -it --rm --workdir /src -v ${PWD}:/src clang-format-lint --clang-format-executable /clang-format/clang-format14 -r --exclude .git .
+    - docker run --rm --workdir /src -v ${PWD}:/src clang-format-lint --clang-format-executable /clang-format/clang-format14 -r --exclude .git .
