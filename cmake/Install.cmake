@@ -1,5 +1,5 @@
-set(PLUG_UDEV_RULE_PATH "/lib/udev/rules.d" CACHE PATH "Udev rules directory.")
-set(PLUG_DESKTOP_PATH "/lib/share/applications" CACHE PATH "Desktop file directory.")
+set(PLUG_UDEV_RULE_PATH "/usr/lib/udev/rules.d" CACHE PATH "Udev rules directory.")
+set(PLUG_DESKTOP_PATH "/usr/share/applications" CACHE PATH "Desktop file directory.")
 set(PLUG_ICON_PATH "/usr/share/icons/hicolor" CACHE PATH "HiColor icon theme directory.")
 
 install(FILES
