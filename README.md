@@ -23,7 +23,7 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 
 ## Building
 
-Building and Testing is done through CMake:
+Building and testing is done through CMake:
 
 ```
 mkdir build && cd build
@@ -35,7 +35,7 @@ make unittest
 
 ## Installation
 
-CMake will install the application and *udev* rule ([`50-mustang.rules`](./cmake/50-mustang.rules)) using:
+CMake will install the application and *udev* rules using:
 
 ```
 make install
