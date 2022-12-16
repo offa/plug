@@ -135,7 +135,7 @@ namespace plug
         QShortcut* off = new QShortcut(QKeySequence(QString("F%1").arg(slotArg)), this, nullptr, nullptr, Qt::ApplicationShortcut);
         connect(off, SIGNAL(activated()), ui->pushButton, SLOT(toggle()));
 
-        QShortcut* default_fx = new QShortcut(QKeySequence(QString("F%1").arg(slot.id() + 5)), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* default_fx = new QShortcut(QKeySequence(QString("Ctrl+F%1").arg(slotArg)), this, nullptr, nullptr, Qt::ApplicationShortcut);
         connect(default_fx, SIGNAL(activated()), this, SLOT(load_default_fx()));
     }
 
