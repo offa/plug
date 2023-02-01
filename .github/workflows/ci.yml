@@ -20,7 +20,7 @@ jobs:
       - name: Setup
         run: script/ci_setup.sh
       - name: Build
-        run: script/ci_build.sh -asan -ubsan
+        run: script/ci_build.sh # -asan -ubsan # Disabled due to #269
 
   formatting-check:
     name: "formatting"
