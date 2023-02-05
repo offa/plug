@@ -13,7 +13,7 @@ build:
   image: registry.gitlab.com/offa/docker-images/${COMPILER}-${VERSION}:stable
   script:
     - script/ci_setup.sh
-    - script/ci_build.sh # -asan -ubsan # Disabled due to #269
+    - script/ci_build.sh -asan -ubsan
 
 coverage:
   image: registry.gitlab.com/offa/docker-images/gcc-12:stable
