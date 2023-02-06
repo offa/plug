@@ -81,54 +81,94 @@ namespace plug
         ui->comboBox_10->addItem(tr("[Empty]"));
 
         if (settings.contains("DefaultPresets/Preset0"))
+        {
             ui->comboBox->setCurrentIndex(settings.value("DefaultPresets/Preset0").toInt());
+        }
         else
+        {
             ui->comboBox->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset1"))
+        {
             ui->comboBox_2->setCurrentIndex(settings.value("DefaultPresets/Preset1").toInt());
+        }
         else
+        {
             ui->comboBox_2->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset2"))
+        {
             ui->comboBox_3->setCurrentIndex(settings.value("DefaultPresets/Preset2").toInt());
+        }
         else
+        {
             ui->comboBox_3->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset3"))
+        {
             ui->comboBox_4->setCurrentIndex(settings.value("DefaultPresets/Preset3").toInt());
+        }
         else
+        {
             ui->comboBox_4->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset4"))
+        {
             ui->comboBox_5->setCurrentIndex(settings.value("DefaultPresets/Preset4").toInt());
+        }
         else
+        {
             ui->comboBox_5->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset5"))
+        {
             ui->comboBox_6->setCurrentIndex(settings.value("DefaultPresets/Preset5").toInt());
+        }
         else
+        {
             ui->comboBox_6->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset6"))
+        {
             ui->comboBox_7->setCurrentIndex(settings.value("DefaultPresets/Preset6").toInt());
+        }
         else
+        {
             ui->comboBox_7->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset7"))
+        {
             ui->comboBox_8->setCurrentIndex(settings.value("DefaultPresets/Preset7").toInt());
+        }
         else
+        {
             ui->comboBox_8->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset8"))
+        {
             ui->comboBox_9->setCurrentIndex(settings.value("DefaultPresets/Preset8").toInt());
+        }
         else
+        {
             ui->comboBox_9->setCurrentIndex(i);
+        }
 
         if (settings.contains("DefaultPresets/Preset9"))
+        {
             ui->comboBox_10->setCurrentIndex(settings.value("DefaultPresets/Preset9").toInt());
+        }
         else
+        {
             ui->comboBox_10->setCurrentIndex(i);
+        }
     }
 
     void QuickPresets::delete_items()
@@ -187,9 +227,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset0");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset0", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset1(int slot)
@@ -197,9 +241,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset1");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset1", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset2(int slot)
@@ -207,9 +255,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset2");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset2", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset3(int slot)
@@ -217,9 +269,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset3");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset3", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset4(int slot)
@@ -227,9 +283,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset4");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset4", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset5(int slot)
@@ -237,9 +297,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset5");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset5", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset6(int slot)
@@ -247,9 +311,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset6");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset6", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset7(int slot)
@@ -257,9 +325,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset7");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset7", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset8(int slot)
@@ -267,9 +339,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset8");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset8", slot);
+        }
     }
 
     void QuickPresets::setDefaultPreset9(int slot)
@@ -277,9 +353,13 @@ namespace plug
         QSettings settings;
 
         if (slot == 24 || slot == 100)
+        {
             settings.remove("DefaultPresets/Preset9");
+        }
         else
+        {
             settings.setValue("DefaultPresets/Preset9", slot);
+        }
     }
 
     void QuickPresets::changeEvent(QEvent* e)

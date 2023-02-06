@@ -51,15 +51,25 @@ namespace plug
         constexpr int check_fx_family(effects value)
         {
             if (value == effects::EMPTY)
+            {
                 return 0;
+            }
             if ((value >= effects::OVERDRIVE) && (value <= effects::COMPRESSOR))
+            {
                 return 1;
+            }
             if ((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER))
+            {
                 return 2;
+            }
             if ((value >= effects::MONO_DELAY) && (value <= effects::STEREO_TAPE_DELAY))
+            {
                 return 3;
+            }
             if ((value >= effects::SMALL_HALL_REVERB) && (value <= effects::FENDER_65_SPRING_REVERB))
+            {
                 return 4;
+            }
             return 0;
         }
 
@@ -89,15 +99,25 @@ namespace plug
 
         // setting default values if there was none
         if (!settings.contains("Settings/connectOnStartup"))
+        {
             settings.setValue("Settings/connectOnStartup", true);
+        }
         if (!settings.contains("Settings/oneSetToSetThemAll"))
+        {
             settings.setValue("Settings/oneSetToSetThemAll", false);
+        }
         if (!settings.contains("Settings/keepWindowsOpen"))
+        {
             settings.setValue("Settings/keepWindowsOpen", false);
+        }
         if (!settings.contains("Settings/popupChangedWindows"))
+        {
             settings.setValue("Settings/popupChangedWindows", true);
+        }
         if (!settings.contains("Settings/defaultEffectValues"))
+        {
             settings.setValue("Settings/defaultEffectValues", true);
+        }
 
         // create child objects
         amp = new Amplifier(this);
