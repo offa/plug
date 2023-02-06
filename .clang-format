@@ -20,7 +20,6 @@ PointerAlignment: Left
 SortIncludes: 'false'
 SpaceAfterCStyleCast: 'true'
 SpaceInEmptyParentheses: 'false'
-#StatementAttributeLikeMacros: [MOCK_METHOD] # Clang-12
 TabWidth: '4'
 UseTab: Never
 
