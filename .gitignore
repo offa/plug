@@ -1,4 +1,4 @@
 build/*
-
+CMakeUserPresets.json
 cppcheck-*
 *.cppcheck
