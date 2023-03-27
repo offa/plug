@@ -12,4 +12,4 @@ install(FILES ${CMAKE_SOURCE_DIR}/cmake/mustang-plug.svg
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps/
         )
 
-install(EXPORT plug-config DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/plug/cmake)
+install(EXPORT plug-config DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/plug)
