@@ -14,4 +14,4 @@ target_link_libraries(plug
                             build-libs
                         )
 
-install(TARGETS plug EXPORT plug-config DESTINATION bin)
+install(TARGETS plug EXPORT plug-config DESTINATION ${CMAKE_INSTALL_BINDIR})

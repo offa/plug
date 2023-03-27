@@ -26,6 +26,7 @@ else()
     message(STATUS "Build Type : None")
 endif()
 
+include(GNUInstallDirs)
 
 if( LTO )
     include(LTO)
