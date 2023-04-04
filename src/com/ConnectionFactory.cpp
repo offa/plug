@@ -39,6 +39,7 @@ namespace plug::com
             inline constexpr std::uint16_t mustangFloor{0x0012};
             inline constexpr std::uint16_t mustangI_II_v2{0x0014};
             inline constexpr std::uint16_t mustangIII_IV_V_v2{0x0016};
+            inline constexpr std::uint16_t rumbleLT25{0x0038};
         }
 
         inline constexpr std::initializer_list<std::uint16_t> pids{
@@ -48,7 +49,8 @@ namespace plug::com
             usbPID::mustangMini,
             usbPID::mustangFloor,
             usbPID::mustangI_II_v2,
-            usbPID::mustangIII_IV_V_v2};
+            usbPID::mustangIII_IV_V_v2,
+            usbPID::rumbleLT25};
     }
 
     std::shared_ptr<Connection> createUsbConnection()
