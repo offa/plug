@@ -18,3 +18,10 @@
 | Mustang IV     | 1ed8 | 0016 |      |
 | Mustang V      | 1ed8 | 0016 |      |
 
+
+## Other devices
+
+| Device         | VID  | PID  | Note |
+|----------------|:----:|:----:|------|
+| Mustang LT 25  | 1ed8 | 0037 |      |
+| Rumble LT 25   | 1ed8 | 0038 |      |
