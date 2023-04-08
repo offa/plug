@@ -80,7 +80,7 @@ namespace plug::com
     {
     }
 
-    InitalData Mustang::start_amp()
+    InitialData Mustang::start_amp()
     {
         if (conn->isOpen() == false)
         {
@@ -156,7 +156,7 @@ namespace plug::com
         return conn->modelVersion();
     }
 
-    InitalData Mustang::loadData()
+    InitialData Mustang::loadData()
     {
         std::vector<std::array<std::uint8_t, 64>> recieved_data;
 

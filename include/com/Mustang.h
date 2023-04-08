@@ -30,7 +30,7 @@
 
 namespace plug::com
 {
-    using InitalData = std::tuple<SignalChain, std::vector<std::string>>;
+    using InitialData = std::tuple<SignalChain, std::vector<std::string>>;
 
     class Mustang
     {
@@ -38,7 +38,7 @@ namespace plug::com
         explicit Mustang(std::shared_ptr<Connection> connection);
         Mustang(const Mustang&) = delete;
 
-        InitalData start_amp();
+        InitialData start_amp();
         void stop_amp();
         void set_effect(fx_pedal_settings value);
         void set_amplifier(amp_settings value);
@@ -53,7 +53,7 @@ namespace plug::com
 
 
     private:
-        InitalData loadData();
+        InitialData loadData();
         void initializeAmp();
 
         const std::shared_ptr<Connection> conn;
