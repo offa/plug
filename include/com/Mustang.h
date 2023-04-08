@@ -30,7 +30,11 @@
 
 namespace plug::com
 {
-    using InitialData = std::tuple<SignalChain, std::vector<std::string>>;
+    struct InitialData
+    {
+        SignalChain signalChain;
+        std::vector<std::string> presetNames;
+    };
 
     class Mustang
     {
