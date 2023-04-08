@@ -296,7 +296,10 @@ namespace plug
         }
         else
         {
-            setWindowTitle(QString(tr("PLUG: %1")).arg(name));
+            setWindowTitle(QString(tr("PLUG - %1 (v%2): %3"))
+                               .arg(QString::fromStdString(amp_ops->getDeviceName()))
+                               .arg(amp_ops->getDeviceModelVersion() == com::ModelVersion::v1 ? "1" : "2")
+                               .arg(name));
             setAccessibleName(QString(tr("Main window: %1")).arg(name));
         }
 
