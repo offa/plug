@@ -146,6 +146,16 @@ namespace plug::com
         sendCommand(*conn, serializeApplyCommand(effects[0]).getBytes());
     }
 
+    std::string Mustang::getDeviceName() const
+    {
+        return conn->name();
+    }
+
+    ModelVersion Mustang::getDeviceModelVersion() const
+    {
+        return conn->modelVersion();
+    }
+
     InitalData Mustang::loadData()
     {
         std::vector<std::array<std::uint8_t, 64>> recieved_data;

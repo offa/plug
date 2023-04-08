@@ -27,6 +27,7 @@
 
 namespace plug::test
 {
+    using plug::com::ModelVersion;
     using plug::com::UsbComm;
     using plug::com::usb::Device;
     using namespace plug::test::matcher;
@@ -45,29 +46,37 @@ namespace plug::test
             mock::clearUsbDeviceMock();
         }
 
+        UsbComm create() const
+        {
+            return UsbComm{Device{nullptr}, ModelVersion::v1};
+        }
+
         mock::UsbDeviceMock* deviceMock{nullptr};
     };
 
     TEST_F(UsbCommTest, ctorOpensDevice)
     {
         EXPECT_CALL(*deviceMock, open());
-        UsbComm com{Device{nullptr}};
+        EXPECT_CALL(*deviceMock, name());
+        UsbComm com{Device{nullptr}, ModelVersion::v1};
     }
 
     TEST_F(UsbCommTest, closeClosesDevice)
     {
         EXPECT_CALL(*deviceMock, open());
+        EXPECT_CALL(*deviceMock, name());
         EXPECT_CALL(*deviceMock, close());
 
-        UsbComm com{Device{nullptr}};
+        UsbComm com = create();
         com.close();
     }
 
     TEST_F(UsbCommTest, isOpenReturnDeviceState)
     {
         EXPECT_CALL(*deviceMock, open());
+        EXPECT_CALL(*deviceMock, name());
 
-        UsbComm com{Device{nullptr}};
+        UsbComm com = create();
         EXPECT_CALL(*deviceMock, isOpen()).WillOnce(Return(false));
         EXPECT_THAT(com.isOpen(), IsFalse());
         EXPECT_CALL(*deviceMock, isOpen()).WillOnce(Return(true));
@@ -77,10 +86,12 @@ namespace plug::test
     TEST_F(UsbCommTest, sendSendsData)
     {
         EXPECT_CALL(*deviceMock, open());
+        EXPECT_CALL(*deviceMock, name());
+
         const std::array<std::uint8_t, 4> data{{0x00, 0xa1, 0xb2, 0xb3}};
         EXPECT_CALL(*deviceMock, write(0x01, BufferIs(data), data.size())).WillOnce(Return(data.size()));
 
-        UsbComm com{Device{nullptr}};
+        UsbComm com = create();
         const auto n = com.send(data);
         EXPECT_THAT(n, Eq(4));
     }
@@ -88,11 +99,32 @@ namespace plug::test
     TEST_F(UsbCommTest, receiveReceivesData)
     {
         EXPECT_CALL(*deviceMock, open());
+        EXPECT_CALL(*deviceMock, name());
+
         std::vector<std::uint8_t> data{{0x00, 0xa1, 0xb2, 0xb3, 0xc4}};
         EXPECT_CALL(*deviceMock, receive(0x81, data.size())).WillOnce(Return(data));
 
-        UsbComm com{Device{nullptr}};
+        UsbComm com = create();
         const auto received = com.receive(data.size());
         EXPECT_THAT(received, Eq(data));
     }
+
+    TEST_F(UsbCommTest, modelName)
+    {
+        EXPECT_CALL(*deviceMock, open());
+        EXPECT_CALL(*deviceMock, name()).WillOnce(Return("USB Device Name"));
+
+        UsbComm com = create();
+        EXPECT_THAT(com.name(), Eq("USB Device Name"));
+    }
+
+    TEST_F(UsbCommTest, modelVersion)
+    {
+        EXPECT_CALL(*deviceMock, open());
+        EXPECT_CALL(*deviceMock, name());
+
+        UsbComm com{Device{nullptr}, ModelVersion::v1};
+        EXPECT_THAT(com.modelVersion(), Eq(ModelVersion::v1));
+    }
+
 }

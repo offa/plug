@@ -30,16 +30,21 @@ namespace plug::com
     class UsbComm : public Connection
     {
     public:
-        explicit UsbComm(usb::Device device);
+        UsbComm(usb::Device device, ModelVersion version);
 
         void close() override;
         bool isOpen() const override;
 
         std::vector<std::uint8_t> receive(std::size_t recvSize) override;
 
+        std::string name() const override;
+        ModelVersion modelVersion() const override;
+
     private:
         std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
 
         usb::Device device_;
+        const std::string name_;
+        const ModelVersion version_;
     };
 }

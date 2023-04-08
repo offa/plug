@@ -21,10 +21,16 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <cstdint>
 
 namespace plug::com
 {
+    enum ModelVersion
+    {
+        v1,
+        v2
+    };
 
     class Connection
     {
@@ -41,6 +47,9 @@ namespace plug::com
         }
 
         virtual std::vector<std::uint8_t> receive(std::size_t recvSize) = 0;
+
+        virtual std::string name() const = 0;
+        virtual ModelVersion modelVersion() const = 0;
 
     private:
         virtual std::size_t sendImpl(std::uint8_t* data, std::size_t size) = 0;

@@ -118,6 +118,11 @@ namespace plug::com::usb
         return plug::test::mock::usbDeviceMock->productId();
     }
 
+    std::string Device::name() const
+    {
+        return plug::test::mock::usbDeviceMock->name();
+    }
+
     std::size_t Device::write(std::uint8_t endpoint, std::uint8_t* data, std::size_t dataSize)
     {
         return plug::test::mock::usbDeviceMock->write(endpoint, data, dataSize);

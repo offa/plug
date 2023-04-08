@@ -45,6 +45,7 @@ namespace plug::test::mock
         MOCK_METHOD(std::uint16_t, productId, (), (const noexcept));
         MOCK_METHOD(std::size_t, write, (std::uint8_t, std::uint8_t*, std::size_t));
         MOCK_METHOD(std::vector<std::uint8_t>, receive, (std::uint8_t, std::size_t));
+        MOCK_METHOD(std::string, name, ());
     };
 
 

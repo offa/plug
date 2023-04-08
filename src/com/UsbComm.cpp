@@ -29,12 +29,17 @@ namespace plug::com
     {
         inline constexpr std::uint8_t endpointSend{0x01};
         inline constexpr std::uint8_t endpointRecv{0x81};
+
+        usb::Device openDevice(usb::Device&& device)
+        {
+            device.open();
+            return std::move(device);
+        }
     }
 
-    UsbComm::UsbComm(usb::Device device)
-        : device_(std::move(device))
+    UsbComm::UsbComm(usb::Device device, ModelVersion version)
+        : device_(openDevice(std::move(device))), name_(device_.name()), version_(version)
     {
-        device_.open();
     }
 
     void UsbComm::close()
@@ -50,6 +55,16 @@ namespace plug::com
     std::vector<std::uint8_t> UsbComm::receive(std::size_t recvSize)
     {
         return device_.receive(endpointRecv, recvSize);
+    }
+
+    std::string UsbComm::name() const
+    {
+        return name_;
+    }
+
+    ModelVersion UsbComm::modelVersion() const
+    {
+        return version_;
     }
 
     std::size_t UsbComm::sendImpl(std::uint8_t* data, std::size_t size)

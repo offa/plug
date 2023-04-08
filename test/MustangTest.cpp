@@ -632,4 +632,13 @@ namespace plug::test
 
         m->save_on_amp(name, slot);
     }
+
+    TEST_F(MustangTest, getDeviceInfoReturnsInfos)
+    {
+        EXPECT_CALL(*conn, name()).WillOnce(Return("A Mustang Device"));
+        EXPECT_CALL(*conn, modelVersion()).WillOnce(Return(ModelVersion::v1));
+
+        EXPECT_THAT(m->getDeviceName(), Eq("A Mustang Device"));
+        EXPECT_THAT(m->getDeviceModelVersion(), Eq(ModelVersion::v1));
+    }
 }

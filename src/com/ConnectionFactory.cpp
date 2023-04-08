@@ -49,6 +49,11 @@ namespace plug::com
             usbPID::mustangFloor,
             usbPID::mustangI_II_v2,
             usbPID::mustangIII_IV_V_v2};
+
+        inline constexpr bool isV2(std::uint16_t pid)
+        {
+            return (pid == usbPID::mustangI_II_v2) || (pid == usbPID::mustangIII_IV_V_v2);
+        }
     }
 
     std::shared_ptr<Connection> createUsbConnection()
@@ -63,7 +68,7 @@ namespace plug::com
         {
             throw CommunicationException{"No device found"};
         }
-
-        return std::make_shared<UsbComm>(std::move(*itr));
+        const auto modelVersion = isV2(itr->productId()) ? ModelVersion::v2 : ModelVersion::v1;
+        return std::make_shared<UsbComm>(std::move(*itr), modelVersion);
     }
 }

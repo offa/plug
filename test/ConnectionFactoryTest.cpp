@@ -65,12 +65,13 @@ namespace plug::test
         devices.emplace_back(nullptr);
         EXPECT_CALL(*contextMock, listDevices).WillOnce(Return(ByMove(std::move(devices))));
         EXPECT_CALL(*deviceMock, open());
+        EXPECT_CALL(*deviceMock, name());
         EXPECT_CALL(*deviceMock, vendorId())
             .WillOnce(Return(0xf0f0))
             .WillOnce(Return(0x1ed8));
         EXPECT_CALL(*deviceMock, productId())
             .WillOnce(Return(0xff04))
-            .WillOnce(Return(0x0005));
+            .WillRepeatedly(Return(0x0005));
 
         auto device = createUsbConnection();
         EXPECT_THAT(device, NotNull());
