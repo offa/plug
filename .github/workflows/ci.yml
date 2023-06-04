@@ -8,12 +8,12 @@ jobs:
     strategy:
       matrix:
         compiler:
-          - gcc-12
-          - gcc-11
-          - clang-16
-          - clang-15
+          - gcc:12
+          - gcc:11
+          - clang:16
+          - clang:15
     container:
-      image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}:stable"
+      image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"
     name: "${{ matrix.compiler }}"
     steps:
       - uses: actions/checkout@main
