@@ -26,9 +26,20 @@ jobs:
     name: "formatting"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
-    - uses: DoozyX/clang-format-lint-action@master
-      name: "Verify formatting"
-      with:
-        clangFormatVersion: 15
+      - uses: actions/checkout@main
+      - uses: DoozyX/clang-format-lint-action@master
+        name: "Verify formatting"
+        with:
+          clangFormatVersion: 15
 
+  coverage:
+    name: "coverage"
+    runs-on: ubuntu-latest
+    container:
+      image: "registry.gitlab.com/offa/docker-images/gcc:12"
+    steps:
+      - uses: actions/checkout@main
+      - name: Setup
+        run: script/ci_setup.sh
+      - name: Build
+        run: script/ci_build.sh -cov
