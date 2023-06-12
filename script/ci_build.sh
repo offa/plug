@@ -20,7 +20,10 @@ do
             COVERAGE=true;
             BUILD_TYPE="Debug"
             apt-get install -y --no-install-recommends python3-pip python3-pkg-resources python3-setuptools
-            pip3 install gcovr
+            pip3 install -U gcovr
+
+            GCC_VERSION="$(${CC} -dumpfullversion | cut -f1 -d.)"
+            ln -sf /usr/bin/gcov-${GCC_VERSION} /usr/bin/gcov
             ;;
     esac
 done

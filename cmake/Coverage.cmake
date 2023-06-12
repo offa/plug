@@ -1,8 +1,10 @@
 
-find_program(GCOVR gcovr DOC "LCov")
+find_program(GCOVR gcovr DOC "gcovr program")
 
 if( NOT GCOVR )
-    message(SEND_ERROR "'gcovr' not found")
+    message(SEND_ERROR "gcovr not found")
+else()
+    message(STATUS "Found gcovr: ${GCOVR}")
 endif()
 
 
