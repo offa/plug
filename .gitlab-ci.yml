@@ -17,7 +17,6 @@ build:
 coverage:
   image: registry.gitlab.com/offa/docker-images/gcc:12
   script:
-  script:
     - script/ci_setup.sh
     - script/ci_build.sh -cov
   coverage: /^\s*lines:\s*\d+.\d+\%/
