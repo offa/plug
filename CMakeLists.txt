@@ -4,20 +4,22 @@ project(plug VERSION 1.4.3)
 message(STATUS "~~~ ${PROJECT_NAME} v${PROJECT_VERSION} ~~~")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-option(UNITTEST "Build Unit Tests" ON)
-message(STATUS "Unit Tests : ${UNITTEST}")
+option(PLUG_UNITTEST "Build Unit Tests" ON)
+message(STATUS "Unit Tests : ${PLUG_UNITTEST}")
 
-option(COVERAGE "Enable Coverage" OFF)
-message(STATUS "Coverage : ${COVERAGE}")
+option(PLUG_COVERAGE "Enable Coverage" OFF)
+message(STATUS "Coverage : ${PLUG_COVERAGE}")
 
-option(LTO "Enable LTO" OFF)
-message(STATUS "LTO : ${LTO}")
+option(PLUG_LTO "Enable LTO" OFF)
+message(STATUS "LTO : ${PLUG_LTO}")
 
-option(SANITIZER_ASAN "Enable ASan" OFF)
-message(STATUS "ASan : ${SANITIZER_ASAN}")
+option(PLUG_SANITIZER_ASAN "Enable ASan" OFF)
+message(STATUS "ASan : ${PLUG_SANITIZER_ASAN}")
 
-option(SANITIZER_UBSAN "Enable UBSan" OFF)
-message(STATUS "UBSan : ${SANITIZER_UBSAN}")
+option(PLUG_SANITIZER_UBSAN "Enable UBSan" OFF)
+message(STATUS "UBSan : ${PLUG_SANITIZER_UBSAN}")
+
+include(DeprecatedOptions)
 
 
 if( CMAKE_BUILD_TYPE )
@@ -28,11 +30,11 @@ endif()
 
 include(GNUInstallDirs)
 
-if( LTO )
+if( PLUG_LTO )
     include(LTO)
 endif()
 
-if( COVERAGE )
+if( PLUG_COVERAGE )
     include(Coverage)
 endif()
 
@@ -65,7 +67,7 @@ include_directories("include")
 add_subdirectory(src)
 
 
-if( UNITTEST )
+if( PLUG_UNITTEST )
     enable_testing()
     add_subdirectory("test")
 endif()

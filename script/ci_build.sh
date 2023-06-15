@@ -10,13 +10,13 @@ for arg in "$@"
 do
     case "${arg}" in
         -asan)
-            BUILD_ARGS+=("-DSANITIZER_ASAN=ON")
+            BUILD_ARGS+=("-DPLUG_SANITIZER_ASAN=ON")
             ;;
         -ubsan)
-            BUILD_ARGS+=("-DSANITIZER_UBSAN=ON")
+            BUILD_ARGS+=("-DPLUG_SANITIZER_UBSAN=ON")
             ;;
         -cov)
-            BUILD_ARGS+=("-DCOVERAGE=ON")
+            BUILD_ARGS+=("-DPLUG_COVERAGE=ON")
             COVERAGE=true;
             BUILD_TYPE="Debug"
             apt-get install -y --no-install-recommends python3-pip python3-pkg-resources python3-setuptools

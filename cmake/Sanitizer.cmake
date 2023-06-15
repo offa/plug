@@ -8,11 +8,11 @@ macro(enable_sanitizer san)
 endmacro()
 
 
-if( SANITIZER_ASAN )
+if( PLUG_SANITIZER_ASAN )
     enable_sanitizer(address)
 endif()
 
-if( SANITIZER_UBSAN )
+if( PLUG_SANITIZER_UBSAN )
     enable_sanitizer(undefined)
 endif()
 
