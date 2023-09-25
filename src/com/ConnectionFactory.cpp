@@ -39,6 +39,10 @@ namespace plug::com
             inline constexpr std::uint16_t mustangFloor{0x0012};
             inline constexpr std::uint16_t mustangI_II_v2{0x0014};
             inline constexpr std::uint16_t mustangIII_IV_V_v2{0x0016};
+
+            inline constexpr std::uint16_t mustangLT25{0x0037};
+            inline constexpr std::uint16_t rumbleLT25{0x0038};
+            inline constexpr std::uint16_t mustangLT40S{0x0046};
         }
 
         inline constexpr std::initializer_list<std::uint16_t> pids{
@@ -48,11 +52,31 @@ namespace plug::com
             usbPID::mustangMini,
             usbPID::mustangFloor,
             usbPID::mustangI_II_v2,
-            usbPID::mustangIII_IV_V_v2};
+            usbPID::mustangIII_IV_V_v2,
+            
+            usbPID::mustangLT25,
+            usbPID::rumbleLT25,
+            usbPID::mustangLT40S};
 
-        inline constexpr bool isV2(std::uint16_t pid)
+        inline constexpr ModelVersion whichVersion(std::uint16_t pid) 
         {
-            return (pid == usbPID::mustangI_II_v2) || (pid == usbPID::mustangIII_IV_V_v2);
+            // Not sure whether this will work on all compilers but
+            // https://stackoverflow.com/questions/45534410/switch-in-constexpr-function
+            // suggests it is legal
+            switch(pid) 
+            {
+                case usbPID::mustangI_II_v2:
+                case usbPID::mustangIII_IV_V_v2:
+                    return ModelVersion::v2;
+
+                case usbPID::mustangLT25:
+                case usbPID::rumbleLT25:
+                case usbPID::mustangLT40S:
+                    return ModelVersion::v3;
+
+                default:
+                    return ModelVersion::v1;
+            }
         }
     }
 
@@ -68,7 +92,10 @@ namespace plug::com
         {
             throw CommunicationException{"No device found"};
         }
-        const auto modelVersion = isV2(itr->productId()) ? ModelVersion::v2 : ModelVersion::v1;
+        const auto modelVersion = whichVersion(itr->productId());
+        if(modelVersion == ModelVersion::v3) {
+            throw CommunicationException{"Unsupported v3 device found"};
+        }
         return std::make_shared<UsbComm>(std::move(*itr), modelVersion);
     }
 }

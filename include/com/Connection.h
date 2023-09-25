@@ -29,7 +29,8 @@ namespace plug::com
     enum ModelVersion
     {
         v1,
-        v2
+        v2,
+        v3
     };
 
     class Connection
