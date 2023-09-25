@@ -20,6 +20,11 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 - [**libusb-1.0**](http://libusb.info/)
 
 
+For developers on Ubuntu or other Debian-based distributions, appropriate versions of several of the required packages are unlikely to be installed by default.
+As of Ubuntu 23.04 Lunar Lobster, the following command is recommended to find the packages required:
+'''
+sudo apt-get install -y cmake qtcreator qtbase5-dev qt5-qmake libusb-1.0-0-dev ament-cmake-googletest
+'''
 
 ## Building
 
