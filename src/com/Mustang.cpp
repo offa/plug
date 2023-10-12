@@ -25,6 +25,9 @@
 #include "com/Packet.h"
 #include <algorithm>
 
+#include <iostream>
+#include <iomanip>
+
 namespace plug::com
 {
     SignalChain decode_data(const std::array<PacketRawType, 7>& data)
@@ -39,7 +42,15 @@ namespace plug::com
 
     std::vector<std::uint8_t> receivePacket(Connection& conn)
     {
-        return conn.receive(packetRawTypeSize);
+        const auto received = conn.receive(packetRawTypeSize);
+
+        std::cout << std::resetiosflags(std::ios_base::basefield) << "\n>>> (" << received.size() << "/" << packetRawTypeSize << ")\n";
+        for (const auto &b : received)
+        {
+            std::cout << std::hex << std::setfill('0') << std::setw(2) << int{b} << " ";
+        }
+        std::cout << "\n----\n";
+        return received;
     }
 
 
