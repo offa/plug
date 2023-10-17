@@ -614,16 +614,13 @@ namespace plug
             return;
         }
 
-        amp_settings amplifier_set{};
-        std::vector<fx_pedal_settings> effects_set{};
-        QString name;
-        LoadFromFile loader{&file, &name, &amplifier_set, effects_set};
-        loader.loadfile();
+        LoadFromFile loader{&file};
+        const auto fileSettings = loader.loadfile();
         file.close();
 
-        change_title(name);
+        change_title(fileSettings.name);
 
-        amp->load(amplifier_set);
+        amp->load(fileSettings.amp);
         if (connected)
         {
             amp->send_amp();
@@ -636,7 +633,7 @@ namespace plug
             amp->show();
         }
 
-        std::for_each(effects_set.begin(), effects_set.end(), [this, shouldPopup](auto& effect)
+        std::for_each(fileSettings.effects.cbegin(), fileSettings.effects.cend(), [this, shouldPopup](auto& effect)
                       {
             const auto& component = effectComponents.at(effect.slot.id());
             component->load(effect);
