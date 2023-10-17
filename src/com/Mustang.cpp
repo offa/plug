@@ -30,15 +30,22 @@
 
 namespace plug::com
 {
-    SignalChain decode_data(const std::array<PacketRawType, 7>& data)
+    template<class C>
+    void print(const C& container)
     {
-        std::cout << "\n---/AMP/---\n";
-        for (const auto& b : data[1])
+        std::cout << "(" << container.size() << ")\t";
+        for (const auto& b : container)
         {
             std::cout << std::hex << std::setfill('0') << std::setw(2) << int{b} << " ";
         }
-        std::cout << "\namp model: 0x" << int{data[1][16]} << "\n";
-        std::cout << "\n---//---\n";
+        std::cout << "\n\n" << std::resetiosflags(std::ios_base::basefield);
+    }
+
+    SignalChain decode_data(const std::array<PacketRawType, 7>& data)
+    {
+        std::cout << "\n---/AMP/---\n";
+        print(data[1]);
+        std::cout << "---//---\n";
 
         const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
         const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
@@ -51,13 +58,7 @@ namespace plug::com
     std::vector<std::uint8_t> receivePacket(Connection& conn)
     {
         const auto received = conn.receive(packetRawTypeSize);
-
-        std::cout << std::resetiosflags(std::ios_base::basefield) << "\n>>> (" << received.size() << "/" << packetRawTypeSize << ")\n";
-        for (const auto& b : received)
-        {
-            std::cout << std::hex << std::setfill('0') << std::setw(2) << int{b} << " ";
-        }
-        std::cout << "\n----\n";
+        print(received);
         return received;
     }
 
@@ -192,6 +193,7 @@ namespace plug::com
         }
 
         const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
+        std::cout << "\n----\nPreset packets: " << max_to_receive << "\n\n";
         std::vector<Packet<NamePayload>> presetListData;
         presetListData.reserve(max_to_receive);
         std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p)
@@ -203,6 +205,13 @@ namespace plug::com
 
         std::array<PacketRawType, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), max_to_receive), std::next(recieved_data.cbegin(), max_to_receive + 7), presetData.begin());
+
+        std::cout << "Current preset data:\n";
+        for (const auto& p : presetData)
+        {
+            print(p);
+        }
+        std::cout << "---\n";
 
         return {decode_data(presetData), presetNames};
     }
