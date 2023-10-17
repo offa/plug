@@ -34,6 +34,15 @@ namespace plug::com
     {
         const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
         const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
+
+        std::cout << "\n---/AMP/---\n";
+        for (const auto& b : data[1])
+        {
+            std::cout << std::hex << std::setfill('0') << std::setw(2) << int{b} << " ";
+        }
+        std::cout << "\namp model: 0x" << int{data[1][16]} << "\n";
+        std::cout << "\n---//---\n";
+
         const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
                                                      fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
 
@@ -45,7 +54,7 @@ namespace plug::com
         const auto received = conn.receive(packetRawTypeSize);
 
         std::cout << std::resetiosflags(std::ios_base::basefield) << "\n>>> (" << received.size() << "/" << packetRawTypeSize << ")\n";
-        for (const auto &b : received)
+        for (const auto& b : received)
         {
             std::cout << std::hex << std::setfill('0') << std::setw(2) << int{b} << " ";
         }
