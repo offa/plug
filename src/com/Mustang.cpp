@@ -32,9 +32,6 @@ namespace plug::com
 {
     SignalChain decode_data(const std::array<PacketRawType, 7>& data)
     {
-        const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
-        const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
-
         std::cout << "\n---/AMP/---\n";
         for (const auto& b : data[1])
         {
@@ -43,6 +40,8 @@ namespace plug::com
         std::cout << "\namp model: 0x" << int{data[1][16]} << "\n";
         std::cout << "\n---//---\n";
 
+        const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
+        const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
         const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
                                                      fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
 
