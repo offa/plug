@@ -192,7 +192,7 @@ namespace plug::com
             recieved_data.push_back(p);
         }
 
-        const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
+        const std::size_t max_to_receive = 48;
         std::cout << "\n----\nPreset packets: " << max_to_receive << "\n\n";
         std::vector<Packet<NamePayload>> presetListData;
         presetListData.reserve(max_to_receive);
