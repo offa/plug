@@ -40,7 +40,16 @@ namespace plug
         BRITISH_70S,
         BRITISH_80S,
         AMERICAN_90S,
-        METAL_2000
+        METAL_2000,
+
+        // Bronco amps
+        RUMBLE,
+        BASSMAN_TV,
+        BASSMAN_300,
+        KGB_800,
+        ROCKIN_PEG,
+        SWR_REDHEAD,
+        MONSTER
     };
 
 

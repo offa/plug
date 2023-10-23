@@ -293,6 +293,12 @@ namespace plug::com
                 payload.setModel(0x6d);
                 payload.setUnknownAmpSpecific(0x08, 0x08, 0x08, 0x08, 0x75);
                 break;
+
+            // TODO: Add Bronco amps; use 59 Bassman for testing
+            default:
+                payload.setModel(0x64);
+                payload.setUnknownAmpSpecific(0x02, 0x02, 0x02, 0x02, 0x67);
+                break;
         }
 
         return Packet<AmpPayload>{header, payload};

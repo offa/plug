@@ -176,6 +176,11 @@ namespace plug
                 something = 0x08;
                 something2 = 0x75;
                 break;
+
+
+            // TODO: Bronco amps
+            default:
+                throw "not yet supported amp";
         }
 
         xml->writeStartElement("Amplifier");

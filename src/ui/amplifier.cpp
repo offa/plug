@@ -267,6 +267,49 @@ namespace plug
                 setAccessibleName("Amplifier: Metal 2000");
                 break;
 
+            // TODO: Bronco amps
+            case amps::RUMBLE:
+                advanced->change_cabinet(value(cabinets::cab65PRN));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Fender Rumble");
+                setAccessibleName("Amplifier: Fender Rumble");
+                break;
+            case amps::BASSMAN_TV:
+                advanced->change_cabinet(value(cabinets::cab65PRN));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Fender Bassman TV");
+                setAccessibleName("Amplifier: Fender Bassman TV");
+                break;
+            case amps::BASSMAN_300:
+                advanced->change_cabinet(value(cabinets::cab65PRN));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Fender Bassman 300");
+                setAccessibleName("Amplifier: Fender Bassman 300");
+                break;
+            case amps::KGB_800:
+                advanced->change_cabinet(value(cabinets::cab65PRN));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Fender KGB 800");
+                setAccessibleName("Amplifier: Fender KGB 800");
+                break;
+            case amps::ROCKIN_PEG:
+                advanced->change_cabinet(value(cabinets::cab65PRN));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Fender Rockin' PEG");
+                setAccessibleName("Amplifier: Fender Rockin' PEG");
+                break;
+            case amps::SWR_REDHEAD:
+                advanced->change_cabinet(value(cabinets::cab65PRN));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Fender SWR Redhead");
+                setAccessibleName("Amplifier: Fender SWR Redhead");
+                break;
+            case amps::MONSTER:
+                advanced->change_cabinet(value(cabinets::cab65PRN));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Fender Monster");
+                setAccessibleName("Amplifier: Fender Monster");
+                break;
             default:
                 break;
         }

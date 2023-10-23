@@ -56,6 +56,23 @@ namespace plug
                 return amps::AMERICAN_90S;
             case 0x6d:
                 return amps::METAL_2000;
+
+            // Bronco amps
+            case 0x96:
+                return amps::RUMBLE;
+            case 0x97:
+                return amps::BASSMAN_TV;
+            case 0x98:
+                return amps::BASSMAN_300;
+            case 0x9b:
+                return amps::KGB_800;
+            case 0x9a:
+                return amps::ROCKIN_PEG;
+            case 0x99:
+                return amps::SWR_REDHEAD;
+            case 0xbd:
+                return amps::MONSTER;
+
             default:
                 throw std::invalid_argument{"Invalid amp id: " + std::to_string(id)};
         }
