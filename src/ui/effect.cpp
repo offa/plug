@@ -510,6 +510,23 @@ namespace plug
             case effects::FENDER_65_SPRING_REVERB:
                 setTitleTexts(slot.id(), "Fender '65 Spring Reverb");
                 break;
+
+            // Bronco 40 effects
+            case effects::MODERN_BASS_OVERDRIVE:
+                setTitleTexts(slot.id(), "Modern Bass Overdrive");
+                break;
+
+            case effects::OVERDRIVE_BASS:
+                setTitleTexts(slot.id(), "Overdrive");
+                break;
+
+            case effects::FUZZ_BASS:
+                setTitleTexts(slot.id(), "Fuzz");
+                break;
+
+            case effects::GREENBOX:
+                setTitleTexts(slot.id(), "Greenbox");
+                break;
         }
 
         // set knobs labels and accessibility informations
@@ -555,6 +572,10 @@ namespace plug
                              tr("When you choose an effect you can set precise value of a parameter here")});
                 break;
             case effects::OVERDRIVE:
+            case effects::MODERN_BASS_OVERDRIVE:    // Bronco 40 only
+            case effects::OVERDRIVE_BASS:           // Bronco 40 only
+            case effects::FUZZ_BASS:                // Bronco 40 only
+            case effects::GREENBOX:                 // Bronco 40 only
                 setTexts(ui.get(),
                          UIText{
                              tr("&Level"),
@@ -1648,6 +1669,22 @@ namespace plug
                 case effects::FENDER_65_SPRING_REVERB:
                     setDialValues(0x80, 0x8b, 0x49, 0xff, 0x80, 0x00);
                     break;
+
+                // Bronco 40 efffects
+                // TODO: Values are placeholders!
+                case effects::MODERN_BASS_OVERDRIVE:
+                    setDialValues(0x80, 0x80, 0x80, 0x80, 0x80, 0x00);
+                    break;
+                case effects::OVERDRIVE_BASS:
+                    setDialValues(0x80, 0x80, 0x80, 0x80, 0x80, 0x00);
+                    break;
+                case effects::FUZZ_BASS:
+                    setDialValues(0x80, 0x80, 0x80, 0x80, 0x80, 0x00);
+                    break;
+                case effects::GREENBOX:
+                    setDialValues(0x80, 0x80, 0x80, 0x80, 0x80, 0x00);
+                    break;
+
             }
         }
     }

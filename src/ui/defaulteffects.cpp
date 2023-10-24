@@ -275,6 +275,10 @@ namespace plug
                              tr("When you choose an effect you can set precise value of a parameter here")});
                 break;
             case effects::OVERDRIVE:
+            case effects::MODERN_BASS_OVERDRIVE:
+            case effects::OVERDRIVE_BASS:
+            case effects::FUZZ_BASS:
+            case effects::GREENBOX:
                 setTexts(ui.get(),
                          UIText{
                              tr("&Level"),

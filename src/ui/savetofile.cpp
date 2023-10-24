@@ -507,6 +507,23 @@ namespace plug
             case effects::FENDER_65_SPRING_REVERB:
                 model = 0x0b;
                 break;
+
+            // Bronco 40 effects
+            case effects::MODERN_BASS_OVERDRIVE:
+                model = 0xc6;
+                break;
+
+            case effects::OVERDRIVE_BASS:
+                model = 0xc3;
+                break;
+
+            case effects::FUZZ_BASS:
+                model = 0xc7;
+                break;
+
+            case effects::GREENBOX:
+                model = 0xba;
+                break;
         }
 
         xml->writeStartElement("Module");

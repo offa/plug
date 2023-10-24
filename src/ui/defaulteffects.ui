@@ -51,7 +51,36 @@
          <string>None</string>
         </property>
        </item>
+
+        <!-- Bronco 40 effects -->
        <item>
+        <property name="text">
+         <string>[1] Modern Bass Overdrive</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Overdrive</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Fuzz</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Greenbox</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Simple Compressor</string>
+        </property>
+       </item>
+
+<!--  
+        <item>
         <property name="text">
          <string>[1] Overdrive</string>
         </property>
@@ -86,7 +115,8 @@
          <string>[1] Compressor</string>
         </property>
        </item>
-       <item>
+ -->
+        <item>
         <property name="text">
          <string>[2] Sine Chorus</string>
         </property>

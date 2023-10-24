@@ -10,7 +10,6 @@ target_link_libraries(TestLibs INTERFACE
 add_subdirectory(mocks)
 
 
-
 add_executable(MustangTest
                 MustangTest.cpp
                 PacketSerializerTest.cpp
@@ -24,7 +23,6 @@ target_link_libraries(MustangTest PRIVATE
                         TestLibs
                         LibUsbMocks
                         )
-
 
 
 add_executable(CommunicationTest
@@ -48,13 +46,11 @@ target_link_libraries(UsbTest PRIVATE
                         LibUsbMocks
                         )
 
-
 add_executable(IdLookupTest IdLookupTest.cpp)
 add_test(IdLookupTest IdLookupTest)
 target_link_libraries(IdLookupTest PRIVATE
                         TestLibs
                         )
-
 
 add_custom_target(unittest MustangTest
                         COMMAND CommunicationTest
