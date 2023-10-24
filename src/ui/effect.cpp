@@ -572,10 +572,10 @@ namespace plug
                              tr("When you choose an effect you can set precise value of a parameter here")});
                 break;
             case effects::OVERDRIVE:
-            case effects::MODERN_BASS_OVERDRIVE:
-            case effects::OVERDRIVE_BASS:
-            case effects::FUZZ_BASS:
-            case effects::GREENBOX:
+            case effects::MODERN_BASS_OVERDRIVE:    // Bronco 40 only
+            case effects::OVERDRIVE_BASS:           // Bronco 40 only
+            case effects::FUZZ_BASS:                // Bronco 40 only
+            case effects::GREENBOX:                 // Bronco 40 only
                 setTexts(ui.get(),
                          UIText{
                              tr("&Level"),

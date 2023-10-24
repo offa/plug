@@ -183,8 +183,6 @@ namespace plug
         // set properties
         switch (static_cast<amps>(ampValue))
         {
-
-/*
             case amps::FENDER_57_DELUXE:
                 advanced->change_cabinet(value(cabinets::cab57DLX));
                 advanced->change_noise_gate(0);
@@ -268,7 +266,6 @@ namespace plug
                 setWindowTitle("Amplifier: Metal 2000");
                 setAccessibleName("Amplifier: Metal 2000");
                 break;
-*/                
 
             // TODO: Bronco 40 amps
             case amps::RUMBLE:
@@ -276,12 +273,6 @@ namespace plug
                 advanced->change_noise_gate(0);
                 setWindowTitle("Amplifier: Fender Rumble");
                 setAccessibleName("Amplifier: Fender Rumble");
-                break;
-            case amps::FENDER_59_BASSMAN:
-                advanced->change_cabinet(value(cabinets::OFF));
-                advanced->change_noise_gate(0);
-                setWindowTitle("Amplifier: Fender '59 Bassman");
-                setAccessibleName("Amplifier: Fender '59 Bassman");
                 break;
             case amps::BASSMAN_TV:
                 advanced->change_cabinet(value(cabinets::OFF));

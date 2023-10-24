@@ -178,40 +178,6 @@ namespace plug
 
     constexpr cabinets lookupCabinetById(std::uint8_t id)
     {
-/*
-        switch (id)
-        {
-            case 0x00:
-                return cabinets::OFF;
-            case 0x01:
-                return cabinets::cab57DLX;
-            case 0x02:
-                return cabinets::cabBSSMN;
-            case 0x03:
-                return cabinets::cab65DLX;
-            case 0x04:
-                return cabinets::cab65PRN;
-            case 0x05:
-                return cabinets::cabCHAMP;
-            case 0x06:
-                return cabinets::cab4x12M;
-            case 0x07:
-                return cabinets::cab2x12C;
-            case 0x08:
-                return cabinets::cab4x12G;
-            case 0x09:
-                return cabinets::cab65TWN;
-            case 0x0a:
-                return cabinets::cab4x12V;
-            case 0x0b:
-                return cabinets::cabSS212;
-            case 0x0c:
-                return cabinets::cabSS112;
-            default:
-                throw std::invalid_argument{"Invalid cabinet id: " + std::to_string(id)};
-        } 
-*/
-
         // Bronco 40 cabinets
         switch (id)
         {

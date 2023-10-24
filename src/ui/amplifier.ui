@@ -53,10 +53,8 @@
         <property name="accessibleDescription">
          <string>Allows you to choose amplifier to emulate</string>
         </property>
-
-        <!--
         <property name="maxVisibleItems">
-         <number>12</number>
+         <number>19</number>
         </property>
         <item>
          <property name="text">
@@ -118,19 +116,9 @@
           <string>Metal 2000</string>
          </property>
         </item>
-        -->
-
-        <property name="maxVisibleItems">
-         <number>8</number>
-        </property>
         <item>
          <property name="text">
           <string>Rumble</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>'59 Bassman</string>
          </property>
         </item>
         <item>
