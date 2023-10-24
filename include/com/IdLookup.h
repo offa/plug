@@ -57,7 +57,7 @@ namespace plug
             case 0x6d:
                 return amps::METAL_2000;
 
-            // Bronco amps
+            // Bronco 40 amps
             case 0x96:
                 return amps::RUMBLE;
             case 0x97:
@@ -159,6 +159,17 @@ namespace plug
                 return effects::FENDER_63_SPRING_REVERB;
             case 0x0b:
                 return effects::FENDER_65_SPRING_REVERB;
+
+            // Bronco 40 effects
+            case 0xc6:
+                return effects::MODERN_BASS_OVERDRIVE;
+            case 0xc3:
+                return effects::OVERDRIVE_BASS;
+            case 0xc7:
+                return effects::FUZZ_BASS;
+            case 0xba:
+                return effects::GREENBOX;
+
             default:
                 throw std::invalid_argument{"Invalid effect id: " + std::to_string(id)};
         }
@@ -167,6 +178,7 @@ namespace plug
 
     constexpr cabinets lookupCabinetById(std::uint8_t id)
     {
+/*
         switch (id)
         {
             case 0x00:
@@ -195,6 +207,42 @@ namespace plug
                 return cabinets::cabSS212;
             case 0x0c:
                 return cabinets::cabSS112;
+            default:
+                throw std::invalid_argument{"Invalid cabinet id: " + std::to_string(id)};
+        } 
+*/
+
+        // Bronco 40 cabinets
+        switch (id)
+        {
+            case 0x00:
+                return cabinets::OFF;
+            case 0x01:
+                return cabinets::cab1x10M;
+            case 0x02:
+                return cabinets::cab2x10M;
+            case 0x03:
+                return cabinets::cab4x10M;
+            case 0x04:
+                return cabinets::cab4x10H;
+            case 0x05:
+                return cabinets::cab8x10M;
+            case 0x06:
+                return cabinets::cab8x10V;
+            case 0x07:
+                return cabinets::cab1x12M;
+            case 0x08:
+                return cabinets::cab2x15V;
+            case 0x09:
+                return cabinets::cab4x12M;
+            case 0x0a:
+                return cabinets::cab1x15V;
+            case 0x0b:
+                return cabinets::cab1x15M;
+            case 0x0c:
+                return cabinets::cab1x18V;
+            case 0x0d:
+                return cabinets::cab4x10V;
             default:
                 throw std::invalid_argument{"Invalid cabinet id: " + std::to_string(id)};
         }

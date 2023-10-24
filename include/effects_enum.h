@@ -29,8 +29,19 @@ namespace plug
     // list of all amplifiers
     enum class amps
     {
-        FENDER_57_DELUXE,
+        // Bronco 40 amps
+        RUMBLE,
         FENDER_59_BASSMAN,
+        BASSMAN_TV,
+        BASSMAN_300,
+        KGB_800,
+        ROCKIN_PEG,
+        SWR_REDHEAD,
+        MONSTER,
+
+        // Mustang amps
+        FENDER_57_DELUXE,
+//        FENDER_59_BASSMAN,
         FENDER_57_CHAMP,
         FENDER_65_DELUXE_REVERB,
         FENDER_65_PRINCETON,
@@ -40,29 +51,29 @@ namespace plug
         BRITISH_70S,
         BRITISH_80S,
         AMERICAN_90S,
-        METAL_2000,
-
-        // Bronco amps
-        RUMBLE,
-        BASSMAN_TV,
-        BASSMAN_300,
-        KGB_800,
-        ROCKIN_PEG,
-        SWR_REDHEAD,
-        MONSTER
+        METAL_2000
     };
 
 
     // list of all effects
     enum class effects
     {
+        // Bronco 40 effects
         EMPTY,
+        MODERN_BASS_OVERDRIVE,
+        OVERDRIVE_BASS,
+        FUZZ_BASS,
+        GREENBOX,
+        SIMPLE_COMP,
+
+// Mustang effects
+//        EMPTY,
         OVERDRIVE,
         WAH,
         TOUCH_WAH,
         FUZZ,
         FUZZ_TOUCH_WAH,
-        SIMPLE_COMP,
+//        SIMPLE_COMP,
         COMPRESSOR,
 
         SINE_CHORUS,
@@ -102,6 +113,7 @@ namespace plug
     // list of all cabinets
     enum class cabinets
     {
+/*        
         OFF,
         cab57DLX,
         cabBSSMN,
@@ -114,7 +126,23 @@ namespace plug
         cab65TWN,
         cab4x12V,
         cabSS212,
-        cabSS112
+        cabSS112,
+*/
+        // Bronco 40 cabinets
+        OFF,
+        cab1x10M,
+        cab2x10M,
+        cab4x10M,
+        cab4x10H,
+        cab4x10V,
+        cab8x10M,
+        cab8x10V,
+        cab1x12M,
+        cab4x12M,
+        cab1x15V,
+        cab1x15M,
+        cab2x15V,
+        cab1x18V
     };
 
 
