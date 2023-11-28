@@ -20,8 +20,10 @@
 
 #include "com/ConnectionFactory.h"
 #include "com/CommunicationException.h"
+#include "com/Mustang.h"
 #include "com/UsbComm.h"
 #include "com/UsbContext.h"
+#include "DeviceModel.h"
 #include <algorithm>
 
 namespace plug::com
@@ -50,13 +52,32 @@ namespace plug::com
             usbPID::mustangI_II_v2,
             usbPID::mustangIII_IV_V_v2};
 
-        inline constexpr bool isV2(std::uint16_t pid)
+        DeviceModel getModel(std::uint16_t pid)
         {
-            return (pid == usbPID::mustangI_II_v2) || (pid == usbPID::mustangIII_IV_V_v2);
+            switch (pid)
+            {
+                case usbPID::mustangI_II:
+                    return DeviceModel{"Mustang I/II", DeviceModel::Category::MustangV1, 24};
+                case usbPID::mustangIII_IV_V:
+                    return DeviceModel{"Mustang III/IV/V", DeviceModel::Category::MustangV1, 100};
+                case usbPID::mustangBronco:
+                    return DeviceModel{"Mustang Bronco", DeviceModel::Category::MustangV1, 0};
+                case usbPID::mustangMini:
+                    return DeviceModel{"Mustang Mini", DeviceModel::Category::MustangV1, 0};
+                case usbPID::mustangFloor:
+                    return DeviceModel{"Mustang Floor", DeviceModel::Category::MustangV1, 0};
+                case usbPID::mustangI_II_v2:
+                    return DeviceModel{"Mustang I/II", DeviceModel::Category::MustangV2, 24};
+                case usbPID::mustangIII_IV_V_v2:
+                    return DeviceModel{"Mustang III/IV/V", DeviceModel::Category::MustangV2, 100};
+                default:
+                    throw CommunicationException{"Unknown device pid: " + std::to_string(pid)};
+            }
         }
+
     }
 
-    std::shared_ptr<Connection> createUsbConnection()
+    std::unique_ptr<Mustang> connect()
     {
         auto devices = usb::listDevices();
 
@@ -68,7 +89,7 @@ namespace plug::com
         {
             throw CommunicationException{"No device found"};
         }
-        const auto modelVersion = isV2(itr->productId()) ? ModelVersion::v2 : ModelVersion::v1;
-        return std::make_shared<UsbComm>(std::move(*itr), modelVersion);
+        return std::make_unique<Mustang>(getModel(itr->productId()), std::make_shared<UsbComm>(std::move(*itr)));
     }
+
 }

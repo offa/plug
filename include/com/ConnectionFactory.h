@@ -25,5 +25,8 @@
 
 namespace plug::com
 {
-    std::shared_ptr<Connection> createUsbConnection();
+    class Mustang;
+
+
+    std::unique_ptr<Mustang> connect();
 }

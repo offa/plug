@@ -20,6 +20,7 @@
 
 #include "com/ConnectionFactory.h"
 #include "com/CommunicationException.h"
+#include "com/Mustang.h"
 #include "mocks/UsbDeviceMock.h"
 #include <gmock/gmock-spec-builders.h>
 #include <gmock/gmock.h>
@@ -50,14 +51,14 @@ namespace plug::test
     };
 
 
-    TEST_F(ConnectionFactoryTest, createUsbConnectionThrowsIfNoDeviceFound)
+    TEST_F(ConnectionFactoryTest, connectThrowsIfNoDeviceFound)
     {
         EXPECT_CALL(*contextMock, listDevices).WillOnce(Return(ByMove(std::vector<usb::Device>{})));
 
-        EXPECT_THROW(createUsbConnection(), CommunicationException);
+        EXPECT_THROW(connect(), CommunicationException);
     }
 
-    TEST_F(ConnectionFactoryTest, createUsbConnectionReturnsFirstDeviceFound)
+    TEST_F(ConnectionFactoryTest, connectReturnsFirstDeviceFound)
     {
         std::vector<usb::Device> devices{};
         devices.emplace_back(nullptr);
@@ -73,7 +74,8 @@ namespace plug::test
             .WillOnce(Return(0xff04))
             .WillRepeatedly(Return(0x0005));
 
-        auto device = createUsbConnection();
+        auto device = connect();
         EXPECT_THAT(device, NotNull());
     }
+
 }

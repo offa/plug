@@ -42,7 +42,7 @@ namespace plug::test
         void SetUp() override
         {
             conn = std::make_shared<mock::MockConnection>();
-            m = std::make_unique<com::Mustang>(conn);
+            m = std::make_unique<com::Mustang>(DeviceModel{"Test Device", DeviceModel::Category::MustangV1, 100}, conn);
         }
 
         void TearDown() override
@@ -69,8 +69,7 @@ namespace plug::test
         { std::vector<std::uint8_t> d(packetRawTypeSize, 0x00); d[16] = 0x5e; return d; }();
         const PacketRawType loadCmd = serializeLoadCommand().getBytes();
         const PacketRawType applyCmd = serializeApplyCommand().getBytes();
-        static inline constexpr std::size_t presetPacketCountShort{48};
-        static inline constexpr std::size_t presetPacketCountFull{200};
+        static inline constexpr std::size_t numPresetPackets{200};
         static inline constexpr int slot{5};
     };
 
@@ -93,7 +92,7 @@ namespace plug::test
         EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
         // Preset names data
-        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
+        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(numPresetPackets).WillRepeatedly(Return(ignoreData));
 
         // Data
         EXPECT_CALL(*conn, receive(packetRawTypeSize))
@@ -135,7 +134,7 @@ namespace plug::test
         EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
         // Preset names data
-        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
+        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(numPresetPackets).WillRepeatedly(Return(ignoreData));
 
         const std::string actualName{"abc"};
         const auto nameData = asBuffer(serializeName(0, actualName).getBytes());
@@ -182,7 +181,7 @@ namespace plug::test
         EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
         // Preset names data
-        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
+        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(numPresetPackets).WillRepeatedly(Return(ignoreData));
 
         // Data
         EXPECT_CALL(*conn, receive(packetRawTypeSize))
@@ -230,7 +229,7 @@ namespace plug::test
         EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
         // Preset names data
-        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(presetPacketCountShort).WillRepeatedly(Return(ignoreData));
+        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(numPresetPackets).WillRepeatedly(Return(ignoreData));
 
         // Data
         EXPECT_CALL(*conn, receive(packetRawTypeSize))
@@ -281,7 +280,7 @@ namespace plug::test
             .WillOnce(Return(ignoreData))
             .WillOnce(Return(recvData2))
             .WillOnce(Return(ignoreData));
-        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(presetPacketCountShort - 6).WillRepeatedly(Return(ignoreData));
+        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(numPresetPackets - 6).WillRepeatedly(Return(ignoreData));
 
         // Data
         EXPECT_CALL(*conn, receive(packetRawTypeSize))
@@ -297,7 +296,7 @@ namespace plug::test
 
         const auto [signalChain, presetList] = m->start_amp();
 
-        EXPECT_THAT(presetList.size(), Eq(presetPacketCountShort / 2));
+        EXPECT_THAT(presetList.size(), Eq(numPresetPackets / 2));
         EXPECT_THAT(presetList[0], StrEq("abc"));
         EXPECT_THAT(presetList[1], StrEq("def"));
         EXPECT_THAT(presetList[2], StrEq("ghi"));
@@ -324,7 +323,7 @@ namespace plug::test
         EXPECT_CALL(*conn, sendImpl(BufferIs(loadCmd), loadCmd.size())).WillOnce(Return(loadCmd.size()));
 
         // Preset names data
-        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(presetPacketCountFull).WillRepeatedly(Return(ignoreData));
+        EXPECT_CALL(*conn, receive(packetRawTypeSize)).Times(numPresetPackets).WillRepeatedly(Return(ignoreData));
 
         // Data
         EXPECT_CALL(*conn, receive(packetRawTypeSize))
@@ -633,12 +632,11 @@ namespace plug::test
         m->save_on_amp(name, slot);
     }
 
-    TEST_F(MustangTest, getDeviceInfoReturnsInfos)
+    TEST_F(MustangTest, getDeviceModelReturnsInfos)
     {
-        EXPECT_CALL(*conn, name()).WillOnce(Return("A Mustang Device"));
-        EXPECT_CALL(*conn, modelVersion()).WillOnce(Return(ModelVersion::v1));
-
-        EXPECT_THAT(m->getDeviceName(), Eq("A Mustang Device"));
-        EXPECT_THAT(m->getDeviceModelVersion(), Eq(ModelVersion::v1));
+        const auto model = m->getDeviceModel();
+        EXPECT_THAT(model.name(), Eq("Test Device"));
+        EXPECT_THAT(model.category(), Eq(DeviceModel::Category::MustangV1));
+        EXPECT_THAT(model.numberOfPresets(), Eq(100));
     }
 }

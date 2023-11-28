@@ -75,8 +75,8 @@ namespace plug::com
     }
 
 
-    Mustang::Mustang(std::shared_ptr<Connection> connection)
-        : conn(connection)
+    Mustang::Mustang(DeviceModel deviceModel, std::shared_ptr<Connection> connection)
+        : model(deviceModel), conn(connection)
     {
     }
 
@@ -146,15 +146,11 @@ namespace plug::com
         sendCommand(*conn, serializeApplyCommand(effects[0]).getBytes());
     }
 
-    std::string Mustang::getDeviceName() const
+    DeviceModel Mustang::getDeviceModel() const
     {
-        return conn->name();
+        return model;
     }
 
-    ModelVersion Mustang::getDeviceModelVersion() const
-    {
-        return conn->modelVersion();
-    }
 
     InitialData Mustang::loadData()
     {
@@ -172,10 +168,10 @@ namespace plug::com
             recieved_data.push_back(p);
         }
 
-        const std::size_t max_to_receive = (recieved_data.size() > 143 ? 200 : 48);
+        const std::size_t numPresetPackets = model.numberOfPresets() > 0 ? (model.numberOfPresets() * 2) : (recieved_data.size() > 143 ? 200 : 48);
         std::vector<Packet<NamePayload>> presetListData;
-        presetListData.reserve(max_to_receive);
-        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), max_to_receive), std::back_inserter(presetListData), [](const auto& p)
+        presetListData.reserve(numPresetPackets);
+        std::transform(recieved_data.cbegin(), std::next(recieved_data.cbegin(), numPresetPackets), std::back_inserter(presetListData), [](const auto& p)
                        {
             Packet<NamePayload> packet{};
             packet.fromBytes(p);
@@ -183,7 +179,7 @@ namespace plug::com
         auto presetNames = decodePresetListFromData(presetListData);
 
         std::array<PacketRawType, 7> presetData{{}};
-        std::copy(std::next(recieved_data.cbegin(), max_to_receive), std::next(recieved_data.cbegin(), max_to_receive + 7), presetData.begin());
+        std::copy(std::next(recieved_data.cbegin(), numPresetPackets), std::next(recieved_data.cbegin(), numPresetPackets + 7), presetData.begin());
 
         return {decode_data(presetData), presetNames};
     }

@@ -112,7 +112,7 @@ namespace plug::test
         packet1[1] = 0xc3;
         PacketRawType packet2{};
         packet2[0] = 0x1a;
-        packet2[1] = 0x03;
+        packet2[1] = 0xc1;
 
         const auto packets = serializeInitCommand();
         EXPECT_THAT(packets, SizeIs(2));

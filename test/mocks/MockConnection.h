@@ -39,6 +39,5 @@ namespace plug::test::mock
         MOCK_METHOD(std::vector<std::uint8_t>, receive, (std::size_t));
         MOCK_METHOD(std::size_t, sendImpl, (std::uint8_t*, std::size_t));
         MOCK_METHOD(std::string, name, (), (const));
-        MOCK_METHOD(plug::com::ModelVersion, modelVersion, (), (const));
     };
 }

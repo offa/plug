@@ -37,8 +37,8 @@ namespace plug::com
         }
     }
 
-    UsbComm::UsbComm(usb::Device device, ModelVersion version)
-        : device_(openDevice(std::move(device))), name_(device_.name()), version_(version)
+    UsbComm::UsbComm(usb::Device device)
+        : device_(openDevice(std::move(device))), name_(device_.name())
     {
     }
 
@@ -60,11 +60,6 @@ namespace plug::com
     std::string UsbComm::name() const
     {
         return name_;
-    }
-
-    ModelVersion UsbComm::modelVersion() const
-    {
-        return version_;
     }
 
     std::size_t UsbComm::sendImpl(std::uint8_t* data, std::size_t size)

@@ -18,31 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "DeviceModel.h"
+#include <gmock/gmock.h>
 
-#include "com/Connection.h"
-#include <com/UsbDevice.h>
-
-
-namespace plug::com
+namespace plug::test
 {
-
-    class UsbComm : public Connection
+    class DeviceModelTest : public testing::Test
     {
-    public:
-        UsbComm(usb::Device device);
-
-        void close() override;
-        bool isOpen() const override;
-
-        std::vector<std::uint8_t> receive(std::size_t recvSize) override;
-
-        std::string name() const override;
-
-    private:
-        std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
-
-        usb::Device device_;
-        const std::string name_;
     };
+
+
+    TEST_F(DeviceModelTest, deviceInfos)
+    {
+        const DeviceModel model{"Mustang I", DeviceModel::Category::MustangV1, 100};
+        EXPECT_EQ(model.name(), "Mustang I");
+        EXPECT_EQ(model.category(), DeviceModel::Category::MustangV1);
+        EXPECT_EQ(model.numberOfPresets(), 100);
+    }
 }

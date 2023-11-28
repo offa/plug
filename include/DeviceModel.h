@@ -20,29 +20,43 @@
 
 #pragma once
 
-#include "com/Connection.h"
-#include <com/UsbDevice.h>
+#include <string>
 
-
-namespace plug::com
+namespace plug
 {
-
-    class UsbComm : public Connection
+    class DeviceModel
     {
     public:
-        UsbComm(usb::Device device);
+        enum class Category
+        {
+            MustangV1,
+            MustangV2,
+            Other
+        };
 
-        void close() override;
-        bool isOpen() const override;
+        DeviceModel(const std::string& name, Category category, std::size_t numberPresets)
+            : name_(name), category_(category), numberPresets_(numberPresets)
+        {
+            static_cast<void>(category);
+            static_cast<void>(numberPresets);
+        }
 
-        std::vector<std::uint8_t> receive(std::size_t recvSize) override;
-
-        std::string name() const override;
+        std::string name() const
+        {
+            return name_;
+        }
+        Category category() const
+        {
+            return category_;
+        }
+        std::size_t numberOfPresets() const
+        {
+            return numberPresets_;
+        }
 
     private:
-        std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
-
-        usb::Device device_;
-        const std::string name_;
+        std::string name_;
+        Category category_;
+        std::size_t numberPresets_;
     };
 }

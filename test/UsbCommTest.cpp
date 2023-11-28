@@ -27,7 +27,6 @@
 
 namespace plug::test
 {
-    using plug::com::ModelVersion;
     using plug::com::UsbComm;
     using plug::com::usb::Device;
     using namespace plug::test::matcher;
@@ -48,7 +47,7 @@ namespace plug::test
 
         UsbComm create() const
         {
-            return UsbComm{Device{nullptr}, ModelVersion::v1};
+            return UsbComm{Device{nullptr}};
         }
 
         mock::UsbDeviceMock* deviceMock{nullptr};
@@ -58,7 +57,7 @@ namespace plug::test
     {
         EXPECT_CALL(*deviceMock, open());
         EXPECT_CALL(*deviceMock, name());
-        UsbComm com{Device{nullptr}, ModelVersion::v1};
+        UsbComm com{Device{nullptr}};
     }
 
     TEST_F(UsbCommTest, closeClosesDevice)
@@ -116,15 +115,6 @@ namespace plug::test
 
         UsbComm com = create();
         EXPECT_THAT(com.name(), Eq("USB Device Name"));
-    }
-
-    TEST_F(UsbCommTest, modelVersion)
-    {
-        EXPECT_CALL(*deviceMock, open());
-        EXPECT_CALL(*deviceMock, name());
-
-        UsbComm com{Device{nullptr}, ModelVersion::v1};
-        EXPECT_THAT(com.modelVersion(), Eq(ModelVersion::v1));
     }
 
 }

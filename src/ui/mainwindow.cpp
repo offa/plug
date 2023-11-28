@@ -271,7 +271,7 @@ namespace plug
 
         try
         {
-            amp_ops = std::make_unique<plug::com::Mustang>(plug::com::createUsbConnection());
+            amp_ops = plug::com::connect();
             const auto [signalChain, presets] = amp_ops->start_amp();
             name = QString::fromStdString(signalChain.name());
             amplifier_set = signalChain.amp();
@@ -296,9 +296,10 @@ namespace plug
         }
         else
         {
-            setWindowTitle(QString(tr("PLUG - %1 (v%2): %3"))
-                               .arg(QString::fromStdString(amp_ops->getDeviceName()))
-                               .arg(amp_ops->getDeviceModelVersion() == com::ModelVersion::v1 ? "1" : "2")
+            const auto model = amp_ops->getDeviceModel();
+            setWindowTitle(QString(tr("PLUG - %1 %2: %3"))
+                               .arg(QString::fromStdString(model.name()))
+                               .arg(model.category() == DeviceModel::Category::MustangV2 ? "(v2)" : "")
                                .arg(name));
             setAccessibleName(QString(tr("Main window: %1")).arg(name));
         }
