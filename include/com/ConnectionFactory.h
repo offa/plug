@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "com/Connection.h"
 #include <memory>
 
 namespace plug::com
