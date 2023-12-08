@@ -16,7 +16,7 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 
 ## Requirements
 
-- [**Qt5**](https://www.qt.io/)
+- [**Qt6**](https://www.qt.io/)
 - [**libusb-1.0**](http://libusb.info/)
 
 

@@ -19,7 +19,7 @@ add_library(plug-ui amp_advanced.cpp
 
 target_link_libraries(plug-ui
                         PUBLIC
-                            Qt5::Widgets
-                            Qt5::Gui
-                            Qt5::Core
+                            Qt6::Widgets
+                            Qt6::Gui
+                            Qt6::Core
                         )

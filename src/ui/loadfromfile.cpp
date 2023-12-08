@@ -63,11 +63,11 @@ namespace plug
     {
         xml.readNextStartElement();
         amp_settings amp;
-        while (xml.name() != "Amplifier")
+        while (xml.name().toString() != "Amplifier")
         {
             if (xml.isStartElement())
             {
-                if (xml.name() == "Module")
+                if (xml.name().toString() == "Module")
                 {
                     switch (xml.attributes().value("ID").toString().toInt())
                     {
@@ -120,7 +120,7 @@ namespace plug
                             break;
                     }
                 }
-                else if (xml.name() == "Param")
+                else if (xml.name().toString() == "Param")
                 {
                     int i = 0;
                     switch (xml.attributes().value("ControlIndex").toString().toInt())
@@ -197,13 +197,13 @@ namespace plug
         std::vector<fx_pedal_settings> settings;
 
         xml.readNextStartElement();
-        while (xml.name() != "FX")
+        while (xml.name().toString() != "FX")
         {
             fx_pedal_settings effect{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
 
             if (xml.isStartElement())
             {
-                if (xml.name() == "Module")
+                if (xml.name().toString() == "Module")
                 {
                     const int position = xml.attributes().value("POS").toString().toInt();
                     effect.slot = FxSlot{static_cast<std::uint8_t>(position)};
@@ -363,7 +363,7 @@ namespace plug
                             break;
                     }
                 }
-                else if (xml.name() == "Param")
+                else if (xml.name().toString() == "Param")
                 {
                     int i = 0;
                     switch (xml.attributes().value("ControlIndex").toString().toInt())
@@ -411,7 +411,7 @@ namespace plug
         xml.readNextStartElement();
         while (!xml.isEndElement())
         {
-            if (xml.name() == "Info")
+            if (xml.name().toString() == "Info")
             {
                 return (xml.attributes().value("name").toString());
             }
