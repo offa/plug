@@ -15,7 +15,7 @@ apt-get install -y --no-install-recommends \
         qtbase5-dev \
         libusb-1.0-0-dev
 
-git clone --depth=1 --branch=release-1.12.1 https://github.com/google/googletest.git
+git clone --depth=1 --branch=v1.14.0 https://github.com/google/googletest.git
 mkdir googletest/build
 cd googletest/build
 cmake -DCMAKE_CXX_STANDARD=17 ..
