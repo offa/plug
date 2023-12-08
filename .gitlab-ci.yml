@@ -24,7 +24,7 @@ coverage:
 formatting:
   image: docker:latest
   variables:
-    CLANGFORMAT_VERSION: 15
+    CLANGFORMAT_VERSION: 16
   services:
     - docker:dind
   before_script:
