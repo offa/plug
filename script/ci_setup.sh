@@ -7,12 +7,13 @@ then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
-
 # Install dependencies
 apt-get update
 apt-get install -y --no-install-recommends \
         pkg-config \
-        qtbase5-dev \
+        qt6-base-dev \
+        libglx-dev \
+        libgl1-mesa-dev \
         libusb-1.0-0-dev
 
 git clone --depth=1 --branch=release-1.12.1 https://github.com/google/googletest.git
