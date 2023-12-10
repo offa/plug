@@ -19,5 +19,5 @@ apt-get install -y --no-install-recommends \
 git clone --depth=1 --branch=v1.14.0 https://github.com/google/googletest.git
 mkdir googletest/build
 cd googletest/build
-cmake -DCMAKE_CXX_STANDARD=17 ..
+cmake -DCMAKE_CXX_STANDARD=20 ..
 make -j install
