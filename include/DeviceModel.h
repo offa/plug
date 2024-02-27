@@ -37,8 +37,6 @@ namespace plug
         DeviceModel(const std::string& name, Category category, std::size_t numberPresets)
             : name_(name), category_(category), numberPresets_(numberPresets)
         {
-            static_cast<void>(category);
-            static_cast<void>(numberPresets);
         }
 
         std::string name() const
