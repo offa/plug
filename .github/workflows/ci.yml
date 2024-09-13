@@ -36,7 +36,7 @@ jobs:
     name: "coverage"
     runs-on: ubuntu-latest
     container:
-      image: "registry.gitlab.com/offa/docker-images/gcc:12"
+      image: "registry.gitlab.com/offa/docker-images/gcc:14"
     steps:
       - uses: actions/checkout@main
       - name: Setup
