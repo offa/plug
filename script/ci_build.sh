@@ -19,8 +19,9 @@ do
             BUILD_ARGS+=("-DPLUG_COVERAGE=ON")
             COVERAGE=true;
             BUILD_TYPE="Debug"
-            apt-get install -y --no-install-recommends python3-pip python3-pkg-resources python3-setuptools
-            pip3 install -U gcovr
+            export PATH=$HOME/.local/bin:$PATH
+            apt-get install -y --no-install-recommends pipx
+            pipx install gcovr
 
             GCC_VERSION="$(${CC} -dumpfullversion | cut -f1 -d.)"
             ln -sf /usr/bin/gcov-${GCC_VERSION} /usr/bin/gcov
