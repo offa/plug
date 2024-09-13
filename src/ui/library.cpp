@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QSettings>
+#include <algorithm>
 
 namespace plug
 {
@@ -51,14 +52,11 @@ namespace plug
         ui->spinBox->setValue(font.pointSize());
         ui->fontComboBox->setCurrentFont(font);
 
-        for (std::size_t i = 0; i < 100; ++i)
-        {
-            if (names[i][0] == 0x00)
-            {
-                break;
-            }
-            ui->listWidget->addItem(QString("[%1] %2").arg(i + 1).arg(QString::fromStdString(names[i])));
-        }
+        std::size_t index{1};
+        std::for_each(names.cbegin(), names.cend(), [&index, this](const auto& name)
+                      {
+            ui->listWidget->addItem(QString("[%1] %2").arg(index).arg(QString::fromStdString(name)));
+                ++index; });
 
         connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(std::size_t)));
         connect(ui->listWidget_2, SIGNAL(currentRowChanged(int)), this, SLOT(load_file(std::size_t)));
