@@ -58,8 +58,8 @@ namespace plug
             ui->listWidget->addItem(QString("[%1] %2").arg(index).arg(QString::fromStdString(name)));
                 ++index; });
 
-        connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(std::size_t)));
-        connect(ui->listWidget_2, SIGNAL(currentRowChanged(int)), this, SLOT(load_file(std::size_t)));
+        connect(ui->listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(load_slot(int)));
+        connect(ui->listWidget_2, SIGNAL(currentRowChanged(int)), this, SLOT(load_file(int)));
         connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(get_directory()));
         connect(this, SIGNAL(directory_changed(QString)), ui->label_3, SLOT(setText(QString)));
         connect(this, SIGNAL(directory_changed(QString)), this, SLOT(get_files(QString)));
@@ -73,7 +73,7 @@ namespace plug
         settings.setValue("Windows/libraryWindowGeometry", saveGeometry());
     }
 
-    void Library::load_slot(std::size_t slot)
+    void Library::load_slot(int slot)
     {
         ui->listWidget_2->setCurrentRow(-1);
         dynamic_cast<MainWindow*>(parent())->load_from_amp(slot);
@@ -109,7 +109,7 @@ namespace plug
         }
     }
 
-    void Library::load_file(std::size_t row)
+    void Library::load_file(int row)
     {
         ui->listWidget->setCurrentRow(-1);
         dynamic_cast<MainWindow*>(parent())->loadfile((*files)[row].canonicalFilePath());
