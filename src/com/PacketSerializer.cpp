@@ -293,6 +293,10 @@ namespace plug::com
                 payload.setModel(0x6d);
                 payload.setUnknownAmpSpecific(0x08, 0x08, 0x08, 0x08, 0x75);
                 break;
+            case amps::STUDIO_PREAMP:
+                payload.setModel(0xf1);
+                payload.setUnknownAmpSpecific(0x0d, 0x0d, 0x0d, 0x0d, 0xf6);
+                break;
         }
 
         return Packet<AmpPayload>{header, payload};

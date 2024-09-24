@@ -44,6 +44,8 @@ namespace plug::test
         EXPECT_EQ(lookupAmpById(0x5e), amps::BRITISH_80S);
         EXPECT_EQ(lookupAmpById(0x5d), amps::AMERICAN_90S);
         EXPECT_EQ(lookupAmpById(0x6d), amps::METAL_2000);
+
+        EXPECT_EQ(lookupAmpById(0xf1), amps::STUDIO_PREAMP);
     }
 
     TEST_F(IdLookupTest, lookupAmpByIdThrowsOnInvalidId)

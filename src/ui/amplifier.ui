@@ -116,6 +116,11 @@
           <string>Metal 2000</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Studio Preamp (Mustang I v2 only)</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>

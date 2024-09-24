@@ -267,6 +267,12 @@ namespace plug
                 setAccessibleName("Amplifier: Metal 2000");
                 break;
 
+            case amps::STUDIO_PREAMP:
+                advanced->change_cabinet(value(cabinets::cab4x12G));
+                advanced->change_noise_gate(0);
+                setWindowTitle("Amplifier: Studio Preamp");
+                setAccessibleName("Amplifier: Studio Preamp");
+
             default:
                 break;
         }

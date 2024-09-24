@@ -293,6 +293,8 @@ namespace plug::test
         EXPECT_THAT(serializeWithType(amps::BRITISH_80S), AmpDataIs(0x5e, 0x80, 0x09, 0x5d));
         EXPECT_THAT(serializeWithType(amps::AMERICAN_90S), AmpDataIs(0x5d, 0x80, 0x0a, 0x6d));
         EXPECT_THAT(serializeWithType(amps::METAL_2000), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
+
+        EXPECT_THAT(serializeWithType(amps::STUDIO_PREAMP), AmpDataIs(0xf1, 0x80, 0x0d, 0xf6));
     }
 
     TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)

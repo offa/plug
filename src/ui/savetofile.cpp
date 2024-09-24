@@ -176,6 +176,12 @@ namespace plug
                 something = 0x08;
                 something2 = 0x75;
                 break;
+
+            case amps::STUDIO_PREAMP:
+                model = 0xf1;
+                something = 0x0d;
+                something2 = 0xf6;
+                break;
         }
 
         xml->writeStartElement("Amplifier");

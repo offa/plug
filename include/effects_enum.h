@@ -40,7 +40,10 @@ namespace plug
         BRITISH_70S,
         BRITISH_80S,
         AMERICAN_90S,
-        METAL_2000
+        METAL_2000,
+
+        // Mustang I v2
+        STUDIO_PREAMP
     };
 
 
