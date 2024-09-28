@@ -33,13 +33,6 @@ BUILD_ARGS+=("-DCMAKE_BUILD_TYPE=${BUILD_TYPE}")
 export GTEST_BRIEF=1
 
 
-if [[ "${CXX}" == clang* ]]
-then
-    # Workaround for #228
-    export ASAN_OPTIONS=alloc_dealloc_mismatch=0
-fi
-
-
 mkdir -p build && cd build
 cmake "${BUILD_ARGS[@]}" ..
 make
