@@ -295,6 +295,10 @@ namespace plug::test
         EXPECT_THAT(serializeWithType(amps::METAL_2000), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
 
         EXPECT_THAT(serializeWithType(amps::STUDIO_PREAMP), AmpDataIs(0xf1, 0x80, 0x0d, 0xf6));
+        EXPECT_THAT(serializeWithType(amps::FENDER_57_TWIN), AmpDataIs(0xf6, 0x80, 0x0e, 0xf9));
+        EXPECT_THAT(serializeWithType(amps::FENDER_60_THRIFT), AmpDataIs(0xf9, 0x80, 0x0f, 0xfc));
+        EXPECT_THAT(serializeWithType(amps::BRITISH_COLOUR), AmpDataIs(0xfc, 0x80, 0x10, 0xff));
+        EXPECT_THAT(serializeWithType(amps::BRITISH_WATTS), AmpDataIs(0xff, 0x80, 0x11, 0x00));
     }
 
     TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)

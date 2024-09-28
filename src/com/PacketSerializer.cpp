@@ -293,9 +293,30 @@ namespace plug::com
                 payload.setModel(0x6d);
                 payload.setUnknownAmpSpecific(0x08, 0x08, 0x08, 0x08, 0x75);
                 break;
+
             case amps::STUDIO_PREAMP:
                 payload.setModel(0xf1);
                 payload.setUnknownAmpSpecific(0x0d, 0x0d, 0x0d, 0x0d, 0xf6);
+                break;
+
+            case amps::FENDER_57_TWIN:
+                payload.setModel(0xf6);
+                payload.setUnknownAmpSpecific(0x0e, 0x0e, 0x0e, 0x0e, 0xf9);
+                break;
+
+            case amps::FENDER_60_THRIFT:
+                payload.setModel(0xf9);
+                payload.setUnknownAmpSpecific(0x0f, 0x0f, 0x0f, 0x0f, 0xfc);
+                break;
+
+            case amps::BRITISH_COLOUR:
+                payload.setModel(0xfc);
+                payload.setUnknownAmpSpecific(0x10, 0x10, 0x10, 0x10, 0xff);
+                break;
+
+            case amps::BRITISH_WATTS:
+                payload.setModel(0xff);
+                payload.setUnknownAmpSpecific(0x11, 0x11, 0x11, 0x11, 0x00);
                 break;
         }
 

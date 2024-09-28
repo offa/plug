@@ -42,15 +42,23 @@ namespace plug
         AMERICAN_90S,
         METAL_2000,
 
-        // Mustang I v2
-        STUDIO_PREAMP
+        // Mustang v2
+        STUDIO_PREAMP,
+        FENDER_57_TWIN,
+        FENDER_60_THRIFT,
+        BRITISH_COLOUR,
+        BRITISH_WATTS
     };
 
     constexpr bool isV2Amp(amps amp)
     {
-        switch(amp)
+        switch (amp)
         {
             case amps::STUDIO_PREAMP:
+            case amps::FENDER_57_TWIN:
+            case amps::FENDER_60_THRIFT:
+            case amps::BRITISH_COLOUR:
+            case amps::BRITISH_WATTS:
                 return true;
             default:
                 return false;

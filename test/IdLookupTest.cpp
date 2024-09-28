@@ -46,6 +46,10 @@ namespace plug::test
         EXPECT_EQ(lookupAmpById(0x6d), amps::METAL_2000);
 
         EXPECT_EQ(lookupAmpById(0xf1), amps::STUDIO_PREAMP);
+        EXPECT_EQ(lookupAmpById(0xf6), amps::FENDER_57_TWIN);
+        EXPECT_EQ(lookupAmpById(0xf9), amps::FENDER_60_THRIFT);
+        EXPECT_EQ(lookupAmpById(0xfc), amps::BRITISH_COLOUR);
+        EXPECT_EQ(lookupAmpById(0xff), amps::BRITISH_WATTS);
     }
 
     TEST_F(IdLookupTest, lookupAmpByIdThrowsOnInvalidId)

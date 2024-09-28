@@ -43,7 +43,11 @@ namespace plug
             {amps::BRITISH_80S, "British 80's"},
             {amps::AMERICAN_90S, "American 90's"},
             {amps::METAL_2000, "Metal 2000"},
-            {amps::STUDIO_PREAMP, "Studio Preamp"}};
+            {amps::STUDIO_PREAMP, "Studio Preamp"},
+            {amps::FENDER_57_TWIN, "Fender '57 Twin"},
+            {amps::FENDER_60_THRIFT, "Fender '60s Thrift"},
+            {amps::BRITISH_COLOUR, "British Colour"},
+            {amps::BRITISH_WATTS, "British Watts"}};
     }
 
     Amplifier::Amplifier(QWidget* parent)

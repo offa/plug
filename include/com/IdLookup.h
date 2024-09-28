@@ -58,6 +58,14 @@ namespace plug
                 return amps::METAL_2000;
             case 0xf1:
                 return amps::STUDIO_PREAMP;
+            case 0xf6:
+                return amps::FENDER_57_TWIN;
+            case 0xf9:
+                return amps::FENDER_60_THRIFT;
+            case 0xfc:
+                return amps::BRITISH_COLOUR;
+            case 0xff:
+                return amps::BRITISH_WATTS;
             default:
                 throw std::invalid_argument{"Invalid amp id: " + std::to_string(id)};
         }
