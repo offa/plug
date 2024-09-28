@@ -35,8 +35,6 @@ export GTEST_BRIEF=1
 
 if [[ "${CXX}" == clang* ]]
 then
-    export CXXFLAGS="-stdlib=libc++"
-
     # Workaround for #228
     export ASAN_OPTIONS=alloc_dealloc_mismatch=0
 fi

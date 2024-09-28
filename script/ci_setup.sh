@@ -2,11 +2,6 @@
 
 set -ex
 
-if [[ "${CXX}" == clang* ]]
-then
-    export CXXFLAGS="-stdlib=libc++"
-fi
-
 # Install dependencies
 apt-get update
 apt-get install -y --no-install-recommends \
