@@ -10,8 +10,8 @@ jobs:
         compiler:
           - gcc:14
           - gcc:13
-          # - clang:18 # Broken Qt6 (#294)
-          # - clang:17
+          - clang:18
+          - clang:17
     container:
       image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"
     name: "${{ matrix.compiler }}"
