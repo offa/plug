@@ -11,7 +11,7 @@
 
 A client Software for Fender Mustang Amps. This is a fork of ***piorekf's Plug***.
 
-Plug is an alternative to the (discontinued) FUSE software.
+Plug is an alternative to the (discontinued) FUSE software. It allows to control the amplifier and organize presets.
 
 Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project.
 
