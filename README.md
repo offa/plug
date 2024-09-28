@@ -9,7 +9,9 @@
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
 ![C++](https://img.shields.io/badge/c++-20-green.svg)
 
-Software for Fender Mustang Amps. This is a fork of ***piorekf's Plug***.
+A client Software for Fender Mustang Amps. This is a fork of ***piorekf's Plug***.
+
+Plug is an alternative to the (discontinued) FUSE software.
 
 Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project.
 
