@@ -23,6 +23,7 @@
 
 #include "data_structs.h"
 #include "effects_enum.h"
+#include "DeviceModel.h"
 #include <QMainWindow>
 #include <memory>
 
@@ -49,6 +50,8 @@ namespace plug
         ~Amplifier() override;
 
         Amplifier& operator=(const Amplifier&) = delete;
+
+        void setDeviceModel(DeviceModel model);
 
     private:
         const std::unique_ptr<Ui::Amplifier> ui;

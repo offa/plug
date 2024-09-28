@@ -46,6 +46,16 @@ namespace plug
         STUDIO_PREAMP
     };
 
+    constexpr bool isV2Amp(amps amp)
+    {
+        switch(amp)
+        {
+            case amps::STUDIO_PREAMP:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // list of all effects
     enum class effects
@@ -127,4 +137,5 @@ namespace plug
     {
         return static_cast<std::uint8_t>(c);
     }
+
 }

@@ -306,6 +306,7 @@ namespace plug
 
         current_name = name;
 
+        amp->setDeviceModel(amp_ops->getDeviceModel());
         amp->load(amplifier_set);
         if (settings.value("Settings/popupChangedWindows").toBool())
         {

@@ -96,6 +96,14 @@ namespace plug
         settings.setValue("Windows/amplifierWindowGeometry", saveGeometry());
     }
 
+    void Amplifier::setDeviceModel(DeviceModel model)
+    {
+        std::for_each(ampNames.cbegin(), ampNames.cend(), [this, model](const auto& item)
+                      {
+                if (!isV2Amp(item.first) || (isV2Amp(item.first) && model.category() == DeviceModel::Category::MustangV2)){
+                ui->comboBox->addItem(QString::fromStdString(item.second));} });
+    }
+
     void Amplifier::set_gain(int value)
     {
         gain = static_cast<std::uint8_t>(value);
