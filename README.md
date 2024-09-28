@@ -22,7 +22,6 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 - [**libusb-1.0**](http://libusb.info/)
 
 
-
 ## Building
 
 Building and testing is done through CMake:
@@ -58,7 +57,7 @@ Thanks to *piorekf* and all Plug contributors.
 
 ## License
 
-**GNU General Public License (GPL)**
+**GNU General Public License (GPLv3+)**
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
