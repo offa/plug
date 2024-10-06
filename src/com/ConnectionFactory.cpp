@@ -78,6 +78,12 @@ namespace plug::com
                     return DeviceModel{"Mustang I/II", DeviceModel::Category::MustangV2, 24};
                 case usbPID::mustangIII_IV_V_v2:
                     return DeviceModel{"Mustang III/IV/V", DeviceModel::Category::MustangV2, 100};
+
+
+                case usbPID::mustangLT40S:
+                    return DeviceModel{"Mustang LT 40S", DeviceModel::Category::MustangV3_LT, 0};
+
+
                 default:
                     throw CommunicationException{"Unknown device pid: " + std::to_string(pid)};
             }

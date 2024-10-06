@@ -30,11 +30,21 @@ namespace plug::com
     SignalChain decode_data(const std::array<PacketRawType, 7>& data)
     {
         const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
-        const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
-        const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
-                                                     fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
 
-        return SignalChain{name, amp, effects};
+        if(false)
+        {
+            const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
+            const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
+                                                        fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
+
+            return SignalChain{name, amp, effects};
+        }
+        else
+        {
+            const amp_settings amp{};            
+            const std::vector<fx_pedal_settings> effects;
+            return SignalChain{name, amp, effects};
+        }
     }
 
     std::vector<std::uint8_t> receivePacket(Connection& conn)
