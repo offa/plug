@@ -7,24 +7,20 @@
 [![Coverage Report](https://gitlab.com/offa/plug/badges/master/coverage.svg)](https://gitlab.com/offa/plug/commits/master)
 [![GitHub release](https://img.shields.io/github/release/offa/plug.svg)](https://github.com/offa/plug/releases)
 [![License](https://img.shields.io/badge/license-GPLv3-yellow.svg)](LICENSE)
-[![C++](https://img.shields.io/badge/c++-17-green.svg)]()
+![C++](https://img.shields.io/badge/c++-20-green.svg)
 
-Software for Fender Mustang Amps. This is a fork of ***piorekf's Plug***.
+A client Software for Fender Mustang Amps. This is a fork of ***piorekf's Plug***.
+
+Plug is an alternative to the (discontinued) FUSE software. It allows to control the amplifier and organize presets.
 
 Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project.
 
 
 ## Requirements
 
-- [**Qt5**](https://www.qt.io/)
+- [**Qt6**](https://www.qt.io/)
 - [**libusb-1.0**](http://libusb.info/)
 
-
-For developers on Ubuntu or other Debian-based distributions, appropriate versions of several of the required packages are unlikely to be installed by default.
-As of Ubuntu 23.04 Lunar Lobster, the following command is recommended to find the packages required:
-'''
-sudo apt-get install -y cmake qtcreator qtbase5-dev qt5-qmake libusb-1.0-0-dev ament-cmake-googletest
-'''
 
 ## Building
 
@@ -61,7 +57,7 @@ Thanks to *piorekf* and all Plug contributors.
 
 ## License
 
-**GNU General Public License (GPL)**
+**GNU General Public License (GPLv3+)**
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

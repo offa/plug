@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ namespace plug::test
         h.setType(Type::init0);
         EXPECT_THAT(h.getBytes()[1], Eq(0xc3));
         h.setType(Type::init1);
-        EXPECT_THAT(h.getBytes()[1], Eq(0x03));
+        EXPECT_THAT(h.getBytes()[1], Eq(0xc1));
         h.setType(Type::load);
         EXPECT_THAT(h.getBytes()[1], Eq(0xc1));
     }

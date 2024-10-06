@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 #include "ui/quickpresets.h"
 #include "ui_quickpresets.h"
+#include <algorithm>
 
 namespace plug
 {
@@ -50,24 +51,21 @@ namespace plug
         QSettings settings;
         std::size_t i = 0;
 
-        for (i = 0; i < 100; i++)
-        {
-            if (names[i][0] == 0x00)
-            {
-                break;
-            }
-            const QString name = QString::fromStdString(names[i]);
-            ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_2->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_3->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_4->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_5->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_6->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_7->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_8->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_9->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-            ui->comboBox_10->addItem(QString("[%1] %2").arg(i + 1).arg(name));
-        }
+        std::for_each(names.cbegin(), names.cend(), [&i, this](const auto& nameStr)
+                      {
+            const QString name = QString::fromStdString(nameStr);
+            const auto index = i + 1;
+            ui->comboBox->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_2->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_3->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_4->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_5->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_6->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_7->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_8->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_9->addItem(QString("[%1] %2").arg(index).arg(name));
+            ui->comboBox_10->addItem(QString("[%1] %2").arg(index).arg(name));
+            ++i; });
 
         ui->comboBox->addItem(tr("[Empty]"));
         ui->comboBox_2->addItem(tr("[Empty]"));

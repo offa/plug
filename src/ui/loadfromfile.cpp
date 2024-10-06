@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,194 +21,194 @@
 
 #include "ui/loadfromfile.h"
 #include "effects_enum.h"
-#include <QXmlStreamReader>
 
 namespace plug
 {
 
-    LoadFromFile::LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::vector<fx_pedal_settings>& fx_settings)
-        : m_name(name),
-          m_amp_settings(amp_settings),
-          m_fx_settings(fx_settings),
-          m_xml(std::make_unique<QXmlStreamReader>(file))
+    LoadFromFile::LoadFromFile(QFile* file)
+        : xml(file)
     {
     }
 
-    void LoadFromFile::loadfile()
+    LoadFromFile::Settings LoadFromFile::loadfile()
     {
-        while (!m_xml->atEnd())
+        Settings settings;
+        while (!xml.atEnd())
         {
-            if (m_xml->isStartElement())
+            if (xml.isStartElement())
             {
-                if (m_xml->name().toString() == "Amplifier")
+                if (xml.name().toString() == "Amplifier")
                 {
-                    parseAmp();
+                    settings.amp = parseAmp();
                 }
-                else if (m_xml->name().toString() == "FX")
+                else if (xml.name().toString() == "FX")
                 {
-                    parseFX();
+                    settings.effects = parseFX();
                 }
-                else if (m_xml->name().toString() == "FUSE")
+                else if (xml.name().toString() == "FUSE")
                 {
-                    parseFUSE();
+                    settings.name = parseFUSE();
                 }
-                else if (m_xml->name().toString() == "UsbGain")
+                else if (xml.name().toString() == "UsbGain")
                 {
-                    m_amp_settings->usb_gain = static_cast<std::uint8_t>(m_xml->readElementText().toUInt());
+                    settings.amp.usb_gain = static_cast<std::uint8_t>(xml.readElementText().toUInt());
                 }
             }
-            m_xml->readNextStartElement();
+            xml.readNextStartElement();
         }
+        return settings;
     }
 
-    void LoadFromFile::parseAmp()
+    amp_settings LoadFromFile::parseAmp()
     {
-        m_xml->readNextStartElement();
-        while (m_xml->name() != "Amplifier")
+        xml.readNextStartElement();
+        amp_settings amp;
+        while (xml.name().toString() != "Amplifier")
         {
-            if (m_xml->isStartElement())
+            if (xml.isStartElement())
             {
-                if (m_xml->name() == "Module")
+                if (xml.name().toString() == "Module")
                 {
-                    switch (m_xml->attributes().value("ID").toString().toInt())
+                    switch (xml.attributes().value("ID").toString().toInt())
                     {
                         case 0x67:
-                            m_amp_settings->amp_num = amps::FENDER_57_DELUXE;
+                            amp.amp_num = amps::FENDER_57_DELUXE;
                             break;
 
                         case 0x64:
-                            m_amp_settings->amp_num = amps::FENDER_59_BASSMAN;
+                            amp.amp_num = amps::FENDER_59_BASSMAN;
                             break;
 
                         case 0x7c:
-                            m_amp_settings->amp_num = amps::FENDER_57_CHAMP;
+                            amp.amp_num = amps::FENDER_57_CHAMP;
                             break;
 
                         case 0x53:
-                            m_amp_settings->amp_num = amps::FENDER_65_DELUXE_REVERB;
+                            amp.amp_num = amps::FENDER_65_DELUXE_REVERB;
                             break;
 
                         case 0x6a:
-                            m_amp_settings->amp_num = amps::FENDER_65_PRINCETON;
+                            amp.amp_num = amps::FENDER_65_PRINCETON;
                             break;
 
                         case 0x75:
-                            m_amp_settings->amp_num = amps::FENDER_65_TWIN_REVERB;
+                            amp.amp_num = amps::FENDER_65_TWIN_REVERB;
                             break;
 
                         case 0x72:
-                            m_amp_settings->amp_num = amps::FENDER_SUPER_SONIC;
+                            amp.amp_num = amps::FENDER_SUPER_SONIC;
                             break;
 
                         case 0x61:
-                            m_amp_settings->amp_num = amps::BRITISH_60S;
+                            amp.amp_num = amps::BRITISH_60S;
                             break;
 
                         case 0x79:
-                            m_amp_settings->amp_num = amps::BRITISH_70S;
+                            amp.amp_num = amps::BRITISH_70S;
                             break;
 
                         case 0x5e:
-                            m_amp_settings->amp_num = amps::BRITISH_80S;
+                            amp.amp_num = amps::BRITISH_80S;
                             break;
 
                         case 0x5d:
-                            m_amp_settings->amp_num = amps::AMERICAN_90S;
+                            amp.amp_num = amps::AMERICAN_90S;
                             break;
 
                         case 0x6d:
-                            m_amp_settings->amp_num = amps::METAL_2000;
+                            amp.amp_num = amps::METAL_2000;
                             break;
                     }
                 }
-                else if (m_xml->name() == "Param")
+                else if (xml.name().toString() == "Param")
                 {
                     int i = 0;
-                    switch (m_xml->attributes().value("ControlIndex").toString().toInt())
+                    switch (xml.attributes().value("ControlIndex").toString().toInt())
                     {
                         case 0:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->volume = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.volume = static_cast<std::uint8_t>(i);
                             break;
                         case 1:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->gain = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.gain = static_cast<std::uint8_t>(i);
                             break;
                         case 2:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->gain2 = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.gain2 = static_cast<std::uint8_t>(i);
                             break;
                         case 3:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->master_vol = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.master_vol = static_cast<std::uint8_t>(i);
                             break;
                         case 4:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->treble = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.treble = static_cast<std::uint8_t>(i);
                             break;
                         case 5:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->middle = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.middle = static_cast<std::uint8_t>(i);
                             break;
                         case 6:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->bass = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.bass = static_cast<std::uint8_t>(i);
                             break;
                         case 7:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->presence = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.presence = static_cast<std::uint8_t>(i);
                             break;
                         case 9:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->depth = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.depth = static_cast<std::uint8_t>(i);
                             break;
                         case 10:
-                            i = m_xml->readElementText().toInt() >> 8;
-                            m_amp_settings->bias = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt() >> 8;
+                            amp.bias = static_cast<std::uint8_t>(i);
                             break;
                         case 15:
-                            i = m_xml->readElementText().toInt();
-                            m_amp_settings->noise_gate = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt();
+                            amp.noise_gate = static_cast<std::uint8_t>(i);
                             break;
                         case 16:
-                            i = m_xml->readElementText().toInt();
-                            m_amp_settings->threshold = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt();
+                            amp.threshold = static_cast<std::uint8_t>(i);
                             break;
                         case 17:
-                            i = m_xml->readElementText().toInt();
-                            m_amp_settings->cabinet = static_cast<cabinets>(i);
+                            i = xml.readElementText().toInt();
+                            amp.cabinet = static_cast<cabinets>(i);
                             break;
                         case 19:
-                            i = m_xml->readElementText().toInt();
-                            m_amp_settings->sag = static_cast<std::uint8_t>(i);
+                            i = xml.readElementText().toInt();
+                            amp.sag = static_cast<std::uint8_t>(i);
                             break;
                         case 20:
-                            m_amp_settings->brightness = (m_xml->readElementText().toInt() != 0);
+                            amp.brightness = (xml.readElementText().toInt() != 0);
                             break;
                     }
                 }
             }
-            m_xml->readNext();
+            xml.readNext();
         }
+        return amp;
     }
 
-    void LoadFromFile::parseFX()
+    std::vector<fx_pedal_settings> LoadFromFile::parseFX()
     {
         std::vector<fx_pedal_settings> settings;
 
-        m_xml->readNextStartElement();
-        while (m_xml->name() != "FX")
+        xml.readNextStartElement();
+        while (xml.name().toString() != "FX")
         {
             fx_pedal_settings effect{FxSlot{0}, effects::EMPTY, 0, 0, 0, 0, 0, 0, false};
 
-            if (m_xml->isStartElement())
+            if (xml.isStartElement())
             {
-                if (m_xml->name() == "Module")
+                if (xml.name().toString() == "Module")
                 {
-                    const int position = m_xml->attributes().value("POS").toString().toInt();
+                    const int position = xml.attributes().value("POS").toString().toInt();
                     effect.slot = FxSlot{static_cast<std::uint8_t>(position)};
 
-                    switch (m_xml->attributes().value("ID").toString().toInt())
+                    switch (xml.attributes().value("ID").toString().toInt())
                     {
                         case 0x00:
                             effect.effect_num = effects::EMPTY;
@@ -363,33 +363,33 @@ namespace plug
                             break;
                     }
                 }
-                else if (m_xml->name() == "Param")
+                else if (xml.name().toString() == "Param")
                 {
                     int i = 0;
-                    switch (m_xml->attributes().value("ControlIndex").toString().toInt())
+                    switch (xml.attributes().value("ControlIndex").toString().toInt())
                     {
                         case 0:
-                            i = m_xml->readElementText().toInt() >> 8;
+                            i = xml.readElementText().toInt() >> 8;
                             effect.knob1 = static_cast<std::uint8_t>(i);
                             break;
                         case 1:
-                            i = m_xml->readElementText().toInt() >> 8;
+                            i = xml.readElementText().toInt() >> 8;
                             effect.knob2 = static_cast<std::uint8_t>(i);
                             break;
                         case 2:
-                            i = m_xml->readElementText().toInt() >> 8;
+                            i = xml.readElementText().toInt() >> 8;
                             effect.knob3 = static_cast<std::uint8_t>(i);
                             break;
                         case 3:
-                            i = m_xml->readElementText().toInt() >> 8;
+                            i = xml.readElementText().toInt() >> 8;
                             effect.knob4 = static_cast<std::uint8_t>(i);
                             break;
                         case 4:
-                            i = m_xml->readElementText().toInt() >> 8;
+                            i = xml.readElementText().toInt() >> 8;
                             effect.knob5 = static_cast<std::uint8_t>(i);
                             break;
                         case 5:
-                            i = m_xml->readElementText().toInt() >> 8;
+                            i = xml.readElementText().toInt() >> 8;
                             effect.knob6 = static_cast<std::uint8_t>(i);
                             break;
                     }
@@ -400,22 +400,23 @@ namespace plug
             {
                 settings.push_back(effect);
             }
-            m_xml->readNext();
+            xml.readNext();
         }
 
-        m_fx_settings = settings;
+        return settings;
     }
 
-    void LoadFromFile::parseFUSE()
+    QString LoadFromFile::parseFUSE()
     {
-        m_xml->readNextStartElement();
-        while (!m_xml->isEndElement())
+        xml.readNextStartElement();
+        while (!xml.isEndElement())
         {
-            if (m_xml->name() == "Info")
+            if (xml.name().toString() == "Info")
             {
-                m_name->operator=(m_xml->attributes().value("name").toString());
+                return (xml.attributes().value("name").toString());
             }
-            m_xml->readNext();
+            xml.readNext();
         }
+        return "Unknown";
     }
 }

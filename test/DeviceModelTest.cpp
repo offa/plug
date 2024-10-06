@@ -18,36 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "com/UsbException.h"
-#include "com/LibUsbCompat.h"
-#include <libusb-1.0/libusb.h>
+#include "DeviceModel.h"
+#include <gmock/gmock.h>
 
-namespace plug::com::usb
+namespace plug::test
 {
-    UsbException::UsbException(int errorCode)
-        : error_(errorCode),
-          name_(libusb_error_name(errorCode)),
-          message_(libusb::strerror(libusb::ErrorCodeAdapter{errorCode}))
+    class DeviceModelTest : public testing::Test
     {
-    }
+    };
 
-    int UsbException::code() const noexcept
-    {
-        return error_;
-    }
 
-    std::string UsbException::name() const
+    TEST_F(DeviceModelTest, deviceInfos)
     {
-        return name_;
-    }
-
-    std::string UsbException::message() const
-    {
-        return message_;
-    }
-
-    const char* UsbException::what() const noexcept
-    {
-        return message_.c_str();
+        const DeviceModel model{"Mustang I", DeviceModel::Category::MustangV1, 100};
+        EXPECT_EQ(model.name(), "Mustang I");
+        EXPECT_EQ(model.category(), DeviceModel::Category::MustangV1);
+        EXPECT_EQ(model.numberOfPresets(), 100);
     }
 }

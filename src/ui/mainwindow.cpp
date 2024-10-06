@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -156,14 +156,14 @@ namespace plug
         connect(ui->action_Quick_presets, SIGNAL(triggered()), quickpres, SLOT(show()));
 
         // shortcuts to activate effect windows
-        QShortcut* showFx1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFx2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFx3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFx4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFx5 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFx6 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_6), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFx7 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
-        QShortcut* showFx8 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx1 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_1), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx2 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_2), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx3 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_3), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx4 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_4), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx5 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_5), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx6 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_6), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx7 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_7), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showFx8 = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_8), this, nullptr, nullptr, Qt::ApplicationShortcut);
         connect(showFx1, &QShortcut::activated, this, [this]
                 { this->showEffect(0); });
         connect(showFx2, &QShortcut::activated, this, [this]
@@ -181,7 +181,7 @@ namespace plug
         connect(showFx8, &QShortcut::activated, this, [this]
                 { this->showEffect(7); });
 
-        QShortcut* showamp = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, nullptr, nullptr, Qt::ApplicationShortcut);
+        QShortcut* showamp = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_A), this, nullptr, nullptr, Qt::ApplicationShortcut);
         connect(showamp, SIGNAL(activated()), this, SLOT(show_amp()));
 
         // shortcuts for quick loading presets
@@ -217,7 +217,7 @@ namespace plug
                 { loadPreset(9); });
 
         // shortcut to activate buttons
-        QShortcut* shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A), this);
+        QShortcut* shortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_A), this);
         connect(shortcut, SIGNAL(activated()), this, SLOT(enable_buttons()));
 
         // connect the functions if needed
@@ -248,7 +248,7 @@ namespace plug
                               "<p>%1 is a GPLv3 licensed program designed as a replacement for Fender FUSE to operate Fender Mustang amplifier and possibly some other models.</p>"
                               "<p><a href=\"https://github.com/offa/plug/\">Plug (GitHub)</a> / <a href=\"https://gitlab.com/offa/plug/\">Plug (GitLab)</a></p>"
                               "<hr>"
-                              "<p>Copyright © 2017-2023 offa</p>"
+                              "<p>Copyright © 2017-2024 offa</p>"
                               "<p>Copyright © 2010-2016 piorekf <piorek@piorekf.org></p>"
                               "<p>License: <a href=\"https://www.gnu.org/licenses/gpl.txt\">GPLv3</a></p>"
                               "</center>")
@@ -271,7 +271,7 @@ namespace plug
 
         try
         {
-            amp_ops = std::make_unique<plug::com::Mustang>(plug::com::createUsbConnection());
+            amp_ops = plug::com::connect();
             const auto [signalChain, presets] = amp_ops->start_amp();
             name = QString::fromStdString(signalChain.name());
             amplifier_set = signalChain.amp();
@@ -296,15 +296,17 @@ namespace plug
         }
         else
         {
-            setWindowTitle(QString(tr("PLUG - %1 (v%2): %3"))
-                               .arg(QString::fromStdString(amp_ops->getDeviceName()))
-                               .arg(amp_ops->getDeviceModelVersion() == com::ModelVersion::v1 ? "1" : "2")
+            const auto model = amp_ops->getDeviceModel();
+            setWindowTitle(QString(tr("PLUG - %1 %2: %3"))
+                               .arg(QString::fromStdString(model.name()))
+                               .arg(model.category() == DeviceModel::Category::MustangV2 ? "(v2)" : "")
                                .arg(name));
             setAccessibleName(QString(tr("Main window: %1")).arg(name));
         }
 
         current_name = name;
 
+        amp->setDeviceModel(amp_ops->getDeviceModel());
         amp->load(amplifier_set);
         if (settings.value("Settings/popupChangedWindows").toBool())
         {
@@ -614,16 +616,13 @@ namespace plug
             return;
         }
 
-        amp_settings amplifier_set{};
-        std::vector<fx_pedal_settings> effects_set{};
-        QString name;
-        LoadFromFile loader{&file, &name, &amplifier_set, effects_set};
-        loader.loadfile();
+        LoadFromFile loader{&file};
+        const auto fileSettings = loader.loadfile();
         file.close();
 
-        change_title(name);
+        change_title(fileSettings.name);
 
-        amp->load(amplifier_set);
+        amp->load(fileSettings.amp);
         if (connected)
         {
             amp->send_amp();
@@ -636,7 +635,7 @@ namespace plug
             amp->show();
         }
 
-        std::for_each(effects_set.begin(), effects_set.end(), [this, shouldPopup](auto& effect)
+        std::for_each(fileSettings.effects.cbegin(), fileSettings.effects.cend(), [this, shouldPopup](auto& effect)
                       {
             const auto& component = effectComponents.at(effect.slot.id());
             component->load(effect);

@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,10 @@
 
 #include "com/ConnectionFactory.h"
 #include "com/CommunicationException.h"
+#include "com/Mustang.h"
 #include "com/UsbComm.h"
 #include "com/UsbContext.h"
+#include "DeviceModel.h"
 #include <algorithm>
 
 namespace plug::com
@@ -58,29 +60,32 @@ namespace plug::com
             usbPID::rumbleLT25,
             usbPID::mustangLT40S};
 
-        inline constexpr ModelVersion whichVersion(std::uint16_t pid) 
+        DeviceModel getModel(std::uint16_t pid)
         {
-            // Not sure whether this will work on all compilers but
-            // https://stackoverflow.com/questions/45534410/switch-in-constexpr-function
-            // suggests it is legal
-            switch(pid) 
+            switch (pid)
             {
+                case usbPID::mustangI_II:
+                    return DeviceModel{"Mustang I/II", DeviceModel::Category::MustangV1, 24};
+                case usbPID::mustangIII_IV_V:
+                    return DeviceModel{"Mustang III/IV/V", DeviceModel::Category::MustangV1, 100};
+                case usbPID::mustangBronco:
+                    return DeviceModel{"Mustang Bronco", DeviceModel::Category::MustangV1, 0};
+                case usbPID::mustangMini:
+                    return DeviceModel{"Mustang Mini", DeviceModel::Category::MustangV1, 0};
+                case usbPID::mustangFloor:
+                    return DeviceModel{"Mustang Floor", DeviceModel::Category::MustangV1, 0};
                 case usbPID::mustangI_II_v2:
+                    return DeviceModel{"Mustang I/II", DeviceModel::Category::MustangV2, 24};
                 case usbPID::mustangIII_IV_V_v2:
-                    return ModelVersion::v2;
-
-                case usbPID::mustangLT25:
-                case usbPID::rumbleLT25:
-                case usbPID::mustangLT40S:
-                    return ModelVersion::v3;
-
+                    return DeviceModel{"Mustang III/IV/V", DeviceModel::Category::MustangV2, 100};
                 default:
-                    return ModelVersion::v1;
+                    throw CommunicationException{"Unknown device pid: " + std::to_string(pid)};
             }
         }
+
     }
 
-    std::shared_ptr<Connection> createUsbConnection()
+    std::unique_ptr<Mustang> connect()
     {
         auto devices = usb::listDevices();
 
@@ -92,10 +97,7 @@ namespace plug::com
         {
             throw CommunicationException{"No device found"};
         }
-        const auto modelVersion = whichVersion(itr->productId());
-        if(modelVersion == ModelVersion::v3) {
-            throw CommunicationException{"Unsupported v3 device found"};
-        }
-        return std::make_shared<UsbComm>(std::move(*itr), modelVersion);
+        return std::make_unique<Mustang>(getModel(itr->productId()), std::make_shared<UsbComm>(std::move(*itr)));
     }
+
 }

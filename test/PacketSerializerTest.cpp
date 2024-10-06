@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ namespace plug::test
         packet1[1] = 0xc3;
         PacketRawType packet2{};
         packet2[0] = 0x1a;
-        packet2[1] = 0x03;
+        packet2[1] = 0xc1;
 
         const auto packets = serializeInitCommand();
         EXPECT_THAT(packets, SizeIs(2));
@@ -293,6 +293,12 @@ namespace plug::test
         EXPECT_THAT(serializeWithType(amps::BRITISH_80S), AmpDataIs(0x5e, 0x80, 0x09, 0x5d));
         EXPECT_THAT(serializeWithType(amps::AMERICAN_90S), AmpDataIs(0x5d, 0x80, 0x0a, 0x6d));
         EXPECT_THAT(serializeWithType(amps::METAL_2000), AmpDataIs(0x6d, 0x80, 0x08, 0x75));
+
+        EXPECT_THAT(serializeWithType(amps::STUDIO_PREAMP), AmpDataIs(0xf1, 0x80, 0x0d, 0xf6));
+        EXPECT_THAT(serializeWithType(amps::FENDER_57_TWIN), AmpDataIs(0xf6, 0x80, 0x0e, 0xf9));
+        EXPECT_THAT(serializeWithType(amps::FENDER_60_THRIFT), AmpDataIs(0xf9, 0x80, 0x0f, 0xfc));
+        EXPECT_THAT(serializeWithType(amps::BRITISH_COLOUR), AmpDataIs(0xfc, 0x80, 0x10, 0xff));
+        EXPECT_THAT(serializeWithType(amps::BRITISH_WATTS), AmpDataIs(0xff, 0x80, 0x11, 0x00));
     }
 
     TEST_F(PacketSerializerTest, serializeAmpSettingsCabinetData)

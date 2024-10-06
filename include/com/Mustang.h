@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #pragma once
 
 #include "SignalChain.h"
+#include "DeviceModel.h"
 #include "com/Connection.h"
 #include <string_view>
 #include <vector>
@@ -39,7 +40,7 @@ namespace plug::com
     class Mustang
     {
     public:
-        explicit Mustang(std::shared_ptr<Connection> connection);
+        Mustang(DeviceModel deviceModel, std::shared_ptr<Connection> connection);
         Mustang(const Mustang&) = delete;
 
         InitialData start_amp();
@@ -50,8 +51,8 @@ namespace plug::com
         SignalChain load_memory_bank(std::uint8_t slot);
         void save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects);
 
-        std::string getDeviceName() const;
-        ModelVersion getDeviceModelVersion() const;
+        DeviceModel getDeviceModel() const;
+
 
         Mustang& operator=(const Mustang&) = delete;
 
@@ -60,6 +61,7 @@ namespace plug::com
         InitialData loadData();
         void initializeAmp();
 
+        const DeviceModel model;
         const std::shared_ptr<Connection> conn;
     };
 }

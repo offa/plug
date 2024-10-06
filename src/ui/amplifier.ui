@@ -56,66 +56,6 @@
         <property name="maxVisibleItems">
          <number>12</number>
         </property>
-        <item>
-         <property name="text">
-          <string>Fender '57 Deluxe</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fender '59 Bassman</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fender '57 Champ</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fender '65 Deluxe Reverb</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fender '65 Princeton</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fender '65 Twin Reverb</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Fender Super-Sonic</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>British 60's</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>British 70's</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>British 80's</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>American 90's</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Metal 2000</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>

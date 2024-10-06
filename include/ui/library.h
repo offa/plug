@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -52,10 +52,10 @@ namespace plug
         void resizeEvent(QResizeEvent*) override;
 
     private slots:
-        void load_slot(std::size_t slot);
+        void load_slot(int slot);
         void get_directory();
         void get_files(const QString&);
-        void load_file(std::size_t row);
+        void load_file(int row);
         void change_font_size(int);
         void change_font_family(QFont);
 

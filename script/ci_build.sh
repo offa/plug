@@ -19,8 +19,9 @@ do
             BUILD_ARGS+=("-DPLUG_COVERAGE=ON")
             COVERAGE=true;
             BUILD_TYPE="Debug"
-            apt-get install -y --no-install-recommends python3-pip python3-pkg-resources python3-setuptools
-            pip3 install -U gcovr
+            export PATH=$HOME/.local/bin:$PATH
+            apt-get install -y --no-install-recommends pipx
+            pipx install gcovr
 
             GCC_VERSION="$(${CC} -dumpfullversion | cut -f1 -d.)"
             ln -sf /usr/bin/gcov-${GCC_VERSION} /usr/bin/gcov
@@ -32,18 +33,9 @@ BUILD_ARGS+=("-DCMAKE_BUILD_TYPE=${BUILD_TYPE}")
 export GTEST_BRIEF=1
 
 
-if [[ "${CXX}" == clang* ]]
-then
-    export CXXFLAGS="-stdlib=libc++"
-
-    # Workaround for #228
-    export ASAN_OPTIONS=alloc_dealloc_mismatch=0
-fi
-
-
 mkdir -p build && cd build
 cmake "${BUILD_ARGS[@]}" ..
-make
+make -j
 make unittest
 
 

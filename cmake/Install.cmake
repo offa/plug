@@ -2,7 +2,7 @@ install(FILES
         ${CMAKE_SOURCE_DIR}/cmake/50-mustang.rules
         ${CMAKE_SOURCE_DIR}/cmake/70-mustang-uaccess.rules
         ${CMAKE_SOURCE_DIR}/cmake/70-mustang-plugdev.rules
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/udev/rules.d
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/udev/rules.d
         )
 install(FILES ${CMAKE_SOURCE_DIR}/cmake/plug.desktop
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications

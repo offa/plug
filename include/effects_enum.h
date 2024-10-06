@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,9 +40,30 @@ namespace plug
         BRITISH_70S,
         BRITISH_80S,
         AMERICAN_90S,
-        METAL_2000
+        METAL_2000,
+
+        // Mustang v2
+        STUDIO_PREAMP,
+        FENDER_57_TWIN,
+        FENDER_60_THRIFT,
+        BRITISH_COLOUR,
+        BRITISH_WATTS
     };
 
+    constexpr bool isV2Amp(amps amp)
+    {
+        switch (amp)
+        {
+            case amps::STUDIO_PREAMP:
+            case amps::FENDER_57_TWIN:
+            case amps::FENDER_60_THRIFT:
+            case amps::BRITISH_COLOUR:
+            case amps::BRITISH_WATTS:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // list of all effects
     enum class effects
@@ -124,4 +145,5 @@ namespace plug
     {
         return static_cast<std::uint8_t>(c);
     }
+
 }

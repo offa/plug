@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ namespace plug::com
     class UsbComm : public Connection
     {
     public:
-        UsbComm(usb::Device device, ModelVersion version);
+        UsbComm(usb::Device device);
 
         void close() override;
         bool isOpen() const override;
@@ -38,13 +38,11 @@ namespace plug::com
         std::vector<std::uint8_t> receive(std::size_t recvSize) override;
 
         std::string name() const override;
-        ModelVersion modelVersion() const override;
 
     private:
         std::size_t sendImpl(std::uint8_t* data, std::size_t size) override;
 
         usb::Device device_;
         const std::string name_;
-        const ModelVersion version_;
     };
 }

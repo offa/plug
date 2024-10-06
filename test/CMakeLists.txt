@@ -16,6 +16,7 @@ add_executable(MustangTest
                 PacketSerializerTest.cpp
                 PacketTest.cpp
                 FxSlotTest.cpp
+                DeviceModelTest.cpp
                 )
 add_test(MustangTest MustangTest)
 target_link_libraries(MustangTest PRIVATE
@@ -34,6 +35,7 @@ add_executable(CommunicationTest
 add_test(CommunicationTest CommunicationTest)
 target_link_libraries(CommunicationTest PRIVATE
                         plug-communication
+                        plug-mustang
                         TestLibs
                         UsbDeviceMock
                         )

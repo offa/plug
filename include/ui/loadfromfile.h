@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,26 +27,27 @@
 #include <vector>
 #include <memory>
 
-class QXmlStreamReader;
-
 namespace plug
 {
-
     class LoadFromFile
     {
     public:
-        LoadFromFile(QFile* file, QString* name, amp_settings* amp_settings, std::vector<fx_pedal_settings>& fx_settings);
+        struct Settings
+        {
+            QString name;
+            std::vector<fx_pedal_settings> effects;
+            amp_settings amp;
+        };
 
-        void loadfile();
+        explicit LoadFromFile(QFile* file);
+
+        Settings loadfile();
 
     private:
-        QString* m_name;
-        amp_settings* m_amp_settings;
-        std::vector<fx_pedal_settings>& m_fx_settings;
-        const std::unique_ptr<QXmlStreamReader> m_xml;
+        QXmlStreamReader xml;
 
-        void parseAmp();
-        void parseFX();
-        void parseFUSE();
+        amp_settings parseAmp();
+        std::vector<fx_pedal_settings> parseFX();
+        QString parseFUSE();
     };
 }

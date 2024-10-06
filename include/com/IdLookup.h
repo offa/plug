@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,16 @@ namespace plug
                 return amps::AMERICAN_90S;
             case 0x6d:
                 return amps::METAL_2000;
+            case 0xf1:
+                return amps::STUDIO_PREAMP;
+            case 0xf6:
+                return amps::FENDER_57_TWIN;
+            case 0xf9:
+                return amps::FENDER_60_THRIFT;
+            case 0xfc:
+                return amps::BRITISH_COLOUR;
+            case 0xff:
+                return amps::BRITISH_WATTS;
             default:
                 throw std::invalid_argument{"Invalid amp id: " + std::to_string(id)};
         }

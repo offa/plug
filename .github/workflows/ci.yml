@@ -8,10 +8,10 @@ jobs:
     strategy:
       matrix:
         compiler:
+          - gcc:14
           - gcc:13
-          - gcc:12
-          - clang:17
-          - clang:16
+          - clang:19
+          - clang:18
     container:
       image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"
     name: "${{ matrix.compiler }}"
@@ -30,13 +30,13 @@ jobs:
       - uses: DoozyX/clang-format-lint-action@master
         name: "Verify formatting"
         with:
-          clangFormatVersion: 15
+          clangFormatVersion: 17
 
   coverage:
     name: "coverage"
     runs-on: ubuntu-latest
     container:
-      image: "registry.gitlab.com/offa/docker-images/gcc:12"
+      image: "registry.gitlab.com/offa/docker-images/gcc:14"
     steps:
       - uses: actions/checkout@main
       - name: Setup

@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,12 @@
 
 #pragma once
 
-#include "com/Connection.h"
 #include <memory>
 
 namespace plug::com
 {
-    std::shared_ptr<Connection> createUsbConnection();
+    class Mustang;
+
+
+    std::unique_ptr<Mustang> connect();
 }

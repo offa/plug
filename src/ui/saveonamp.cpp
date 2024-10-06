@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2023  offa
+ * Copyright (C) 2017-2024  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include "ui/mainwindow.h"
 #include "ui_saveonamp.h"
 #include <QSettings>
+#include <algorithm>
 
 namespace plug
 {
@@ -62,14 +63,11 @@ namespace plug
 
     void SaveOnAmp::load_names(const std::vector<std::string>& names)
     {
-        for (std::size_t i = 0; i < 100; ++i)
-        {
-            if (names[i][0] == 0x00)
-            {
-                break;
-            }
-            ui->comboBox->addItem(QString("[%1] %2").arg(i + 1).arg(QString::fromStdString(names[i])));
-        }
+        std::size_t index{1};
+        std::for_each(names.cbegin(), names.cend(), [&index, this](const auto& name)
+                      {
+            ui->comboBox->addItem(QString("[%1] %2").arg(index).arg(QString::fromStdString(name)));
+            ++index; });
     }
 
     void SaveOnAmp::delete_items()

@@ -6,16 +6,16 @@ build:
   parallel:
     matrix:
       - COMPILER: gcc
-        VERSION: [13, 12]
+        VERSION: [14, 13]
       - COMPILER: clang
-        VERSION: [17, 16]
+        VERSION: [19, 18]
   image: registry.gitlab.com/offa/docker-images/${COMPILER}:${VERSION}
   script:
     - script/ci_setup.sh
     - script/ci_build.sh -asan -ubsan
 
 coverage:
-  image: registry.gitlab.com/offa/docker-images/gcc:12
+  image: registry.gitlab.com/offa/docker-images/gcc:14
   script:
     - script/ci_setup.sh
     - script/ci_build.sh -cov
@@ -24,7 +24,7 @@ coverage:
 formatting:
   image: docker:latest
   variables:
-    CLANGFORMAT_VERSION: 15
+    CLANGFORMAT_VERSION: 17
   services:
     - docker:dind
   before_script:

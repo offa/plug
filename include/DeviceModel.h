@@ -18,36 +18,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "com/UsbException.h"
-#include "com/LibUsbCompat.h"
-#include <libusb-1.0/libusb.h>
+#pragma once
 
-namespace plug::com::usb
+#include <string>
+
+namespace plug
 {
-    UsbException::UsbException(int errorCode)
-        : error_(errorCode),
-          name_(libusb_error_name(errorCode)),
-          message_(libusb::strerror(libusb::ErrorCodeAdapter{errorCode}))
+    class DeviceModel
     {
-    }
+    public:
+        enum class Category
+        {
+            MustangV1,
+            MustangV2,
+            Other
+        };
 
-    int UsbException::code() const noexcept
-    {
-        return error_;
-    }
+        DeviceModel(const std::string& name, Category category, std::size_t numberPresets)
+            : name_(name), category_(category), numberPresets_(numberPresets)
+        {
+        }
 
-    std::string UsbException::name() const
-    {
-        return name_;
-    }
+        std::string name() const
+        {
+            return name_;
+        }
+        Category category() const
+        {
+            return category_;
+        }
+        std::size_t numberOfPresets() const
+        {
+            return numberPresets_;
+        }
 
-    std::string UsbException::message() const
-    {
-        return message_;
-    }
-
-    const char* UsbException::what() const noexcept
-    {
-        return message_.c_str();
-    }
+    private:
+        std::string name_;
+        Category category_;
+        std::size_t numberPresets_;
+    };
 }
