@@ -27,3 +27,4 @@
 | Mustang LT 40S | 1ed8 | 0046 |      |
 | Rumble LT 25   | 1ed8 | 0038 |      |
 | Mustang GT 40  | 1ed8 | 0032 |      |
+| Mustang Micro  | 1ed8 | 0043 |      |
