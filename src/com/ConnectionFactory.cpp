@@ -83,11 +83,13 @@ namespace plug::com
                     return DeviceModel{"Mustang III/IV/V", DeviceModel::Category::MustangV2, 100};
 
 
+                case usbPID::mustangLT25:
+                    return DeviceModel{"Mustang LT 25", DeviceModel::Category::MustangV3_USB, 0};
                 case usbPID::mustangLT40S:
-                    return DeviceModel{"Mustang LT 40S", DeviceModel::Category::MustangV3_LT, 0};
-
-                case usbPID::mustangMicro:
-                    return DeviceModel{"Mustang Micro", DeviceModel::Category::MustangV3_Micro, 0};
+                    return DeviceModel{"Mustang LT 40S", DeviceModel::Category::MustangV3_USB, 0};
+                // TODO: add mustangLT50 support when PID is known
+                case usbPID::rumbleLT25:
+                    return DeviceModel{"Rumble LT 25", DeviceModel::Category::MustangV3_USB, 0};
 
                 default:
                     throw CommunicationException{"Unknown device pid: " + std::to_string(pid)};
@@ -96,7 +98,7 @@ namespace plug::com
 
     }
 
-    std::unique_ptr<Mustang> connect()
+    std::unique_ptr<Mustang> connect(bool v3usb_devices_enabled)
     {
         auto devices = usb::listDevices();
 
@@ -108,7 +110,12 @@ namespace plug::com
         {
             throw CommunicationException{"No device found"};
         }
-        return std::make_unique<Mustang>(getModel(itr->productId()), std::make_shared<UsbComm>(std::move(*itr)));
+        std::unique_ptr<Mustang> retval = std::make_unique<Mustang>(getModel(itr->productId()), std::make_shared<UsbComm>(std::move(*itr)));
+        if(v3usb_devices_enabled==false && retval->getDeviceModel().category()==DeviceModel::Category::MustangV3_USB)
+        {
+            // throw CommunicationException{"V3 USB device found but not enabled"};
+        }
+        return retval;
     }
 
 }

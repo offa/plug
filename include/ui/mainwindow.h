@@ -62,7 +62,6 @@ namespace plug
         ~MainWindow() override;
 
         void enable_v3usb_devices();
-    
 
         MainWindow& operator=(const MainWindow&) = delete;
 

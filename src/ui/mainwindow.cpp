@@ -243,7 +243,7 @@ namespace plug
 
     void MainWindow::enable_v3usb_devices()
     {
-        v3usb_devices_enabled = true;
+        this->v3usb_devices_enabled = true;
     }
 
     void MainWindow::about()
@@ -278,7 +278,7 @@ namespace plug
 
         try
         {
-            amp_ops = plug::com::connect();
+            amp_ops = plug::com::connect(v3usb_devices_enabled);
             const auto [signalChain, presets] = amp_ops->start_amp();
     
             name = QString::fromStdString(signalChain.name());
