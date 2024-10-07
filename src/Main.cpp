@@ -24,6 +24,8 @@
 #include "ui/mainwindow.h"
 #include "Version.h"
 #include <QApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 int main(int argc, char* argv[])
 {
@@ -32,9 +34,32 @@ int main(int argc, char* argv[])
     QCoreApplication::setApplicationName("Plug");
     QCoreApplication::setApplicationVersion(QString::fromStdString(plug::version()));
 
+    // following https://doc.qt.io/qt-6/qcommandlineparser.html
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Linux program to provide similar services to Fender Fuse/Fender Tone");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    QCommandLineOption enableV3UsbDevicesOption(
+        "enable-v3usb-devices", 
+        QCoreApplication::translate(
+            "main",
+            "Enable incomplete support for USB connected V3 devices controllable with Windows/macOS FenderTone applications "
+            "(Mustang LT25/LT40S/LT50, Rumble LT 25)."
+            // TODO: Mustang LT50 PID not integrated in DeviceModel.cpp yet
+        )
+    );
+    parser.addOption(enableV3UsbDevicesOption);
+    parser.process(app);
+
     plug::com::usb::Context context{};
 
     plug::MainWindow window;
+    
+    if(parser.isSet(enableV3UsbDevicesOption))
+    {
+        window.enable_v3usb_devices();
+    }
+
     window.show();
 
     return app.exec();

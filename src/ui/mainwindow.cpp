@@ -130,6 +130,8 @@ namespace plug
 
         connected = false;
 
+        v3usb_devices_enabled = false;
+
         // connect buttons to slots
         connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(showAndActivate()));
         connect(ui->EffectButton1, SIGNAL(clicked()), effectComponents[0], SLOT(showAndActivate()));
@@ -239,6 +241,11 @@ namespace plug
         settings.setValue("Windows/mainWindowState", saveState());
     }
 
+    void MainWindow::enable_v3usb_devices()
+    {
+        v3usb_devices_enabled = true;
+    }
+
     void MainWindow::about()
     {
         const QString title{tr("About %1").arg(QCoreApplication::applicationName())};
@@ -273,16 +280,22 @@ namespace plug
         {
             amp_ops = plug::com::connect();
             const auto [signalChain, presets] = amp_ops->start_amp();
+    
             name = QString::fromStdString(signalChain.name());
             amplifier_set = signalChain.amp();
             effects_set = signalChain.effects();
             presetNames = presets;
         }
+        catch(std::invalid_argument& ex)
+        {
+            qWarning() << "WARNING: " << ex.what();
+            ui->statusBar->showMessage(QString(tr("Warning: %1")).arg(ex.what()), 5000);
+        }
         catch (const std::exception& ex)
         {
             qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
-            return;
+            //return;
         }
 
         load->load_names(presetNames);
