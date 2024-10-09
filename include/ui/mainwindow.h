@@ -61,7 +61,7 @@ namespace plug
         MainWindow(const MainWindow&) = delete;
         ~MainWindow() override;
 
-        void enable_v3usb_devices();
+        static void enable_v3usb_devices();
 
         MainWindow& operator=(const MainWindow&) = delete;
 
@@ -98,7 +98,7 @@ namespace plug
         SaveToFile* saver;
         QuickPresets* quickpres;
 
-        bool v3usb_devices_enabled;
+        static bool v3usb_devices_enabled;
 
 
     private slots:

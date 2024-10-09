@@ -53,12 +53,12 @@ int main(int argc, char* argv[])
 
     plug::com::usb::Context context{};
 
-    plug::MainWindow window;
-    
     if(parser.isSet(enableV3UsbDevicesOption))
     {
-        window.enable_v3usb_devices();
+        plug::MainWindow::enable_v3usb_devices();
     }
+    plug::MainWindow window;
+    
 
     window.show();
 

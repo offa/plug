@@ -75,6 +75,7 @@ namespace plug
 
     }
 
+    bool MainWindow::v3usb_devices_enabled = false;
 
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
@@ -129,8 +130,6 @@ namespace plug
         quickpres = new QuickPresets(this);
 
         connected = false;
-
-        v3usb_devices_enabled = false;
 
         // connect buttons to slots
         connect(ui->Amplifier, SIGNAL(clicked()), amp, SLOT(showAndActivate()));
@@ -243,7 +242,7 @@ namespace plug
 
     void MainWindow::enable_v3usb_devices()
     {
-        this->v3usb_devices_enabled = true;
+        v3usb_devices_enabled = true;
     }
 
     void MainWindow::about()
@@ -286,16 +285,16 @@ namespace plug
             effects_set = signalChain.effects();
             presetNames = presets;
         }
+        catch(plug::com::CommunicationException& ex)
+        {
+            qWarning() << "ERROR: " << ex.what();
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 0);
+            return;
+        }
         catch(std::invalid_argument& ex)
         {
             qWarning() << "WARNING: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Warning: %1")).arg(ex.what()), 5000);
-        }
-        catch (const std::exception& ex)
-        {
-            qWarning() << "ERROR: " << ex.what();
-            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
-            //return;
         }
 
         load->load_names(presetNames);

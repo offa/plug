@@ -24,12 +24,13 @@
 #include "com/CommunicationException.h"
 #include "com/Packet.h"
 #include <algorithm>
+#include <iostream>
 
 namespace plug::com
 {
-    SignalChain decode_data(const std::array<PacketRawType, 7>& data, DeviceModel::Category modelCategory)
+    SignalChain decode_data(const std::array<PacketRawType, 7>& data, DeviceModel model)
     {
-        switch(modelCategory)
+        switch(model.category())
         {
             case DeviceModel::Category::MustangV1:
             case DeviceModel::Category::MustangV2:
@@ -44,7 +45,7 @@ namespace plug::com
 
             case DeviceModel::Category::MustangV3_USB:
                 {
-                    const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
+                    const std::string name("dummy name"); // decodeNameFromData(fromRawData<NamePayload>(data[0]));
                     const amp_settings amp{};            
                     const std::vector<fx_pedal_settings> effects;
                     return SignalChain{name, amp, effects};
@@ -150,7 +151,7 @@ namespace plug::com
 
     SignalChain Mustang::load_memory_bank(std::uint8_t slot)
     {
-        return decode_data(loadBankData(*conn, slot ), model.category());
+        return decode_data(loadBankData(*conn, slot ), model);
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
@@ -197,10 +198,12 @@ namespace plug::com
             return packet; });
         auto presetNames = decodePresetListFromData(presetListData);
 
+        std::cout << "Packet count: " << recieved_data.size() << std::endl;
+
         std::array<PacketRawType, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), numPresetPackets), std::next(recieved_data.cbegin(), numPresetPackets + 7), presetData.begin());
 
-        return {decode_data(presetData, model.category()), presetNames};
+        return {decode_data(presetData, model), presetNames};
     }
 
     void Mustang::initializeAmp()
