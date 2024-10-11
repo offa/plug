@@ -132,7 +132,6 @@ namespace plug::com
         }
     }
 
-
     std::string decodeNameFromData(const Packet<NamePayload>& packet)
     {
         return packet.getPayload().getName();

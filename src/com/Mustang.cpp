@@ -45,7 +45,7 @@ namespace plug::com
 
             case DeviceModel::Category::MustangV3_USB:
                 {
-                    const std::string name("dummy name"); // decodeNameFromData(fromRawData<NamePayload>(data[0]));
+                    const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
                     const amp_settings amp{};            
                     const std::vector<fx_pedal_settings> effects;
                     return SignalChain{name, amp, effects};
