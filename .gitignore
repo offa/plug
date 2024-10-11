@@ -2,3 +2,10 @@ build/*
 CMakeUserPresets.json
 cppcheck-*
 *.cppcheck
+
+# Tim Littlefair, October 2024
+# When I created a kdevelop project, kdevelop created a directory 
+# .kdev4 which contains a single file .kdev4/offa-plug.kdev4. 
+# As this file contains the full path my local build directory
+# I'm guessing that it should not be committed to git.
+.kdev4
