@@ -18,11 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "com/UsbDevice.h"
 #include "com/UsbException.h"
 #include <array>
 #include <chrono>
 #include <libusb-1.0/libusb.h>
+
+#include <iostream>
 
 namespace plug::com::usb
 {
@@ -120,11 +123,18 @@ namespace plug::com::usb
         std::vector<std::uint8_t> buffer(dataSize);
         int transfered{0};
 
-        if (const auto result = libusb_interrupt_transfer(handle_.get(), endpoint, buffer.data(), dataSize, &transfered, usbTimeout.count()); (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
+        const auto result = libusb_interrupt_transfer(handle_.get(), endpoint, buffer.data(), dataSize, &transfered, usbTimeout.count());
+#ifndef NDEBUG
+        std::cout << "Device::receive libusb_interrupt_transfer returned "
+                << result << ", " << transfered << " bytes received" << std::endl
+        ;
+#endif
+        if ( (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
         {
             throw UsbException{result};
         }
         buffer.resize(transfered);
+
         return buffer;
     }
 

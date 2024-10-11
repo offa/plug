@@ -19,12 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "com/Mustang.h"
 #include "com/PacketSerializer.h"
 #include "com/CommunicationException.h"
 #include "com/Packet.h"
 #include <algorithm>
-#include <iostream>
 
 namespace plug::com
 {
@@ -59,7 +59,8 @@ namespace plug::com
 
     std::vector<std::uint8_t> receivePacket(Connection& conn)
     {
-        return conn.receive(packetRawTypeSize);
+        std::vector<std::uint8_t> retval = conn.receive(packetRawTypeSize);
+        return retval;
     }
 
 
@@ -198,8 +199,6 @@ namespace plug::com
             return packet; });
         auto presetNames = decodePresetListFromData(presetListData);
 
-        std::cout << "Packet count: " << recieved_data.size() << std::endl;
-
         std::array<PacketRawType, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), numPresetPackets), std::next(recieved_data.cbegin(), numPresetPackets + 7), presetData.begin());
 
@@ -208,8 +207,18 @@ namespace plug::com
 
     void Mustang::initializeAmp()
     {
-        const auto packets = serializeInitCommand();
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
-                      { sendCommand(*conn, p.getBytes()); });
+        if(model.category()==DeviceModel::Category::MustangV3_USB)
+        {
+            const auto packets = serializeInitCommand_V3_USB();
+            std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
+                        { sendCommand(*conn, p.getBytes()); });
+
+        }
+        else
+        {
+            const auto packets = serializeInitCommand();
+            std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
+                        { sendCommand(*conn, p.getBytes()); });
+        }
     }
 }

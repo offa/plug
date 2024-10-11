@@ -680,4 +680,26 @@ namespace plug::com
         header1.setDSP(DSP::none);
         return {{Packet<EmptyPayload>{header0, EmptyPayload{}}, Packet<EmptyPayload>{header1, EmptyPayload{}}}};
     }
+
+    std::array<Packet<EmptyPayload>, 3> serializeInitCommand_V3_USB()
+    {
+        Header header0{};
+        std::array<uint8_t,16> header0Bytes = {0x35, 0x09, 0x08, 0x00, 0x8a, 0x07, 0x04, 0x08, 0x00, 0x10,};
+        header0.fromBytes(header0Bytes);
+
+        Header header1{};
+        std::array<uint8_t,16> header1Bytes = {0x35, 0x07, 0x08, 0x00, 0xb2, 0x06, 0x02, 0x08, 0x01, 0x00, 0x10,};
+        header1.fromBytes(header1Bytes);
+
+        Header header2{};
+        std::array<uint8_t,16> header2Bytes = {0x35, 0x07, 0x08, 0x00, 0xca, 0x06, 0x02, 0x08, 0x01, 0x01, 0x00, 0x10,};
+        header2.fromBytes(header2Bytes);
+
+        return {{
+            Packet<EmptyPayload>{header0, EmptyPayload{}},
+            Packet<EmptyPayload>{header1, EmptyPayload{}},
+            Packet<EmptyPayload>{header2, EmptyPayload{}},
+        }};
+    }
+
 }

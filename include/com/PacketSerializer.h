@@ -59,5 +59,5 @@ namespace plug::com
     Packet<EmptyPayload> serializeApplyCommand(fx_pedal_settings effect);
 
     std::array<Packet<EmptyPayload>, 2> serializeInitCommand();
-
+    std::array<Packet<EmptyPayload>, 3> serializeInitCommand_V3_USB();
 }

@@ -67,6 +67,7 @@ namespace plug::com::usb
 
         std::size_t write(std::uint8_t endpoint, std::uint8_t* data, std::size_t dataSize);
         std::vector<std::uint8_t> receive(std::uint8_t endpoint, std::size_t dataSize);
+        std::vector<std::uint8_t> receive_more(std::uint8_t endpoint, std::size_t dataSize);
 
         Device& operator=(Device&&) = default;
 
