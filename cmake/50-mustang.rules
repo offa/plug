@@ -16,4 +16,9 @@ ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0015", ENV{ID_AUDIO_MODELING_AMP}="1
 ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0016", ENV{ID_AUDIO_MODELING_AMP}="1"
 ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0017", ENV{ID_AUDIO_MODELING_AMP}="1"
 
+# Mustang/Rumble LT series (experimental, even less warranty than usual)
+ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0037", ENV{ID_AUDIO_MODELING_AMP}="1"
+ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0038", ENV{ID_AUDIO_MODELING_AMP}="1"
+ATTRS{idVendor}=="1ed8", ATTRS{idProduct}=="0046", ENV{ID_AUDIO_MODELING_AMP}="1"
+
 LABEL="mustang_plug_rules_end"

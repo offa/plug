@@ -27,5 +27,5 @@ namespace plug::com
     class Mustang;
 
 
-    std::unique_ptr<Mustang> connect();
+    std::unique_ptr<Mustang> connect(bool v3usb_devices_enabled);
 }

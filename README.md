@@ -21,6 +21,12 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 - [**Qt6**](https://www.qt.io/)
 - [**libusb-1.0**](http://libusb.info/)
 
+For developers on Ubuntu or other Debian-based distributions, appropriate versions of several of the required packages are unlikely to be installed by default.
+As of Ubuntu 24.04 Noble Numbat, the following command is recommended to find the packages required:
+'''
+sudo apt-get install -y cmake qtcreator qtbase6-dev qt6-qmake libusb-1.0-0-dev \
+   cmake-googletest googletest libgtest-dev google-mock libgmock-dev
+'''
 
 ## Building
 

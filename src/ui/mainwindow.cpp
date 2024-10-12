@@ -75,6 +75,7 @@ namespace plug
 
     }
 
+    bool MainWindow::v3usb_devices_enabled = false;
 
     MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
@@ -239,6 +240,11 @@ namespace plug
         settings.setValue("Windows/mainWindowState", saveState());
     }
 
+    void MainWindow::enable_v3usb_devices()
+    {
+        v3usb_devices_enabled = true;
+    }
+
     void MainWindow::about()
     {
         const QString title{tr("About %1").arg(QCoreApplication::applicationName())};
@@ -271,18 +277,24 @@ namespace plug
 
         try
         {
-            amp_ops = plug::com::connect();
+            amp_ops = plug::com::connect(v3usb_devices_enabled);
             const auto [signalChain, presets] = amp_ops->start_amp();
+
             name = QString::fromStdString(signalChain.name());
             amplifier_set = signalChain.amp();
             effects_set = signalChain.effects();
             presetNames = presets;
         }
-        catch (const std::exception& ex)
+        catch (plug::com::CommunicationException& ex)
         {
             qWarning() << "ERROR: " << ex.what();
-            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 5000);
+            ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 0);
             return;
+        }
+        catch (std::invalid_argument& ex)
+        {
+            qWarning() << "WARNING: " << ex.what();
+            ui->statusBar->showMessage(QString(tr("Warning: %1")).arg(ex.what()), 5000);
         }
 
         load->load_names(presetNames);

@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "com/Mustang.h"
 #include "com/PacketSerializer.h"
 #include "com/CommunicationException.h"
@@ -27,19 +28,39 @@
 
 namespace plug::com
 {
-    SignalChain decode_data(const std::array<PacketRawType, 7>& data)
+    SignalChain decode_data(const std::array<PacketRawType, 7>& data, DeviceModel model)
     {
-        const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
-        const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
-        const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
-                                                     fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
+        switch (model.category())
+        {
+            case DeviceModel::Category::MustangV1:
+            case DeviceModel::Category::MustangV2:
+            {
+                const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
+                const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
+                const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
+                                                             fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
 
-        return SignalChain{name, amp, effects};
+                return SignalChain{name, amp, effects};
+            }
+
+            case DeviceModel::Category::MustangV3_USB:
+            {
+                const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
+                const amp_settings amp{};
+                const std::vector<fx_pedal_settings> effects;
+                return SignalChain{name, amp, effects};
+            }
+
+            case DeviceModel::Category::MustangV3_BT:
+            default:
+                throw new CommunicationException("Amplifier does not belong to a supported category");
+        }
     }
 
     std::vector<std::uint8_t> receivePacket(Connection& conn)
     {
-        return conn.receive(packetRawTypeSize);
+        std::vector<std::uint8_t> retval = conn.receive(packetRawTypeSize);
+        return retval;
     }
 
 
@@ -131,7 +152,7 @@ namespace plug::com
 
     SignalChain Mustang::load_memory_bank(std::uint8_t slot)
     {
-        return decode_data(loadBankData(*conn, slot));
+        return decode_data(loadBankData(*conn, slot), model);
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
@@ -181,13 +202,22 @@ namespace plug::com
         std::array<PacketRawType, 7> presetData{{}};
         std::copy(std::next(recieved_data.cbegin(), numPresetPackets), std::next(recieved_data.cbegin(), numPresetPackets + 7), presetData.begin());
 
-        return {decode_data(presetData), presetNames};
+        return {decode_data(presetData, model), presetNames};
     }
 
     void Mustang::initializeAmp()
     {
-        const auto packets = serializeInitCommand();
-        std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
-                      { sendCommand(*conn, p.getBytes()); });
+        if (model.category() == DeviceModel::Category::MustangV3_USB)
+        {
+            const auto packets = serializeInitCommand_V3_USB();
+            std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
+                          { sendCommand(*conn, p.getBytes()); });
+        }
+        else
+        {
+            const auto packets = serializeInitCommand();
+            std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
+                          { sendCommand(*conn, p.getBytes()); });
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace plug::test
     {
         EXPECT_CALL(*contextMock, listDevices).WillOnce(Return(ByMove(std::vector<usb::Device>{})));
 
-        EXPECT_THROW(connect(), CommunicationException);
+        EXPECT_THROW(connect(false), CommunicationException);
     }
 
     TEST_F(ConnectionFactoryTest, connectReturnsFirstDeviceFound)
@@ -74,8 +74,9 @@ namespace plug::test
             .WillOnce(Return(0xff04))
             .WillRepeatedly(Return(0x0005));
 
-        auto device = connect();
+        auto device = connect(false);
         EXPECT_THAT(device, NotNull());
     }
 
+    // TODO Add tests to check whether V3USB filtering works as expected
 }

@@ -13,6 +13,7 @@ add_subdirectory(mocks)
 
 add_executable(MustangTest
                 MustangTest.cpp
+                MustangV3UsbTest.cpp
                 PacketSerializerTest.cpp
                 PacketTest.cpp
                 FxSlotTest.cpp
