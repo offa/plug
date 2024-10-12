@@ -42,6 +42,7 @@ namespace plug::test
     using namespace plug::com;
     using namespace testing;
 
+#if MUSTANG_V3USB_TESTS_IMPLEMENTED
 
     class MustangV3UsbTest : public testing::Test
     {
@@ -651,6 +652,8 @@ namespace plug::test
         EXPECT_THAT(model.category(), Eq(DeviceModel::Category::MustangV1));
         EXPECT_THAT(model.numberOfPresets(), Eq(100));
     }
+
+#endif // MUSTANG_V3_USB_TESTS_IMPLEMENTED
 
 #endif // MUSTANG_V3_USB_TESTS_IMPLEMENTED
 
