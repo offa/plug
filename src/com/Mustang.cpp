@@ -38,7 +38,7 @@ namespace plug::com
                 const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
                 const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
                 const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
-                                                            fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
+                                                             fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
 
                 return SignalChain{name, amp, effects};
             }
@@ -207,7 +207,7 @@ namespace plug::com
 
     void Mustang::initializeAmp()
     {
-        if(model.category() == DeviceModel::Category::MustangV3_USB)
+        if (model.category() == DeviceModel::Category::MustangV3_USB)
         {
             const auto packets = serializeInitCommand_V3_USB();
             std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)

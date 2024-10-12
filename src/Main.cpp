@@ -46,8 +46,7 @@ int main(int argc, char* argv[])
             "Enable incomplete support for USB connected V3 devices controllable with Windows/macOS FenderTone applications "
             "(Mustang LT25/LT40S/LT50, Rumble LT 25)."
             // TODO: Mustang LT50 PID not integrated in DeviceModel.cpp yet
-        )
-    );
+            ));
     parser.addOption(enableV3UsbDevicesOption);
     parser.process(app);
 
