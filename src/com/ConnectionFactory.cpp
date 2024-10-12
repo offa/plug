@@ -103,18 +103,18 @@ namespace plug::com
                 case usbPID::rumbleLT25:
                     return DeviceModel{"Rumble LT 25", DeviceModel::Category::MustangV3_USB, 50};
 
-                // Testing to date suggest that the Mustang Micro does not respond
-                // to any of the USB commands sent by the Fender Tone USB version, which is disappointing
-                // but not surprising given that Fender Tone doesn't interact with this device.
-                // case usbPID::mustangMicro:
-                //     return DeviceModel{"Mustang Micro", DeviceModel::Category::MustangV3_USB, 0};
+                    // Testing to date suggest that the Mustang Micro does not respond
+                    // to any of the USB commands sent by the Fender Tone USB version, which is disappointing
+                    // but not surprising given that Fender Tone doesn't interact with this device.
+                    // case usbPID::mustangMicro:
+                    //     return DeviceModel{"Mustang Micro", DeviceModel::Category::MustangV3_USB, 0};
 
-                // The premium GT and GTX series, released from around 2017 are designed to be
-                // controlled over Bluetooth by iOS/Android mobile applications rather than
-                // over USB by Windows/macOS applications.
-                // It is unlikely that offa-plug will ever become interoperable with these, but the
-                // enumeration value DeviceModel::Category::MustangV3_BT has been reserved for use
-                // in the event that this should ever happen.
+                    // The premium GT and GTX series, released from around 2017 are designed to be
+                    // controlled over Bluetooth by iOS/Android mobile applications rather than
+                    // over USB by Windows/macOS applications.
+                    // It is unlikely that offa-plug will ever become interoperable with these, but the
+                    // enumeration value DeviceModel::Category::MustangV3_BT has been reserved for use
+                    // in the event that this should ever happen.
 
                 default:
                     throw CommunicationException{"Unknown device pid: " + std::to_string(pid)};
@@ -136,10 +136,10 @@ namespace plug::com
             throw CommunicationException{"No device found"};
         }
         std::unique_ptr<Mustang> retval = std::make_unique<Mustang>(getModel(itr->productId()), std::make_shared<UsbComm>(std::move(*itr)));
-        if(v3usb_devices_enabled==false && retval->getDeviceModel().category()==DeviceModel::Category::MustangV3_USB)
+        if (v3usb_devices_enabled == false && retval->getDeviceModel().category() == DeviceModel::Category::MustangV3_USB)
         {
             throw CommunicationException{"V3 USB device found but not enabled"};
-        } 
+        }
         return retval;
     }
 
