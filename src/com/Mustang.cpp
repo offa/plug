@@ -30,26 +30,26 @@ namespace plug::com
 {
     SignalChain decode_data(const std::array<PacketRawType, 7>& data, DeviceModel model)
     {
-        switch(model.category())
+        switch (model.category())
         {
             case DeviceModel::Category::MustangV1:
             case DeviceModel::Category::MustangV2:
-                {
-                    const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
-                    const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
-                    const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
-                                                                fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
+            {
+                const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
+                const auto amp = decodeAmpFromData(fromRawData<AmpPayload>(data[1]), fromRawData<AmpPayload>(data[6]));
+                const auto effects = decodeEffectsFromData({{fromRawData<EffectPayload>(data[2]), fromRawData<EffectPayload>(data[3]),
+                                                            fromRawData<EffectPayload>(data[4]), fromRawData<EffectPayload>(data[5])}});
 
-                    return SignalChain{name, amp, effects};
-                }
+                return SignalChain{name, amp, effects};
+            }
 
             case DeviceModel::Category::MustangV3_USB:
-                {
-                    const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
-                    const amp_settings amp{};            
-                    const std::vector<fx_pedal_settings> effects;
-                    return SignalChain{name, amp, effects};
-                }
+            {
+                const auto name = decodeNameFromData(fromRawData<NamePayload>(data[0]));
+                const amp_settings amp{};
+                const std::vector<fx_pedal_settings> effects;
+                return SignalChain{name, amp, effects};
+            }
 
             case DeviceModel::Category::MustangV3_BT:
             default:
@@ -152,7 +152,7 @@ namespace plug::com
 
     SignalChain Mustang::load_memory_bank(std::uint8_t slot)
     {
-        return decode_data(loadBankData(*conn, slot ), model);
+        return decode_data(loadBankData(*conn, slot), model);
     }
 
     void Mustang::save_effects(std::uint8_t slot, std::string_view name, const std::vector<fx_pedal_settings>& effects)
@@ -207,7 +207,7 @@ namespace plug::com
 
     void Mustang::initializeAmp()
     {
-        if(model.category()==DeviceModel::Category::MustangV3_USB)
+        if(model.category() == DeviceModel::Category::MustangV3_USB)
         {
             const auto packets = serializeInitCommand_V3_USB();
             std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)

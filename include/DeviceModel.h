@@ -33,14 +33,14 @@ namespace plug
             MustangV2,
 
             // Mustang LT 25, LT 40S, LT 50, Rumble LT 25
-            // All of these are interoperable over USB with 
-            //Windows/macOS Fender Tone
+            // All of these are interoperable over USB with
+            // Windows/macOS Fender Tone
             MustangV3_USB,
 
-            // Mustang GTX series, also Mustang Micro Plus
+            // Mustang GT/GTX series, also Mustang Micro Plus
             // (all theoretical - no test devices available)
-            // According to Fender marketing material, these are interoperable 
-            // over Bluetooth with iOS/Android Fender TONE 4.0 app
+            // According to Fender marketing material, these are interoperable
+            // over Bluetooth with iOS/Android Fender TONE 4.0 app.
             // No support yet, defining the symbol for future use
             MustangV3_BT,
 

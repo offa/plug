@@ -30,7 +30,7 @@
 
 
 // This test class is just a placeholder for the moment, so that someone
-// can come back and establish a test to cover the logic specific to the 
+// can come back and establish a test to cover the logic specific to the
 // MUSTANG_V3_USB category.
 // When this happens the #define in the next line can be updated to value 1
 // or the #if blocks referencing it can be made unconditional
@@ -165,7 +165,7 @@ namespace plug::test
         EXPECT_THAT(signalChain.name(), StrEq(actualName));
 
         static_cast<void>(presets);
-#endif        
+#endif
     }
 
 #if MUSTANG_V3USB_TESTS_IMPLEMENTED

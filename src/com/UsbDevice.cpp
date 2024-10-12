@@ -126,10 +126,9 @@ namespace plug::com::usb
         const auto result = libusb_interrupt_transfer(handle_.get(), endpoint, buffer.data(), dataSize, &transfered, usbTimeout.count());
 #ifndef NDEBUG
         std::cout << "Device::receive libusb_interrupt_transfer returned "
-                << result << ", " << transfered << " bytes received" << std::endl
-        ;
+                  << result << ", " << transfered << " bytes received" << std::endl;
 #endif
-        if ( (result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
+        if ((result != LIBUSB_SUCCESS) && (result != LIBUSB_ERROR_TIMEOUT))
         {
             throw UsbException{result};
         }

@@ -285,13 +285,13 @@ namespace plug
             effects_set = signalChain.effects();
             presetNames = presets;
         }
-        catch(plug::com::CommunicationException& ex)
+        catch (plug::com::CommunicationException& ex)
         {
             qWarning() << "ERROR: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Error: %1")).arg(ex.what()), 0);
             return;
         }
-        catch(std::invalid_argument& ex)
+        catch (std::invalid_argument& ex)
         {
             qWarning() << "WARNING: " << ex.what();
             ui->statusBar->showMessage(QString(tr("Warning: %1")).arg(ex.what()), 5000);
