@@ -29,17 +29,19 @@
 static void debug_dump(const char* label, std::vector<std::uint8_t> bytes, int *pRetval=NULL) {
 #ifndef NDEBUG
     std::cout << label << ": {";
+    std::cout << std::setfill('0') << std::resetiosflags(std::ios::dec) << std::setiosflags(std::ios::hex);
     for(
         std::vector<std::uint8_t>::const_iterator pByte = bytes.begin();
         pByte != bytes.end();
         ++pByte
     ) {
-            std::cout << " " << std::setw(2) << std::setfill('0') << std::setiosflags(std::ios::hex) << static_cast<unsigned int>(*pByte);
+            std::cout << " " << std::setw(2) << static_cast<unsigned int>(*pByte);
     }
+    std::cout << std::setw(0) << std::setfill(' ') << std::resetiosflags(std::ios::hex) << std::setiosflags(std::ios::dec);
     std::cout << " }";
     if(pRetval != NULL)
     {
-        std::cout << "returning " << pRetval;
+        std::cout << "returning " << *pRetval;
     }
     std::cout << std::endl;
 #endif
