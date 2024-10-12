@@ -212,7 +212,6 @@ namespace plug::com
             const auto packets = serializeInitCommand_V3_USB();
             std::for_each(packets.cbegin(), packets.cend(), [this](const auto& p)
                           { sendCommand(*conn, p.getBytes()); });
-
         }
         else
         {

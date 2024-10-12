@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
         plug::MainWindow::enable_v3usb_devices();
     }
     plug::MainWindow window;
-    
+
 
     window.show();
 

@@ -56,7 +56,7 @@ namespace plug::com
             usbPID::mustangFloor,
             usbPID::mustangI_II_v2,
             usbPID::mustangIII_IV_V_v2,
-            
+
             usbPID::mustangMicro,
             usbPID::mustangLT25,
             usbPID::rumbleLT25,
@@ -98,7 +98,7 @@ namespace plug::com
                     return DeviceModel{"Mustang LT 40S", DeviceModel::Category::MustangV3_USB, 50};
 
                 // TODO: add mustangLT50 support when PID is known
-                
+
                 // The Rumble LT25 is believed to be similar protocol wise to the Mustang LT series
                 case usbPID::rumbleLT25:
                     return DeviceModel{"Rumble LT 25", DeviceModel::Category::MustangV3_USB, 50};
