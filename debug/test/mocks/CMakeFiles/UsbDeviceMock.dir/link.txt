@@ -1,0 +1,2 @@
+/usr/bin/ar qc libUsbDeviceMock.a CMakeFiles/UsbDeviceMock.dir/UsbDeviceMock.cpp.o
+/usr/bin/ranlib libUsbDeviceMock.a

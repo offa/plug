@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/UsbTest.dir/UsbTest.cpp.o -o UsbTest  ../src/com/libplug-communication-usb.a mocks/libLibUsbMocks.a /usr/lib/x86_64-linux-gnu/libusb-1.0.so /usr/lib/x86_64-linux-gnu/libgmock_main.a /usr/lib/x86_64-linux-gnu/libgmock.a /usr/lib/x86_64-linux-gnu/libgtest.a 

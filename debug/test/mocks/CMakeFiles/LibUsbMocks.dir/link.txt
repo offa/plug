@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLibUsbMocks.a CMakeFiles/LibUsbMocks.dir/LibUsbMocks.cpp.o
+/usr/bin/ranlib libLibUsbMocks.a
