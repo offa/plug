@@ -26,20 +26,21 @@
 #include <iostream>
 #include <iomanip>
 
-static void debug_dump(const char* label, std::vector<std::uint8_t> bytes, int *pRetval=NULL) {
+static void debug_dump(const char* label, std::vector<std::uint8_t> bytes, int *pRetval = NULL)
+{
 #ifndef NDEBUG
     std::cout << label << ": {";
     std::cout << std::setfill('0') << std::resetiosflags(std::ios::dec) << std::setiosflags(std::ios::hex);
-    for(
+    for (
         std::vector<std::uint8_t>::const_iterator pByte = bytes.begin();
         pByte != bytes.end();
-        ++pByte
-    ) {
-            std::cout << " " << std::setw(2) << static_cast<unsigned int>(*pByte);
+        ++pByte)
+    {
+        std::cout << " " << std::setw(2) << static_cast<unsigned int>(*pByte);
     }
     std::cout << std::setw(0) << std::setfill(' ') << std::resetiosflags(std::ios::hex) << std::setiosflags(std::ios::dec);
     std::cout << " }";
-    if(pRetval != NULL)
+    if (pRetval != NULL)
     {
         std::cout << "returning " << *pRetval;
     }
@@ -78,9 +79,9 @@ namespace plug::com
 
     std::vector<std::uint8_t> UsbComm::receive(std::size_t recvSize)
     {
-        auto retval =  device_.receive(endpointRecv, recvSize);
+        auto retval = device_.receive(endpointRecv, recvSize);
 
-        debug_dump("UsbComm::receive",retval);
+        debug_dump("UsbComm::receive", retval);
 
         return retval;
     }
@@ -94,7 +95,7 @@ namespace plug::com
     {
         auto retval = device_.write(endpointSend, data, size);
 
-        debug_dump("UsbComm::sendImpl",std::vector<uint8_t>(data,data+size));
+        debug_dump("UsbComm::sendImpl", std::vector<uint8_t>(data, data + size));
 
         return retval;
     }
