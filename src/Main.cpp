@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     parser.addHelpOption();
     parser.addVersionOption();
     QCommandLineOption enableV3UsbDevicesOption(
-        "enable-v3usb-devices", 
+        "enable-v3usb-devices",
         QCoreApplication::translate(
             "main",
             "Enable incomplete support for USB connected V3 devices controllable with Windows/macOS FenderTone applications "
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
     plug::com::usb::Context context{};
 
-    if(parser.isSet(enableV3UsbDevicesOption))
+    if (parser.isSet(enableV3UsbDevicesOption))
     {
         plug::MainWindow::enable_v3usb_devices();
     }

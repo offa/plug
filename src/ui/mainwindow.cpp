@@ -279,7 +279,7 @@ namespace plug
         {
             amp_ops = plug::com::connect(v3usb_devices_enabled);
             const auto [signalChain, presets] = amp_ops->start_amp();
-    
+
             name = QString::fromStdString(signalChain.name());
             amplifier_set = signalChain.amp();
             effects_set = signalChain.effects();

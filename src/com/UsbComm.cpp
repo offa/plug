@@ -26,7 +26,7 @@
 #include <iostream>
 #include <iomanip>
 
-static void debug_dump(const char* label, std::vector<std::uint8_t> bytes, int *pRetval = NULL)
+static void debug_dump(const char* label, std::vector<std::uint8_t> bytes, int* pRetval = NULL)
 {
 #ifndef NDEBUG
     std::cout << label << ": {";
