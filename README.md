@@ -21,6 +21,8 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 - [**Qt6**](https://www.qt.io/)
 - [**libusb-1.0**](http://libusb.info/)
 
+See [Setup](./doc/Setup.md) for installation instructions.
+
 
 ## Building
 
