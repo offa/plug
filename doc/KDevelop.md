@@ -80,6 +80,7 @@ of 2FA, passcode innovations on GitHub itself.
 
 KDevelop can also check projects out using non-GitHub git and HTTPS URLs, but 
 does not seem to be able to handle git-over-ssh URLs 
-(e.g. like (git@github.com:offa/plug.git)) so it doesn't play well if you want 
-to push your changes using SSH private key authentication.
+(i.e. ones which start with git@github.com, like [git@github.com:offa/plug.git]) 
+so it doesn't play well if you want to push your changes using SSH private 
+key authentication.
 
