@@ -23,6 +23,10 @@ Please see [Contributing](CONTRIBUTING.md) for how to contribute to this project
 
 See [Setup](./doc/Setup.md) for installation instructions.
 
+If you would like to use an IDE to build and debug plug and are on a 
+platform where KDevelop is available, consider using this, there are some
+instructions [here](./doc/KDevelop.md).
+
 
 ## Building
 
