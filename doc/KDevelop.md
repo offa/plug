@@ -4,18 +4,22 @@ On machines with the KDevelop IDE is installed, that IDE can be used
 to build and debug plug.
 
 > [!WARNING]
-> The instructions below only work if the checkout directory is called 'plug'
+> The instructions below have only been confirmed to work if the 
+> checkout directory is called 'plug'
 >
 > The git checkout of plug contains a single file in the top level directory
 > called plug.kdev4 which is a KDevelop project file.  The instructions below 
-> will only work if the name of the directory which contains this file is 
-> 'plug' (which is the default name you would get from a simple clone
-> of offa's project repository.
+> have been tested in a directory checked out using a simple git clone 
+> operation from a fork of offa's repository.  As the checkout URL
+> (whether it is git or HTTPS style) ends in plug.git, the checkout directory
+> takes the default name plug.
 >
 > If you have renamed the directory (for example if you want to have 
-> side-by-side checkouts of multiple branches or upstream and a fork),
-> the instructions should work if both the name and the content of plug.kdev4
-> are updated to replace the string 'plug' with the name of your directory.
+> side-by-side checkouts of multiple branches or upstream and a fork, or 
+> a fork with a repository name other than 'plug'), it should be possible
+> to get the instructions to work if both the filename and the content of 
+> plug.kdev4 are updated to replace the string 'plug' with the name of your 
+> directory.
 >
 > Of course, if you do this it is probably better not to include your 
 > renamed .kdev4 file in a pull request...
