@@ -3,6 +3,27 @@
 On machines with the KDevelop IDE is installed, that IDE can be used
 to build and debug plug.
 
+> [!WARNING]
+> The instructions below only work if the checkout directory is called 'plug'
+>
+> The git checkout of plug contains a single file in the top level directory
+> called plug.kdev4 which is a KDevelop project file.  The instructions below 
+> will only work if the name of the directory which contains this file is 
+> 'plug' (which is the default name you would get from a simple clone
+> of offa's project repository.
+>
+> If you have renamed the directory (for example if you want to have 
+> side-by-side checkouts of multiple branches or upstream and a fork),
+> the instructions should work if both the name and the content of plug.kdev4
+> are updated to replace the string 'plug' with the name of your directory.
+>
+> Of course, if you do this it is probably better not to include your 
+> renamed .kdev4 file in a pull request...
+>
+> Warning over - now back to the instructions...
+>
+
+
 One way to get this working is to check the project out manually, then 
 use the KDevelop menu option 'Project'/'Open / Import Project ...' and
 navigate to the checkout directory:  
@@ -43,6 +64,7 @@ populated item in the right pane looking like this:
 
 Click the 'OK' button to save the new run configuration, and it should
 be possible to run plug using the 'Execute' and 'Debug' buttons in the IDE. 
+
 
 ## Fetching a git sandbox using KDevelop - not recommended for now
 
