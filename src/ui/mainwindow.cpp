@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2024  offa
+ * Copyright (C) 2017-2025  offa
  * Copyright (C) 2010-2016  piorekf <piorek@piorekf.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -248,7 +248,7 @@ namespace plug
                               "<p>%1 is a GPLv3 licensed program designed as a replacement for Fender FUSE to operate Fender Mustang amplifier and possibly some other models.</p>"
                               "<p><a href=\"https://github.com/offa/plug/\">Plug (GitHub)</a> / <a href=\"https://gitlab.com/offa/plug/\">Plug (GitLab)</a></p>"
                               "<hr>"
-                              "<p>Copyright © 2017-2024 offa</p>"
+                              "<p>Copyright © 2017-2025 offa</p>"
                               "<p>Copyright © 2010-2016 piorekf <piorek@piorekf.org></p>"
                               "<p>License: <a href=\"https://www.gnu.org/licenses/gpl.txt\">GPLv3</a></p>"
                               "</center>")
