@@ -10,8 +10,8 @@ jobs:
         compiler:
           - gcc:14
           - gcc:13
+          - clang:20
           - clang:19
-          - clang:18
     container:
       image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"
     name: "${{ matrix.compiler }}"
