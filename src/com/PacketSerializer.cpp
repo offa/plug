@@ -88,6 +88,11 @@ namespace plug::com
                 case effects::FUZZ_TOUCH_WAH:
                 case effects::SIMPLE_COMP:
                 case effects::COMPRESSOR:
+                case effects::RANGER_BOOST:
+                case effects::GREENBOX:
+                case effects::ORANGEBOX:
+                case effects::BLACKBOX:
+                case effects::BIG_FUZZ:
                     return DSP::effect0;
 
                 case effects::SINE_CHORUS:
@@ -101,6 +106,9 @@ namespace plug::com
                 case effects::STEP_FILTER:
                 case effects::PHASER:
                 case effects::PITCH_SHIFTER:
+                case effects::WAH_MOD:
+                case effects::TOUCH_WAH_MOD:
+                case effects::DIATONIC_PITCH_SHIFTER:
                     return DSP::effect1;
 
                 case effects::MONO_DELAY:
@@ -171,7 +179,7 @@ namespace plug::com
                        {
             const auto payload = p.getPayload();
             return fx_pedal_settings{FxSlot{payload.getSlot()},
-                    lookupEffectById(payload.getModel()),
+                    lookupEffectById(payload.getModel(), payload.getModelMSB()),
                     payload.getKnob1(),
                     payload.getKnob2(),
                     payload.getKnob3(),
@@ -554,6 +562,48 @@ namespace plug::com
             case effects::FENDER_65_SPRING_REVERB:
                 payload.setModel(0x0b);
                 break;
+
+            // Mustang I V2
+            case effects::RANGER_BOOST:
+                payload.setModel(0x03);
+                payload.setModelMSB(0x01);
+                break;
+
+            case effects::GREENBOX:
+                payload.setModel(0xba);
+                break;
+
+            case effects::ORANGEBOX:
+                payload.setModel(0x10);
+                payload.setModelMSB(0x01);
+                break;
+
+            case effects::BLACKBOX:
+                payload.setModel(0x11);
+                payload.setModelMSB(0x01);
+                break;
+
+            case effects::BIG_FUZZ:
+                payload.setModel(0x0f);
+                payload.setModelMSB(0x01);
+                break;
+
+            case effects::WAH_MOD:
+                payload.setModel(0xf4);
+                payload.setUnknown(0x01, 0x08, 0x01);
+                break;
+
+            case effects::TOUCH_WAH_MOD:
+                payload.setModel(0xf5);
+                payload.setUnknown(0x01, 0x08, 0x01);
+                break;
+
+            case effects::DIATONIC_PITCH_SHIFTER:
+                payload.setModel(0x1f);
+                payload.setModelMSB(0x10);
+                payload.setUnknown(0x00, 0x08, 0x01);
+                break;
+
 
             default:
                 break;

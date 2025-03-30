@@ -292,6 +292,16 @@ namespace plug::com
         return bytes[0];
     }
 
+    void EffectPayload::setModelMSB(std::uint8_t modelmsb)
+    {
+        bytes[1] = modelmsb;
+    }
+
+    std::uint8_t EffectPayload::getModelMSB() const
+    {
+        return bytes[1];
+    }
+
     void EffectPayload::setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)
     {
         bytes[3] = value0;

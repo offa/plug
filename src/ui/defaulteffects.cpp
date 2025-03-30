@@ -25,6 +25,8 @@
 #include <QSettings>
 #include <array>
 
+#include <QMap>
+
 namespace plug
 {
     namespace
@@ -79,6 +81,9 @@ namespace plug
 
     }
 
+    static QMap<QString, struct plug::UIText> mapLbls;
+
+
     DefaultEffects::DefaultEffects(QWidget* parent)
         : QDialog(parent),
           ui(std::make_unique<Ui::DefaultEffects>())
@@ -88,6 +93,123 @@ namespace plug
         connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_fx(int)));
         connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(get_settings()));
         connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(save_default_effects()));
+
+        // Up to discussion, prepare map with default effects description to greatly
+        // reduce duplicate code
+        mapLbls["Level"] = UIText{
+                             tr("&Level"),
+                             tr("Default effect's \"Level\" dial"),
+                             tr("Allows you to set \"Level\" parameter of this effect"),
+                             tr("Default effect's \"Level\" box"),
+                             tr("Allows you to precisely set \"Level\" parameter of this effect")};
+        mapLbls["Gain"] = UIText{
+                             tr("&Gain"),
+                             tr("Default effect's \"Gain\" dial"),
+                             tr("Allows you to set \"Gain\" parameter of this effect"),
+                             tr("Default effect's \"Gain\" box"),
+                             tr("Allows you to precisely set \"Gain\" parameter of this effect")};
+        mapLbls["Low"] = UIText{
+                             tr("L&ow"),
+                             tr("Default effect's \"Low tones\" dial"),
+                             tr("Allows you to set \"Low tones\" parameter of this effect"),
+                             tr("Default effect's \"Low tones\" box"),
+                             tr("Allows you to precisely set \"Low tones\" parameter of this effect")};
+        mapLbls["Brightness"] = UIText{
+                             tr("&Brightness"),
+                             tr("Default effect's \"Brightness\" dial"),
+                             tr("Allows you to set \"Brightness\" parameter of this effect"),
+                             tr("Default effect's \"Brightness\" box"),
+                             tr("Allows you to precisely set \"Brightness\" parameter of this effect")};
+        mapLbls["Disabled"] = UIText{
+                             tr(""),
+                             tr("Disabled dial"),
+                             tr("This dial is disabled in this effect"),
+                             tr("Disabled box"),
+                             tr("This box is disabled in this effect")};
+        mapLbls["Tone"] = UIText{
+                             tr("&Tone"),
+                             tr("Default effect's \"Tone\" dial"),
+                             tr("Allows you to set \"Tone\" parameter of this effect"),
+                             tr("Default effect's \"Tone\" box"),
+                             tr("Allows you to precisely set \"Tone\" parameter of this effect")};
+        mapLbls["Blend"] = UIText{
+                             tr("&Blend"),
+                             tr("Default effect's \"Blend\" dial"),
+                             tr("Allows you to set \"Blend\" parameter of this effect"),
+                             tr("Default effect's \"Blend\" box"),
+                             tr("Allows you to precisely set \"Blend\" parameter of this effect")};
+        mapLbls["Distortion"] = UIText{
+                             tr("&Distortion"),
+                             tr("Default effect's \"Distortion\" dial"),
+                             tr("Allows you to set \"Distortion\" parameter of this effect"),
+                             tr("Default effect's \"Distortion\" box"),
+                             tr("Allows you to precisely set \"Distortion\" parameter of this effect")};
+        mapLbls["High"] = UIText{
+                             tr("&High"),
+                             tr("Default effect's \"High tones\" dial"),
+                             tr("Allows you to set \"High tones\" parameter of this effect"),
+                             tr("Default effect's \"High tones\" box"),
+                             tr("Allows you to precisely set \"High tones\" parameter of this effect")};
+        mapLbls["Sustain"] = UIText{
+                             tr("&Sustain"),
+                             tr("Default effect's \"Sustain\" dial"),
+                             tr("Allows you to set \"Sustain\" parameter of this effect"),
+                             tr("Default effect's \"Sustain\" box"),
+                             tr("Allows you to precisely set \"Sustain\" parameter of this effect")};
+        mapLbls["Pitch"] = UIText{
+                             tr("&Pitch"),
+                             tr("Default effect's \"Pitch\" dial"),
+                             tr("Allows you to set \"Pitch\" parameter of this effect"),
+                             tr("Default effect's \"Pitch\" box"),
+                             tr("Allows you to precisely set \"Pitch\" parameter of this effect")};
+        mapLbls["Mix"] = UIText{
+                             tr("&Mix"),
+                             tr("Default effect's \"Mix\" dial"),
+                             tr("Allows you to set \"Mix\" parameter of this effect"),
+                             tr("Default effect's \"Mix\" box"),
+                             tr("Allows you to precisely set \"Mix\" parameter of this effect")};
+        mapLbls["Key"] = UIText{
+                             tr("&Key"),
+                             tr("Default effect's \"Key\" dial"),
+                             tr("Allows you to set \"Key\" parameter of this effect"),
+                             tr("Default effect's \"Key\" box"),
+                             tr("Allows you to precisely set \"Key\" parameter of this effect")};
+        mapLbls["Scale"] = UIText{
+                             tr("S&cale"),
+                             tr("Default effect's \"Scale\" dial"),
+                             tr("Allows you to set \"Scale\" parameter of this effect"),
+                             tr("Default effect's \"Scale\" box"),
+                             tr("Allows you to precisely set \"Scale\" parameter of this effect")};
+        mapLbls["Freq"] = UIText{
+                             tr("&Frequency"),
+                             tr("Default effect's \"Frequency\" dial"),
+                             tr("Allows you to set \"Frequency\" parameter of this effect"),
+                             tr("Default effect's \"Frequency\" box"),
+                             tr("Allows you to precisely set \"Frequency\" parameter of this effect")};
+        mapLbls["MinFreq"] = UIText{
+                             tr("Mi&n Freq"),
+                             tr("Default effect's \"Minimum Frequency\" dial"),
+                             tr("Allows you to set \"Minimum Frequency\" parameter of this effect"),
+                             tr("Default effect's \"Minimum Frequency\" box"),
+                             tr("Allows you to precisely set \"Minimum Frequency\" parameter of this effect")};
+        mapLbls["MaxFreq"] = UIText{
+                             tr("Ma&x Freq"),
+                             tr("Default effect's \"Maximum Frequency\" dial"),
+                             tr("Allows you to set \"Maximum Frequency\" parameter of this effect"),
+                             tr("Default effect's \"Maximum Frequency\" box"),
+                             tr("Allows you to precisely set \"Maximum Frequency\" parameter of this effect")};
+        mapLbls["HighQ"] = UIText{
+                             tr("Band Pass &Q"),
+                             tr("Default effect's \"High Q\" dial"),
+                             tr("Allows you to set \"High Q\" parameter of this effect"),
+                             tr("Default effect's \"High Q\" box"),
+                             tr("Allows you to precisely set \"High Q\" parameter of this effect")};
+        mapLbls["Sensitivity"] = UIText{
+                             tr("&Sensivity"),
+                             tr("Default effect's \"Sensivity\" dial"),
+                             tr("Allows you to set \"Sensivity\" parameter of this effect"),
+                             tr("Default effect's \"Sensivity\" box"),
+                             tr("Allows you to precisely set \"Sensivity\" parameter of this effect")};
     }
 
     void DefaultEffects::choose_fx(int value)
@@ -546,6 +668,79 @@ namespace plug
                              tr("This dial is disabled in this effect"),
                              tr("Disabled box"),
                              tr("This box is disabled in this effect")});
+                break;
+            /* Mustang I V2 */
+            case effects::RANGER_BOOST:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Gain"],
+                         mapLbls["Low"],
+                         mapLbls["Brightness"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::GREENBOX:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Tone"],
+                         mapLbls["Gain"],
+                         mapLbls["Blend"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::ORANGEBOX:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Distortion"],
+                         mapLbls["Tone"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::BLACKBOX:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Distortion"],
+                         mapLbls["High"], // AKA Filter
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::BIG_FUZZ:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Tone"],
+                         mapLbls["Sustain"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::WAH_MOD:
+                setTexts(ui.get(),
+                         mapLbls["Mix"],
+                         mapLbls["Freq"],
+                         mapLbls["MaxFreq"], // Heel freq
+                         mapLbls["MinFreq"], // Toe freq
+                         mapLbls["HighQ"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::TOUCH_WAH_MOD:
+                setTexts(ui.get(),
+                         mapLbls["Mix"],
+                         mapLbls["Sensitivity"],
+                         mapLbls["MinFreq"],
+                         mapLbls["MaxFreq"],
+                         mapLbls["HighQ"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::DIATONIC_PITCH_SHIFTER:
+                setTexts(ui.get(),
+                         mapLbls["Mix"],
+                         mapLbls["Pitch"],
+                         mapLbls["Key"],
+                         mapLbls["Scale"],
+                         mapLbls["Tone"],
+                         mapLbls["Disabled"]);
                 break;
             case effects::SINE_CHORUS:
             case effects::TRIANGLE_CHORUS:

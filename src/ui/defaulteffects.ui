@@ -88,6 +88,31 @@
        </item>
        <item>
         <property name="text">
+         <string>[1] Ranger Boost</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Green Box</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Orange Box</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Black Box</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[1] Big Fuzz</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>[2] Sine Chorus</string>
         </property>
        </item>
@@ -139,6 +164,16 @@
        <item>
         <property name="text">
          <string>[2] Pitch Schifter</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Wah</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>[2] Touch Wah</string>
         </property>
        </item>
        <item>

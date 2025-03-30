@@ -79,6 +79,7 @@ namespace plug
 
     }
 
+    static QMap<QString, struct plug::UIText> mapLbls;
 
     Effect::Effect(QWidget* parent, FxSlot fxSlot)
         : QMainWindow(parent),
@@ -137,6 +138,139 @@ namespace plug
 
         QShortcut* default_fx = new QShortcut(QKeySequence(QString("Ctrl+F%1").arg(slotArg)), this, nullptr, nullptr, Qt::ApplicationShortcut);
         connect(default_fx, SIGNAL(activated()), this, SLOT(load_default_fx()));
+
+        mapLbls["Level"] = UIText{
+                             tr("&Level"),
+                             tr("Effect's %1 \"Level\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Level\" parameter of this effect"),
+                             tr("Effect's %1 \"Level\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Level\" parameter of this effect")};
+        mapLbls["Gain"] = UIText{
+                             tr("&Gain"),
+                             tr("Effect's %1 \"Gain\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Gain\" parameter of this effect"),
+                             tr("Effect's %1 \"Gain\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Gain\" parameter of this effect")};
+        mapLbls["Low"] = UIText{
+                             tr("L&ow"),
+                             tr("Effect's %1 \"Low tones\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Low tones\" parameter of this effect"),
+                             tr("Effect's %1 \"Low tones\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Low tones\" parameter of this effect")};
+        mapLbls["Brightness"] = UIText{
+                             tr("&Brightness"),
+                             tr("Effect's %1 \"Brightness\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Brightness\" parameter of this effect"),
+                             tr("Effect's %1 \"Brightness\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Brightness\" parameter of this effect")};
+        mapLbls["Disabled"] = UIText{
+                             tr(""),
+                             tr("Disabled dial"),
+                             tr("This dial is disabled in this effect"),
+                             tr("Disabled box"),
+                             tr("This box is disabled in this effect")};
+        mapLbls["Tone"] = UIText{
+                             tr("&Tone"),
+                             tr("Effect's %1 \"Tone\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Tone\" parameter of this effect"),
+                             tr("Effect's %1 \"Tone\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Tone\" parameter of this effect")};
+        mapLbls["Blend"] = UIText{
+                             tr("&Blend"),
+                             tr("Effect's %1 \"Blend\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Blend\" parameter of this effect"),
+                             tr("Effect's %1 \"Blend\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Blend\" parameter of this effect")};
+        mapLbls["Distortion"] = UIText{
+                             tr("&Distortion"),
+                             tr("Effect's %1 \"Distortion\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Distortion\" parameter of this effect"),
+                             tr("Effect's %1 \"Distortion\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Distortion\" parameter of this effect")};
+        mapLbls["High"] = UIText{
+                             tr("&High"),
+                             tr("Effect's %1 \"High tones\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"High tones\" parameter of this effect"),
+                             tr("Effect's %1 \"High tones\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"High tones\" parameter of this effect")};
+        mapLbls["Sustain"] = UIText{
+                             tr("&Sustain"),
+                             tr("Effect's %1 \"Sustain tones\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Sustain tones\" parameter of this effect"),
+                             tr("Effect's %1 \"Sustain tones\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Sustain tones\" parameter of this effect")};
+        mapLbls["Mix"] = UIText{
+                             tr("&Mix"),
+                             tr("Effect's %1 \"Mix\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Mix\" parameter of this effect"),
+                             tr("Effect's %1 \"Mix\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Mix\" parameter of this effect")},
+        mapLbls["Sensitivity"] = UIText{
+                             tr("&Sensivity"),
+                             tr("Effect's %1 \"Sensivity\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Sensivity\" parameter of this effect"),
+                             tr("Effect's %1 \"Sensivity\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Sensivity\" parameter of this effect")};
+        mapLbls["Frequency"] = UIText{
+                             tr("&Frequency"),
+                             tr("Effect's %1 \"Frequency\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Frequency\" parameter of this effect"),
+                             tr("Effect's %1 \"Frequency\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Frequency\" parameter of this effect")};
+        mapLbls["HeelFreq"] = UIText{
+                             tr("&Heel Freq"),
+                             tr("Effect's %1 \"Heel Frequency\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Heel Frequency\" parameter of this effect"),
+                             tr("Effect's %1 \"Heel Frequency\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Heel Frequency\" parameter of this effect")};
+        mapLbls["ToeFreq"] = UIText{
+                             tr("&Toe Freq"),
+                             tr("Effect's %1 \"Toe Frequency\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Toe Frequency\" parameter of this effect"),
+                             tr("Effect's %1 \"Toe Frequency\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Toe Frequency\" parameter of this effect")};
+        mapLbls["HighQ"] = UIText{
+                             tr("High &Q"),
+                             tr("Effect's %1 \"High Q\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"High Q\" parameter of this effect"),
+                             tr("Effect's %1 \"High Q\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"High Q\" parameter of this effect")};
+        mapLbls["MinFreq"] = UIText{
+                             tr("Mi&n Freq"),
+                             tr("Effect's %1 \"Minimum Frequency\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Minimum Frequency\" parameter of this effect"),
+                             tr("Effect's %1 \"Minimum Frequency\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Minimum Frequency\" parameter of this effect")};
+        mapLbls["MaxFreq"] = UIText{
+                             tr("Ma&x Freq"),
+                             tr("Effect's %1 \"Maximum Frequency\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Maximum Frequency\" parameter of this effect"),
+                             tr("Effect's %1 \"Maximum Frequency\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Maximum Frequency\" parameter of this effect")};
+        mapLbls["Pitch"] = UIText{
+                             tr("&Pitch"),
+                             tr("Effect's %1 \"Pitch\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Pitch\" parameter of this effect"),
+                             tr("Effect's %1 \"Pitch\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Pitch\" parameter of this effect")};
+        mapLbls["Key"] = UIText{
+                             tr("&Key"),
+                             tr("Effect's %1 \"Key\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Key\" parameter of this effect"),
+                             tr("Effect's %1 \"Key\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Key\" parameter of this effect")};
+        mapLbls["Scale"] = UIText{
+                             tr("&Scale"),
+                             tr("Effect's %1 \"Scale\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Scale\" parameter of this effect"),
+                             tr("Effect's %1 \"Scale\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Scale\" parameter of this effect")};
+        mapLbls["Tone"] = UIText{
+                             tr("&Tone"),
+                             tr("Effect's %1 \"Tone\" dial").arg(slot.id() + 1),
+                             tr("Allows you to set \"Tone\" parameter of this effect"),
+                             tr("Effect's %1 \"Tone\" box").arg(slot.id() + 1),
+                             tr("Allows you to precisely set \"Tone\" parameter of this effect")};
     }
 
     Effect::~Effect()
@@ -333,6 +467,222 @@ namespace plug
                 ui->spinBox_6->setDisabled(false);
                 break;
 
+            case effects::RANGER_BOOST:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(255);
+                ui->spinBox_2->setMaximum(255);
+                ui->dial_3->setMaximum(255);
+                ui->spinBox_3->setMaximum(255);
+                ui->dial_4->setMaximum(255);
+                ui->spinBox_4->setMaximum(255);
+                ui->dial_5->setValue(0);
+                ui->spinBox_5->setValue(0);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(false);
+                ui->dial_5->setDisabled(true);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(false);
+                ui->spinBox_5->setDisabled(true);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
+            case effects::GREENBOX:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(255);
+                ui->spinBox_2->setMaximum(255);
+                ui->dial_3->setMaximum(255);
+                ui->spinBox_3->setMaximum(255);
+                ui->dial_4->setMaximum(255);
+                ui->spinBox_4->setMaximum(255);
+                ui->dial_5->setValue(0);
+                ui->spinBox_5->setValue(0);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(false);
+                ui->dial_5->setDisabled(true);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(false);
+                ui->spinBox_5->setDisabled(true);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
+            case effects::ORANGEBOX:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(255);
+                ui->spinBox_2->setMaximum(255);
+                ui->dial_3->setMaximum(255);
+                ui->spinBox_3->setMaximum(255);
+                ui->dial_4->setValue(0);
+                ui->spinBox_4->setValue(0);
+                ui->dial_5->setValue(0);
+                ui->spinBox_5->setValue(0);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(true);
+                ui->dial_5->setDisabled(true);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(true);
+                ui->spinBox_5->setDisabled(true);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
+            case effects::BLACKBOX:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(255);
+                ui->spinBox_2->setMaximum(255);
+                ui->dial_3->setMaximum(255);
+                ui->spinBox_3->setMaximum(255);
+                ui->dial_4->setValue(0);
+                ui->spinBox_4->setValue(0);
+                ui->dial_5->setValue(0);
+                ui->spinBox_5->setValue(0);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(true);
+                ui->dial_5->setDisabled(true);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(true);
+                ui->spinBox_5->setDisabled(true);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
+            case effects::BIG_FUZZ:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(255);
+                ui->spinBox_2->setMaximum(255);
+                ui->dial_3->setMaximum(255);
+                ui->spinBox_3->setMaximum(255);
+                ui->dial_4->setValue(0);
+                ui->spinBox_4->setValue(0);
+                ui->dial_5->setValue(0);
+                ui->spinBox_5->setValue(0);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(true);
+                ui->dial_5->setDisabled(true);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(true);
+                ui->spinBox_5->setDisabled(true);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
+            case effects::WAH_MOD:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(255);
+                ui->spinBox_2->setMaximum(255);
+                ui->dial_3->setMaximum(255);
+                ui->spinBox_3->setMaximum(255);
+                ui->dial_4->setMaximum(255);
+                ui->spinBox_4->setMaximum(255);
+                ui->dial_5->setMaximum(1);
+                ui->spinBox_5->setMaximum(1);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(false);
+                ui->dial_5->setDisabled(false);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(false);
+                ui->spinBox_5->setDisabled(false);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
+            case effects::TOUCH_WAH_MOD:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(255);
+                ui->spinBox_2->setMaximum(255);
+                ui->dial_3->setMaximum(255);
+                ui->spinBox_3->setMaximum(255);
+                ui->dial_4->setMaximum(255);
+                ui->spinBox_4->setMaximum(255);
+                ui->dial_5->setMaximum(1);
+                ui->spinBox_5->setMaximum(1);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(false);
+                ui->dial_5->setDisabled(false);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(false);
+                ui->spinBox_5->setDisabled(false);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
+            case effects::DIATONIC_PITCH_SHIFTER:
+                ui->dial->setMaximum(255);
+                ui->spinBox->setMaximum(255);
+                ui->dial_2->setMaximum(24);
+                ui->spinBox_2->setMaximum(24);
+                ui->dial_3->setMaximum(11);
+                ui->spinBox_3->setMaximum(11);
+                ui->dial_4->setMaximum(9);
+                ui->spinBox_4->setMaximum(9);
+                ui->dial_5->setMaximum(255);
+                ui->spinBox_5->setMaximum(255);
+                ui->dial_6->setValue(0);
+                ui->spinBox_6->setValue(0);
+                ui->dial->setDisabled(false);
+                ui->dial_2->setDisabled(false);
+                ui->dial_3->setDisabled(false);
+                ui->dial_4->setDisabled(false);
+                ui->dial_5->setDisabled(false);
+                ui->dial_6->setDisabled(true);
+                ui->spinBox->setDisabled(false);
+                ui->spinBox_2->setDisabled(false);
+                ui->spinBox_3->setDisabled(false);
+                ui->spinBox_4->setDisabled(false);
+                ui->spinBox_5->setDisabled(false);
+                ui->spinBox_6->setDisabled(true);
+                break;
+
             default:
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
@@ -391,6 +741,26 @@ namespace plug
                 setTitleTexts(slot.id(), "Compressor");
                 break;
 
+            case effects::RANGER_BOOST:
+                setTitleTexts(slot.id(), "Ranger Boost");
+                break;
+
+            case effects::GREENBOX:
+                setTitleTexts(slot.id(), "Greenbox");
+                break;
+
+            case effects::ORANGEBOX:
+                setTitleTexts(slot.id(), "Orangebox");
+                break;
+
+            case effects::BLACKBOX:
+                setTitleTexts(slot.id(), "Blackbox");
+                break;
+
+            case effects::BIG_FUZZ:
+                setTitleTexts(slot.id(), "Big Fuzz");
+                break;
+
             case effects::SINE_CHORUS:
                 setTitleTexts(slot.id(), "Sine Chorus");
                 break;
@@ -433,6 +803,18 @@ namespace plug
 
             case effects::PITCH_SHIFTER:
                 setTitleTexts(slot.id(), "Pitch Shifter");
+                break;
+
+            case effects::WAH_MOD:
+                setTitleTexts(slot.id(), "Wah");
+                break;
+
+            case effects::TOUCH_WAH_MOD:
+                setTitleTexts(slot.id(), "Touch Wah");
+                break;
+
+            case effects::DIATONIC_PITCH_SHIFTER:
+                setTitleTexts(slot.id(), "Diatonic Pitch Shifter");
                 break;
 
             case effects::MONO_DELAY:
@@ -826,6 +1208,79 @@ namespace plug
                              tr("This dial is disabled in this effect"),
                              tr("Disabled box"),
                              tr("This box is disabled in this effect")});
+                break;
+            // Mustang I V2
+            case effects::RANGER_BOOST:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Gain"],
+                         mapLbls["Low"],
+                         mapLbls["Brightness"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::GREENBOX:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Gain"],
+                         mapLbls["Tone"],
+                         mapLbls["Blend"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::ORANGEBOX:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Distortion"],
+                         mapLbls["Tone"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::BLACKBOX:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Distortion"],
+                         mapLbls["High"], // AKA Filter
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::BIG_FUZZ:
+                setTexts(ui.get(),
+                         mapLbls["Level"],
+                         mapLbls["Tone"],
+                         mapLbls["Sustain"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::WAH_MOD:
+                setTexts(ui.get(),
+                         mapLbls["Mix"],
+                         mapLbls["Frequency"],
+                         mapLbls["HeelFreq"],
+                         mapLbls["ToeFreq"],
+                         mapLbls["HighQ"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::TOUCH_WAH_MOD:
+                setTexts(ui.get(),
+                         mapLbls["Mix"],
+                         mapLbls["Sensitivity"],
+                         mapLbls["MinFreq"],
+                         mapLbls["MaxFreq"],
+                         mapLbls["HighQ"],
+                         mapLbls["Disabled"]);
+                break;
+            case effects::DIATONIC_PITCH_SHIFTER:
+                setTexts(ui.get(),
+                         mapLbls["Mix"],
+                         mapLbls["Pitch"],
+                         mapLbls["Key"],
+                         mapLbls["Scale"],
+                         mapLbls["Tone"],
+                         mapLbls["Disabled"]);
                 break;
             case effects::SINE_CHORUS:
             case effects::TRIANGLE_CHORUS:
@@ -1547,6 +2002,30 @@ namespace plug
         {
             switch (static_cast<effects>(value))
             {
+                case effects::RANGER_BOOST:
+                    setDialValues(0x64, 0xba, 0x01, 0x9b, 0x00, 0x00);
+                    break;
+                case effects::GREENBOX:
+                    setDialValues(0x81, 0xb1, 0x8c, 0xff, 0x00, 0x00);
+                    break;
+                case effects::ORANGEBOX:
+                    setDialValues(0x81, 0x81, 0x81, 0x00, 0x00, 0x00);
+                    break;
+                case effects::BLACKBOX:
+                    setDialValues(0x81, 0x81, 0x56, 0x00, 0x00, 0x00);
+                    break;
+                case effects::BIG_FUZZ:
+                    setDialValues(0xac, 0xac, 0x73, 0x00, 0x00, 0x00);
+                    break;
+                case effects::WAH_MOD:
+                    setDialValues(0xff, 0x81, 0x01, 0xff, 0x00, 0x00);
+                    break;
+                case effects::TOUCH_WAH_MOD:
+                    setDialValues(0xed, 0x81, 0x07, 0xff, 0x00, 0x00);
+                    break;
+                case effects::DIATONIC_PITCH_SHIFTER:
+                    setDialValues(0x56, 0x09, 0x04, 0x05, 0xc8, 0x00);
+                    break;
                 case effects::EMPTY:
                     break;
                 case effects::OVERDRIVE:

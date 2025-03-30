@@ -137,6 +137,9 @@ namespace plug::com
         void setModel(std::uint8_t model);
         std::uint8_t getModel() const;
 
+        void setModelMSB(std::uint8_t modelmsb);
+        std::uint8_t getModelMSB() const;
+
         void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2);
     };
 
