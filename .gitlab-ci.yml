@@ -15,7 +15,7 @@ build:
     - script/ci_build.sh -asan -ubsan
 
 coverage:
-  image: registry.gitlab.com/offa/docker-images/gcc:14
+  image: registry.gitlab.com/offa/docker-images/gcc:15
   script:
     - script/ci_setup.sh
     - script/ci_build.sh -cov
