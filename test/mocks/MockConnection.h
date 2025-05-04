@@ -32,12 +32,12 @@ namespace plug::test::mock
         {
         }
 
-        MOCK_METHOD(void, open, (std::uint16_t, std::uint16_t));
+        MOCK_METHOD(void, open, (std::uint16_t, std::uint16_t) );
         MOCK_METHOD(void, openFirst, (std::uint16_t, std::initializer_list<std::uint16_t>) );
         MOCK_METHOD(void, close, ());
         MOCK_METHOD(bool, isOpen, (), (const));
-        MOCK_METHOD(std::vector<std::uint8_t>, receive, (std::size_t));
-        MOCK_METHOD(std::size_t, sendImpl, (std::uint8_t*, std::size_t));
+        MOCK_METHOD(std::vector<std::uint8_t>, receive, (std::size_t) );
+        MOCK_METHOD(std::size_t, sendImpl, (std::uint8_t*, std::size_t) );
         MOCK_METHOD(std::string, name, (), (const));
     };
 }

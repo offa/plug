@@ -30,7 +30,7 @@ jobs:
       - uses: DoozyX/clang-format-lint-action@master
         name: "Verify formatting"
         with:
-          clangFormatVersion: 17
+          clangFormatVersion: 19
 
   coverage:
     name: "coverage"
