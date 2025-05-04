@@ -8,8 +8,8 @@ jobs:
     strategy:
       matrix:
         compiler:
+          - gcc:15
           - gcc:14
-          - gcc:13
           - clang:20
           - clang:19
     container:
@@ -36,7 +36,7 @@ jobs:
     name: "coverage"
     runs-on: ubuntu-latest
     container:
-      image: "registry.gitlab.com/offa/docker-images/gcc:14"
+      image: "registry.gitlab.com/offa/docker-images/gcc:15"
     steps:
       - uses: actions/checkout@main
       - name: Setup
