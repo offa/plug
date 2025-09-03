@@ -8,7 +8,7 @@ build:
       - COMPILER: gcc
         VERSION: [15, 14]
       - COMPILER: clang
-        VERSION: [20, 19]
+        VERSION: [21, 20]
   image: registry.gitlab.com/offa/docker-images/${COMPILER}:${VERSION}
   script:
     - script/ci_setup.sh
