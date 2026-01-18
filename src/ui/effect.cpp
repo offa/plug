@@ -659,12 +659,12 @@ namespace plug
             case effects::DIATONIC_PITCH_SHIFTER:
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
-                ui->dial_2->setMaximum(24);
-                ui->spinBox_2->setMaximum(24);
+                ui->dial_2->setMaximum(21);
+                ui->spinBox_2->setMaximum(21); //22 - 1
                 ui->dial_3->setMaximum(11);
                 ui->spinBox_3->setMaximum(11);
-                ui->dial_4->setMaximum(9);
-                ui->spinBox_4->setMaximum(9);
+                ui->dial_4->setMaximum(8);
+                ui->spinBox_4->setMaximum(8);
                 ui->dial_5->setMaximum(255);
                 ui->spinBox_5->setMaximum(255);
                 ui->dial_6->setValue(0);
