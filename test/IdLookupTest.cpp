@@ -106,7 +106,7 @@ namespace plug::test
         EXPECT_EQ(lookupEffectById(0x0f,0x1), effects::BIG_FUZZ);
         EXPECT_EQ(lookupEffectById(0xf4),  effects::WAH_MOD);
         EXPECT_EQ(lookupEffectById(0xf5),  effects::TOUCH_WAH_MOD);
-        EXPECT_EQ(lookupEffectById(0x1f,0x1), effects::DIATONIC_PITCH_SHIFTER);
+        EXPECT_EQ(lookupEffectById(0x1f,0x10), effects::DIATONIC_PITCH_SHIFTER);
     }
 
     TEST_F(IdLookupTest, lookupEffectByIdThrowsOnInvalidId)
