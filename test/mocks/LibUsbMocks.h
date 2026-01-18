@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2024  offa
+ * Copyright (C) 2017-2025  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ namespace plug::test::mock
     public:
         MOCK_METHOD(int, init, (libusb_context**) );
         MOCK_METHOD(void, close, (libusb_device_handle*) );
-        MOCK_METHOD(libusb_device_handle*, open_device_with_vid_pid, (libusb_context*, uint16_t, uint16_t));
+        MOCK_METHOD(libusb_device_handle*, open_device_with_vid_pid, (libusb_context*, uint16_t, uint16_t) );
         MOCK_METHOD(void, exit, (libusb_context*) );
         MOCK_METHOD(int, kernel_driver_active, (libusb_device_handle*, int) );
         MOCK_METHOD(int, detach_kernel_driver, (libusb_device_handle*, int) );

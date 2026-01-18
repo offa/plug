@@ -2,16 +2,20 @@ name: ci
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   build_linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         compiler:
+          - gcc:15
           - gcc:14
-          - gcc:13
-          - clang:19
-          - clang:18
+          - clang:21
+          - clang:20
     container:
       image: "registry.gitlab.com/offa/docker-images/${{ matrix.compiler }}"
     name: "${{ matrix.compiler }}"
@@ -27,16 +31,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: DoozyX/clang-format-lint-action@master
+      - uses: jidicula/clang-format-action@fb1a7a56a9341d16f79d610e65f81963ae33871d
         name: "Verify formatting"
         with:
-          clangFormatVersion: 17
+          clang-format-version: 19
 
   coverage:
     name: "coverage"
     runs-on: ubuntu-latest
     container:
-      image: "registry.gitlab.com/offa/docker-images/gcc:14"
+      image: "registry.gitlab.com/offa/docker-images/gcc:15"
     steps:
       - uses: actions/checkout@main
       - name: Setup
