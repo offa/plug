@@ -167,10 +167,10 @@ namespace plug
                 return effects::WAH_MOD;
             case 0xf5:
                 return effects::TOUCH_WAH_MOD;
-            case 0x11f:
+            case 0x101f:
                 return effects::DIATONIC_PITCH_SHIFTER;
             default:
-                throw std::invalid_argument{"Invalid effect id: " + std::to_string(id)};
+                throw std::invalid_argument{"Invalid effect id: " + std::to_string(idmsb << 8 | id)};
         }
     }
 
