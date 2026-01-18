@@ -60,7 +60,7 @@ namespace plug
                 return 1;
             }
             if (((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER)) ||
-              ((value >= effects::WAH_MOD) && (value <= effects::DIATONIC_PITCH_SHIFTER)))
+                ((value >= effects::WAH_MOD) && (value <= effects::DIATONIC_PITCH_SHIFTER)))
             {
                 return 2;
             }
