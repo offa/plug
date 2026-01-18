@@ -72,7 +72,7 @@ namespace plug
     }
 
 
-    constexpr effects lookupEffectById(std::uint8_t id, std::uint8_t idmsb=0)
+    constexpr effects lookupEffectById(std::uint8_t id, std::uint8_t idmsb = 0)
     {
         switch ((idmsb << 8) | id)
         {

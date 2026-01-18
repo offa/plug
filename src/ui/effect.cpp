@@ -140,137 +140,137 @@ namespace plug
         connect(default_fx, SIGNAL(activated()), this, SLOT(load_default_fx()));
 
         mapLbls["Level"] = UIText{
-                             tr("&Level"),
-                             tr("Effect's %1 \"Level\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Level\" parameter of this effect"),
-                             tr("Effect's %1 \"Level\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Level\" parameter of this effect")};
+            tr("&Level"),
+            tr("Effect's %1 \"Level\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Level\" parameter of this effect"),
+            tr("Effect's %1 \"Level\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Level\" parameter of this effect")};
         mapLbls["Gain"] = UIText{
-                             tr("&Gain"),
-                             tr("Effect's %1 \"Gain\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Gain\" parameter of this effect"),
-                             tr("Effect's %1 \"Gain\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Gain\" parameter of this effect")};
+            tr("&Gain"),
+            tr("Effect's %1 \"Gain\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Gain\" parameter of this effect"),
+            tr("Effect's %1 \"Gain\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Gain\" parameter of this effect")};
         mapLbls["Low"] = UIText{
-                             tr("L&ow"),
-                             tr("Effect's %1 \"Low tones\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Low tones\" parameter of this effect"),
-                             tr("Effect's %1 \"Low tones\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Low tones\" parameter of this effect")};
+            tr("L&ow"),
+            tr("Effect's %1 \"Low tones\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Low tones\" parameter of this effect"),
+            tr("Effect's %1 \"Low tones\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Low tones\" parameter of this effect")};
         mapLbls["Brightness"] = UIText{
-                             tr("&Brightness"),
-                             tr("Effect's %1 \"Brightness\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Brightness\" parameter of this effect"),
-                             tr("Effect's %1 \"Brightness\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Brightness\" parameter of this effect")};
+            tr("&Brightness"),
+            tr("Effect's %1 \"Brightness\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Brightness\" parameter of this effect"),
+            tr("Effect's %1 \"Brightness\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Brightness\" parameter of this effect")};
         mapLbls["Disabled"] = UIText{
-                             tr(""),
-                             tr("Disabled dial"),
-                             tr("This dial is disabled in this effect"),
-                             tr("Disabled box"),
-                             tr("This box is disabled in this effect")};
+            tr(""),
+            tr("Disabled dial"),
+            tr("This dial is disabled in this effect"),
+            tr("Disabled box"),
+            tr("This box is disabled in this effect")};
         mapLbls["Tone"] = UIText{
-                             tr("&Tone"),
-                             tr("Effect's %1 \"Tone\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Tone\" parameter of this effect"),
-                             tr("Effect's %1 \"Tone\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Tone\" parameter of this effect")};
+            tr("&Tone"),
+            tr("Effect's %1 \"Tone\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Tone\" parameter of this effect"),
+            tr("Effect's %1 \"Tone\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Tone\" parameter of this effect")};
         mapLbls["Blend"] = UIText{
-                             tr("&Blend"),
-                             tr("Effect's %1 \"Blend\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Blend\" parameter of this effect"),
-                             tr("Effect's %1 \"Blend\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Blend\" parameter of this effect")};
+            tr("&Blend"),
+            tr("Effect's %1 \"Blend\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Blend\" parameter of this effect"),
+            tr("Effect's %1 \"Blend\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Blend\" parameter of this effect")};
         mapLbls["Distortion"] = UIText{
-                             tr("&Distortion"),
-                             tr("Effect's %1 \"Distortion\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Distortion\" parameter of this effect"),
-                             tr("Effect's %1 \"Distortion\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Distortion\" parameter of this effect")};
+            tr("&Distortion"),
+            tr("Effect's %1 \"Distortion\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Distortion\" parameter of this effect"),
+            tr("Effect's %1 \"Distortion\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Distortion\" parameter of this effect")};
         mapLbls["High"] = UIText{
-                             tr("&High"),
-                             tr("Effect's %1 \"High tones\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"High tones\" parameter of this effect"),
-                             tr("Effect's %1 \"High tones\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"High tones\" parameter of this effect")};
+            tr("&High"),
+            tr("Effect's %1 \"High tones\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"High tones\" parameter of this effect"),
+            tr("Effect's %1 \"High tones\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"High tones\" parameter of this effect")};
         mapLbls["Sustain"] = UIText{
-                             tr("&Sustain"),
-                             tr("Effect's %1 \"Sustain tones\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Sustain tones\" parameter of this effect"),
-                             tr("Effect's %1 \"Sustain tones\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Sustain tones\" parameter of this effect")};
+            tr("&Sustain"),
+            tr("Effect's %1 \"Sustain tones\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Sustain tones\" parameter of this effect"),
+            tr("Effect's %1 \"Sustain tones\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Sustain tones\" parameter of this effect")};
         mapLbls["Mix"] = UIText{
-                             tr("&Mix"),
-                             tr("Effect's %1 \"Mix\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Mix\" parameter of this effect"),
-                             tr("Effect's %1 \"Mix\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Mix\" parameter of this effect")},
+            tr("&Mix"),
+            tr("Effect's %1 \"Mix\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Mix\" parameter of this effect"),
+            tr("Effect's %1 \"Mix\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Mix\" parameter of this effect")};
         mapLbls["Sensitivity"] = UIText{
-                             tr("&Sensivity"),
-                             tr("Effect's %1 \"Sensivity\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Sensivity\" parameter of this effect"),
-                             tr("Effect's %1 \"Sensivity\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Sensivity\" parameter of this effect")};
+            tr("&Sensivity"),
+            tr("Effect's %1 \"Sensivity\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Sensivity\" parameter of this effect"),
+            tr("Effect's %1 \"Sensivity\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Sensivity\" parameter of this effect")};
         mapLbls["Frequency"] = UIText{
-                             tr("&Frequency"),
-                             tr("Effect's %1 \"Frequency\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Frequency\" parameter of this effect"),
-                             tr("Effect's %1 \"Frequency\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Frequency\" parameter of this effect")};
+            tr("&Frequency"),
+            tr("Effect's %1 \"Frequency\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Frequency\" parameter of this effect"),
+            tr("Effect's %1 \"Frequency\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Frequency\" parameter of this effect")};
         mapLbls["HeelFreq"] = UIText{
-                             tr("&Heel Freq"),
-                             tr("Effect's %1 \"Heel Frequency\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Heel Frequency\" parameter of this effect"),
-                             tr("Effect's %1 \"Heel Frequency\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Heel Frequency\" parameter of this effect")};
+            tr("&Heel Freq"),
+            tr("Effect's %1 \"Heel Frequency\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Heel Frequency\" parameter of this effect"),
+            tr("Effect's %1 \"Heel Frequency\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Heel Frequency\" parameter of this effect")};
         mapLbls["ToeFreq"] = UIText{
-                             tr("&Toe Freq"),
-                             tr("Effect's %1 \"Toe Frequency\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Toe Frequency\" parameter of this effect"),
-                             tr("Effect's %1 \"Toe Frequency\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Toe Frequency\" parameter of this effect")};
+            tr("&Toe Freq"),
+            tr("Effect's %1 \"Toe Frequency\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Toe Frequency\" parameter of this effect"),
+            tr("Effect's %1 \"Toe Frequency\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Toe Frequency\" parameter of this effect")};
         mapLbls["HighQ"] = UIText{
-                             tr("High &Q"),
-                             tr("Effect's %1 \"High Q\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"High Q\" parameter of this effect"),
-                             tr("Effect's %1 \"High Q\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"High Q\" parameter of this effect")};
+            tr("High &Q"),
+            tr("Effect's %1 \"High Q\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"High Q\" parameter of this effect"),
+            tr("Effect's %1 \"High Q\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"High Q\" parameter of this effect")};
         mapLbls["MinFreq"] = UIText{
-                             tr("Mi&n Freq"),
-                             tr("Effect's %1 \"Minimum Frequency\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Minimum Frequency\" parameter of this effect"),
-                             tr("Effect's %1 \"Minimum Frequency\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Minimum Frequency\" parameter of this effect")};
+            tr("Mi&n Freq"),
+            tr("Effect's %1 \"Minimum Frequency\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Minimum Frequency\" parameter of this effect"),
+            tr("Effect's %1 \"Minimum Frequency\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Minimum Frequency\" parameter of this effect")};
         mapLbls["MaxFreq"] = UIText{
-                             tr("Ma&x Freq"),
-                             tr("Effect's %1 \"Maximum Frequency\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Maximum Frequency\" parameter of this effect"),
-                             tr("Effect's %1 \"Maximum Frequency\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Maximum Frequency\" parameter of this effect")};
+            tr("Ma&x Freq"),
+            tr("Effect's %1 \"Maximum Frequency\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Maximum Frequency\" parameter of this effect"),
+            tr("Effect's %1 \"Maximum Frequency\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Maximum Frequency\" parameter of this effect")};
         mapLbls["Pitch"] = UIText{
-                             tr("&Pitch"),
-                             tr("Effect's %1 \"Pitch\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Pitch\" parameter of this effect"),
-                             tr("Effect's %1 \"Pitch\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Pitch\" parameter of this effect")};
+            tr("&Pitch"),
+            tr("Effect's %1 \"Pitch\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Pitch\" parameter of this effect"),
+            tr("Effect's %1 \"Pitch\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Pitch\" parameter of this effect")};
         mapLbls["Key"] = UIText{
-                             tr("&Key"),
-                             tr("Effect's %1 \"Key\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Key\" parameter of this effect"),
-                             tr("Effect's %1 \"Key\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Key\" parameter of this effect")};
+            tr("&Key"),
+            tr("Effect's %1 \"Key\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Key\" parameter of this effect"),
+            tr("Effect's %1 \"Key\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Key\" parameter of this effect")};
         mapLbls["Scale"] = UIText{
-                             tr("&Scale"),
-                             tr("Effect's %1 \"Scale\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Scale\" parameter of this effect"),
-                             tr("Effect's %1 \"Scale\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Scale\" parameter of this effect")};
+            tr("&Scale"),
+            tr("Effect's %1 \"Scale\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Scale\" parameter of this effect"),
+            tr("Effect's %1 \"Scale\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Scale\" parameter of this effect")};
         mapLbls["Tone"] = UIText{
-                             tr("&Tone"),
-                             tr("Effect's %1 \"Tone\" dial").arg(slot.id() + 1),
-                             tr("Allows you to set \"Tone\" parameter of this effect"),
-                             tr("Effect's %1 \"Tone\" box").arg(slot.id() + 1),
-                             tr("Allows you to precisely set \"Tone\" parameter of this effect")};
+            tr("&Tone"),
+            tr("Effect's %1 \"Tone\" dial").arg(slot.id() + 1),
+            tr("Allows you to set \"Tone\" parameter of this effect"),
+            tr("Effect's %1 \"Tone\" box").arg(slot.id() + 1),
+            tr("Allows you to precisely set \"Tone\" parameter of this effect")};
     }
 
     Effect::~Effect()
@@ -660,7 +660,7 @@ namespace plug
                 ui->dial->setMaximum(255);
                 ui->spinBox->setMaximum(255);
                 ui->dial_2->setMaximum(21);
-                ui->spinBox_2->setMaximum(21); //22 - 1
+                ui->spinBox_2->setMaximum(21); // 22 - 1
                 ui->dial_3->setMaximum(11);
                 ui->spinBox_3->setMaximum(11);
                 ui->dial_4->setMaximum(8);
