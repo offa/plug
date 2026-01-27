@@ -73,7 +73,7 @@ namespace plug::test
             return packet;
         };
 
-        [[nodiscard]] std::array<Packet<EffectPayload>, 4> effectPackage(std::uint8_t effectId) const
+        [[nodiscard]] std::array<Packet<EffectPayload>, 4> effectPackage(std::uint16_t effectId) const
         {
             EffectPayload payload{};
             payload.setSlot(0x01);
@@ -1117,6 +1117,14 @@ namespace plug::test
         EXPECT_THAT(decodeWithId(0x4d), Eq(effects::ARENA_REVERB));
         EXPECT_THAT(decodeWithId(0x21), Eq(effects::FENDER_63_SPRING_REVERB));
         EXPECT_THAT(decodeWithId(0x0b), Eq(effects::FENDER_65_SPRING_REVERB));
+        EXPECT_THAT(decodeWithId(0x103), Eq(effects::RANGER_BOOST));
+        EXPECT_THAT(decodeWithId(0xba), Eq(effects::GREENBOX));
+        EXPECT_THAT(decodeWithId(0x110), Eq(effects::ORANGEBOX));
+        EXPECT_THAT(decodeWithId(0x111), Eq(effects::BLACKBOX));
+        EXPECT_THAT(decodeWithId(0x10f), Eq(effects::BIG_FUZZ));
+        EXPECT_THAT(decodeWithId(0xf4), Eq(effects::WAH_MOD));
+        EXPECT_THAT(decodeWithId(0xf5), Eq(effects::TOUCH_WAH_MOD));
+        EXPECT_THAT(decodeWithId(0x101f), Eq(effects::DIATONIC_PITCH_SHIFTER));
     }
 
     TEST_F(PacketSerializerTest, decodeEffectsFromDataSetsPositionInput)

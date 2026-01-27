@@ -402,6 +402,15 @@ namespace plug::test
         EXPECT_THAT(p.getBytes()[0], Eq(17));
     }
 
+    TEST_F(PacketTest, effectPayloadModel16bit)
+    {
+        EffectPayload p{};
+        p.setModel(0x101f);
+
+        EXPECT_THAT(p.getBytes()[0], Eq(0x1f));
+        EXPECT_THAT(p.getBytes()[1], Eq(0x10));
+    }
+
     TEST_F(PacketTest, effectPayloadFixedFields)
     {
         constexpr std::uint8_t unknown{0x00};
