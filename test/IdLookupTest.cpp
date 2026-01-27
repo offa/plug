@@ -99,14 +99,14 @@ namespace plug::test
         EXPECT_EQ(lookupEffectById(0x0b), effects::FENDER_65_SPRING_REVERB);
 
         /* Mustang I V2 */
-        EXPECT_EQ(lookupEffectById(0x03, 0x1), effects::RANGER_BOOST);
+        EXPECT_EQ(lookupEffectById(0x103), effects::RANGER_BOOST);
         EXPECT_EQ(lookupEffectById(0xba), effects::GREENBOX);
-        EXPECT_EQ(lookupEffectById(0x10, 0x1), effects::ORANGEBOX);
-        EXPECT_EQ(lookupEffectById(0x11, 0x1), effects::BLACKBOX);
-        EXPECT_EQ(lookupEffectById(0x0f, 0x1), effects::BIG_FUZZ);
+        EXPECT_EQ(lookupEffectById(0x110), effects::ORANGEBOX);
+        EXPECT_EQ(lookupEffectById(0x111), effects::BLACKBOX);
+        EXPECT_EQ(lookupEffectById(0x10f), effects::BIG_FUZZ);
         EXPECT_EQ(lookupEffectById(0xf4), effects::WAH_MOD);
         EXPECT_EQ(lookupEffectById(0xf5), effects::TOUCH_WAH_MOD);
-        EXPECT_EQ(lookupEffectById(0x1f, 0x10), effects::DIATONIC_PITCH_SHIFTER);
+        EXPECT_EQ(lookupEffectById(0x101f), effects::DIATONIC_PITCH_SHIFTER);
     }
 
     TEST_F(IdLookupTest, lookupEffectByIdThrowsOnInvalidId)

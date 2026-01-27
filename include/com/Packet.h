@@ -134,11 +134,8 @@ namespace plug::com
         void setSlot(std::uint8_t slot);
         std::uint8_t getSlot() const;
 
-        void setModel(std::uint8_t model);
-        std::uint8_t getModel() const;
-
-        void setModelMSB(std::uint8_t modelmsb);
-        std::uint8_t getModelMSB() const;
+        void setModel(std::uint16_t model);
+        std::uint16_t getModel() const;
 
         void setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2);
     };

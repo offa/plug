@@ -179,7 +179,7 @@ namespace plug::com
                        {
             const auto payload = p.getPayload();
             return fx_pedal_settings{FxSlot{payload.getSlot()},
-                    lookupEffectById(payload.getModel(), payload.getModelMSB()),
+                    lookupEffectById(payload.getModel()),
                     payload.getKnob1(),
                     payload.getKnob2(),
                     payload.getKnob3(),
@@ -565,8 +565,7 @@ namespace plug::com
 
             // Mustang I V2
             case effects::RANGER_BOOST:
-                payload.setModel(0x03);
-                payload.setModelMSB(0x01);
+                payload.setModel(0x0103);
                 break;
 
             case effects::GREENBOX:
@@ -574,18 +573,15 @@ namespace plug::com
                 break;
 
             case effects::ORANGEBOX:
-                payload.setModel(0x10);
-                payload.setModelMSB(0x01);
+                payload.setModel(0x0110);
                 break;
 
             case effects::BLACKBOX:
-                payload.setModel(0x11);
-                payload.setModelMSB(0x01);
+                payload.setModel(0x0111);
                 break;
 
             case effects::BIG_FUZZ:
-                payload.setModel(0x0f);
-                payload.setModelMSB(0x01);
+                payload.setModel(0x010f);
                 break;
 
             case effects::WAH_MOD:
@@ -599,8 +595,7 @@ namespace plug::com
                 break;
 
             case effects::DIATONIC_PITCH_SHIFTER:
-                payload.setModel(0x1f);
-                payload.setModelMSB(0x10);
+                payload.setModel(0x101f);
                 payload.setUnknown(0x00, 0x08, 0x01);
                 break;
 

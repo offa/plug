@@ -72,9 +72,9 @@ namespace plug
     }
 
 
-    constexpr effects lookupEffectById(std::uint8_t id, std::uint8_t idmsb = 0)
+    constexpr effects lookupEffectById(std::uint16_t id)
     {
-        switch ((idmsb << 8) | id)
+        switch (id)
         {
             case 0x00:
                 return effects::EMPTY;
@@ -170,7 +170,7 @@ namespace plug
             case 0x101f:
                 return effects::DIATONIC_PITCH_SHIFTER;
             default:
-                throw std::invalid_argument{"Invalid effect id: " + std::to_string(idmsb << 8 | id)};
+                throw std::invalid_argument{"Invalid effect id: " + std::to_string(id)};
         }
     }
 
