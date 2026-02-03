@@ -532,6 +532,30 @@ namespace plug
             case effects::FENDER_65_SPRING_REVERB:
                 model = 0x0b;
                 break;
+            case effects::RANGER_BOOST:
+                model = 0x103;
+                break;
+            case effects::GREENBOX:
+                model = 0xba;
+                break;
+            case effects::ORANGEBOX:
+                model = 0x110;
+                break;
+            case effects::BLACKBOX:
+                model = 0x111;
+                break;
+            case effects::BIG_FUZZ:
+                model = 0x10f;
+                break;
+            case effects::WAH_MOD:
+                model = 0xf4;
+                break;
+            case effects::TOUCH_WAH_MOD:
+                model = 0xf5;
+                break;
+            case effects::DIATONIC_PITCH_SHIFTER:
+                model = 0x11f;
+                break;
         }
 
         xml->writeStartElement("Module");

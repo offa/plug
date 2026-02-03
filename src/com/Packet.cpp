@@ -282,14 +282,15 @@ namespace plug::com
         return bytes[2];
     }
 
-    void EffectPayload::setModel(std::uint8_t model)
+    void EffectPayload::setModel(std::uint16_t model)
     {
-        bytes[0] = model;
+        bytes[0] = model & 0xFF;
+        bytes[1] = (model >> 8) & 0xFF;
     }
 
-    std::uint8_t EffectPayload::getModel() const
+    std::uint16_t EffectPayload::getModel() const
     {
-        return bytes[0];
+        return (bytes[1] << 8 | bytes[0]);
     }
 
     void EffectPayload::setUnknown(std::uint8_t value0, std::uint8_t value1, std::uint8_t value2)

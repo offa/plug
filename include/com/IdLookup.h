@@ -72,7 +72,7 @@ namespace plug
     }
 
 
-    constexpr effects lookupEffectById(std::uint8_t id)
+    constexpr effects lookupEffectById(std::uint16_t id)
     {
         switch (id)
         {
@@ -152,6 +152,23 @@ namespace plug
                 return effects::FENDER_63_SPRING_REVERB;
             case 0x0b:
                 return effects::FENDER_65_SPRING_REVERB;
+            /* Mustang I V2 */
+            case 0x103:
+                return effects::RANGER_BOOST;
+            case 0xba:
+                return effects::GREENBOX;
+            case 0x110:
+                return effects::ORANGEBOX;
+            case 0x111:
+                return effects::BLACKBOX;
+            case 0x10f:
+                return effects::BIG_FUZZ;
+            case 0xf4:
+                return effects::WAH_MOD;
+            case 0xf5:
+                return effects::TOUCH_WAH_MOD;
+            case 0x101f:
+                return effects::DIATONIC_PITCH_SHIFTER;
             default:
                 throw std::invalid_argument{"Invalid effect id: " + std::to_string(id)};
         }

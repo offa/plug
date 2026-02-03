@@ -54,11 +54,13 @@ namespace plug
             {
                 return 0;
             }
-            if ((value >= effects::OVERDRIVE) && (value <= effects::COMPRESSOR))
+            if (((value >= effects::OVERDRIVE) && (value <= effects::COMPRESSOR)) ||
+                ((value >= effects::RANGER_BOOST) && (value <= effects::BIG_FUZZ))) // had to add this, because the effects are appended into the effects enum
             {
                 return 1;
             }
-            if ((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER))
+            if (((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER)) ||
+                ((value >= effects::WAH_MOD) && (value <= effects::DIATONIC_PITCH_SHIFTER)))
             {
                 return 2;
             }

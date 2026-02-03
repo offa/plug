@@ -118,6 +118,26 @@ namespace plug
                         case 0x6d:
                             amp.amp_num = amps::METAL_2000;
                             break;
+
+                        case 0xf1:
+                            amp.amp_num = amps::STUDIO_PREAMP;
+                            break;
+
+                        case 0xf6:
+                            amp.amp_num = amps::FENDER_57_TWIN;
+                            break;
+
+                        case 0xf9:
+                            amp.amp_num = amps::FENDER_60_THRIFT;
+                            break;
+
+                        case 0xfc:
+                            amp.amp_num = amps::BRITISH_COLOUR;
+                            break;
+
+                        case 0xff:
+                            amp.amp_num = amps::BRITISH_WATTS;
+                            break;
                     }
                 }
                 else if (xml.name().toString() == "Param")
@@ -360,6 +380,38 @@ namespace plug
 
                         case 0x0b:
                             effect.effect_num = effects::FENDER_65_SPRING_REVERB;
+                            break;
+
+                        case 0x103:
+                            effect.effect_num = effects::RANGER_BOOST;
+                            break;
+
+                        case 0xba:
+                            effect.effect_num = effects::GREENBOX;
+                            break;
+
+                        case 0x110:
+                            effect.effect_num = effects::ORANGEBOX;
+                            break;
+
+                        case 0x111:
+                            effect.effect_num = effects::BLACKBOX;
+                            break;
+
+                        case 0x10f:
+                            effect.effect_num = effects::BIG_FUZZ;
+                            break;
+
+                        case 0xf4:
+                            effect.effect_num = effects::WAH_MOD;
+                            break;
+
+                        case 0xf5:
+                            effect.effect_num = effects::TOUCH_WAH_MOD;
+                            break;
+
+                        case 0x11f:
+                            effect.effect_num = effects::DIATONIC_PITCH_SHIFTER;
                             break;
                     }
                 }

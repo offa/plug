@@ -69,6 +69,7 @@ namespace plug
     enum class effects
     {
         EMPTY,
+        /* Gain/Stomp Box */
         OVERDRIVE,
         WAH,
         TOUCH_WAH,
@@ -77,6 +78,7 @@ namespace plug
         SIMPLE_COMP,
         COMPRESSOR,
 
+        /* Modulation */
         SINE_CHORUS,
         TRIANGLE_CHORUS,
         SINE_FLANGER,
@@ -89,6 +91,7 @@ namespace plug
         PHASER,
         PITCH_SHIFTER,
 
+        /* Delay */
         MONO_DELAY,
         MONO_ECHO_FILTER,
         STEREO_ECHO_FILTER,
@@ -99,6 +102,7 @@ namespace plug
         TAPE_DELAY,
         STEREO_TAPE_DELAY,
 
+        /* Reverb */
         SMALL_HALL_REVERB,
         LARGE_HALL_REVERB,
         SMALL_ROOM_REVERB,
@@ -108,7 +112,18 @@ namespace plug
         AMBIENT_REVERB,
         ARENA_REVERB,
         FENDER_63_SPRING_REVERB,
-        FENDER_65_SPRING_REVERB
+        FENDER_65_SPRING_REVERB,
+
+        /* Mustang I V2 Effect */
+        RANGER_BOOST,
+        GREENBOX,
+        ORANGEBOX,
+        BLACKBOX,
+        BIG_FUZZ,
+        /* Mustang I V2 Modulation */
+        WAH_MOD,
+        TOUCH_WAH_MOD,
+        DIATONIC_PITCH_SHIFTER
     };
 
     // list of all cabinets

@@ -97,6 +97,16 @@ namespace plug::test
         EXPECT_EQ(lookupEffectById(0x4d), effects::ARENA_REVERB);
         EXPECT_EQ(lookupEffectById(0x21), effects::FENDER_63_SPRING_REVERB);
         EXPECT_EQ(lookupEffectById(0x0b), effects::FENDER_65_SPRING_REVERB);
+
+        /* Mustang I V2 */
+        EXPECT_EQ(lookupEffectById(0x103), effects::RANGER_BOOST);
+        EXPECT_EQ(lookupEffectById(0xba), effects::GREENBOX);
+        EXPECT_EQ(lookupEffectById(0x110), effects::ORANGEBOX);
+        EXPECT_EQ(lookupEffectById(0x111), effects::BLACKBOX);
+        EXPECT_EQ(lookupEffectById(0x10f), effects::BIG_FUZZ);
+        EXPECT_EQ(lookupEffectById(0xf4), effects::WAH_MOD);
+        EXPECT_EQ(lookupEffectById(0xf5), effects::TOUCH_WAH_MOD);
+        EXPECT_EQ(lookupEffectById(0x101f), effects::DIATONIC_PITCH_SHIFTER);
     }
 
     TEST_F(IdLookupTest, lookupEffectByIdThrowsOnInvalidId)
