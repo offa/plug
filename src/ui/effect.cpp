@@ -105,6 +105,14 @@ namespace plug
         // set window title
         setTitleTexts(slot.id(), "EMPTY");
 
+        // Store all available effects
+        // QComboBox does not support hiding items, so we have to keep a copy of the supported effects
+        // Yes, it is done 6x times, solution is to create Effects base class
+        for(int idx = 0; idx < ui->comboBox->count(); ++idx)
+        {
+          vEffectLabels.push_back(ui->comboBox->itemText(idx));
+        }
+
         const auto slotArg = slot.id() + 1;
         setAccessibleDescription(tr("Here you can choose which effect should be emulated on this slot and it's parameters"));
         ui->setButton->setAccessibleName(tr("Effect's %1 set button").arg(slotArg));
@@ -319,7 +327,7 @@ namespace plug
     void Effect::choose_fx(int value)
     {
         QSettings settings;
-        effect_num = static_cast<effects>(value);
+        effect_num = static_cast<effects>(ui->comboBox->itemData(value).toInt());
         set_changed(true);
 
         ui->comboBox->setCurrentIndex(value);
@@ -2147,8 +2155,13 @@ namespace plug
     void Effect::load(fx_pedal_settings settings)
     {
         set_changed(true);
+        int idx = ui->comboBox->findData(value(settings.effect_num));
+        if(idx < 0)
+        {
+          idx = value(effects::EMPTY);
+        }
 
-        ui->comboBox->setCurrentIndex(value(settings.effect_num));
+        ui->comboBox->setCurrentIndex(idx);
         ui->dial->setValue(settings.knob1);
         ui->dial_2->setValue(settings.knob2);
         ui->dial_3->setValue(settings.knob3);
@@ -2291,6 +2304,23 @@ namespace plug
         ui->dial_4->setValue(d4);
         ui->dial_5->setValue(d5);
         ui->dial_6->setValue(d6);
+    }
+
+    void Effect::setDeviceModel(DeviceModel model)
+    {
+        ui->comboBox->blockSignals(true);
+        ui->comboBox->clear();
+        for(unsigned int idx = 0; idx < vEffectLabels.size(); ++idx)
+        {
+            if(!isV2Effect(static_cast<effects>(idx)) || (model.category() == DeviceModel::Category::MustangV2))
+            {
+               ui->comboBox->addItem(vEffectLabels[idx], idx);
+            }
+            else
+            {
+            }
+        }
+        ui->comboBox->blockSignals(false);
     }
 
 }

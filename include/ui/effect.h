@@ -24,8 +24,10 @@
 #include "data_structs.h"
 #include "effects_enum.h"
 #include "FxSlot.h"
+#include <DeviceModel.h>
 #include <QMainWindow>
 #include <memory>
+#include <vector>
 
 namespace Ui
 {
@@ -48,6 +50,7 @@ namespace plug
         bool get_changed() const;
 
         fx_pedal_settings getSettings() const;
+        void setDeviceModel(DeviceModel model);
 
         Effect& operator=(const Effect&) = delete;
 
@@ -68,6 +71,8 @@ namespace plug
         bool changed;
         QString temp1;
         QString temp2;
+
+        std::vector<QString> vEffectLabels;
 
     public slots:
         // functions to set variables

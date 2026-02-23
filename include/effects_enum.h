@@ -143,6 +143,23 @@ namespace plug
         cabSS112
     };
 
+    constexpr bool isV2Effect(effects effect)
+    {
+        switch (effect)
+        {
+            case effects::RANGER_BOOST:
+            case effects::GREENBOX:
+            case effects::ORANGEBOX:
+            case effects::BLACKBOX:
+            case effects::BIG_FUZZ:
+            case effects::WAH_MOD:
+            case effects::TOUCH_WAH_MOD:
+            case effects::DIATONIC_PITCH_SHIFTER:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // Helper functions - for compatibility only.
     constexpr auto value(amps a)
