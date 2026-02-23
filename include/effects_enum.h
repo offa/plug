@@ -77,6 +77,12 @@ namespace plug
         FUZZ_TOUCH_WAH,
         SIMPLE_COMP,
         COMPRESSOR,
+        /* Mustang I V2 Effect */
+        RANGER_BOOST,
+        GREENBOX,
+        ORANGEBOX,
+        BLACKBOX,
+        BIG_FUZZ,
 
         /* Modulation */
         SINE_CHORUS,
@@ -90,6 +96,10 @@ namespace plug
         STEP_FILTER,
         PHASER,
         PITCH_SHIFTER,
+        /* Mustang I V2 Modulation */
+        WAH_MOD,
+        TOUCH_WAH_MOD,
+        DIATONIC_PITCH_SHIFTER,
 
         /* Delay */
         MONO_DELAY,
@@ -113,17 +123,6 @@ namespace plug
         ARENA_REVERB,
         FENDER_63_SPRING_REVERB,
         FENDER_65_SPRING_REVERB,
-
-        /* Mustang I V2 Effect */
-        RANGER_BOOST,
-        GREENBOX,
-        ORANGEBOX,
-        BLACKBOX,
-        BIG_FUZZ,
-        /* Mustang I V2 Modulation */
-        WAH_MOD,
-        TOUCH_WAH_MOD,
-        DIATONIC_PITCH_SHIFTER
     };
 
     // list of all cabinets
