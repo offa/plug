@@ -108,9 +108,9 @@ namespace plug
         // Store all available effects
         // QComboBox does not support hiding items, so we have to keep a copy of the supported effects
         // Yes, it is done 6x times, solution is to create Effects base class
-        for(int idx = 0; idx < ui->comboBox->count(); ++idx)
+        for (int idx = 0; idx < ui->comboBox->count(); ++idx)
         {
-          vEffectLabels.push_back(ui->comboBox->itemText(idx));
+            vEffectLabels.push_back(ui->comboBox->itemText(idx));
         }
 
         const auto slotArg = slot.id() + 1;
@@ -2156,9 +2156,9 @@ namespace plug
     {
         set_changed(true);
         int idx = ui->comboBox->findData(value(settings.effect_num));
-        if(idx < 0)
+        if (idx < 0)
         {
-          idx = value(effects::EMPTY);
+            idx = value(effects::EMPTY);
         }
 
         ui->comboBox->setCurrentIndex(idx);
@@ -2310,14 +2310,11 @@ namespace plug
     {
         ui->comboBox->blockSignals(true);
         ui->comboBox->clear();
-        for(unsigned int idx = 0; idx < vEffectLabels.size(); ++idx)
+        for (unsigned int idx = 0; idx < vEffectLabels.size(); ++idx)
         {
-            if(!isV2Effect(static_cast<effects>(idx)) || (model.category() == DeviceModel::Category::MustangV2))
+            if (!isV2Effect(static_cast<effects>(idx)) || (model.category() == DeviceModel::Category::MustangV2))
             {
-               ui->comboBox->addItem(vEffectLabels[idx], idx);
-            }
-            else
-            {
+                ui->comboBox->addItem(vEffectLabels[idx], idx);
             }
         }
         ui->comboBox->blockSignals(false);
