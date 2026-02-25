@@ -54,11 +54,11 @@ namespace plug
             {
                 return 0;
             }
-            if ((value >= effects::OVERDRIVE) && (value <= effects::COMPRESSOR))
+            if ((value >= effects::OVERDRIVE) && (value <= effects::BIG_FUZZ))
             {
                 return 1;
             }
-            if ((value >= effects::SINE_CHORUS) && (value <= effects::PITCH_SHIFTER))
+            if ((value >= effects::SINE_CHORUS) && (value <= effects::DIATONIC_PITCH_SHIFTER))
             {
                 return 2;
             }
@@ -313,6 +313,11 @@ namespace plug
             amp->show();
         }
 
+        // Enable only those effects supported by the Mustang
+        const auto model = amp_ops->getDeviceModel();
+        std::for_each(effectComponents.cbegin(), effectComponents.cend(), [&model](const auto& effect)
+                      { effect->setDeviceModel(model); });
+
         std::for_each(effects_set.cbegin(), effects_set.cend(), [this, &settings](const auto& effect)
                       {
             Effect* component = effectComponents.at(effect.slot.id());
@@ -322,6 +327,7 @@ namespace plug
             {
                 component->show();
             } });
+
         // activate buttons
         amp->enable_set_button(true);
         std::for_each(effectComponents.cbegin(), effectComponents.cend(), [](const auto& effect)

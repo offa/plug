@@ -69,6 +69,7 @@ namespace plug
     enum class effects
     {
         EMPTY,
+        /* Gain/Stomp Box */
         OVERDRIVE,
         WAH,
         TOUCH_WAH,
@@ -76,7 +77,14 @@ namespace plug
         FUZZ_TOUCH_WAH,
         SIMPLE_COMP,
         COMPRESSOR,
+        /* Mustang I V2 Effect */
+        RANGER_BOOST,
+        GREENBOX,
+        ORANGEBOX,
+        BLACKBOX,
+        BIG_FUZZ,
 
+        /* Modulation */
         SINE_CHORUS,
         TRIANGLE_CHORUS,
         SINE_FLANGER,
@@ -88,7 +96,12 @@ namespace plug
         STEP_FILTER,
         PHASER,
         PITCH_SHIFTER,
+        /* Mustang I V2 Modulation */
+        WAH_MOD,
+        TOUCH_WAH_MOD,
+        DIATONIC_PITCH_SHIFTER,
 
+        /* Delay */
         MONO_DELAY,
         MONO_ECHO_FILTER,
         STEREO_ECHO_FILTER,
@@ -99,6 +112,7 @@ namespace plug
         TAPE_DELAY,
         STEREO_TAPE_DELAY,
 
+        /* Reverb */
         SMALL_HALL_REVERB,
         LARGE_HALL_REVERB,
         SMALL_ROOM_REVERB,
@@ -108,7 +122,7 @@ namespace plug
         AMBIENT_REVERB,
         ARENA_REVERB,
         FENDER_63_SPRING_REVERB,
-        FENDER_65_SPRING_REVERB
+        FENDER_65_SPRING_REVERB,
     };
 
     // list of all cabinets
@@ -129,6 +143,23 @@ namespace plug
         cabSS112
     };
 
+    constexpr bool isV2Effect(effects effect)
+    {
+        switch (effect)
+        {
+            case effects::RANGER_BOOST:
+            case effects::GREENBOX:
+            case effects::ORANGEBOX:
+            case effects::BLACKBOX:
+            case effects::BIG_FUZZ:
+            case effects::WAH_MOD:
+            case effects::TOUCH_WAH_MOD:
+            case effects::DIATONIC_PITCH_SHIFTER:
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // Helper functions - for compatibility only.
     constexpr auto value(amps a)
