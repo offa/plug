@@ -20,7 +20,6 @@
  */
 
 #include "com/UsbContext.h"
-#include "com/Mustang.h"
 #include "ui/mainwindow.h"
 #include "Version.h"
 #include <QApplication>
