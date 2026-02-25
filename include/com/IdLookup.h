@@ -2,7 +2,7 @@
  * PLUG - software to operate Fender Mustang amplifier
  *        Linux replacement for Fender FUSE software
  *
- * Copyright (C) 2017-2025  offa
+ * Copyright (C) 2017-2026  offa
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
