@@ -71,10 +71,7 @@ namespace plug
 
     void LoadFromAmp::delete_items()
     {
-        for (int i = 0; i < ui->comboBox->count(); ++i)
-        {
-            ui->comboBox->removeItem(0);
-        }
+        ui->comboBox->clear();
     }
 
     void LoadFromAmp::change_name(int slot, QString* name)

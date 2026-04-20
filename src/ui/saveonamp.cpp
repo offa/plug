@@ -72,10 +72,7 @@ namespace plug
 
     void SaveOnAmp::delete_items()
     {
-        for (int i = 0; i < ui->comboBox->count(); ++i)
-        {
-            ui->comboBox->removeItem(0);
-        }
+        ui->comboBox->clear();
     }
 
     void SaveOnAmp::change_index(int value, const QString& name)

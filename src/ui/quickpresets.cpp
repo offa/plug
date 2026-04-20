@@ -171,20 +171,16 @@ namespace plug
 
     void QuickPresets::delete_items()
     {
-        int j = ui->comboBox->count();
-        for (int i = 0; i < j; i++)
-        {
-            ui->comboBox->removeItem(0);
-            ui->comboBox_2->removeItem(0);
-            ui->comboBox_3->removeItem(0);
-            ui->comboBox_4->removeItem(0);
-            ui->comboBox_5->removeItem(0);
-            ui->comboBox_6->removeItem(0);
-            ui->comboBox_7->removeItem(0);
-            ui->comboBox_8->removeItem(0);
-            ui->comboBox_9->removeItem(0);
-            ui->comboBox_10->removeItem(0);
-        }
+        ui->comboBox->clear();
+        ui->comboBox_2->clear();
+        ui->comboBox_3->clear();
+        ui->comboBox_4->clear();
+        ui->comboBox_5->clear();
+        ui->comboBox_6->clear();
+        ui->comboBox_7->clear();
+        ui->comboBox_8->clear();
+        ui->comboBox_9->clear();
+        ui->comboBox_10->clear();
     }
 
     void QuickPresets::change_name(int slot, QString* name)
