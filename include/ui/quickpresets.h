@@ -47,19 +47,9 @@ namespace plug
     protected:
         void changeEvent(QEvent* e) override;
 
-    private slots:
-        void setDefaultPreset0(int);
-        void setDefaultPreset1(int);
-        void setDefaultPreset2(int);
-        void setDefaultPreset3(int);
-        void setDefaultPreset4(int);
-        void setDefaultPreset5(int);
-        void setDefaultPreset6(int);
-        void setDefaultPreset7(int);
-        void setDefaultPreset8(int);
-        void setDefaultPreset9(int);
-
     private:
+        void setDefaultPreset(int index, int slot);
+
         const std::unique_ptr<Ui::QuickPresets> ui;
     };
 }

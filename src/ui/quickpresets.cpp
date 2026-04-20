@@ -34,16 +34,26 @@ namespace plug
 
         connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(close()));
 
-        connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(setDefaultPreset0(int)));
-        connect(ui->comboBox_2, SIGNAL(activated(int)), this, SLOT(setDefaultPreset1(int)));
-        connect(ui->comboBox_3, SIGNAL(activated(int)), this, SLOT(setDefaultPreset2(int)));
-        connect(ui->comboBox_4, SIGNAL(activated(int)), this, SLOT(setDefaultPreset3(int)));
-        connect(ui->comboBox_5, SIGNAL(activated(int)), this, SLOT(setDefaultPreset4(int)));
-        connect(ui->comboBox_6, SIGNAL(activated(int)), this, SLOT(setDefaultPreset5(int)));
-        connect(ui->comboBox_7, SIGNAL(activated(int)), this, SLOT(setDefaultPreset6(int)));
-        connect(ui->comboBox_8, SIGNAL(activated(int)), this, SLOT(setDefaultPreset7(int)));
-        connect(ui->comboBox_9, SIGNAL(activated(int)), this, SLOT(setDefaultPreset8(int)));
-        connect(ui->comboBox_10, SIGNAL(activated(int)), this, SLOT(setDefaultPreset9(int)));
+        connect(ui->comboBox, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(0, slot); });
+        connect(ui->comboBox_2, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(1, slot); });
+        connect(ui->comboBox_3, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(2, slot); });
+        connect(ui->comboBox_4, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(3, slot); });
+        connect(ui->comboBox_5, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(4, slot); });
+        connect(ui->comboBox_6, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(5, slot); });
+        connect(ui->comboBox_7, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(6, slot); });
+        connect(ui->comboBox_8, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(7, slot); });
+        connect(ui->comboBox_9, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(8, slot); });
+        connect(ui->comboBox_10, &QComboBox::activated, this, [this](int slot)
+                { setDefaultPreset(9, slot); });
     }
 
     void QuickPresets::load_names(const std::vector<std::string>& names)
@@ -216,146 +226,6 @@ namespace plug
         ui->comboBox_10->setCurrentIndex(slot);
     }
 
-    void QuickPresets::setDefaultPreset0(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset0");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset0", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset1(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset1");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset1", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset2(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset2");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset2", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset3(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset3");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset3", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset4(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset4");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset4", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset5(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset5");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset5", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset6(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset6");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset6", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset7(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset7");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset7", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset8(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset8");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset8", slot);
-        }
-    }
-
-    void QuickPresets::setDefaultPreset9(int slot)
-    {
-        QSettings settings;
-
-        if (slot == 24 || slot == 100)
-        {
-            settings.remove("DefaultPresets/Preset9");
-        }
-        else
-        {
-            settings.setValue("DefaultPresets/Preset9", slot);
-        }
-    }
-
     void QuickPresets::changeEvent(QEvent* e)
     {
         QDialog::changeEvent(e);
@@ -363,6 +233,21 @@ namespace plug
         if (e->type() == QEvent::LanguageChange)
         {
             ui->retranslateUi(this);
+        }
+    }
+
+    void QuickPresets::setDefaultPreset(int index, int slot)
+    {
+        QSettings settings;
+        const QString key = QStringLiteral("DefaultPresets/Preset%1").arg(index);
+
+        if (slot == 24 || slot == 100)
+        {
+            settings.remove(key);
+        }
+        else
+        {
+            settings.setValue(key, slot);
         }
     }
 }
