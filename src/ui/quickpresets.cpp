@@ -128,35 +128,22 @@ namespace plug
 
     void QuickPresets::change_name(int slot, QString* name)
     {
-        ui->comboBox->setItemText(slot, *name);
-        ui->comboBox->setCurrentIndex(slot);
+        auto setTextAndSlot = [](QComboBox& cb, int s, const QString& n)
+        {
+            cb.setItemText(s, n);
+            cb.setCurrentIndex(s);
+        };
 
-        ui->comboBox_2->setItemText(slot, *name);
-        ui->comboBox_2->setCurrentIndex(slot);
-
-        ui->comboBox_3->setItemText(slot, *name);
-        ui->comboBox_3->setCurrentIndex(slot);
-
-        ui->comboBox_4->setItemText(slot, *name);
-        ui->comboBox_4->setCurrentIndex(slot);
-
-        ui->comboBox_5->setItemText(slot, *name);
-        ui->comboBox_5->setCurrentIndex(slot);
-
-        ui->comboBox_6->setItemText(slot, *name);
-        ui->comboBox_6->setCurrentIndex(slot);
-
-        ui->comboBox_7->setItemText(slot, *name);
-        ui->comboBox_7->setCurrentIndex(slot);
-
-        ui->comboBox_8->setItemText(slot, *name);
-        ui->comboBox_8->setCurrentIndex(slot);
-
-        ui->comboBox_9->setItemText(slot, *name);
-        ui->comboBox_9->setCurrentIndex(slot);
-
-        ui->comboBox_10->setItemText(slot, *name);
-        ui->comboBox_10->setCurrentIndex(slot);
+        setTextAndSlot(*ui->comboBox, slot, *name);
+        setTextAndSlot(*ui->comboBox_2, slot, *name);
+        setTextAndSlot(*ui->comboBox_3, slot, *name);
+        setTextAndSlot(*ui->comboBox_4, slot, *name);
+        setTextAndSlot(*ui->comboBox_5, slot, *name);
+        setTextAndSlot(*ui->comboBox_6, slot, *name);
+        setTextAndSlot(*ui->comboBox_7, slot, *name);
+        setTextAndSlot(*ui->comboBox_8, slot, *name);
+        setTextAndSlot(*ui->comboBox_9, slot, *name);
+        setTextAndSlot(*ui->comboBox_10, slot, *name);
     }
 
     void QuickPresets::changeEvent(QEvent* e)
