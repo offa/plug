@@ -32,7 +32,7 @@ namespace plug
 
     LoadFromFile::Settings LoadFromFile::loadfile()
     {
-        Settings settings;
+        Settings settings{};
         while (!xml.atEnd())
         {
             if (xml.isStartElement())
@@ -62,7 +62,7 @@ namespace plug
     amp_settings LoadFromFile::parseAmp()
     {
         xml.readNextStartElement();
-        amp_settings amp;
+        amp_settings amp{};
         while (xml.name().toString() != "Amplifier")
         {
             if (xml.isStartElement())
