@@ -88,95 +88,28 @@ namespace plug
         ui->comboBox_9->addItem(tr("[Empty]"));
         ui->comboBox_10->addItem(tr("[Empty]"));
 
-        if (settings.contains("DefaultPresets/Preset0"))
+        auto setCurrentIndexOrPreset = [&settings](QComboBox& cb, int presetIndex, std::size_t index)
         {
-            ui->comboBox->setCurrentIndex(settings.value("DefaultPresets/Preset0").toInt());
-        }
-        else
-        {
-            ui->comboBox->setCurrentIndex(i);
-        }
+            if (const QString key = QStringLiteral("DefaultPresets/Preset%1").arg(presetIndex); settings.contains(key))
+            {
+                cb.setCurrentIndex(settings.value(key).toInt());
+            }
+            else
+            {
+                cb.setCurrentIndex(index);
+            }
+        };
 
-        if (settings.contains("DefaultPresets/Preset1"))
-        {
-            ui->comboBox_2->setCurrentIndex(settings.value("DefaultPresets/Preset1").toInt());
-        }
-        else
-        {
-            ui->comboBox_2->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset2"))
-        {
-            ui->comboBox_3->setCurrentIndex(settings.value("DefaultPresets/Preset2").toInt());
-        }
-        else
-        {
-            ui->comboBox_3->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset3"))
-        {
-            ui->comboBox_4->setCurrentIndex(settings.value("DefaultPresets/Preset3").toInt());
-        }
-        else
-        {
-            ui->comboBox_4->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset4"))
-        {
-            ui->comboBox_5->setCurrentIndex(settings.value("DefaultPresets/Preset4").toInt());
-        }
-        else
-        {
-            ui->comboBox_5->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset5"))
-        {
-            ui->comboBox_6->setCurrentIndex(settings.value("DefaultPresets/Preset5").toInt());
-        }
-        else
-        {
-            ui->comboBox_6->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset6"))
-        {
-            ui->comboBox_7->setCurrentIndex(settings.value("DefaultPresets/Preset6").toInt());
-        }
-        else
-        {
-            ui->comboBox_7->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset7"))
-        {
-            ui->comboBox_8->setCurrentIndex(settings.value("DefaultPresets/Preset7").toInt());
-        }
-        else
-        {
-            ui->comboBox_8->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset8"))
-        {
-            ui->comboBox_9->setCurrentIndex(settings.value("DefaultPresets/Preset8").toInt());
-        }
-        else
-        {
-            ui->comboBox_9->setCurrentIndex(i);
-        }
-
-        if (settings.contains("DefaultPresets/Preset9"))
-        {
-            ui->comboBox_10->setCurrentIndex(settings.value("DefaultPresets/Preset9").toInt());
-        }
-        else
-        {
-            ui->comboBox_10->setCurrentIndex(i);
-        }
+        setCurrentIndexOrPreset(*ui->comboBox, 0, i);
+        setCurrentIndexOrPreset(*ui->comboBox_2, 1, i);
+        setCurrentIndexOrPreset(*ui->comboBox_3, 2, i);
+        setCurrentIndexOrPreset(*ui->comboBox_4, 3, i);
+        setCurrentIndexOrPreset(*ui->comboBox_5, 4, i);
+        setCurrentIndexOrPreset(*ui->comboBox_6, 5, i);
+        setCurrentIndexOrPreset(*ui->comboBox_7, 6, i);
+        setCurrentIndexOrPreset(*ui->comboBox_8, 7, i);
+        setCurrentIndexOrPreset(*ui->comboBox_9, 8, i);
+        setCurrentIndexOrPreset(*ui->comboBox_10, 9, i);
     }
 
     void QuickPresets::delete_items()
