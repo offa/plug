@@ -59,22 +59,23 @@ namespace plug
     void QuickPresets::load_names(const std::vector<std::string>& names)
     {
         QSettings settings;
+        const QString fmt = QStringLiteral("[%1] %2");
         std::size_t i = 0;
 
-        std::for_each(names.cbegin(), names.cend(), [&i, this](const auto& nameStr)
+        std::for_each(names.cbegin(), names.cend(), [&i, &fmt, this](const auto& nameStr)
                       {
-            const QString name = QString::fromStdString(nameStr);
-            const auto index = i + 1;
-            ui->comboBox->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_2->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_3->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_4->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_5->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_6->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_7->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_8->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_9->addItem(QString("[%1] %2").arg(index).arg(name));
-            ui->comboBox_10->addItem(QString("[%1] %2").arg(index).arg(name));
+            const QString item = fmt.arg(i + 1).arg(QString::fromStdString(nameStr));
+
+            ui->comboBox->addItem(item);
+            ui->comboBox_2->addItem(item);
+            ui->comboBox_3->addItem(item);
+            ui->comboBox_4->addItem(item);
+            ui->comboBox_5->addItem(item);
+            ui->comboBox_6->addItem(item);
+            ui->comboBox_7->addItem(item);
+            ui->comboBox_8->addItem(item);
+            ui->comboBox_9->addItem(item);
+            ui->comboBox_10->addItem(item);
             ++i; });
 
         ui->comboBox->addItem(tr("[Empty]"));
