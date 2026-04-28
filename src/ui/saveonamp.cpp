@@ -37,8 +37,8 @@ namespace plug
         QSettings settings;
         restoreGeometry(settings.value("Windows/saveAmpPresetWindowGeometry").toByteArray());
 
-        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(save()));
-        connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
+        connect(ui->pushButton, &QPushButton::clicked, this, &SaveOnAmp::save);
+        connect(ui->pushButton_2, &QPushButton::clicked, this, &SaveOnAmp::close);
     }
 
     SaveOnAmp::~SaveOnAmp()
