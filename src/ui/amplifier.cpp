@@ -79,19 +79,19 @@ namespace plug
         QSettings settings;
         restoreGeometry(settings.value("Windows/amplifierWindowGeometry").toByteArray());
 
-        connect(ui->advancedButton, SIGNAL(clicked()), advanced.get(), SLOT(open()));
+        connect(ui->advancedButton, &QPushButton::clicked, advanced.get(), &Amp_Advanced::open);
         choose_amp(0);
 
-        connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(choose_amp(int)));
-        connect(ui->dial, SIGNAL(valueChanged(int)), this, SLOT(set_gain(int)));
-        connect(ui->dial_2, SIGNAL(valueChanged(int)), this, SLOT(set_volume(int)));
-        connect(ui->dial_3, SIGNAL(valueChanged(int)), this, SLOT(set_treble(int)));
-        connect(ui->dial_4, SIGNAL(valueChanged(int)), this, SLOT(set_middle(int)));
-        connect(ui->dial_5, SIGNAL(valueChanged(int)), this, SLOT(set_bass(int)));
-        connect(ui->setButton, SIGNAL(clicked()), this, SLOT(send_amp()));
+        connect(ui->comboBox, &QComboBox::currentIndexChanged, this, &Amplifier::choose_amp);
+        connect(ui->dial, &QDial::valueChanged, this, &Amplifier::set_gain);
+        connect(ui->dial_2, &QDial::valueChanged, this, &Amplifier::set_volume);
+        connect(ui->dial_3, &QDial::valueChanged, this, &Amplifier::set_treble);
+        connect(ui->dial_4, &QDial::valueChanged, this, &Amplifier::set_middle);
+        connect(ui->dial_5, &QDial::valueChanged, this, &Amplifier::set_bass);
+        connect(ui->setButton, &QPushButton::clicked, this, &Amplifier::send_amp);
 
-        QShortcut* close = new QShortcut(QKeySequence(Qt::Key_Escape), this);
-        connect(close, SIGNAL(activated()), this, SLOT(close()));
+        auto* closeShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+        connect(closeShortcut, &QShortcut::activated, this, &QWidget::close);
     }
 
     Amplifier::~Amplifier()
