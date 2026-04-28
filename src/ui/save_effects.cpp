@@ -36,11 +36,11 @@ namespace plug
         QSettings settings;
         restoreGeometry(settings.value("Windows/saveEffectPresetWindowGeometry").toByteArray());
 
-        connect(ui->checkBox, SIGNAL(clicked()), this, SLOT(select_checkbox()));
-        connect(ui->checkBox_2, SIGNAL(clicked()), this, SLOT(select_checkbox()));
-        connect(ui->checkBox_3, SIGNAL(clicked()), this, SLOT(select_checkbox()));
-        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(send()));
-        connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
+        connect(ui->checkBox, &QCheckBox::clicked, this, &SaveEffects::select_checkbox);
+        connect(ui->checkBox_2, &QCheckBox::clicked, this, &SaveEffects::select_checkbox);
+        connect(ui->checkBox_3, &QCheckBox::clicked, this, &SaveEffects::select_checkbox);
+        connect(ui->pushButton, &QPushButton::clicked, this, &SaveEffects::send);
+        connect(ui->pushButton_2, &QPushButton::clicked, this, &QWidget::close);
     }
 
     SaveEffects::~SaveEffects()
