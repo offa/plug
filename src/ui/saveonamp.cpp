@@ -50,7 +50,7 @@ namespace plug
     void SaveOnAmp::save()
     {
         QSettings settings;
-        QString name(QString("[%1] %2").arg(ui->comboBox->currentIndex()).arg(ui->lineEdit->text()));
+        QString name(QStringLiteral("[%1] %2").arg(ui->comboBox->currentIndex()).arg(ui->lineEdit->text()));
 
         ui->comboBox->setItemText(ui->comboBox->currentIndex(), name);
         dynamic_cast<MainWindow*>(parent())->change_name(ui->comboBox->currentIndex(), &name);
@@ -66,7 +66,7 @@ namespace plug
         std::size_t index{1};
         std::for_each(names.cbegin(), names.cend(), [&index, this](const auto& name)
                       {
-            ui->comboBox->addItem(QString("[%1] %2").arg(index).arg(QString::fromStdString(name)));
+            ui->comboBox->addItem(QStringLiteral("[%1] %2").arg(index).arg(QString::fromStdString(name)));
             ++index; });
     }
 
