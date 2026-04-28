@@ -37,8 +37,8 @@ namespace plug
         QSettings settings;
         restoreGeometry(settings.value("Windows/loadAmpPresetWindowGeometry").toByteArray());
 
-        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(load()));
-        connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(close()));
+        connect(ui->pushButton, &QPushButton::clicked, this, &LoadFromAmp::load);
+        connect(ui->pushButton_2, &QPushButton::clicked, this, &QWidget::close);
     }
 
     LoadFromAmp::~LoadFromAmp()

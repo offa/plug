@@ -32,7 +32,7 @@ namespace plug
     {
         ui->setupUi(this);
 
-        connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(close()));
+        connect(ui->pushButton, &QPushButton::clicked, this, &QWidget::close);
 
         connect(ui->comboBox, &QComboBox::activated, this, [this](int slot)
                 { setDefaultPreset(0, slot); });
