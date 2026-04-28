@@ -45,7 +45,7 @@ namespace plug
         }
 
     private:
-        constexpr std::uint8_t checkRange(std::uint8_t value) const
+        static constexpr std::uint8_t checkRange(std::uint8_t value)
         {
             if (value > 7)
             {
