@@ -209,7 +209,7 @@ namespace plug
         amp_num = static_cast<amps>(ampValue);
         changed = true;
 
-        const auto title = QString::fromStdString("Amplifier: " + ampNames.at(amp_num));
+        const QString title = QStringLiteral("Amplifier: %1").arg(QString::fromStdString(ampNames.at(amp_num)));
         setWindowTitle(title);
         setAccessibleName(title);
 

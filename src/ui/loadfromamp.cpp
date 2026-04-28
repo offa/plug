@@ -65,7 +65,7 @@ namespace plug
         std::size_t index{1};
         std::for_each(names.cbegin(), names.cend(), [&index, this](const auto& name)
                       {
-                ui->comboBox->addItem(QString("[%1] %2").arg(index).arg(QString::fromStdString(name)));
+                ui->comboBox->addItem(QStringLiteral("[%1] %2").arg(index).arg(QString::fromStdString(name)));
                 ++index; });
     }
 
