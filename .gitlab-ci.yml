@@ -6,7 +6,7 @@ build:
   parallel:
     matrix:
       - COMPILER: gcc
-        VERSION: [15, 14]
+        VERSION: [16, 15]
       - COMPILER: clang
         VERSION: [22, 21]
   image: registry.gitlab.com/offa/docker-images/${COMPILER}:${VERSION}
