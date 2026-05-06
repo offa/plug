@@ -39,11 +39,11 @@ namespace plug
         ui->checkBox_5->setChecked(settings.value("Settings/popupChangedWindows").toBool());
         ui->checkBox_6->setChecked(settings.value("Settings/defaultEffectValues").toBool());
 
-        connect(ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(change_connect(bool)));
-        connect(ui->checkBox_3, SIGNAL(toggled(bool)), this, SLOT(change_oneset(bool)));
-        connect(ui->checkBox_4, SIGNAL(toggled(bool)), this, SLOT(change_keepopen(bool)));
-        connect(ui->checkBox_5, SIGNAL(toggled(bool)), this, SLOT(change_popupwindows(bool)));
-        connect(ui->checkBox_6, SIGNAL(toggled(bool)), this, SLOT(change_effectvalues(bool)));
+        connect(ui->checkBox_2, &QCheckBox::toggled, this, &Settings::change_connect);
+        connect(ui->checkBox_3, &QCheckBox::toggled, this, &Settings::change_oneset);
+        connect(ui->checkBox_4, &QCheckBox::toggled, this, &Settings::change_keepopen);
+        connect(ui->checkBox_5, &QCheckBox::toggled, this, &Settings::change_popupwindows);
+        connect(ui->checkBox_6, &QCheckBox::toggled, this, &Settings::change_effectvalues);
     }
 
     void Settings::change_connect(bool value)
