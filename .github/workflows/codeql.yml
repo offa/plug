@@ -19,7 +19,7 @@ jobs:
     name: "CodeQL"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup
         run: script/ci_setup.sh
       - name: CodeQL Initialization
