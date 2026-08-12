@@ -1,5 +1,5 @@
 [requires]
-gtest/1.17.0
+gtest/1.18.0
 
 [generators]
 CMakeToolchain
