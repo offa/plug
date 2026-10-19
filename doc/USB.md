@@ -21,9 +21,10 @@
 
 ## Other devices
 
-| Device         | VID  | PID  | Note |
-|----------------|:----:|:----:|------|
-| Mustang LT 25  | 1ed8 | 0037 |      |
-| Mustang LT 40S | 1ed8 | 0046 |      |
-| Rumble LT 25   | 1ed8 | 0038 |      |
-| Mustang GT 40  | 1ed8 | 0032 |      |
+| Device             | VID  | PID  | Note |
+|--------------------|:----:|:----:|------|
+| Mustang LT 25      | 1ed8 | 0037 |      |
+| Mustang LT 40S     | 1ed8 | 0046 |      |
+| Rumble LT 25       | 1ed8 | 0038 |      |
+| Mustang GT 40      | 1ed8 | 0032 |      |
+| Mustang Micro Plus | 1ed8 | 003a |      |
