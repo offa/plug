@@ -31,4 +31,4 @@ sudo apt-get install \
 
 For development [*Google Test*](https://github.com/google/googletest) (`gtest`) is needed for testing.
 
-It can be installed via the system package manager (Arch: `gtest`, Debian/Ubuntu: `libgtest-dev), [Conan](https://conan.io/center/recipes/gtest) or built from source.
+It can be installed via the system package manager (Arch: `gtest`, Debian/Ubuntu: `libgtest-dev libgmock-dev`), [Conan](https://conan.io/center/recipes/gtest) or built from source.
